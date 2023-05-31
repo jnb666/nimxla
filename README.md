@@ -28,13 +28,13 @@ A simple example to build and executing a graph which squares the elements from 
 ```
 
 ## Module structure
-- [nimxla](./htdocs/nimxla.html): Contains the Client type for interfacing with the CPU or GPU device, procs to copy data between host memory and device buffers and procs for compiling and executing a Computation which has been defined using the graph module.
+- [nimxla](https://jnb666.github.io/nimxla/htdocs/nimxla.html): Contains the Client type for interfacing with the CPU or GPU device, procs to copy data between host memory and device buffers and procs for compiling and executing a Computation which has been defined using the graph module.
 
-- [nimxla/tensor](./htdocs/nimxla/tensor.html): Defines a generic host resident n dimensional array Tensor type which can be accessed from Nim, the Shape type which holds the data type and dimesions of either one or a tuple of tensors and the Literal type which is a host resident tensor or tuple of tensors in a format compatible with XLA.
+- [nimxla/tensor](https://jnb666.github.io/nimxla/htdocs/nimxla/tensor.html): Defines a generic host resident n dimensional array Tensor type which can be accessed from Nim, the Shape type which holds the data type and dimesions of either one or a tuple of tensors and the Literal type which is a host resident tensor or tuple of tensors in a format compatible with XLA.
 
-- [nimxla/graph](./htdocs/nimxla/graph.html): Wraps the XLA Builder and Op classes and is used to construct a tree of Nodes which can then be finalised using the build function to generate a Computation. Regular arithmetic ops and math functions are overloaded so they can be used with nodes. Extra metadata is stored so that graphs can be inspected easily. The gradient function can be used to generate a graph to perform reverse mode automatic differentiation. The autodiff implementation is inspired by the python [smallpebble](https://github.com/sradc/smallpebble) project.
+- [nimxla/graph](https://jnb666.github.io/nimxla/htdocs/nimxla/graph.html): Wraps the XLA Builder and Op classes and is used to construct a tree of Nodes which can then be finalised using the build function to generate a Computation. Regular arithmetic ops and math functions are overloaded so they can be used with nodes. Extra metadata is stored so that graphs can be inspected easily. The gradient function can be used to generate a graph to perform reverse mode automatic differentiation. The autodiff implementation is inspired by the python [smallpebble](https://github.com/sradc/smallpebble) project.
 
-- [nimxla/xla_wrapper](./htdocs/nimxla/xla_wrapper.html): Nim bindings for the C wrapper functions which call the XLA X++ API. The C wrapper code here is based on the Rust bindings from [xla-rs](https://github.com/LaurentMazare/xla-rs). This is for internal use by the above modules.
+- [nimxla/xla_wrapper](https://jnb666.github.io/nimxla/htdocs/nimxla/xla_wrapper.html): Nim bindings for the C wrapper functions which call the XLA X++ API. The C wrapper code here is based on the Rust bindings from [xla-rs](https://github.com/LaurentMazare/xla-rs). This is for internal use by the above modules.
 
 See the docs linked above for more details.
 
