@@ -595,7 +595,7 @@ window.addEventListener('DOMContentLoaded', main);
   <div class="section" id="6">
 <h1><a class="toc-backref" href="#6">Imports</a></h1>
 <dl class="item">
-<a class="reference external" href="tensor.html">tensor</a>, <a class="reference external" href="xla_wrapper.html">xla_wrapper</a>
+<a class="reference external" href="tensor.html">tensor</a>, <a class="reference external" href="private/xla_wrapper.html">private/xla_wrapper</a>, <a class="reference external" href="private/utils.html">private/utils</a>
 </dl></div>
 <div class="section" id="7">
 <h1><a class="toc-backref" href="#7">Types</a></h1>
@@ -623,7 +623,7 @@ Exception raised while building the graph. origMsg is the original status messag
 <dt><pre><a href="graph.html#Computation"><span class="Identifier">Computation</span></a> <span class="Other">=</span> <span class="Keyword">object</span>
   <span class="Identifier">nodes</span><span class="Operator">*</span><span class="Other">:</span> <span class="Identifier">seq</span><span class="Other">[</span><a href="graph.html#Node"><span class="Identifier">Node</span></a><span class="Other">]</span>
   <span class="Identifier">params</span><span class="Operator">*</span><span class="Other">:</span> <span class="Identifier">seq</span><span class="Other">[</span><a href="graph.html#Node"><span class="Identifier">Node</span></a><span class="Other">]</span>
-  <span class="Identifier">c</span><span class="Other">:</span> <a href="xla_wrapper.html#xla_computation"><span class="Identifier">xla_computation</span></a>
+  <span class="Identifier">c</span><span class="Other">:</span> <a href="private/xla_wrapper.html#xla_computation"><span class="Identifier">xla_computation</span></a>
 </pre></dt>
 <dd>
 
@@ -869,7 +869,7 @@ Build a computation from the specified root operation. Should only be called onc
 </dd>
 </div>
 <div id="checkBuilderError,status_t,Node">
-<dt><pre><span class="Keyword">proc</span> <a href="#checkBuilderError%2Cstatus_t%2CNode"><span class="Identifier">checkBuilderError</span></a><span class="Other">(</span><span class="Identifier">status</span><span class="Other">:</span> <a href="xla_wrapper.html#status_t"><span class="Identifier">status_t</span></a><span class="Other">;</span> <span class="Identifier">at</span><span class="Other">:</span> <a href="graph.html#Node"><span class="Identifier">Node</span></a> <span class="Other">=</span> <span class="Keyword">nil</span><span class="Other">)</span> {.
+<dt><pre><span class="Keyword">proc</span> <a href="#checkBuilderError%2Cstatus_t%2CNode"><span class="Identifier">checkBuilderError</span></a><span class="Other">(</span><span class="Identifier">status</span><span class="Other">:</span> <a href="private/xla_wrapper.html#status_t"><span class="Identifier">status_t</span></a><span class="Other">;</span> <span class="Identifier">at</span><span class="Other">:</span> <a href="graph.html#Node"><span class="Identifier">Node</span></a> <span class="Other">=</span> <span class="Keyword">nil</span><span class="Other">)</span> {.
     <span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Identifier">Exception</span><span class="Other">,</span> <span class="Identifier">BuilderError</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Identifier">RootEffect</span><span class="Other">]</span></span>.}</pre></dt>
 <dd>
 
@@ -1261,7 +1261,7 @@ Number of dimensions in the node output.
 </dd>
 </div>
 <div id="rawPtr,Computation">
-<dt><pre><span class="Keyword">proc</span> <a href="#rawPtr%2CComputation"><span class="Identifier">rawPtr</span></a><span class="Other">(</span><span class="Identifier">comp</span><span class="Other">:</span> <a href="graph.html#Computation"><span class="Identifier">Computation</span></a><span class="Other">)</span><span class="Other">:</span> <a href="xla_wrapper.html#xla_computation"><span class="Identifier">xla_computation</span></a> {.<span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span>.}</pre></dt>
+<dt><pre><span class="Keyword">proc</span> <a href="#rawPtr%2CComputation"><span class="Identifier">rawPtr</span></a><span class="Other">(</span><span class="Identifier">comp</span><span class="Other">:</span> <a href="graph.html#Computation"><span class="Identifier">Computation</span></a><span class="Other">)</span><span class="Other">:</span> <a href="private/xla_wrapper.html#xla_computation"><span class="Identifier">xla_computation</span></a> {.<span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span>.}</pre></dt>
 <dd>
 
 
@@ -1324,7 +1324,7 @@ Formatted AST tree of this node and all of it's children.
 </div>
 <div id="reshape,Node,varargs[int]">
 <dt><pre><span class="Keyword">proc</span> <a href="#reshape%2CNode%2Cvarargs%5Bint%5D"><span class="Identifier">reshape</span></a><span class="Other">(</span><span class="Identifier">a</span><span class="Other">:</span> <a href="graph.html#Node"><span class="Identifier">Node</span></a><span class="Other">;</span> <span class="Identifier">dims</span><span class="Other">:</span> <span class="Identifier">varargs</span><span class="Other">[</span><span class="Identifier">int</span><span class="Other">]</span><span class="Other">)</span><span class="Other">:</span> <a href="graph.html#Node"><span class="Identifier">Node</span></a> {.
-    <span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Identifier">Exception</span><span class="Other">,</span> <span class="Identifier">ValueError</span><span class="Other">,</span> <span class="Identifier">BuilderError</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Identifier">RootEffect</span><span class="Other">]</span></span>.}</pre></dt>
+    <span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Identifier">Exception</span><span class="Other">,</span> <span class="Identifier">BuilderError</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Identifier">RootEffect</span><span class="Other">]</span></span>.}</pre></dt>
 <dd>
 
 Reshape the input node to dims. Total number of elements is unchanged. If one of the dimensions is -1 then this value is inferred from the total number of elements.
@@ -1467,7 +1467,7 @@ Constant op of given type and value. If dims is given then it is brooadcast to t
       <div class="twelve-columns footer">
         <span class="nim-sprite"></span>
         <br/>
-        <small style="color: var(--hint);">Made with Nim. Generated: 2023-05-31 12:31:52 UTC</small>
+        <small style="color: var(--hint);">Made with Nim. Generated: 2023-05-31 15:21:01 UTC</small>
       </div>
     </div>
   </div>

@@ -70,7 +70,7 @@ window.addEventListener('DOMContentLoaded', main);
 <div class="document" id="documentId">
   <div class="container">
     <h1 class="title">Index</h1>
-    Modules: <a href="nimxla.html">nimxla</a>, <a href="nimxla/graph.html">nimxla/graph</a>, <a href="nimxla/tensor.html">nimxla/tensor</a>, <a href="nimxla/xla_wrapper.html">nimxla/xla_wrapper</a>.<br/><p /><h2>API symbols</h2>
+    Modules: <a href="nimxla.html">nimxla</a>, <a href="nimxla/graph.html">nimxla/graph</a>, <a href="nimxla/private/utils.html">nimxla/private/utils</a>, <a href="nimxla/private/xla_wrapper.html">nimxla/private/xla_wrapper</a>, <a href="nimxla/tensor.html">nimxla/tensor</a>.<br/><p /><h2>API symbols</h2>
 <dl><dt><a name="%60%21%3D%60" href="#%60%21%3D%60"><span>`!=`:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
           data-doc-search-tag="graph: `!=`(a`gensym55, b`gensym55: Node): Node" href="nimxla/graph.html#%21%3D%2CNode%2CNode">graph: `!=`(a`gensym55, b`gensym55: Node): Node</a></li>
@@ -189,7 +189,7 @@ window.addEventListener('DOMContentLoaded', main);
 <li><a class="reference external"
           data-doc-search-tag="graph: build(root: Node): Computation" href="nimxla/graph.html#build%2CNode">graph: build(root: Node): Computation</a></li>
           <li><a class="reference external"
-          data-doc-search-tag="xla_wrapper: build(a1: xla_builder; a2: xla_op; a3: ptr xla_computation): status_t" href="nimxla/xla_wrapper.html#build%2Cxla_builder%2Cxla_op%2Cptr.xla_computation">xla_wrapper: build(a1: xla_builder; a2: xla_op; a3: ptr xla_computation): status_t</a></li>
+          data-doc-search-tag="xla_wrapper: build(a1: xla_builder; a2: xla_op; a3: ptr xla_computation): status_t" href="nimxla/private/xla_wrapper.html#build%2Cxla_builder%2Cxla_op%2Cptr.xla_computation">xla_wrapper: build(a1: xla_builder; a2: xla_op; a3: ptr xla_computation): status_t</a></li>
           </ul></dd>
 <dt><a name="Builder" href="#Builder"><span>Builder:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
@@ -237,7 +237,7 @@ window.addEventListener('DOMContentLoaded', main);
 <li><a class="reference external"
           data-doc-search-tag="nimxla: compile(client: Client; comp: Computation): Executable" href="nimxla.html#compile%2CClient%2CComputation">nimxla: compile(client: Client; comp: Computation): Executable</a></li>
           <li><a class="reference external"
-          data-doc-search-tag="xla_wrapper: compile(a1: pjrt_client; a2: xla_computation; a3: ptr pjrt_loaded_executable): status_t" href="nimxla/xla_wrapper.html#compile%2Cpjrt_client%2Cxla_computation%2Cptr.pjrt_loaded_executable">xla_wrapper: compile(a1: pjrt_client; a2: xla_computation; a3: ptr pjrt_loaded_executable): status_t</a></li>
+          data-doc-search-tag="xla_wrapper: compile(a1: pjrt_client; a2: xla_computation; a3: ptr pjrt_loaded_executable): status_t" href="nimxla/private/xla_wrapper.html#compile%2Cpjrt_client%2Cxla_computation%2Cptr.pjrt_loaded_executable">xla_wrapper: compile(a1: pjrt_client; a2: xla_computation; a3: ptr pjrt_loaded_executable): status_t</a></li>
           </ul></dd>
 <dt><a name="Computation" href="#Computation"><span>Computation:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
@@ -267,39 +267,39 @@ window.addEventListener('DOMContentLoaded', main);
           </ul></dd>
 <dt><a name="constant_literal" href="#constant_literal"><span>constant_literal:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
-          data-doc-search-tag="xla_wrapper: constant_literal(a1: xla_builder; a2: literal_t): xla_op" href="nimxla/xla_wrapper.html#constant_literal%2Cxla_builder%2Cliteral_t">xla_wrapper: constant_literal(a1: xla_builder; a2: literal_t): xla_op</a></li>
+          data-doc-search-tag="xla_wrapper: constant_literal(a1: xla_builder; a2: literal_t): xla_op" href="nimxla/private/xla_wrapper.html#constant_literal%2Cxla_builder%2Cliteral_t">xla_wrapper: constant_literal(a1: xla_builder; a2: literal_t): xla_op</a></li>
           </ul></dd>
 <dt><a name="constant_r0_double" href="#constant_r0_double"><span>constant_r0_double:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
-          data-doc-search-tag="xla_wrapper: constant_r0_double(a0: xla_builder; a1: cdouble): xla_op" href="nimxla/xla_wrapper.html#constant_r0_double%2Cxla_builder%2Ccdouble">xla_wrapper: constant_r0_double(a0: xla_builder; a1: cdouble): xla_op</a></li>
+          data-doc-search-tag="xla_wrapper: constant_r0_double(a0: xla_builder; a1: cdouble): xla_op" href="nimxla/private/xla_wrapper.html#constant_r0_double%2Cxla_builder%2Ccdouble">xla_wrapper: constant_r0_double(a0: xla_builder; a1: cdouble): xla_op</a></li>
           </ul></dd>
 <dt><a name="constant_r0_float" href="#constant_r0_float"><span>constant_r0_float:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
-          data-doc-search-tag="xla_wrapper: constant_r0_float(a0: xla_builder; a1: cfloat): xla_op" href="nimxla/xla_wrapper.html#constant_r0_float%2Cxla_builder%2Ccfloat">xla_wrapper: constant_r0_float(a0: xla_builder; a1: cfloat): xla_op</a></li>
+          data-doc-search-tag="xla_wrapper: constant_r0_float(a0: xla_builder; a1: cfloat): xla_op" href="nimxla/private/xla_wrapper.html#constant_r0_float%2Cxla_builder%2Ccfloat">xla_wrapper: constant_r0_float(a0: xla_builder; a1: cfloat): xla_op</a></li>
           </ul></dd>
 <dt><a name="constant_r0_int32_t" href="#constant_r0_int32_t"><span>constant_r0_int32_t:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
-          data-doc-search-tag="xla_wrapper: constant_r0_int32_t(a0: xla_builder; a1: int32): xla_op" href="nimxla/xla_wrapper.html#constant_r0_int32_t%2Cxla_builder%2Cint32">xla_wrapper: constant_r0_int32_t(a0: xla_builder; a1: int32): xla_op</a></li>
+          data-doc-search-tag="xla_wrapper: constant_r0_int32_t(a0: xla_builder; a1: int32): xla_op" href="nimxla/private/xla_wrapper.html#constant_r0_int32_t%2Cxla_builder%2Cint32">xla_wrapper: constant_r0_int32_t(a0: xla_builder; a1: int32): xla_op</a></li>
           </ul></dd>
 <dt><a name="constant_r0_int64_t" href="#constant_r0_int64_t"><span>constant_r0_int64_t:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
-          data-doc-search-tag="xla_wrapper: constant_r0_int64_t(a0: xla_builder; a1: int64): xla_op" href="nimxla/xla_wrapper.html#constant_r0_int64_t%2Cxla_builder%2Cint64">xla_wrapper: constant_r0_int64_t(a0: xla_builder; a1: int64): xla_op</a></li>
+          data-doc-search-tag="xla_wrapper: constant_r0_int64_t(a0: xla_builder; a1: int64): xla_op" href="nimxla/private/xla_wrapper.html#constant_r0_int64_t%2Cxla_builder%2Cint64">xla_wrapper: constant_r0_int64_t(a0: xla_builder; a1: int64): xla_op</a></li>
           </ul></dd>
 <dt><a name="constant_r1_double" href="#constant_r1_double"><span>constant_r1_double:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
-          data-doc-search-tag="xla_wrapper: constant_r1_double(a0: xla_builder; a1: ptr cdouble; a2: csize_t): xla_op" href="nimxla/xla_wrapper.html#constant_r1_double%2Cxla_builder%2Cptr.cdouble%2Ccsize_t">xla_wrapper: constant_r1_double(a0: xla_builder; a1: ptr cdouble; a2: csize_t): xla_op</a></li>
+          data-doc-search-tag="xla_wrapper: constant_r1_double(a0: xla_builder; a1: ptr cdouble; a2: csize_t): xla_op" href="nimxla/private/xla_wrapper.html#constant_r1_double%2Cxla_builder%2Cptr.cdouble%2Ccsize_t">xla_wrapper: constant_r1_double(a0: xla_builder; a1: ptr cdouble; a2: csize_t): xla_op</a></li>
           </ul></dd>
 <dt><a name="constant_r1_float" href="#constant_r1_float"><span>constant_r1_float:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
-          data-doc-search-tag="xla_wrapper: constant_r1_float(a0: xla_builder; a1: ptr cfloat; a2: csize_t): xla_op" href="nimxla/xla_wrapper.html#constant_r1_float%2Cxla_builder%2Cptr.cfloat%2Ccsize_t">xla_wrapper: constant_r1_float(a0: xla_builder; a1: ptr cfloat; a2: csize_t): xla_op</a></li>
+          data-doc-search-tag="xla_wrapper: constant_r1_float(a0: xla_builder; a1: ptr cfloat; a2: csize_t): xla_op" href="nimxla/private/xla_wrapper.html#constant_r1_float%2Cxla_builder%2Cptr.cfloat%2Ccsize_t">xla_wrapper: constant_r1_float(a0: xla_builder; a1: ptr cfloat; a2: csize_t): xla_op</a></li>
           </ul></dd>
 <dt><a name="constant_r1_int32_t" href="#constant_r1_int32_t"><span>constant_r1_int32_t:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
-          data-doc-search-tag="xla_wrapper: constant_r1_int32_t(a0: xla_builder; a1: ptr int32; a2: csize_t): xla_op" href="nimxla/xla_wrapper.html#constant_r1_int32_t%2Cxla_builder%2Cptr.int32%2Ccsize_t">xla_wrapper: constant_r1_int32_t(a0: xla_builder; a1: ptr int32; a2: csize_t): xla_op</a></li>
+          data-doc-search-tag="xla_wrapper: constant_r1_int32_t(a0: xla_builder; a1: ptr int32; a2: csize_t): xla_op" href="nimxla/private/xla_wrapper.html#constant_r1_int32_t%2Cxla_builder%2Cptr.int32%2Ccsize_t">xla_wrapper: constant_r1_int32_t(a0: xla_builder; a1: ptr int32; a2: csize_t): xla_op</a></li>
           </ul></dd>
 <dt><a name="constant_r1_int64_t" href="#constant_r1_int64_t"><span>constant_r1_int64_t:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
-          data-doc-search-tag="xla_wrapper: constant_r1_int64_t(a0: xla_builder; a1: ptr int64; a2: csize_t): xla_op" href="nimxla/xla_wrapper.html#constant_r1_int64_t%2Cxla_builder%2Cptr.int64%2Ccsize_t">xla_wrapper: constant_r1_int64_t(a0: xla_builder; a1: ptr int64; a2: csize_t): xla_op</a></li>
+          data-doc-search-tag="xla_wrapper: constant_r1_int64_t(a0: xla_builder; a1: ptr int64; a2: csize_t): xla_op" href="nimxla/private/xla_wrapper.html#constant_r1_int64_t%2Cxla_builder%2Cptr.int64%2Ccsize_t">xla_wrapper: constant_r1_int64_t(a0: xla_builder; a1: ptr int64; a2: csize_t): xla_op</a></li>
           </ul></dd>
 <dt><a name="convert" href="#convert"><span>convert:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
@@ -317,35 +317,35 @@ window.addEventListener('DOMContentLoaded', main);
           </ul></dd>
 <dt><a name="create_r0_double" href="#create_r0_double"><span>create_r0_double:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
-          data-doc-search-tag="xla_wrapper: create_r0_double(a0: cdouble): literal_t" href="nimxla/xla_wrapper.html#create_r0_double%2Ccdouble">xla_wrapper: create_r0_double(a0: cdouble): literal_t</a></li>
+          data-doc-search-tag="xla_wrapper: create_r0_double(a0: cdouble): literal_t" href="nimxla/private/xla_wrapper.html#create_r0_double%2Ccdouble">xla_wrapper: create_r0_double(a0: cdouble): literal_t</a></li>
           </ul></dd>
 <dt><a name="create_r0_float" href="#create_r0_float"><span>create_r0_float:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
-          data-doc-search-tag="xla_wrapper: create_r0_float(a0: cfloat): literal_t" href="nimxla/xla_wrapper.html#create_r0_float%2Ccfloat">xla_wrapper: create_r0_float(a0: cfloat): literal_t</a></li>
+          data-doc-search-tag="xla_wrapper: create_r0_float(a0: cfloat): literal_t" href="nimxla/private/xla_wrapper.html#create_r0_float%2Ccfloat">xla_wrapper: create_r0_float(a0: cfloat): literal_t</a></li>
           </ul></dd>
 <dt><a name="create_r0_int32_t" href="#create_r0_int32_t"><span>create_r0_int32_t:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
-          data-doc-search-tag="xla_wrapper: create_r0_int32_t(a0: int32): literal_t" href="nimxla/xla_wrapper.html#create_r0_int32_t%2Cint32">xla_wrapper: create_r0_int32_t(a0: int32): literal_t</a></li>
+          data-doc-search-tag="xla_wrapper: create_r0_int32_t(a0: int32): literal_t" href="nimxla/private/xla_wrapper.html#create_r0_int32_t%2Cint32">xla_wrapper: create_r0_int32_t(a0: int32): literal_t</a></li>
           </ul></dd>
 <dt><a name="create_r0_int64_t" href="#create_r0_int64_t"><span>create_r0_int64_t:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
-          data-doc-search-tag="xla_wrapper: create_r0_int64_t(a0: int64): literal_t" href="nimxla/xla_wrapper.html#create_r0_int64_t%2Cint64">xla_wrapper: create_r0_int64_t(a0: int64): literal_t</a></li>
+          data-doc-search-tag="xla_wrapper: create_r0_int64_t(a0: int64): literal_t" href="nimxla/private/xla_wrapper.html#create_r0_int64_t%2Cint64">xla_wrapper: create_r0_int64_t(a0: int64): literal_t</a></li>
           </ul></dd>
 <dt><a name="create_r1_double" href="#create_r1_double"><span>create_r1_double:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
-          data-doc-search-tag="xla_wrapper: create_r1_double(a0: ptr cdouble; a1: csize_t): literal_t" href="nimxla/xla_wrapper.html#create_r1_double%2Cptr.cdouble%2Ccsize_t">xla_wrapper: create_r1_double(a0: ptr cdouble; a1: csize_t): literal_t</a></li>
+          data-doc-search-tag="xla_wrapper: create_r1_double(a0: ptr cdouble; a1: csize_t): literal_t" href="nimxla/private/xla_wrapper.html#create_r1_double%2Cptr.cdouble%2Ccsize_t">xla_wrapper: create_r1_double(a0: ptr cdouble; a1: csize_t): literal_t</a></li>
           </ul></dd>
 <dt><a name="create_r1_float" href="#create_r1_float"><span>create_r1_float:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
-          data-doc-search-tag="xla_wrapper: create_r1_float(a0: ptr cfloat; a1: csize_t): literal_t" href="nimxla/xla_wrapper.html#create_r1_float%2Cptr.cfloat%2Ccsize_t">xla_wrapper: create_r1_float(a0: ptr cfloat; a1: csize_t): literal_t</a></li>
+          data-doc-search-tag="xla_wrapper: create_r1_float(a0: ptr cfloat; a1: csize_t): literal_t" href="nimxla/private/xla_wrapper.html#create_r1_float%2Cptr.cfloat%2Ccsize_t">xla_wrapper: create_r1_float(a0: ptr cfloat; a1: csize_t): literal_t</a></li>
           </ul></dd>
 <dt><a name="create_r1_int32_t" href="#create_r1_int32_t"><span>create_r1_int32_t:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
-          data-doc-search-tag="xla_wrapper: create_r1_int32_t(a0: ptr int32; a1: csize_t): literal_t" href="nimxla/xla_wrapper.html#create_r1_int32_t%2Cptr.int32%2Ccsize_t">xla_wrapper: create_r1_int32_t(a0: ptr int32; a1: csize_t): literal_t</a></li>
+          data-doc-search-tag="xla_wrapper: create_r1_int32_t(a0: ptr int32; a1: csize_t): literal_t" href="nimxla/private/xla_wrapper.html#create_r1_int32_t%2Cptr.int32%2Ccsize_t">xla_wrapper: create_r1_int32_t(a0: ptr int32; a1: csize_t): literal_t</a></li>
           </ul></dd>
 <dt><a name="create_r1_int64_t" href="#create_r1_int64_t"><span>create_r1_int64_t:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
-          data-doc-search-tag="xla_wrapper: create_r1_int64_t(a0: ptr int64; a1: csize_t): literal_t" href="nimxla/xla_wrapper.html#create_r1_int64_t%2Cptr.int64%2Ccsize_t">xla_wrapper: create_r1_int64_t(a0: ptr int64; a1: csize_t): literal_t</a></li>
+          data-doc-search-tag="xla_wrapper: create_r1_int64_t(a0: ptr int64; a1: csize_t): literal_t" href="nimxla/private/xla_wrapper.html#create_r1_int64_t%2Cptr.int64%2Ccsize_t">xla_wrapper: create_r1_int64_t(a0: ptr int64; a1: csize_t): literal_t</a></li>
           </ul></dd>
 <dt><a name="DataType" href="#DataType"><span>DataType:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
@@ -396,13 +396,13 @@ window.addEventListener('DOMContentLoaded', main);
 <dt><a name="execute" href="#execute"><span>execute:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
           data-doc-search-tag="xla_wrapper: execute(a1: pjrt_loaded_executable; a2: ptr literal_t; a3: cint;
-        a4: ptr ptr ptr pjrt_buffer; untuple_result: bool): status_t" href="nimxla/xla_wrapper.html#execute%2Cpjrt_loaded_executable%2Cptr.literal_t%2Ccint%2Cptr.ptr.ptr.pjrt_buffer%2Cbool">xla_wrapper: execute(a1: pjrt_loaded_executable; a2: ptr literal_t; a3: cint;
+        a4: ptr ptr ptr pjrt_buffer; untuple_result: bool): status_t" href="nimxla/private/xla_wrapper.html#execute%2Cpjrt_loaded_executable%2Cptr.literal_t%2Ccint%2Cptr.ptr.ptr.pjrt_buffer%2Cbool">xla_wrapper: execute(a1: pjrt_loaded_executable; a2: ptr literal_t; a3: cint;
         a4: ptr ptr ptr pjrt_buffer; untuple_result: bool): status_t</a></li>
           </ul></dd>
 <dt><a name="execute_b" href="#execute_b"><span>execute_b:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
           data-doc-search-tag="xla_wrapper: execute_b(a1: pjrt_loaded_executable; a2: ptr pjrt_buffer; a3: cint;
-          a4: ptr ptr ptr pjrt_buffer; untuple_result: bool): status_t" href="nimxla/xla_wrapper.html#execute_b%2Cpjrt_loaded_executable%2Cptr.pjrt_buffer%2Ccint%2Cptr.ptr.ptr.pjrt_buffer%2Cbool">xla_wrapper: execute_b(a1: pjrt_loaded_executable; a2: ptr pjrt_buffer; a3: cint;
+          a4: ptr ptr ptr pjrt_buffer; untuple_result: bool): status_t" href="nimxla/private/xla_wrapper.html#execute_b%2Cpjrt_loaded_executable%2Cptr.pjrt_buffer%2Ccint%2Cptr.ptr.ptr.pjrt_buffer%2Cbool">xla_wrapper: execute_b(a1: pjrt_loaded_executable; a2: ptr pjrt_buffer; a3: cint;
           a4: ptr ptr ptr pjrt_buffer; untuple_result: bool): status_t</a></li>
           </ul></dd>
 <dt><a name="exp" href="#exp"><span>exp:</span></a></dt><dd><ul class="simple">
@@ -439,7 +439,7 @@ window.addEventListener('DOMContentLoaded', main);
           </ul></dd>
 <dt><a name="first_error" href="#first_error"><span>first_error:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
-          data-doc-search-tag="xla_wrapper: first_error(a1: xla_builder): status_t" href="nimxla/xla_wrapper.html#first_error%2Cxla_builder">xla_wrapper: first_error(a1: xla_builder): status_t</a></li>
+          data-doc-search-tag="xla_wrapper: first_error(a1: xla_builder): status_t" href="nimxla/private/xla_wrapper.html#first_error%2Cxla_builder">xla_wrapper: first_error(a1: xla_builder): status_t</a></li>
           </ul></dd>
 <dt><a name="floor" href="#floor"><span>floor:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
@@ -451,23 +451,23 @@ window.addEventListener('DOMContentLoaded', main);
           </ul></dd>
 <dt><a name="get_current_status" href="#get_current_status"><span>get_current_status:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
-          data-doc-search-tag="xla_wrapper: get_current_status(a1: xla_builder): status_t" href="nimxla/xla_wrapper.html#get_current_status%2Cxla_builder">xla_wrapper: get_current_status(a1: xla_builder): status_t</a></li>
+          data-doc-search-tag="xla_wrapper: get_current_status(a1: xla_builder): status_t" href="nimxla/private/xla_wrapper.html#get_current_status%2Cxla_builder">xla_wrapper: get_current_status(a1: xla_builder): status_t</a></li>
           </ul></dd>
 <dt><a name="get_dimensions" href="#get_dimensions"><span>get_dimensions:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
-          data-doc-search-tag="xla_wrapper: get_dimensions(a1: xla_builder; a2: xla_op; a3: ptr csize_t): status_t" href="nimxla/xla_wrapper.html#get_dimensions%2Cxla_builder%2Cxla_op%2Cptr.csize_t">xla_wrapper: get_dimensions(a1: xla_builder; a2: xla_op; a3: ptr csize_t): status_t</a></li>
+          data-doc-search-tag="xla_wrapper: get_dimensions(a1: xla_builder; a2: xla_op; a3: ptr csize_t): status_t" href="nimxla/private/xla_wrapper.html#get_dimensions%2Cxla_builder%2Cxla_op%2Cptr.csize_t">xla_wrapper: get_dimensions(a1: xla_builder; a2: xla_op; a3: ptr csize_t): status_t</a></li>
           </ul></dd>
 <dt><a name="get_dimensions_size" href="#get_dimensions_size"><span>get_dimensions_size:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
-          data-doc-search-tag="xla_wrapper: get_dimensions_size(a1: xla_builder; a2: xla_op; a3: ptr cint): status_t" href="nimxla/xla_wrapper.html#get_dimensions_size%2Cxla_builder%2Cxla_op%2Cptr.cint">xla_wrapper: get_dimensions_size(a1: xla_builder; a2: xla_op; a3: ptr cint): status_t</a></li>
+          data-doc-search-tag="xla_wrapper: get_dimensions_size(a1: xla_builder; a2: xla_op; a3: ptr cint): status_t" href="nimxla/private/xla_wrapper.html#get_dimensions_size%2Cxla_builder%2Cxla_op%2Cptr.cint">xla_wrapper: get_dimensions_size(a1: xla_builder; a2: xla_op; a3: ptr cint): status_t</a></li>
           </ul></dd>
 <dt><a name="get_element_type" href="#get_element_type"><span>get_element_type:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
-          data-doc-search-tag="xla_wrapper: get_element_type(a1: xla_builder; a2: xla_op; a3: ptr cint): status_t" href="nimxla/xla_wrapper.html#get_element_type%2Cxla_builder%2Cxla_op%2Cptr.cint">xla_wrapper: get_element_type(a1: xla_builder; a2: xla_op; a3: ptr cint): status_t</a></li>
+          data-doc-search-tag="xla_wrapper: get_element_type(a1: xla_builder; a2: xla_op; a3: ptr cint): status_t" href="nimxla/private/xla_wrapper.html#get_element_type%2Cxla_builder%2Cxla_op%2Cptr.cint">xla_wrapper: get_element_type(a1: xla_builder; a2: xla_op; a3: ptr cint): status_t</a></li>
           </ul></dd>
 <dt><a name="get_shape" href="#get_shape"><span>get_shape:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
-          data-doc-search-tag="xla_wrapper: get_shape(a1: xla_builder; a2: xla_op; a3: ptr shape_t): status_t" href="nimxla/xla_wrapper.html#get_shape%2Cxla_builder%2Cxla_op%2Cptr.shape_t">xla_wrapper: get_shape(a1: xla_builder; a2: xla_op; a3: ptr shape_t): status_t</a></li>
+          data-doc-search-tag="xla_wrapper: get_shape(a1: xla_builder; a2: xla_op; a3: ptr shape_t): status_t" href="nimxla/private/xla_wrapper.html#get_shape%2Cxla_builder%2Cxla_op%2Cptr.shape_t">xla_wrapper: get_shape(a1: xla_builder; a2: xla_op; a3: ptr shape_t): status_t</a></li>
           </ul></dd>
 <dt><a name="gradient" href="#gradient"><span>gradient:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
@@ -499,7 +499,7 @@ window.addEventListener('DOMContentLoaded', main);
           </ul></dd>
 <dt><a name="infeed" href="#infeed"><span>infeed:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
-          data-doc-search-tag="xla_wrapper: infeed(a1: xla_builder; a2: cint; a3: cint; a4: ptr int64; a5: cstring): xla_op" href="nimxla/xla_wrapper.html#infeed%2Cxla_builder%2Ccint%2Ccint%2Cptr.int64%2Ccstring">xla_wrapper: infeed(a1: xla_builder; a2: cint; a3: cint; a4: ptr int64; a5: cstring): xla_op</a></li>
+          data-doc-search-tag="xla_wrapper: infeed(a1: xla_builder; a2: cint; a3: cint; a4: ptr int64; a5: cstring): xla_op" href="nimxla/private/xla_wrapper.html#infeed%2Cxla_builder%2Ccint%2Ccint%2Cptr.int64%2Ccstring">xla_wrapper: infeed(a1: xla_builder; a2: cint; a3: cint; a4: ptr int64; a5: cstring): xla_op</a></li>
           </ul></dd>
 <dt><a name="Info" href="#Info"><span>Info:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
@@ -541,69 +541,69 @@ window.addEventListener('DOMContentLoaded', main);
           </ul></dd>
 <dt><a name="literal_clone" href="#literal_clone"><span>literal_clone:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
-          data-doc-search-tag="xla_wrapper: literal_clone(a1: literal_t): literal_t" href="nimxla/xla_wrapper.html#literal_clone%2Cliteral_t">xla_wrapper: literal_clone(a1: literal_t): literal_t</a></li>
+          data-doc-search-tag="xla_wrapper: literal_clone(a1: literal_t): literal_t" href="nimxla/private/xla_wrapper.html#literal_clone%2Cliteral_t">xla_wrapper: literal_clone(a1: literal_t): literal_t</a></li>
           </ul></dd>
 <dt><a name="literal_convert" href="#literal_convert"><span>literal_convert:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
-          data-doc-search-tag="xla_wrapper: literal_convert(a1: literal_t; a2: cint; a3: ptr literal_t): status_t" href="nimxla/xla_wrapper.html#literal_convert%2Cliteral_t%2Ccint%2Cptr.literal_t">xla_wrapper: literal_convert(a1: literal_t; a2: cint; a3: ptr literal_t): status_t</a></li>
+          data-doc-search-tag="xla_wrapper: literal_convert(a1: literal_t; a2: cint; a3: ptr literal_t): status_t" href="nimxla/private/xla_wrapper.html#literal_convert%2Cliteral_t%2Ccint%2Cptr.literal_t">xla_wrapper: literal_convert(a1: literal_t; a2: cint; a3: ptr literal_t): status_t</a></li>
           </ul></dd>
 <dt><a name="literal_copy_from" href="#literal_copy_from"><span>literal_copy_from:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
-          data-doc-search-tag="xla_wrapper: literal_copy_from(a1: literal_t; a2: pointer; a3: csize_t)" href="nimxla/xla_wrapper.html#literal_copy_from%2Cliteral_t%2Cpointer%2Ccsize_t">xla_wrapper: literal_copy_from(a1: literal_t; a2: pointer; a3: csize_t)</a></li>
+          data-doc-search-tag="xla_wrapper: literal_copy_from(a1: literal_t; a2: pointer; a3: csize_t)" href="nimxla/private/xla_wrapper.html#literal_copy_from%2Cliteral_t%2Cpointer%2Ccsize_t">xla_wrapper: literal_copy_from(a1: literal_t; a2: pointer; a3: csize_t)</a></li>
           </ul></dd>
 <dt><a name="literal_copy_to" href="#literal_copy_to"><span>literal_copy_to:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
-          data-doc-search-tag="xla_wrapper: literal_copy_to(a1: literal_t; a2: pointer; a3: csize_t)" href="nimxla/xla_wrapper.html#literal_copy_to%2Cliteral_t%2Cpointer%2Ccsize_t">xla_wrapper: literal_copy_to(a1: literal_t; a2: pointer; a3: csize_t)</a></li>
+          data-doc-search-tag="xla_wrapper: literal_copy_to(a1: literal_t; a2: pointer; a3: csize_t)" href="nimxla/private/xla_wrapper.html#literal_copy_to%2Cliteral_t%2Cpointer%2Ccsize_t">xla_wrapper: literal_copy_to(a1: literal_t; a2: pointer; a3: csize_t)</a></li>
           </ul></dd>
 <dt><a name="literal_create_from_shape" href="#literal_create_from_shape"><span>literal_create_from_shape:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
-          data-doc-search-tag="xla_wrapper: literal_create_from_shape(a1: cint; a2: ptr int64; a3: csize_t): literal_t" href="nimxla/xla_wrapper.html#literal_create_from_shape%2Ccint%2Cptr.int64%2Ccsize_t">xla_wrapper: literal_create_from_shape(a1: cint; a2: ptr int64; a3: csize_t): literal_t</a></li>
+          data-doc-search-tag="xla_wrapper: literal_create_from_shape(a1: cint; a2: ptr int64; a3: csize_t): literal_t" href="nimxla/private/xla_wrapper.html#literal_create_from_shape%2Ccint%2Cptr.int64%2Ccsize_t">xla_wrapper: literal_create_from_shape(a1: cint; a2: ptr int64; a3: csize_t): literal_t</a></li>
           </ul></dd>
 <dt><a name="literal_create_from_shape_and_data" href="#literal_create_from_shape_and_data"><span>literal_create_from_shape_and_data:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
           data-doc-search-tag="xla_wrapper: literal_create_from_shape_and_data(a1: cint; a2: ptr int64; a3: csize_t;
-                                   a4: pointer; a5: csize_t): literal_t" href="nimxla/xla_wrapper.html#literal_create_from_shape_and_data%2Ccint%2Cptr.int64%2Ccsize_t%2Cpointer%2Ccsize_t">xla_wrapper: literal_create_from_shape_and_data(a1: cint; a2: ptr int64; a3: csize_t;
+                                   a4: pointer; a5: csize_t): literal_t" href="nimxla/private/xla_wrapper.html#literal_create_from_shape_and_data%2Ccint%2Cptr.int64%2Ccsize_t%2Cpointer%2Ccsize_t">xla_wrapper: literal_create_from_shape_and_data(a1: cint; a2: ptr int64; a3: csize_t;
                                    a4: pointer; a5: csize_t): literal_t</a></li>
           </ul></dd>
 <dt><a name="literal_decompose_tuple" href="#literal_decompose_tuple"><span>literal_decompose_tuple:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
-          data-doc-search-tag="xla_wrapper: literal_decompose_tuple(a1: literal_t; a2: ptr literal_t; a3: csize_t)" href="nimxla/xla_wrapper.html#literal_decompose_tuple%2Cliteral_t%2Cptr.literal_t%2Ccsize_t">xla_wrapper: literal_decompose_tuple(a1: literal_t; a2: ptr literal_t; a3: csize_t)</a></li>
+          data-doc-search-tag="xla_wrapper: literal_decompose_tuple(a1: literal_t; a2: ptr literal_t; a3: csize_t)" href="nimxla/private/xla_wrapper.html#literal_decompose_tuple%2Cliteral_t%2Cptr.literal_t%2Ccsize_t">xla_wrapper: literal_decompose_tuple(a1: literal_t; a2: ptr literal_t; a3: csize_t)</a></li>
           </ul></dd>
 <dt><a name="literal_element_count" href="#literal_element_count"><span>literal_element_count:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
-          data-doc-search-tag="xla_wrapper: literal_element_count(a1: literal_t): int64" href="nimxla/xla_wrapper.html#literal_element_count%2Cliteral_t">xla_wrapper: literal_element_count(a1: literal_t): int64</a></li>
+          data-doc-search-tag="xla_wrapper: literal_element_count(a1: literal_t): int64" href="nimxla/private/xla_wrapper.html#literal_element_count%2Cliteral_t">xla_wrapper: literal_element_count(a1: literal_t): int64</a></li>
           </ul></dd>
 <dt><a name="literal_element_type" href="#literal_element_type"><span>literal_element_type:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
-          data-doc-search-tag="xla_wrapper: literal_element_type(a1: literal_t): cint" href="nimxla/xla_wrapper.html#literal_element_type%2Cliteral_t">xla_wrapper: literal_element_type(a1: literal_t): cint</a></li>
+          data-doc-search-tag="xla_wrapper: literal_element_type(a1: literal_t): cint" href="nimxla/private/xla_wrapper.html#literal_element_type%2Cliteral_t">xla_wrapper: literal_element_type(a1: literal_t): cint</a></li>
           </ul></dd>
 <dt><a name="literal_free" href="#literal_free"><span>literal_free:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
-          data-doc-search-tag="xla_wrapper: literal_free(a1: literal_t)" href="nimxla/xla_wrapper.html#literal_free%2Cliteral_t">xla_wrapper: literal_free(a1: literal_t)</a></li>
+          data-doc-search-tag="xla_wrapper: literal_free(a1: literal_t)" href="nimxla/private/xla_wrapper.html#literal_free%2Cliteral_t">xla_wrapper: literal_free(a1: literal_t)</a></li>
           </ul></dd>
 <dt><a name="literal_make_tuple" href="#literal_make_tuple"><span>literal_make_tuple:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
-          data-doc-search-tag="xla_wrapper: literal_make_tuple(a1: ptr literal_t; a2: csize_t): literal_t" href="nimxla/xla_wrapper.html#literal_make_tuple%2Cptr.literal_t%2Ccsize_t">xla_wrapper: literal_make_tuple(a1: ptr literal_t; a2: csize_t): literal_t</a></li>
+          data-doc-search-tag="xla_wrapper: literal_make_tuple(a1: ptr literal_t; a2: csize_t): literal_t" href="nimxla/private/xla_wrapper.html#literal_make_tuple%2Cptr.literal_t%2Ccsize_t">xla_wrapper: literal_make_tuple(a1: ptr literal_t; a2: csize_t): literal_t</a></li>
           </ul></dd>
 <dt><a name="literal_make_tuple_owned" href="#literal_make_tuple_owned"><span>literal_make_tuple_owned:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
-          data-doc-search-tag="xla_wrapper: literal_make_tuple_owned(a1: ptr literal_t; a2: csize_t): literal_t" href="nimxla/xla_wrapper.html#literal_make_tuple_owned%2Cptr.literal_t%2Ccsize_t">xla_wrapper: literal_make_tuple_owned(a1: ptr literal_t; a2: csize_t): literal_t</a></li>
+          data-doc-search-tag="xla_wrapper: literal_make_tuple_owned(a1: ptr literal_t; a2: csize_t): literal_t" href="nimxla/private/xla_wrapper.html#literal_make_tuple_owned%2Cptr.literal_t%2Ccsize_t">xla_wrapper: literal_make_tuple_owned(a1: ptr literal_t; a2: csize_t): literal_t</a></li>
           </ul></dd>
 <dt><a name="literal_reshape" href="#literal_reshape"><span>literal_reshape:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
-          data-doc-search-tag="xla_wrapper: literal_reshape(a1: literal_t; a2: ptr int64; a3: csize_t; a4: ptr literal_t): status_t" href="nimxla/xla_wrapper.html#literal_reshape%2Cliteral_t%2Cptr.int64%2Ccsize_t%2Cptr.literal_t">xla_wrapper: literal_reshape(a1: literal_t; a2: ptr int64; a3: csize_t; a4: ptr literal_t): status_t</a></li>
+          data-doc-search-tag="xla_wrapper: literal_reshape(a1: literal_t; a2: ptr int64; a3: csize_t; a4: ptr literal_t): status_t" href="nimxla/private/xla_wrapper.html#literal_reshape%2Cliteral_t%2Cptr.int64%2Ccsize_t%2Cptr.literal_t">xla_wrapper: literal_reshape(a1: literal_t; a2: ptr int64; a3: csize_t; a4: ptr literal_t): status_t</a></li>
           </ul></dd>
 <dt><a name="literal_shape" href="#literal_shape"><span>literal_shape:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
-          data-doc-search-tag="xla_wrapper: literal_shape(a1: literal_t; a2: ptr shape_t)" href="nimxla/xla_wrapper.html#literal_shape%2Cliteral_t%2Cptr.shape_t">xla_wrapper: literal_shape(a1: literal_t; a2: ptr shape_t)</a></li>
+          data-doc-search-tag="xla_wrapper: literal_shape(a1: literal_t; a2: ptr shape_t)" href="nimxla/private/xla_wrapper.html#literal_shape%2Cliteral_t%2Cptr.shape_t">xla_wrapper: literal_shape(a1: literal_t; a2: ptr shape_t)</a></li>
           </ul></dd>
 <dt><a name="literal_size_bytes" href="#literal_size_bytes"><span>literal_size_bytes:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
-          data-doc-search-tag="xla_wrapper: literal_size_bytes(a1: literal_t): int64" href="nimxla/xla_wrapper.html#literal_size_bytes%2Cliteral_t">xla_wrapper: literal_size_bytes(a1: literal_t): int64</a></li>
+          data-doc-search-tag="xla_wrapper: literal_size_bytes(a1: literal_t): int64" href="nimxla/private/xla_wrapper.html#literal_size_bytes%2Cliteral_t">xla_wrapper: literal_size_bytes(a1: literal_t): int64</a></li>
           </ul></dd>
 <dt><a name="literal_t" href="#literal_t"><span>literal_t:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
-          data-doc-search-tag="xla_wrapper: literal_t" href="nimxla/xla_wrapper.html#literal_t">xla_wrapper: literal_t</a></li>
+          data-doc-search-tag="xla_wrapper: literal_t" href="nimxla/private/xla_wrapper.html#literal_t">xla_wrapper: literal_t</a></li>
           </ul></dd>
 <dt><a name="log" href="#log"><span>log:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
@@ -631,11 +631,11 @@ window.addEventListener('DOMContentLoaded', main);
           </ul></dd>
 <dt><a name="make_shape_array" href="#make_shape_array"><span>make_shape_array:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
-          data-doc-search-tag="xla_wrapper: make_shape_array(a1: cint; a2: csize_t; a3: ptr int64): shape_t" href="nimxla/xla_wrapper.html#make_shape_array%2Ccint%2Ccsize_t%2Cptr.int64">xla_wrapper: make_shape_array(a1: cint; a2: csize_t; a3: ptr int64): shape_t</a></li>
+          data-doc-search-tag="xla_wrapper: make_shape_array(a1: cint; a2: csize_t; a3: ptr int64): shape_t" href="nimxla/private/xla_wrapper.html#make_shape_array%2Ccint%2Ccsize_t%2Cptr.int64">xla_wrapper: make_shape_array(a1: cint; a2: csize_t; a3: ptr int64): shape_t</a></li>
           </ul></dd>
 <dt><a name="make_shape_tuple" href="#make_shape_tuple"><span>make_shape_tuple:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
-          data-doc-search-tag="xla_wrapper: make_shape_tuple(a1: csize_t; a2: ptr shape_t): shape_t" href="nimxla/xla_wrapper.html#make_shape_tuple%2Ccsize_t%2Cptr.shape_t">xla_wrapper: make_shape_tuple(a1: csize_t; a2: ptr shape_t): shape_t</a></li>
+          data-doc-search-tag="xla_wrapper: make_shape_tuple(a1: csize_t; a2: ptr shape_t): shape_t" href="nimxla/private/xla_wrapper.html#make_shape_tuple%2Ccsize_t%2Cptr.shape_t">xla_wrapper: make_shape_tuple(a1: csize_t; a2: ptr shape_t): shape_t</a></li>
           </ul></dd>
 <dt><a name="makeTuple" href="#makeTuple"><span>makeTuple:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
@@ -711,15 +711,15 @@ window.addEventListener('DOMContentLoaded', main);
           </ul></dd>
 <dt><a name="op_abs" href="#op_abs"><span>op_abs:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
-          data-doc-search-tag="xla_wrapper: op_abs(a1: xla_op): xla_op" href="nimxla/xla_wrapper.html#op_abs%2Cxla_op">xla_wrapper: op_abs(a1: xla_op): xla_op</a></li>
+          data-doc-search-tag="xla_wrapper: op_abs(a1: xla_op): xla_op" href="nimxla/private/xla_wrapper.html#op_abs%2Cxla_op">xla_wrapper: op_abs(a1: xla_op): xla_op</a></li>
           </ul></dd>
 <dt><a name="op_add" href="#op_add"><span>op_add:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
-          data-doc-search-tag="xla_wrapper: op_add(a1: xla_op; a2: xla_op): xla_op" href="nimxla/xla_wrapper.html#op_add%2Cxla_op%2Cxla_op">xla_wrapper: op_add(a1: xla_op; a2: xla_op): xla_op</a></li>
+          data-doc-search-tag="xla_wrapper: op_add(a1: xla_op; a2: xla_op): xla_op" href="nimxla/private/xla_wrapper.html#op_add%2Cxla_op%2Cxla_op">xla_wrapper: op_add(a1: xla_op; a2: xla_op): xla_op</a></li>
           </ul></dd>
 <dt><a name="op_and" href="#op_and"><span>op_and:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
-          data-doc-search-tag="xla_wrapper: op_and(a1: xla_op; a2: xla_op): xla_op" href="nimxla/xla_wrapper.html#op_and%2Cxla_op%2Cxla_op">xla_wrapper: op_and(a1: xla_op; a2: xla_op): xla_op</a></li>
+          data-doc-search-tag="xla_wrapper: op_and(a1: xla_op; a2: xla_op): xla_op" href="nimxla/private/xla_wrapper.html#op_and%2Cxla_op%2Cxla_op">xla_wrapper: op_and(a1: xla_op; a2: xla_op): xla_op</a></li>
           </ul></dd>
 <dt><a name="OpaqueType" href="#OpaqueType"><span>OpaqueType:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
@@ -727,293 +727,293 @@ window.addEventListener('DOMContentLoaded', main);
           </ul></dd>
 <dt><a name="op_atan2" href="#op_atan2"><span>op_atan2:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
-          data-doc-search-tag="xla_wrapper: op_atan2(a1: xla_op; a2: xla_op): xla_op" href="nimxla/xla_wrapper.html#op_atan2%2Cxla_op%2Cxla_op">xla_wrapper: op_atan2(a1: xla_op; a2: xla_op): xla_op</a></li>
+          data-doc-search-tag="xla_wrapper: op_atan2(a1: xla_op; a2: xla_op): xla_op" href="nimxla/private/xla_wrapper.html#op_atan2%2Cxla_op%2Cxla_op">xla_wrapper: op_atan2(a1: xla_op; a2: xla_op): xla_op</a></li>
           </ul></dd>
 <dt><a name="op_broadcast" href="#op_broadcast"><span>op_broadcast:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
-          data-doc-search-tag="xla_wrapper: op_broadcast(a1: xla_op; a2: csize_t; a3: ptr int64): xla_op" href="nimxla/xla_wrapper.html#op_broadcast%2Cxla_op%2Ccsize_t%2Cptr.int64">xla_wrapper: op_broadcast(a1: xla_op; a2: csize_t; a3: ptr int64): xla_op</a></li>
+          data-doc-search-tag="xla_wrapper: op_broadcast(a1: xla_op; a2: csize_t; a3: ptr int64): xla_op" href="nimxla/private/xla_wrapper.html#op_broadcast%2Cxla_op%2Ccsize_t%2Cptr.int64">xla_wrapper: op_broadcast(a1: xla_op; a2: csize_t; a3: ptr int64): xla_op</a></li>
           </ul></dd>
 <dt><a name="op_broadcast_in_dim" href="#op_broadcast_in_dim"><span>op_broadcast_in_dim:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
           data-doc-search-tag="xla_wrapper: op_broadcast_in_dim(a1: xla_op; a2: csize_t; a3: ptr int64; a4: csize_t;
-                    a5: ptr int64): xla_op" href="nimxla/xla_wrapper.html#op_broadcast_in_dim%2Cxla_op%2Ccsize_t%2Cptr.int64%2Ccsize_t%2Cptr.int64">xla_wrapper: op_broadcast_in_dim(a1: xla_op; a2: csize_t; a3: ptr int64; a4: csize_t;
+                    a5: ptr int64): xla_op" href="nimxla/private/xla_wrapper.html#op_broadcast_in_dim%2Cxla_op%2Ccsize_t%2Cptr.int64%2Ccsize_t%2Cptr.int64">xla_wrapper: op_broadcast_in_dim(a1: xla_op; a2: csize_t; a3: ptr int64; a4: csize_t;
                     a5: ptr int64): xla_op</a></li>
           </ul></dd>
 <dt><a name="op_builder" href="#op_builder"><span>op_builder:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
-          data-doc-search-tag="xla_wrapper: op_builder(a1: xla_op): xla_builder" href="nimxla/xla_wrapper.html#op_builder%2Cxla_op">xla_wrapper: op_builder(a1: xla_op): xla_builder</a></li>
+          data-doc-search-tag="xla_wrapper: op_builder(a1: xla_op): xla_builder" href="nimxla/private/xla_wrapper.html#op_builder%2Cxla_op">xla_wrapper: op_builder(a1: xla_op): xla_builder</a></li>
           </ul></dd>
 <dt><a name="op_cbrt" href="#op_cbrt"><span>op_cbrt:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
-          data-doc-search-tag="xla_wrapper: op_cbrt(a1: xla_op): xla_op" href="nimxla/xla_wrapper.html#op_cbrt%2Cxla_op">xla_wrapper: op_cbrt(a1: xla_op): xla_op</a></li>
+          data-doc-search-tag="xla_wrapper: op_cbrt(a1: xla_op): xla_op" href="nimxla/private/xla_wrapper.html#op_cbrt%2Cxla_op">xla_wrapper: op_cbrt(a1: xla_op): xla_op</a></li>
           </ul></dd>
 <dt><a name="op_ceil" href="#op_ceil"><span>op_ceil:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
-          data-doc-search-tag="xla_wrapper: op_ceil(a1: xla_op): xla_op" href="nimxla/xla_wrapper.html#op_ceil%2Cxla_op">xla_wrapper: op_ceil(a1: xla_op): xla_op</a></li>
+          data-doc-search-tag="xla_wrapper: op_ceil(a1: xla_op): xla_op" href="nimxla/private/xla_wrapper.html#op_ceil%2Cxla_op">xla_wrapper: op_ceil(a1: xla_op): xla_op</a></li>
           </ul></dd>
 <dt><a name="op_clamp" href="#op_clamp"><span>op_clamp:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
-          data-doc-search-tag="xla_wrapper: op_clamp(a1: xla_op; a2: xla_op; a3: xla_op): xla_op" href="nimxla/xla_wrapper.html#op_clamp%2Cxla_op%2Cxla_op%2Cxla_op">xla_wrapper: op_clamp(a1: xla_op; a2: xla_op; a3: xla_op): xla_op</a></li>
+          data-doc-search-tag="xla_wrapper: op_clamp(a1: xla_op; a2: xla_op; a3: xla_op): xla_op" href="nimxla/private/xla_wrapper.html#op_clamp%2Cxla_op%2Cxla_op%2Cxla_op">xla_wrapper: op_clamp(a1: xla_op; a2: xla_op; a3: xla_op): xla_op</a></li>
           </ul></dd>
 <dt><a name="op_clone" href="#op_clone"><span>op_clone:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
-          data-doc-search-tag="xla_wrapper: op_clone(a1: xla_op): xla_op" href="nimxla/xla_wrapper.html#op_clone%2Cxla_op">xla_wrapper: op_clone(a1: xla_op): xla_op</a></li>
+          data-doc-search-tag="xla_wrapper: op_clone(a1: xla_op): xla_op" href="nimxla/private/xla_wrapper.html#op_clone%2Cxla_op">xla_wrapper: op_clone(a1: xla_op): xla_op</a></li>
           </ul></dd>
 <dt><a name="op_clz" href="#op_clz"><span>op_clz:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
-          data-doc-search-tag="xla_wrapper: op_clz(a1: xla_op): xla_op" href="nimxla/xla_wrapper.html#op_clz%2Cxla_op">xla_wrapper: op_clz(a1: xla_op): xla_op</a></li>
+          data-doc-search-tag="xla_wrapper: op_clz(a1: xla_op): xla_op" href="nimxla/private/xla_wrapper.html#op_clz%2Cxla_op">xla_wrapper: op_clz(a1: xla_op): xla_op</a></li>
           </ul></dd>
 <dt><a name="op_collapse" href="#op_collapse"><span>op_collapse:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
-          data-doc-search-tag="xla_wrapper: op_collapse(a1: xla_op; a2: csize_t; a3: ptr int64): xla_op" href="nimxla/xla_wrapper.html#op_collapse%2Cxla_op%2Ccsize_t%2Cptr.int64">xla_wrapper: op_collapse(a1: xla_op; a2: csize_t; a3: ptr int64): xla_op</a></li>
+          data-doc-search-tag="xla_wrapper: op_collapse(a1: xla_op; a2: csize_t; a3: ptr int64): xla_op" href="nimxla/private/xla_wrapper.html#op_collapse%2Cxla_op%2Ccsize_t%2Cptr.int64">xla_wrapper: op_collapse(a1: xla_op; a2: csize_t; a3: ptr int64): xla_op</a></li>
           </ul></dd>
 <dt><a name="op_concat_in_dim" href="#op_concat_in_dim"><span>op_concat_in_dim:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
-          data-doc-search-tag="xla_wrapper: op_concat_in_dim(a1: xla_op; a2: ptr xla_op; a3: csize_t; a4: int64): xla_op" href="nimxla/xla_wrapper.html#op_concat_in_dim%2Cxla_op%2Cptr.xla_op%2Ccsize_t%2Cint64">xla_wrapper: op_concat_in_dim(a1: xla_op; a2: ptr xla_op; a3: csize_t; a4: int64): xla_op</a></li>
+          data-doc-search-tag="xla_wrapper: op_concat_in_dim(a1: xla_op; a2: ptr xla_op; a3: csize_t; a4: int64): xla_op" href="nimxla/private/xla_wrapper.html#op_concat_in_dim%2Cxla_op%2Cptr.xla_op%2Ccsize_t%2Cint64">xla_wrapper: op_concat_in_dim(a1: xla_op; a2: ptr xla_op; a3: csize_t; a4: int64): xla_op</a></li>
           </ul></dd>
 <dt><a name="op_conditional" href="#op_conditional"><span>op_conditional:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
           data-doc-search-tag="xla_wrapper: op_conditional(a1: xla_op; a2: xla_op; a3: xla_computation; a4: xla_op;
-               a5: xla_computation): xla_op" href="nimxla/xla_wrapper.html#op_conditional%2Cxla_op%2Cxla_op%2Cxla_computation%2Cxla_op%2Cxla_computation">xla_wrapper: op_conditional(a1: xla_op; a2: xla_op; a3: xla_computation; a4: xla_op;
+               a5: xla_computation): xla_op" href="nimxla/private/xla_wrapper.html#op_conditional%2Cxla_op%2Cxla_op%2Cxla_computation%2Cxla_op%2Cxla_computation">xla_wrapper: op_conditional(a1: xla_op; a2: xla_op; a3: xla_computation; a4: xla_op;
                a5: xla_computation): xla_op</a></li>
           </ul></dd>
 <dt><a name="op_convert_element_type" href="#op_convert_element_type"><span>op_convert_element_type:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
-          data-doc-search-tag="xla_wrapper: op_convert_element_type(a1: xla_op; a2: cint): xla_op" href="nimxla/xla_wrapper.html#op_convert_element_type%2Cxla_op%2Ccint">xla_wrapper: op_convert_element_type(a1: xla_op; a2: cint): xla_op</a></li>
+          data-doc-search-tag="xla_wrapper: op_convert_element_type(a1: xla_op; a2: cint): xla_op" href="nimxla/private/xla_wrapper.html#op_convert_element_type%2Cxla_op%2Ccint">xla_wrapper: op_convert_element_type(a1: xla_op; a2: cint): xla_op</a></li>
           </ul></dd>
 <dt><a name="op_copy" href="#op_copy"><span>op_copy:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
-          data-doc-search-tag="xla_wrapper: op_copy(a1: xla_op): xla_op" href="nimxla/xla_wrapper.html#op_copy%2Cxla_op">xla_wrapper: op_copy(a1: xla_op): xla_op</a></li>
+          data-doc-search-tag="xla_wrapper: op_copy(a1: xla_op): xla_op" href="nimxla/private/xla_wrapper.html#op_copy%2Cxla_op">xla_wrapper: op_copy(a1: xla_op): xla_op</a></li>
           </ul></dd>
 <dt><a name="op_cos" href="#op_cos"><span>op_cos:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
-          data-doc-search-tag="xla_wrapper: op_cos(a1: xla_op): xla_op" href="nimxla/xla_wrapper.html#op_cos%2Cxla_op">xla_wrapper: op_cos(a1: xla_op): xla_op</a></li>
+          data-doc-search-tag="xla_wrapper: op_cos(a1: xla_op): xla_op" href="nimxla/private/xla_wrapper.html#op_cos%2Cxla_op">xla_wrapper: op_cos(a1: xla_op): xla_op</a></li>
           </ul></dd>
 <dt><a name="op_dimensions_size" href="#op_dimensions_size"><span>op_dimensions_size:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
-          data-doc-search-tag="xla_wrapper: op_dimensions_size(a1: xla_op; a2: int64): xla_op" href="nimxla/xla_wrapper.html#op_dimensions_size%2Cxla_op%2Cint64">xla_wrapper: op_dimensions_size(a1: xla_op; a2: int64): xla_op</a></li>
+          data-doc-search-tag="xla_wrapper: op_dimensions_size(a1: xla_op; a2: int64): xla_op" href="nimxla/private/xla_wrapper.html#op_dimensions_size%2Cxla_op%2Cint64">xla_wrapper: op_dimensions_size(a1: xla_op; a2: int64): xla_op</a></li>
           </ul></dd>
 <dt><a name="op_div" href="#op_div"><span>op_div:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
-          data-doc-search-tag="xla_wrapper: op_div(a1: xla_op; a2: xla_op): xla_op" href="nimxla/xla_wrapper.html#op_div%2Cxla_op%2Cxla_op">xla_wrapper: op_div(a1: xla_op; a2: xla_op): xla_op</a></li>
+          data-doc-search-tag="xla_wrapper: op_div(a1: xla_op; a2: xla_op): xla_op" href="nimxla/private/xla_wrapper.html#op_div%2Cxla_op%2Cxla_op">xla_wrapper: op_div(a1: xla_op; a2: xla_op): xla_op</a></li>
           </ul></dd>
 <dt><a name="op_dot" href="#op_dot"><span>op_dot:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
-          data-doc-search-tag="xla_wrapper: op_dot(a1: xla_op; a2: xla_op): xla_op" href="nimxla/xla_wrapper.html#op_dot%2Cxla_op%2Cxla_op">xla_wrapper: op_dot(a1: xla_op; a2: xla_op): xla_op</a></li>
+          data-doc-search-tag="xla_wrapper: op_dot(a1: xla_op; a2: xla_op): xla_op" href="nimxla/private/xla_wrapper.html#op_dot%2Cxla_op%2Cxla_op">xla_wrapper: op_dot(a1: xla_op; a2: xla_op): xla_op</a></li>
           </ul></dd>
 <dt><a name="op_dot_general" href="#op_dot_general"><span>op_dot_general:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
           data-doc-search-tag="xla_wrapper: op_dot_general(a1: xla_op; a2: xla_op; a3: ptr int64; a4: csize_t;
                a5: ptr int64; a6: csize_t; a7: ptr int64; a8: csize_t;
-               a9: ptr int64; a10: csize_t): xla_op" href="nimxla/xla_wrapper.html#op_dot_general%2Cxla_op%2Cxla_op%2Cptr.int64%2Ccsize_t%2Cptr.int64%2Ccsize_t%2Cptr.int64%2Ccsize_t%2Cptr.int64%2Ccsize_t">xla_wrapper: op_dot_general(a1: xla_op; a2: xla_op; a3: ptr int64; a4: csize_t;
+               a9: ptr int64; a10: csize_t): xla_op" href="nimxla/private/xla_wrapper.html#op_dot_general%2Cxla_op%2Cxla_op%2Cptr.int64%2Ccsize_t%2Cptr.int64%2Ccsize_t%2Cptr.int64%2Ccsize_t%2Cptr.int64%2Ccsize_t">xla_wrapper: op_dot_general(a1: xla_op; a2: xla_op; a3: ptr int64; a4: csize_t;
                a5: ptr int64; a6: csize_t; a7: ptr int64; a8: csize_t;
                a9: ptr int64; a10: csize_t): xla_op</a></li>
           </ul></dd>
 <dt><a name="op_einsum1" href="#op_einsum1"><span>op_einsum1:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
-          data-doc-search-tag="xla_wrapper: op_einsum1(a1: xla_op; a2: cstring): xla_op" href="nimxla/xla_wrapper.html#op_einsum1%2Cxla_op%2Ccstring">xla_wrapper: op_einsum1(a1: xla_op; a2: cstring): xla_op</a></li>
+          data-doc-search-tag="xla_wrapper: op_einsum1(a1: xla_op; a2: cstring): xla_op" href="nimxla/private/xla_wrapper.html#op_einsum1%2Cxla_op%2Ccstring">xla_wrapper: op_einsum1(a1: xla_op; a2: cstring): xla_op</a></li>
           </ul></dd>
 <dt><a name="op_einsum2" href="#op_einsum2"><span>op_einsum2:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
-          data-doc-search-tag="xla_wrapper: op_einsum2(a1: xla_op; a2: xla_op; a3: cstring): xla_op" href="nimxla/xla_wrapper.html#op_einsum2%2Cxla_op%2Cxla_op%2Ccstring">xla_wrapper: op_einsum2(a1: xla_op; a2: xla_op; a3: cstring): xla_op</a></li>
+          data-doc-search-tag="xla_wrapper: op_einsum2(a1: xla_op; a2: xla_op; a3: cstring): xla_op" href="nimxla/private/xla_wrapper.html#op_einsum2%2Cxla_op%2Cxla_op%2Ccstring">xla_wrapper: op_einsum2(a1: xla_op; a2: xla_op; a3: cstring): xla_op</a></li>
           </ul></dd>
 <dt><a name="op_eq" href="#op_eq"><span>op_eq:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
-          data-doc-search-tag="xla_wrapper: op_eq(a1: xla_op; a2: xla_op): xla_op" href="nimxla/xla_wrapper.html#op_eq%2Cxla_op%2Cxla_op">xla_wrapper: op_eq(a1: xla_op; a2: xla_op): xla_op</a></li>
+          data-doc-search-tag="xla_wrapper: op_eq(a1: xla_op; a2: xla_op): xla_op" href="nimxla/private/xla_wrapper.html#op_eq%2Cxla_op%2Cxla_op">xla_wrapper: op_eq(a1: xla_op; a2: xla_op): xla_op</a></li>
           </ul></dd>
 <dt><a name="op_exp" href="#op_exp"><span>op_exp:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
-          data-doc-search-tag="xla_wrapper: op_exp(a1: xla_op): xla_op" href="nimxla/xla_wrapper.html#op_exp%2Cxla_op">xla_wrapper: op_exp(a1: xla_op): xla_op</a></li>
+          data-doc-search-tag="xla_wrapper: op_exp(a1: xla_op): xla_op" href="nimxla/private/xla_wrapper.html#op_exp%2Cxla_op">xla_wrapper: op_exp(a1: xla_op): xla_op</a></li>
           </ul></dd>
 <dt><a name="op_expm1" href="#op_expm1"><span>op_expm1:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
-          data-doc-search-tag="xla_wrapper: op_expm1(a1: xla_op): xla_op" href="nimxla/xla_wrapper.html#op_expm1%2Cxla_op">xla_wrapper: op_expm1(a1: xla_op): xla_op</a></li>
+          data-doc-search-tag="xla_wrapper: op_expm1(a1: xla_op): xla_op" href="nimxla/private/xla_wrapper.html#op_expm1%2Cxla_op">xla_wrapper: op_expm1(a1: xla_op): xla_op</a></li>
           </ul></dd>
 <dt><a name="op_floor" href="#op_floor"><span>op_floor:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
-          data-doc-search-tag="xla_wrapper: op_floor(a1: xla_op): xla_op" href="nimxla/xla_wrapper.html#op_floor%2Cxla_op">xla_wrapper: op_floor(a1: xla_op): xla_op</a></li>
+          data-doc-search-tag="xla_wrapper: op_floor(a1: xla_op): xla_op" href="nimxla/private/xla_wrapper.html#op_floor%2Cxla_op">xla_wrapper: op_floor(a1: xla_op): xla_op</a></li>
           </ul></dd>
 <dt><a name="op_gather" href="#op_gather"><span>op_gather:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
           data-doc-search-tag="xla_wrapper: op_gather(a1: xla_op; a2: xla_op; a3: ptr int64; a4: csize_t; a5: ptr int64;
           a6: csize_t; a7: ptr int64; a8: csize_t; a9: ptr int64;
-          a10: ptr int64; a11: csize_t): xla_op" href="nimxla/xla_wrapper.html#op_gather%2Cxla_op%2Cxla_op%2Cptr.int64%2Ccsize_t%2Cptr.int64%2Ccsize_t%2Cptr.int64%2Ccsize_t%2Cptr.int64%2Cptr.int64%2Ccsize_t">xla_wrapper: op_gather(a1: xla_op; a2: xla_op; a3: ptr int64; a4: csize_t; a5: ptr int64;
+          a10: ptr int64; a11: csize_t): xla_op" href="nimxla/private/xla_wrapper.html#op_gather%2Cxla_op%2Cxla_op%2Cptr.int64%2Ccsize_t%2Cptr.int64%2Ccsize_t%2Cptr.int64%2Ccsize_t%2Cptr.int64%2Cptr.int64%2Ccsize_t">xla_wrapper: op_gather(a1: xla_op; a2: xla_op; a3: ptr int64; a4: csize_t; a5: ptr int64;
           a6: csize_t; a7: ptr int64; a8: csize_t; a9: ptr int64;
           a10: ptr int64; a11: csize_t): xla_op</a></li>
           </ul></dd>
 <dt><a name="op_ge" href="#op_ge"><span>op_ge:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
-          data-doc-search-tag="xla_wrapper: op_ge(a1: xla_op; a2: xla_op): xla_op" href="nimxla/xla_wrapper.html#op_ge%2Cxla_op%2Cxla_op">xla_wrapper: op_ge(a1: xla_op; a2: xla_op): xla_op</a></li>
+          data-doc-search-tag="xla_wrapper: op_ge(a1: xla_op; a2: xla_op): xla_op" href="nimxla/private/xla_wrapper.html#op_ge%2Cxla_op%2Cxla_op">xla_wrapper: op_ge(a1: xla_op; a2: xla_op): xla_op</a></li>
           </ul></dd>
 <dt><a name="op_get_tuple_element" href="#op_get_tuple_element"><span>op_get_tuple_element:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
-          data-doc-search-tag="xla_wrapper: op_get_tuple_element(a1: xla_op; a2: int64): xla_op" href="nimxla/xla_wrapper.html#op_get_tuple_element%2Cxla_op%2Cint64">xla_wrapper: op_get_tuple_element(a1: xla_op; a2: int64): xla_op</a></li>
+          data-doc-search-tag="xla_wrapper: op_get_tuple_element(a1: xla_op; a2: int64): xla_op" href="nimxla/private/xla_wrapper.html#op_get_tuple_element%2Cxla_op%2Cint64">xla_wrapper: op_get_tuple_element(a1: xla_op; a2: int64): xla_op</a></li>
           </ul></dd>
 <dt><a name="op_gt" href="#op_gt"><span>op_gt:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
-          data-doc-search-tag="xla_wrapper: op_gt(a1: xla_op; a2: xla_op): xla_op" href="nimxla/xla_wrapper.html#op_gt%2Cxla_op%2Cxla_op">xla_wrapper: op_gt(a1: xla_op; a2: xla_op): xla_op</a></li>
+          data-doc-search-tag="xla_wrapper: op_gt(a1: xla_op; a2: xla_op): xla_op" href="nimxla/private/xla_wrapper.html#op_gt%2Cxla_op%2Cxla_op">xla_wrapper: op_gt(a1: xla_op; a2: xla_op): xla_op</a></li>
           </ul></dd>
 <dt><a name="op_imag" href="#op_imag"><span>op_imag:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
-          data-doc-search-tag="xla_wrapper: op_imag(a1: xla_op): xla_op" href="nimxla/xla_wrapper.html#op_imag%2Cxla_op">xla_wrapper: op_imag(a1: xla_op): xla_op</a></li>
+          data-doc-search-tag="xla_wrapper: op_imag(a1: xla_op): xla_op" href="nimxla/private/xla_wrapper.html#op_imag%2Cxla_op">xla_wrapper: op_imag(a1: xla_op): xla_op</a></li>
           </ul></dd>
 <dt><a name="op_internal_error" href="#op_internal_error"><span>op_internal_error:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
-          data-doc-search-tag="xla_wrapper: op_internal_error(a1: xla_builder; a2: cstring): xla_op" href="nimxla/xla_wrapper.html#op_internal_error%2Cxla_builder%2Ccstring">xla_wrapper: op_internal_error(a1: xla_builder; a2: cstring): xla_op</a></li>
+          data-doc-search-tag="xla_wrapper: op_internal_error(a1: xla_builder; a2: cstring): xla_op" href="nimxla/private/xla_wrapper.html#op_internal_error%2Cxla_builder%2Ccstring">xla_wrapper: op_internal_error(a1: xla_builder; a2: cstring): xla_op</a></li>
           </ul></dd>
 <dt><a name="op_invalid_argument_error" href="#op_invalid_argument_error"><span>op_invalid_argument_error:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
-          data-doc-search-tag="xla_wrapper: op_invalid_argument_error(a1: xla_builder; a2: cstring): xla_op" href="nimxla/xla_wrapper.html#op_invalid_argument_error%2Cxla_builder%2Ccstring">xla_wrapper: op_invalid_argument_error(a1: xla_builder; a2: cstring): xla_op</a></li>
+          data-doc-search-tag="xla_wrapper: op_invalid_argument_error(a1: xla_builder; a2: cstring): xla_op" href="nimxla/private/xla_wrapper.html#op_invalid_argument_error%2Cxla_builder%2Ccstring">xla_wrapper: op_invalid_argument_error(a1: xla_builder; a2: cstring): xla_op</a></li>
           </ul></dd>
 <dt><a name="op_iota" href="#op_iota"><span>op_iota:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
-          data-doc-search-tag="xla_wrapper: op_iota(a1: xla_builder; a2: cint; a3: csize_t; a4: ptr int64; a5: int64): xla_op" href="nimxla/xla_wrapper.html#op_iota%2Cxla_builder%2Ccint%2Ccsize_t%2Cptr.int64%2Cint64">xla_wrapper: op_iota(a1: xla_builder; a2: cint; a3: csize_t; a4: ptr int64; a5: int64): xla_op</a></li>
+          data-doc-search-tag="xla_wrapper: op_iota(a1: xla_builder; a2: cint; a3: csize_t; a4: ptr int64; a5: int64): xla_op" href="nimxla/private/xla_wrapper.html#op_iota%2Cxla_builder%2Ccint%2Ccsize_t%2Cptr.int64%2Cint64">xla_wrapper: op_iota(a1: xla_builder; a2: cint; a3: csize_t; a4: ptr int64; a5: int64): xla_op</a></li>
           </ul></dd>
 <dt><a name="op_iota1" href="#op_iota1"><span>op_iota1:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
-          data-doc-search-tag="xla_wrapper: op_iota1(a1: xla_builder; a2: cint; a3: csize_t): xla_op" href="nimxla/xla_wrapper.html#op_iota1%2Cxla_builder%2Ccint%2Ccsize_t">xla_wrapper: op_iota1(a1: xla_builder; a2: cint; a3: csize_t): xla_op</a></li>
+          data-doc-search-tag="xla_wrapper: op_iota1(a1: xla_builder; a2: cint; a3: csize_t): xla_op" href="nimxla/private/xla_wrapper.html#op_iota1%2Cxla_builder%2Ccint%2Ccsize_t">xla_wrapper: op_iota1(a1: xla_builder; a2: cint; a3: csize_t): xla_op</a></li>
           </ul></dd>
 <dt><a name="op_is_finite" href="#op_is_finite"><span>op_is_finite:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
-          data-doc-search-tag="xla_wrapper: op_is_finite(a1: xla_op): xla_op" href="nimxla/xla_wrapper.html#op_is_finite%2Cxla_op">xla_wrapper: op_is_finite(a1: xla_op): xla_op</a></li>
+          data-doc-search-tag="xla_wrapper: op_is_finite(a1: xla_op): xla_op" href="nimxla/private/xla_wrapper.html#op_is_finite%2Cxla_op">xla_wrapper: op_is_finite(a1: xla_op): xla_op</a></li>
           </ul></dd>
 <dt><a name="op_le" href="#op_le"><span>op_le:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
-          data-doc-search-tag="xla_wrapper: op_le(a1: xla_op; a2: xla_op): xla_op" href="nimxla/xla_wrapper.html#op_le%2Cxla_op%2Cxla_op">xla_wrapper: op_le(a1: xla_op; a2: xla_op): xla_op</a></li>
+          data-doc-search-tag="xla_wrapper: op_le(a1: xla_op; a2: xla_op): xla_op" href="nimxla/private/xla_wrapper.html#op_le%2Cxla_op%2Cxla_op">xla_wrapper: op_le(a1: xla_op; a2: xla_op): xla_op</a></li>
           </ul></dd>
 <dt><a name="op_log" href="#op_log"><span>op_log:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
-          data-doc-search-tag="xla_wrapper: op_log(a1: xla_op): xla_op" href="nimxla/xla_wrapper.html#op_log%2Cxla_op">xla_wrapper: op_log(a1: xla_op): xla_op</a></li>
+          data-doc-search-tag="xla_wrapper: op_log(a1: xla_op): xla_op" href="nimxla/private/xla_wrapper.html#op_log%2Cxla_op">xla_wrapper: op_log(a1: xla_op): xla_op</a></li>
           </ul></dd>
 <dt><a name="op_log1p" href="#op_log1p"><span>op_log1p:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
-          data-doc-search-tag="xla_wrapper: op_log1p(a1: xla_op): xla_op" href="nimxla/xla_wrapper.html#op_log1p%2Cxla_op">xla_wrapper: op_log1p(a1: xla_op): xla_op</a></li>
+          data-doc-search-tag="xla_wrapper: op_log1p(a1: xla_op): xla_op" href="nimxla/private/xla_wrapper.html#op_log1p%2Cxla_op">xla_wrapper: op_log1p(a1: xla_op): xla_op</a></li>
           </ul></dd>
 <dt><a name="op_logistic" href="#op_logistic"><span>op_logistic:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
-          data-doc-search-tag="xla_wrapper: op_logistic(a1: xla_op): xla_op" href="nimxla/xla_wrapper.html#op_logistic%2Cxla_op">xla_wrapper: op_logistic(a1: xla_op): xla_op</a></li>
+          data-doc-search-tag="xla_wrapper: op_logistic(a1: xla_op): xla_op" href="nimxla/private/xla_wrapper.html#op_logistic%2Cxla_op">xla_wrapper: op_logistic(a1: xla_op): xla_op</a></li>
           </ul></dd>
 <dt><a name="op_lower_triangle" href="#op_lower_triangle"><span>op_lower_triangle:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
-          data-doc-search-tag="xla_wrapper: op_lower_triangle(a1: xla_op): xla_op" href="nimxla/xla_wrapper.html#op_lower_triangle%2Cxla_op">xla_wrapper: op_lower_triangle(a1: xla_op): xla_op</a></li>
+          data-doc-search-tag="xla_wrapper: op_lower_triangle(a1: xla_op): xla_op" href="nimxla/private/xla_wrapper.html#op_lower_triangle%2Cxla_op">xla_wrapper: op_lower_triangle(a1: xla_op): xla_op</a></li>
           </ul></dd>
 <dt><a name="op_lt" href="#op_lt"><span>op_lt:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
-          data-doc-search-tag="xla_wrapper: op_lt(a1: xla_op; a2: xla_op): xla_op" href="nimxla/xla_wrapper.html#op_lt%2Cxla_op%2Cxla_op">xla_wrapper: op_lt(a1: xla_op; a2: xla_op): xla_op</a></li>
+          data-doc-search-tag="xla_wrapper: op_lt(a1: xla_op; a2: xla_op): xla_op" href="nimxla/private/xla_wrapper.html#op_lt%2Cxla_op%2Cxla_op">xla_wrapper: op_lt(a1: xla_op; a2: xla_op): xla_op</a></li>
           </ul></dd>
 <dt><a name="op_max" href="#op_max"><span>op_max:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
-          data-doc-search-tag="xla_wrapper: op_max(a1: xla_op; a2: xla_op): xla_op" href="nimxla/xla_wrapper.html#op_max%2Cxla_op%2Cxla_op">xla_wrapper: op_max(a1: xla_op; a2: xla_op): xla_op</a></li>
+          data-doc-search-tag="xla_wrapper: op_max(a1: xla_op; a2: xla_op): xla_op" href="nimxla/private/xla_wrapper.html#op_max%2Cxla_op%2Cxla_op">xla_wrapper: op_max(a1: xla_op; a2: xla_op): xla_op</a></li>
           </ul></dd>
 <dt><a name="op_max_value" href="#op_max_value"><span>op_max_value:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
-          data-doc-search-tag="xla_wrapper: op_max_value(a1: xla_builder; a2: cint): xla_op" href="nimxla/xla_wrapper.html#op_max_value%2Cxla_builder%2Ccint">xla_wrapper: op_max_value(a1: xla_builder; a2: cint): xla_op</a></li>
+          data-doc-search-tag="xla_wrapper: op_max_value(a1: xla_builder; a2: cint): xla_op" href="nimxla/private/xla_wrapper.html#op_max_value%2Cxla_builder%2Ccint">xla_wrapper: op_max_value(a1: xla_builder; a2: cint): xla_op</a></li>
           </ul></dd>
 <dt><a name="op_min" href="#op_min"><span>op_min:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
-          data-doc-search-tag="xla_wrapper: op_min(a1: xla_op; a2: xla_op): xla_op" href="nimxla/xla_wrapper.html#op_min%2Cxla_op%2Cxla_op">xla_wrapper: op_min(a1: xla_op; a2: xla_op): xla_op</a></li>
+          data-doc-search-tag="xla_wrapper: op_min(a1: xla_op; a2: xla_op): xla_op" href="nimxla/private/xla_wrapper.html#op_min%2Cxla_op%2Cxla_op">xla_wrapper: op_min(a1: xla_op; a2: xla_op): xla_op</a></li>
           </ul></dd>
 <dt><a name="op_min_value" href="#op_min_value"><span>op_min_value:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
-          data-doc-search-tag="xla_wrapper: op_min_value(a1: xla_builder; a2: cint): xla_op" href="nimxla/xla_wrapper.html#op_min_value%2Cxla_builder%2Ccint">xla_wrapper: op_min_value(a1: xla_builder; a2: cint): xla_op</a></li>
+          data-doc-search-tag="xla_wrapper: op_min_value(a1: xla_builder; a2: cint): xla_op" href="nimxla/private/xla_wrapper.html#op_min_value%2Cxla_builder%2Ccint">xla_wrapper: op_min_value(a1: xla_builder; a2: cint): xla_op</a></li>
           </ul></dd>
 <dt><a name="op_mul" href="#op_mul"><span>op_mul:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
-          data-doc-search-tag="xla_wrapper: op_mul(a1: xla_op; a2: xla_op): xla_op" href="nimxla/xla_wrapper.html#op_mul%2Cxla_op%2Cxla_op">xla_wrapper: op_mul(a1: xla_op; a2: xla_op): xla_op</a></li>
+          data-doc-search-tag="xla_wrapper: op_mul(a1: xla_op; a2: xla_op): xla_op" href="nimxla/private/xla_wrapper.html#op_mul%2Cxla_op%2Cxla_op">xla_wrapper: op_mul(a1: xla_op; a2: xla_op): xla_op</a></li>
           </ul></dd>
 <dt><a name="op_ne" href="#op_ne"><span>op_ne:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
-          data-doc-search-tag="xla_wrapper: op_ne(a1: xla_op; a2: xla_op): xla_op" href="nimxla/xla_wrapper.html#op_ne%2Cxla_op%2Cxla_op">xla_wrapper: op_ne(a1: xla_op; a2: xla_op): xla_op</a></li>
+          data-doc-search-tag="xla_wrapper: op_ne(a1: xla_op; a2: xla_op): xla_op" href="nimxla/private/xla_wrapper.html#op_ne%2Cxla_op%2Cxla_op">xla_wrapper: op_ne(a1: xla_op; a2: xla_op): xla_op</a></li>
           </ul></dd>
 <dt><a name="op_neg" href="#op_neg"><span>op_neg:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
-          data-doc-search-tag="xla_wrapper: op_neg(a1: xla_op): xla_op" href="nimxla/xla_wrapper.html#op_neg%2Cxla_op">xla_wrapper: op_neg(a1: xla_op): xla_op</a></li>
+          data-doc-search-tag="xla_wrapper: op_neg(a1: xla_op): xla_op" href="nimxla/private/xla_wrapper.html#op_neg%2Cxla_op">xla_wrapper: op_neg(a1: xla_op): xla_op</a></li>
           </ul></dd>
 <dt><a name="op_not" href="#op_not"><span>op_not:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
-          data-doc-search-tag="xla_wrapper: op_not(a1: xla_op): xla_op" href="nimxla/xla_wrapper.html#op_not%2Cxla_op">xla_wrapper: op_not(a1: xla_op): xla_op</a></li>
+          data-doc-search-tag="xla_wrapper: op_not(a1: xla_op): xla_op" href="nimxla/private/xla_wrapper.html#op_not%2Cxla_op">xla_wrapper: op_not(a1: xla_op): xla_op</a></li>
           </ul></dd>
 <dt><a name="op_one" href="#op_one"><span>op_one:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
-          data-doc-search-tag="xla_wrapper: op_one(a1: xla_builder; a2: cint): xla_op" href="nimxla/xla_wrapper.html#op_one%2Cxla_builder%2Ccint">xla_wrapper: op_one(a1: xla_builder; a2: cint): xla_op</a></li>
+          data-doc-search-tag="xla_wrapper: op_one(a1: xla_builder; a2: cint): xla_op" href="nimxla/private/xla_wrapper.html#op_one%2Cxla_builder%2Ccint">xla_wrapper: op_one(a1: xla_builder; a2: cint): xla_op</a></li>
           </ul></dd>
 <dt><a name="op_or" href="#op_or"><span>op_or:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
-          data-doc-search-tag="xla_wrapper: op_or(a1: xla_op; a2: xla_op): xla_op" href="nimxla/xla_wrapper.html#op_or%2Cxla_op%2Cxla_op">xla_wrapper: op_or(a1: xla_op; a2: xla_op): xla_op</a></li>
+          data-doc-search-tag="xla_wrapper: op_or(a1: xla_op; a2: xla_op): xla_op" href="nimxla/private/xla_wrapper.html#op_or%2Cxla_op%2Cxla_op">xla_wrapper: op_or(a1: xla_op; a2: xla_op): xla_op</a></li>
           </ul></dd>
 <dt><a name="op_pow" href="#op_pow"><span>op_pow:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
-          data-doc-search-tag="xla_wrapper: op_pow(a1: xla_op; a2: xla_op): xla_op" href="nimxla/xla_wrapper.html#op_pow%2Cxla_op%2Cxla_op">xla_wrapper: op_pow(a1: xla_op; a2: xla_op): xla_op</a></li>
+          data-doc-search-tag="xla_wrapper: op_pow(a1: xla_op; a2: xla_op): xla_op" href="nimxla/private/xla_wrapper.html#op_pow%2Cxla_op%2Cxla_op">xla_wrapper: op_pow(a1: xla_op; a2: xla_op): xla_op</a></li>
           </ul></dd>
 <dt><a name="op_real" href="#op_real"><span>op_real:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
-          data-doc-search-tag="xla_wrapper: op_real(a1: xla_op): xla_op" href="nimxla/xla_wrapper.html#op_real%2Cxla_op">xla_wrapper: op_real(a1: xla_op): xla_op</a></li>
+          data-doc-search-tag="xla_wrapper: op_real(a1: xla_op): xla_op" href="nimxla/private/xla_wrapper.html#op_real%2Cxla_op">xla_wrapper: op_real(a1: xla_op): xla_op</a></li>
           </ul></dd>
 <dt><a name="op_reduce" href="#op_reduce"><span>op_reduce:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
           data-doc-search-tag="xla_wrapper: op_reduce(a1: xla_op; a2: xla_op; a3: xla_computation; a4: ptr int64;
-          a5: csize_t): xla_op" href="nimxla/xla_wrapper.html#op_reduce%2Cxla_op%2Cxla_op%2Cxla_computation%2Cptr.int64%2Ccsize_t">xla_wrapper: op_reduce(a1: xla_op; a2: xla_op; a3: xla_computation; a4: ptr int64;
+          a5: csize_t): xla_op" href="nimxla/private/xla_wrapper.html#op_reduce%2Cxla_op%2Cxla_op%2Cxla_computation%2Cptr.int64%2Ccsize_t">xla_wrapper: op_reduce(a1: xla_op; a2: xla_op; a3: xla_computation; a4: ptr int64;
           a5: csize_t): xla_op</a></li>
           </ul></dd>
 <dt><a name="op_rem" href="#op_rem"><span>op_rem:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
-          data-doc-search-tag="xla_wrapper: op_rem(a1: xla_op; a2: xla_op): xla_op" href="nimxla/xla_wrapper.html#op_rem%2Cxla_op%2Cxla_op">xla_wrapper: op_rem(a1: xla_op; a2: xla_op): xla_op</a></li>
+          data-doc-search-tag="xla_wrapper: op_rem(a1: xla_op; a2: xla_op): xla_op" href="nimxla/private/xla_wrapper.html#op_rem%2Cxla_op%2Cxla_op">xla_wrapper: op_rem(a1: xla_op; a2: xla_op): xla_op</a></li>
           </ul></dd>
 <dt><a name="op_reshape" href="#op_reshape"><span>op_reshape:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
-          data-doc-search-tag="xla_wrapper: op_reshape(a1: xla_op; a2: csize_t; a3: ptr int64): xla_op" href="nimxla/xla_wrapper.html#op_reshape%2Cxla_op%2Ccsize_t%2Cptr.int64">xla_wrapper: op_reshape(a1: xla_op; a2: csize_t; a3: ptr int64): xla_op</a></li>
+          data-doc-search-tag="xla_wrapper: op_reshape(a1: xla_op; a2: csize_t; a3: ptr int64): xla_op" href="nimxla/private/xla_wrapper.html#op_reshape%2Cxla_op%2Ccsize_t%2Cptr.int64">xla_wrapper: op_reshape(a1: xla_op; a2: csize_t; a3: ptr int64): xla_op</a></li>
           </ul></dd>
 <dt><a name="op_rng_normal" href="#op_rng_normal"><span>op_rng_normal:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
-          data-doc-search-tag="xla_wrapper: op_rng_normal(a1: xla_op; a2: xla_op; a3: cint; a4: cint; a5: ptr int64): xla_op" href="nimxla/xla_wrapper.html#op_rng_normal%2Cxla_op%2Cxla_op%2Ccint%2Ccint%2Cptr.int64">xla_wrapper: op_rng_normal(a1: xla_op; a2: xla_op; a3: cint; a4: cint; a5: ptr int64): xla_op</a></li>
+          data-doc-search-tag="xla_wrapper: op_rng_normal(a1: xla_op; a2: xla_op; a3: cint; a4: cint; a5: ptr int64): xla_op" href="nimxla/private/xla_wrapper.html#op_rng_normal%2Cxla_op%2Cxla_op%2Ccint%2Ccint%2Cptr.int64">xla_wrapper: op_rng_normal(a1: xla_op; a2: xla_op; a3: cint; a4: cint; a5: ptr int64): xla_op</a></li>
           </ul></dd>
 <dt><a name="op_rng_uniform" href="#op_rng_uniform"><span>op_rng_uniform:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
-          data-doc-search-tag="xla_wrapper: op_rng_uniform(a1: xla_op; a2: xla_op; a3: cint; a4: cint; a5: ptr int64): xla_op" href="nimxla/xla_wrapper.html#op_rng_uniform%2Cxla_op%2Cxla_op%2Ccint%2Ccint%2Cptr.int64">xla_wrapper: op_rng_uniform(a1: xla_op; a2: xla_op; a3: cint; a4: cint; a5: ptr int64): xla_op</a></li>
+          data-doc-search-tag="xla_wrapper: op_rng_uniform(a1: xla_op; a2: xla_op; a3: cint; a4: cint; a5: ptr int64): xla_op" href="nimxla/private/xla_wrapper.html#op_rng_uniform%2Cxla_op%2Cxla_op%2Ccint%2Ccint%2Cptr.int64">xla_wrapper: op_rng_uniform(a1: xla_op; a2: xla_op; a3: cint; a4: cint; a5: ptr int64): xla_op</a></li>
           </ul></dd>
 <dt><a name="op_round" href="#op_round"><span>op_round:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
-          data-doc-search-tag="xla_wrapper: op_round(a1: xla_op): xla_op" href="nimxla/xla_wrapper.html#op_round%2Cxla_op">xla_wrapper: op_round(a1: xla_op): xla_op</a></li>
+          data-doc-search-tag="xla_wrapper: op_round(a1: xla_op): xla_op" href="nimxla/private/xla_wrapper.html#op_round%2Cxla_op">xla_wrapper: op_round(a1: xla_op): xla_op</a></li>
           </ul></dd>
 <dt><a name="op_rsqrt" href="#op_rsqrt"><span>op_rsqrt:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
-          data-doc-search-tag="xla_wrapper: op_rsqrt(a1: xla_op): xla_op" href="nimxla/xla_wrapper.html#op_rsqrt%2Cxla_op">xla_wrapper: op_rsqrt(a1: xla_op): xla_op</a></li>
+          data-doc-search-tag="xla_wrapper: op_rsqrt(a1: xla_op): xla_op" href="nimxla/private/xla_wrapper.html#op_rsqrt%2Cxla_op">xla_wrapper: op_rsqrt(a1: xla_op): xla_op</a></li>
           </ul></dd>
 <dt><a name="op_select" href="#op_select"><span>op_select:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
-          data-doc-search-tag="xla_wrapper: op_select(a1: xla_op; a2: xla_op; a3: xla_op): xla_op" href="nimxla/xla_wrapper.html#op_select%2Cxla_op%2Cxla_op%2Cxla_op">xla_wrapper: op_select(a1: xla_op; a2: xla_op; a3: xla_op): xla_op</a></li>
+          data-doc-search-tag="xla_wrapper: op_select(a1: xla_op; a2: xla_op; a3: xla_op): xla_op" href="nimxla/private/xla_wrapper.html#op_select%2Cxla_op%2Cxla_op%2Cxla_op">xla_wrapper: op_select(a1: xla_op; a2: xla_op; a3: xla_op): xla_op</a></li>
           </ul></dd>
 <dt><a name="op_sign" href="#op_sign"><span>op_sign:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
-          data-doc-search-tag="xla_wrapper: op_sign(a1: xla_op): xla_op" href="nimxla/xla_wrapper.html#op_sign%2Cxla_op">xla_wrapper: op_sign(a1: xla_op): xla_op</a></li>
+          data-doc-search-tag="xla_wrapper: op_sign(a1: xla_op): xla_op" href="nimxla/private/xla_wrapper.html#op_sign%2Cxla_op">xla_wrapper: op_sign(a1: xla_op): xla_op</a></li>
           </ul></dd>
 <dt><a name="op_sin" href="#op_sin"><span>op_sin:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
-          data-doc-search-tag="xla_wrapper: op_sin(a1: xla_op): xla_op" href="nimxla/xla_wrapper.html#op_sin%2Cxla_op">xla_wrapper: op_sin(a1: xla_op): xla_op</a></li>
+          data-doc-search-tag="xla_wrapper: op_sin(a1: xla_op): xla_op" href="nimxla/private/xla_wrapper.html#op_sin%2Cxla_op">xla_wrapper: op_sin(a1: xla_op): xla_op</a></li>
           </ul></dd>
 <dt><a name="op_slice_in_dim" href="#op_slice_in_dim"><span>op_slice_in_dim:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
-          data-doc-search-tag="xla_wrapper: op_slice_in_dim(a1: xla_op; a2: int64; a3: int64; a4: int64; a5: int64): xla_op" href="nimxla/xla_wrapper.html#op_slice_in_dim%2Cxla_op%2Cint64%2Cint64%2Cint64%2Cint64">xla_wrapper: op_slice_in_dim(a1: xla_op; a2: int64; a3: int64; a4: int64; a5: int64): xla_op</a></li>
+          data-doc-search-tag="xla_wrapper: op_slice_in_dim(a1: xla_op; a2: int64; a3: int64; a4: int64; a5: int64): xla_op" href="nimxla/private/xla_wrapper.html#op_slice_in_dim%2Cxla_op%2Cint64%2Cint64%2Cint64%2Cint64">xla_wrapper: op_slice_in_dim(a1: xla_op; a2: int64; a3: int64; a4: int64; a5: int64): xla_op</a></li>
           </ul></dd>
 <dt><a name="op_sqrt" href="#op_sqrt"><span>op_sqrt:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
-          data-doc-search-tag="xla_wrapper: op_sqrt(a1: xla_op): xla_op" href="nimxla/xla_wrapper.html#op_sqrt%2Cxla_op">xla_wrapper: op_sqrt(a1: xla_op): xla_op</a></li>
+          data-doc-search-tag="xla_wrapper: op_sqrt(a1: xla_op): xla_op" href="nimxla/private/xla_wrapper.html#op_sqrt%2Cxla_op">xla_wrapper: op_sqrt(a1: xla_op): xla_op</a></li>
           </ul></dd>
 <dt><a name="op_sub" href="#op_sub"><span>op_sub:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
-          data-doc-search-tag="xla_wrapper: op_sub(a1: xla_op; a2: xla_op): xla_op" href="nimxla/xla_wrapper.html#op_sub%2Cxla_op%2Cxla_op">xla_wrapper: op_sub(a1: xla_op; a2: xla_op): xla_op</a></li>
+          data-doc-search-tag="xla_wrapper: op_sub(a1: xla_op; a2: xla_op): xla_op" href="nimxla/private/xla_wrapper.html#op_sub%2Cxla_op%2Cxla_op">xla_wrapper: op_sub(a1: xla_op; a2: xla_op): xla_op</a></li>
           </ul></dd>
 <dt><a name="op_tanh" href="#op_tanh"><span>op_tanh:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
-          data-doc-search-tag="xla_wrapper: op_tanh(a1: xla_op): xla_op" href="nimxla/xla_wrapper.html#op_tanh%2Cxla_op">xla_wrapper: op_tanh(a1: xla_op): xla_op</a></li>
+          data-doc-search-tag="xla_wrapper: op_tanh(a1: xla_op): xla_op" href="nimxla/private/xla_wrapper.html#op_tanh%2Cxla_op">xla_wrapper: op_tanh(a1: xla_op): xla_op</a></li>
           </ul></dd>
 <dt><a name="op_transpose" href="#op_transpose"><span>op_transpose:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
-          data-doc-search-tag="xla_wrapper: op_transpose(a1: xla_op; a2: csize_t; a3: ptr int64): xla_op" href="nimxla/xla_wrapper.html#op_transpose%2Cxla_op%2Ccsize_t%2Cptr.int64">xla_wrapper: op_transpose(a1: xla_op; a2: csize_t; a3: ptr int64): xla_op</a></li>
+          data-doc-search-tag="xla_wrapper: op_transpose(a1: xla_op; a2: csize_t; a3: ptr int64): xla_op" href="nimxla/private/xla_wrapper.html#op_transpose%2Cxla_op%2Ccsize_t%2Cptr.int64">xla_wrapper: op_transpose(a1: xla_op; a2: csize_t; a3: ptr int64): xla_op</a></li>
           </ul></dd>
 <dt><a name="op_tuple" href="#op_tuple"><span>op_tuple:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
-          data-doc-search-tag="xla_wrapper: op_tuple(a1: xla_builder; a2: ptr xla_op; a3: csize_t): xla_op" href="nimxla/xla_wrapper.html#op_tuple%2Cxla_builder%2Cptr.xla_op%2Ccsize_t">xla_wrapper: op_tuple(a1: xla_builder; a2: ptr xla_op; a3: csize_t): xla_op</a></li>
+          data-doc-search-tag="xla_wrapper: op_tuple(a1: xla_builder; a2: ptr xla_op; a3: csize_t): xla_op" href="nimxla/private/xla_wrapper.html#op_tuple%2Cxla_builder%2Cptr.xla_op%2Ccsize_t">xla_wrapper: op_tuple(a1: xla_builder; a2: ptr xla_op; a3: csize_t): xla_op</a></li>
           </ul></dd>
 <dt><a name="OpType" href="#OpType"><span>OpType:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
@@ -1021,35 +1021,35 @@ window.addEventListener('DOMContentLoaded', main);
           </ul></dd>
 <dt><a name="op_unknown_error" href="#op_unknown_error"><span>op_unknown_error:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
-          data-doc-search-tag="xla_wrapper: op_unknown_error(a1: xla_builder; a2: cstring): xla_op" href="nimxla/xla_wrapper.html#op_unknown_error%2Cxla_builder%2Ccstring">xla_wrapper: op_unknown_error(a1: xla_builder; a2: cstring): xla_op</a></li>
+          data-doc-search-tag="xla_wrapper: op_unknown_error(a1: xla_builder; a2: cstring): xla_op" href="nimxla/private/xla_wrapper.html#op_unknown_error%2Cxla_builder%2Ccstring">xla_wrapper: op_unknown_error(a1: xla_builder; a2: cstring): xla_op</a></li>
           </ul></dd>
 <dt><a name="op_upper_triangle" href="#op_upper_triangle"><span>op_upper_triangle:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
-          data-doc-search-tag="xla_wrapper: op_upper_triangle(a1: xla_op): xla_op" href="nimxla/xla_wrapper.html#op_upper_triangle%2Cxla_op">xla_wrapper: op_upper_triangle(a1: xla_op): xla_op</a></li>
+          data-doc-search-tag="xla_wrapper: op_upper_triangle(a1: xla_op): xla_op" href="nimxla/private/xla_wrapper.html#op_upper_triangle%2Cxla_op">xla_wrapper: op_upper_triangle(a1: xla_op): xla_op</a></li>
           </ul></dd>
 <dt><a name="op_while" href="#op_while"><span>op_while:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
-          data-doc-search-tag="xla_wrapper: op_while(a1: xla_computation; a2: xla_computation; a3: xla_op): xla_op" href="nimxla/xla_wrapper.html#op_while%2Cxla_computation%2Cxla_computation%2Cxla_op">xla_wrapper: op_while(a1: xla_computation; a2: xla_computation; a3: xla_op): xla_op</a></li>
+          data-doc-search-tag="xla_wrapper: op_while(a1: xla_computation; a2: xla_computation; a3: xla_op): xla_op" href="nimxla/private/xla_wrapper.html#op_while%2Cxla_computation%2Cxla_computation%2Cxla_op">xla_wrapper: op_while(a1: xla_computation; a2: xla_computation; a3: xla_op): xla_op</a></li>
           </ul></dd>
 <dt><a name="op_xor" href="#op_xor"><span>op_xor:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
-          data-doc-search-tag="xla_wrapper: op_xor(a1: xla_op; a2: xla_op): xla_op" href="nimxla/xla_wrapper.html#op_xor%2Cxla_op%2Cxla_op">xla_wrapper: op_xor(a1: xla_op; a2: xla_op): xla_op</a></li>
+          data-doc-search-tag="xla_wrapper: op_xor(a1: xla_op; a2: xla_op): xla_op" href="nimxla/private/xla_wrapper.html#op_xor%2Cxla_op%2Cxla_op">xla_wrapper: op_xor(a1: xla_op; a2: xla_op): xla_op</a></li>
           </ul></dd>
 <dt><a name="op_zero" href="#op_zero"><span>op_zero:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
-          data-doc-search-tag="xla_wrapper: op_zero(a1: xla_builder; a2: cint): xla_op" href="nimxla/xla_wrapper.html#op_zero%2Cxla_builder%2Ccint">xla_wrapper: op_zero(a1: xla_builder; a2: cint): xla_op</a></li>
+          data-doc-search-tag="xla_wrapper: op_zero(a1: xla_builder; a2: cint): xla_op" href="nimxla/private/xla_wrapper.html#op_zero%2Cxla_builder%2Ccint">xla_wrapper: op_zero(a1: xla_builder; a2: cint): xla_op</a></li>
           </ul></dd>
 <dt><a name="op_zero_like" href="#op_zero_like"><span>op_zero_like:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
-          data-doc-search-tag="xla_wrapper: op_zero_like(a1: xla_op): xla_op" href="nimxla/xla_wrapper.html#op_zero_like%2Cxla_op">xla_wrapper: op_zero_like(a1: xla_op): xla_op</a></li>
+          data-doc-search-tag="xla_wrapper: op_zero_like(a1: xla_op): xla_op" href="nimxla/private/xla_wrapper.html#op_zero_like%2Cxla_op">xla_wrapper: op_zero_like(a1: xla_op): xla_op</a></li>
           </ul></dd>
 <dt><a name="op_zeros_like" href="#op_zeros_like"><span>op_zeros_like:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
-          data-doc-search-tag="xla_wrapper: op_zeros_like(a1: xla_op): xla_op" href="nimxla/xla_wrapper.html#op_zeros_like%2Cxla_op">xla_wrapper: op_zeros_like(a1: xla_op): xla_op</a></li>
+          data-doc-search-tag="xla_wrapper: op_zeros_like(a1: xla_op): xla_op" href="nimxla/private/xla_wrapper.html#op_zeros_like%2Cxla_op">xla_wrapper: op_zeros_like(a1: xla_op): xla_op</a></li>
           </ul></dd>
 <dt><a name="outfeed" href="#outfeed"><span>outfeed:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
-          data-doc-search-tag="xla_wrapper: outfeed(a1: xla_op; a2: cint; a3: cint; a4: ptr int64; a5: cstring)" href="nimxla/xla_wrapper.html#outfeed%2Cxla_op%2Ccint%2Ccint%2Cptr.int64%2Ccstring">xla_wrapper: outfeed(a1: xla_op; a2: cint; a3: cint; a4: ptr int64; a5: cstring)</a></li>
+          data-doc-search-tag="xla_wrapper: outfeed(a1: xla_op; a2: cint; a3: cint; a4: ptr int64; a5: cstring)" href="nimxla/private/xla_wrapper.html#outfeed%2Cxla_op%2Ccint%2Ccint%2Cptr.int64%2Ccstring">xla_wrapper: outfeed(a1: xla_op; a2: cint; a3: cint; a4: ptr int64; a5: cstring)</a></li>
           </ul></dd>
 <dt><a name="parameter" href="#parameter"><span>parameter:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
@@ -1058,12 +1058,12 @@ window.addEventListener('DOMContentLoaded', main);
           name = &quot;&quot;): Node</a></li>
           <li><a class="reference external"
           data-doc-search-tag="xla_wrapper: parameter(a1: xla_builder; a2: int64; a3: cint; a4: cint; a5: ptr int64;
-          a6: cstring): xla_op" href="nimxla/xla_wrapper.html#parameter%2Cxla_builder%2Cint64%2Ccint%2Ccint%2Cptr.int64%2Ccstring">xla_wrapper: parameter(a1: xla_builder; a2: int64; a3: cint; a4: cint; a5: ptr int64;
+          a6: cstring): xla_op" href="nimxla/private/xla_wrapper.html#parameter%2Cxla_builder%2Cint64%2Ccint%2Ccint%2Cptr.int64%2Ccstring">xla_wrapper: parameter(a1: xla_builder; a2: int64; a3: cint; a4: cint; a5: ptr int64;
           a6: cstring): xla_op</a></li>
           </ul></dd>
 <dt><a name="parameter_s" href="#parameter_s"><span>parameter_s:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
-          data-doc-search-tag="xla_wrapper: parameter_s(a1: xla_builder; a2: int64; a3: shape_t; a4: cstring): xla_op" href="nimxla/xla_wrapper.html#parameter_s%2Cxla_builder%2Cint64%2Cshape_t%2Ccstring">xla_wrapper: parameter_s(a1: xla_builder; a2: int64; a3: shape_t; a4: cstring): xla_op</a></li>
+          data-doc-search-tag="xla_wrapper: parameter_s(a1: xla_builder; a2: int64; a3: shape_t; a4: cstring): xla_op" href="nimxla/private/xla_wrapper.html#parameter_s%2Cxla_builder%2Cint64%2Cshape_t%2Ccstring">xla_wrapper: parameter_s(a1: xla_builder; a2: int64; a3: shape_t; a4: cstring): xla_op</a></li>
           </ul></dd>
 <dt><a name="paramNames" href="#paramNames"><span>paramNames:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
@@ -1071,131 +1071,131 @@ window.addEventListener('DOMContentLoaded', main);
           </ul></dd>
 <dt><a name="pjrt_buffer" href="#pjrt_buffer"><span>pjrt_buffer:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
-          data-doc-search-tag="xla_wrapper: pjrt_buffer" href="nimxla/xla_wrapper.html#pjrt_buffer">xla_wrapper: pjrt_buffer</a></li>
+          data-doc-search-tag="xla_wrapper: pjrt_buffer" href="nimxla/private/xla_wrapper.html#pjrt_buffer">xla_wrapper: pjrt_buffer</a></li>
           </ul></dd>
 <dt><a name="pjrt_buffer_copy_raw_to_host_sync" href="#pjrt_buffer_copy_raw_to_host_sync"><span>pjrt_buffer_copy_raw_to_host_sync:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
           data-doc-search-tag="xla_wrapper: pjrt_buffer_copy_raw_to_host_sync(a1: pjrt_buffer; a2: pointer; a3: csize_t;
-                                  a4: csize_t): status_t" href="nimxla/xla_wrapper.html#pjrt_buffer_copy_raw_to_host_sync%2Cpjrt_buffer%2Cpointer%2Ccsize_t%2Ccsize_t">xla_wrapper: pjrt_buffer_copy_raw_to_host_sync(a1: pjrt_buffer; a2: pointer; a3: csize_t;
+                                  a4: csize_t): status_t" href="nimxla/private/xla_wrapper.html#pjrt_buffer_copy_raw_to_host_sync%2Cpjrt_buffer%2Cpointer%2Ccsize_t%2Ccsize_t">xla_wrapper: pjrt_buffer_copy_raw_to_host_sync(a1: pjrt_buffer; a2: pointer; a3: csize_t;
                                   a4: csize_t): status_t</a></li>
           </ul></dd>
 <dt><a name="pjrt_buffer_copy_to_device" href="#pjrt_buffer_copy_to_device"><span>pjrt_buffer_copy_to_device:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
-          data-doc-search-tag="xla_wrapper: pjrt_buffer_copy_to_device(a1: pjrt_buffer; a2: pjrt_device; a3: ptr pjrt_buffer): status_t" href="nimxla/xla_wrapper.html#pjrt_buffer_copy_to_device%2Cpjrt_buffer%2Cpjrt_device%2Cptr.pjrt_buffer">xla_wrapper: pjrt_buffer_copy_to_device(a1: pjrt_buffer; a2: pjrt_device; a3: ptr pjrt_buffer): status_t</a></li>
+          data-doc-search-tag="xla_wrapper: pjrt_buffer_copy_to_device(a1: pjrt_buffer; a2: pjrt_device; a3: ptr pjrt_buffer): status_t" href="nimxla/private/xla_wrapper.html#pjrt_buffer_copy_to_device%2Cpjrt_buffer%2Cpjrt_device%2Cptr.pjrt_buffer">xla_wrapper: pjrt_buffer_copy_to_device(a1: pjrt_buffer; a2: pjrt_device; a3: ptr pjrt_buffer): status_t</a></li>
           </ul></dd>
 <dt><a name="pjrt_buffer_free" href="#pjrt_buffer_free"><span>pjrt_buffer_free:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
-          data-doc-search-tag="xla_wrapper: pjrt_buffer_free(a1: pjrt_buffer)" href="nimxla/xla_wrapper.html#pjrt_buffer_free%2Cpjrt_buffer">xla_wrapper: pjrt_buffer_free(a1: pjrt_buffer)</a></li>
+          data-doc-search-tag="xla_wrapper: pjrt_buffer_free(a1: pjrt_buffer)" href="nimxla/private/xla_wrapper.html#pjrt_buffer_free%2Cpjrt_buffer">xla_wrapper: pjrt_buffer_free(a1: pjrt_buffer)</a></li>
           </ul></dd>
 <dt><a name="pjrt_buffer_from_host_buffer" href="#pjrt_buffer_from_host_buffer"><span>pjrt_buffer_from_host_buffer:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
           data-doc-search-tag="xla_wrapper: pjrt_buffer_from_host_buffer(a1: pjrt_client; a2: pjrt_device; a3: pointer;
                              a4: cint; a5: cint; a6: ptr int64;
-                             a7: ptr pjrt_buffer): status_t" href="nimxla/xla_wrapper.html#pjrt_buffer_from_host_buffer%2Cpjrt_client%2Cpjrt_device%2Cpointer%2Ccint%2Ccint%2Cptr.int64%2Cptr.pjrt_buffer">xla_wrapper: pjrt_buffer_from_host_buffer(a1: pjrt_client; a2: pjrt_device; a3: pointer;
+                             a7: ptr pjrt_buffer): status_t" href="nimxla/private/xla_wrapper.html#pjrt_buffer_from_host_buffer%2Cpjrt_client%2Cpjrt_device%2Cpointer%2Ccint%2Ccint%2Cptr.int64%2Cptr.pjrt_buffer">xla_wrapper: pjrt_buffer_from_host_buffer(a1: pjrt_client; a2: pjrt_device; a3: pointer;
                              a4: cint; a5: cint; a6: ptr int64;
                              a7: ptr pjrt_buffer): status_t</a></li>
           </ul></dd>
 <dt><a name="pjrt_buffer_from_host_literal" href="#pjrt_buffer_from_host_literal"><span>pjrt_buffer_from_host_literal:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
           data-doc-search-tag="xla_wrapper: pjrt_buffer_from_host_literal(a1: pjrt_client; a2: pjrt_device; a3: literal_t;
-                              a4: ptr pjrt_buffer): status_t" href="nimxla/xla_wrapper.html#pjrt_buffer_from_host_literal%2Cpjrt_client%2Cpjrt_device%2Cliteral_t%2Cptr.pjrt_buffer">xla_wrapper: pjrt_buffer_from_host_literal(a1: pjrt_client; a2: pjrt_device; a3: literal_t;
+                              a4: ptr pjrt_buffer): status_t" href="nimxla/private/xla_wrapper.html#pjrt_buffer_from_host_literal%2Cpjrt_client%2Cpjrt_device%2Cliteral_t%2Cptr.pjrt_buffer">xla_wrapper: pjrt_buffer_from_host_literal(a1: pjrt_client; a2: pjrt_device; a3: literal_t;
                               a4: ptr pjrt_buffer): status_t</a></li>
           </ul></dd>
 <dt><a name="pjrt_buffer_on_device_shape" href="#pjrt_buffer_on_device_shape"><span>pjrt_buffer_on_device_shape:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
-          data-doc-search-tag="xla_wrapper: pjrt_buffer_on_device_shape(a1: pjrt_buffer): shape_t" href="nimxla/xla_wrapper.html#pjrt_buffer_on_device_shape%2Cpjrt_buffer">xla_wrapper: pjrt_buffer_on_device_shape(a1: pjrt_buffer): shape_t</a></li>
+          data-doc-search-tag="xla_wrapper: pjrt_buffer_on_device_shape(a1: pjrt_buffer): shape_t" href="nimxla/private/xla_wrapper.html#pjrt_buffer_on_device_shape%2Cpjrt_buffer">xla_wrapper: pjrt_buffer_on_device_shape(a1: pjrt_buffer): shape_t</a></li>
           </ul></dd>
 <dt><a name="pjrt_buffer_to_literal_sync" href="#pjrt_buffer_to_literal_sync"><span>pjrt_buffer_to_literal_sync:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
-          data-doc-search-tag="xla_wrapper: pjrt_buffer_to_literal_sync(a1: pjrt_buffer; a2: ptr literal_t): status_t" href="nimxla/xla_wrapper.html#pjrt_buffer_to_literal_sync%2Cpjrt_buffer%2Cptr.literal_t">xla_wrapper: pjrt_buffer_to_literal_sync(a1: pjrt_buffer; a2: ptr literal_t): status_t</a></li>
+          data-doc-search-tag="xla_wrapper: pjrt_buffer_to_literal_sync(a1: pjrt_buffer; a2: ptr literal_t): status_t" href="nimxla/private/xla_wrapper.html#pjrt_buffer_to_literal_sync%2Cpjrt_buffer%2Cptr.literal_t">xla_wrapper: pjrt_buffer_to_literal_sync(a1: pjrt_buffer; a2: ptr literal_t): status_t</a></li>
           </ul></dd>
 <dt><a name="pjrt_client" href="#pjrt_client"><span>pjrt_client:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
-          data-doc-search-tag="xla_wrapper: pjrt_client" href="nimxla/xla_wrapper.html#pjrt_client">xla_wrapper: pjrt_client</a></li>
+          data-doc-search-tag="xla_wrapper: pjrt_client" href="nimxla/private/xla_wrapper.html#pjrt_client">xla_wrapper: pjrt_client</a></li>
           </ul></dd>
 <dt><a name="pjrt_client_addressable_device_count" href="#pjrt_client_addressable_device_count"><span>pjrt_client_addressable_device_count:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
-          data-doc-search-tag="xla_wrapper: pjrt_client_addressable_device_count(a1: pjrt_client): cint" href="nimxla/xla_wrapper.html#pjrt_client_addressable_device_count%2Cpjrt_client">xla_wrapper: pjrt_client_addressable_device_count(a1: pjrt_client): cint</a></li>
+          data-doc-search-tag="xla_wrapper: pjrt_client_addressable_device_count(a1: pjrt_client): cint" href="nimxla/private/xla_wrapper.html#pjrt_client_addressable_device_count%2Cpjrt_client">xla_wrapper: pjrt_client_addressable_device_count(a1: pjrt_client): cint</a></li>
           </ul></dd>
 <dt><a name="pjrt_client_addressable_devices" href="#pjrt_client_addressable_devices"><span>pjrt_client_addressable_devices:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
-          data-doc-search-tag="xla_wrapper: pjrt_client_addressable_devices(a1: pjrt_client; a2: ptr pjrt_device)" href="nimxla/xla_wrapper.html#pjrt_client_addressable_devices%2Cpjrt_client%2Cptr.pjrt_device">xla_wrapper: pjrt_client_addressable_devices(a1: pjrt_client; a2: ptr pjrt_device)</a></li>
+          data-doc-search-tag="xla_wrapper: pjrt_client_addressable_devices(a1: pjrt_client; a2: ptr pjrt_device)" href="nimxla/private/xla_wrapper.html#pjrt_client_addressable_devices%2Cpjrt_client%2Cptr.pjrt_device">xla_wrapper: pjrt_client_addressable_devices(a1: pjrt_client; a2: ptr pjrt_device)</a></li>
           </ul></dd>
 <dt><a name="pjrt_client_device_count" href="#pjrt_client_device_count"><span>pjrt_client_device_count:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
-          data-doc-search-tag="xla_wrapper: pjrt_client_device_count(a1: pjrt_client): cint" href="nimxla/xla_wrapper.html#pjrt_client_device_count%2Cpjrt_client">xla_wrapper: pjrt_client_device_count(a1: pjrt_client): cint</a></li>
+          data-doc-search-tag="xla_wrapper: pjrt_client_device_count(a1: pjrt_client): cint" href="nimxla/private/xla_wrapper.html#pjrt_client_device_count%2Cpjrt_client">xla_wrapper: pjrt_client_device_count(a1: pjrt_client): cint</a></li>
           </ul></dd>
 <dt><a name="pjrt_client_devices" href="#pjrt_client_devices"><span>pjrt_client_devices:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
-          data-doc-search-tag="xla_wrapper: pjrt_client_devices(a1: pjrt_client; a2: ptr pjrt_device)" href="nimxla/xla_wrapper.html#pjrt_client_devices%2Cpjrt_client%2Cptr.pjrt_device">xla_wrapper: pjrt_client_devices(a1: pjrt_client; a2: ptr pjrt_device)</a></li>
+          data-doc-search-tag="xla_wrapper: pjrt_client_devices(a1: pjrt_client; a2: ptr pjrt_device)" href="nimxla/private/xla_wrapper.html#pjrt_client_devices%2Cpjrt_client%2Cptr.pjrt_device">xla_wrapper: pjrt_client_devices(a1: pjrt_client; a2: ptr pjrt_device)</a></li>
           </ul></dd>
 <dt><a name="pjrt_client_free" href="#pjrt_client_free"><span>pjrt_client_free:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
-          data-doc-search-tag="xla_wrapper: pjrt_client_free(a1: pjrt_client)" href="nimxla/xla_wrapper.html#pjrt_client_free%2Cpjrt_client">xla_wrapper: pjrt_client_free(a1: pjrt_client)</a></li>
+          data-doc-search-tag="xla_wrapper: pjrt_client_free(a1: pjrt_client)" href="nimxla/private/xla_wrapper.html#pjrt_client_free%2Cpjrt_client">xla_wrapper: pjrt_client_free(a1: pjrt_client)</a></li>
           </ul></dd>
 <dt><a name="pjrt_client_platform_name" href="#pjrt_client_platform_name"><span>pjrt_client_platform_name:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
-          data-doc-search-tag="xla_wrapper: pjrt_client_platform_name(a1: pjrt_client): cstring" href="nimxla/xla_wrapper.html#pjrt_client_platform_name%2Cpjrt_client">xla_wrapper: pjrt_client_platform_name(a1: pjrt_client): cstring</a></li>
+          data-doc-search-tag="xla_wrapper: pjrt_client_platform_name(a1: pjrt_client): cstring" href="nimxla/private/xla_wrapper.html#pjrt_client_platform_name%2Cpjrt_client">xla_wrapper: pjrt_client_platform_name(a1: pjrt_client): cstring</a></li>
           </ul></dd>
 <dt><a name="pjrt_client_platform_version" href="#pjrt_client_platform_version"><span>pjrt_client_platform_version:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
-          data-doc-search-tag="xla_wrapper: pjrt_client_platform_version(a1: pjrt_client): cstring" href="nimxla/xla_wrapper.html#pjrt_client_platform_version%2Cpjrt_client">xla_wrapper: pjrt_client_platform_version(a1: pjrt_client): cstring</a></li>
+          data-doc-search-tag="xla_wrapper: pjrt_client_platform_version(a1: pjrt_client): cstring" href="nimxla/private/xla_wrapper.html#pjrt_client_platform_version%2Cpjrt_client">xla_wrapper: pjrt_client_platform_version(a1: pjrt_client): cstring</a></li>
           </ul></dd>
 <dt><a name="pjrt_cpu_client_create" href="#pjrt_cpu_client_create"><span>pjrt_cpu_client_create:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
-          data-doc-search-tag="xla_wrapper: pjrt_cpu_client_create(a1: ptr pjrt_client): status_t" href="nimxla/xla_wrapper.html#pjrt_cpu_client_create%2Cptr.pjrt_client">xla_wrapper: pjrt_cpu_client_create(a1: ptr pjrt_client): status_t</a></li>
+          data-doc-search-tag="xla_wrapper: pjrt_cpu_client_create(a1: ptr pjrt_client): status_t" href="nimxla/private/xla_wrapper.html#pjrt_cpu_client_create%2Cptr.pjrt_client">xla_wrapper: pjrt_cpu_client_create(a1: ptr pjrt_client): status_t</a></li>
           </ul></dd>
 <dt><a name="pjrt_device" href="#pjrt_device"><span>pjrt_device:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
-          data-doc-search-tag="xla_wrapper: pjrt_device" href="nimxla/xla_wrapper.html#pjrt_device">xla_wrapper: pjrt_device</a></li>
+          data-doc-search-tag="xla_wrapper: pjrt_device" href="nimxla/private/xla_wrapper.html#pjrt_device">xla_wrapper: pjrt_device</a></li>
           </ul></dd>
 <dt><a name="pjrt_device_debug_string" href="#pjrt_device_debug_string"><span>pjrt_device_debug_string:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
-          data-doc-search-tag="xla_wrapper: pjrt_device_debug_string(a1: pjrt_device): cstring" href="nimxla/xla_wrapper.html#pjrt_device_debug_string%2Cpjrt_device">xla_wrapper: pjrt_device_debug_string(a1: pjrt_device): cstring</a></li>
+          data-doc-search-tag="xla_wrapper: pjrt_device_debug_string(a1: pjrt_device): cstring" href="nimxla/private/xla_wrapper.html#pjrt_device_debug_string%2Cpjrt_device">xla_wrapper: pjrt_device_debug_string(a1: pjrt_device): cstring</a></li>
           </ul></dd>
 <dt><a name="pjrt_device_id" href="#pjrt_device_id"><span>pjrt_device_id:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
-          data-doc-search-tag="xla_wrapper: pjrt_device_id(a1: pjrt_device): cint" href="nimxla/xla_wrapper.html#pjrt_device_id%2Cpjrt_device">xla_wrapper: pjrt_device_id(a1: pjrt_device): cint</a></li>
+          data-doc-search-tag="xla_wrapper: pjrt_device_id(a1: pjrt_device): cint" href="nimxla/private/xla_wrapper.html#pjrt_device_id%2Cpjrt_device">xla_wrapper: pjrt_device_id(a1: pjrt_device): cint</a></li>
           </ul></dd>
 <dt><a name="pjrt_device_kind" href="#pjrt_device_kind"><span>pjrt_device_kind:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
-          data-doc-search-tag="xla_wrapper: pjrt_device_kind(a1: pjrt_device): cstring" href="nimxla/xla_wrapper.html#pjrt_device_kind%2Cpjrt_device">xla_wrapper: pjrt_device_kind(a1: pjrt_device): cstring</a></li>
+          data-doc-search-tag="xla_wrapper: pjrt_device_kind(a1: pjrt_device): cstring" href="nimxla/private/xla_wrapper.html#pjrt_device_kind%2Cpjrt_device">xla_wrapper: pjrt_device_kind(a1: pjrt_device): cstring</a></li>
           </ul></dd>
 <dt><a name="pjrt_device_local_hardware_id" href="#pjrt_device_local_hardware_id"><span>pjrt_device_local_hardware_id:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
-          data-doc-search-tag="xla_wrapper: pjrt_device_local_hardware_id(a1: pjrt_device): cint" href="nimxla/xla_wrapper.html#pjrt_device_local_hardware_id%2Cpjrt_device">xla_wrapper: pjrt_device_local_hardware_id(a1: pjrt_device): cint</a></li>
+          data-doc-search-tag="xla_wrapper: pjrt_device_local_hardware_id(a1: pjrt_device): cint" href="nimxla/private/xla_wrapper.html#pjrt_device_local_hardware_id%2Cpjrt_device">xla_wrapper: pjrt_device_local_hardware_id(a1: pjrt_device): cint</a></li>
           </ul></dd>
 <dt><a name="pjrt_device_process_index" href="#pjrt_device_process_index"><span>pjrt_device_process_index:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
-          data-doc-search-tag="xla_wrapper: pjrt_device_process_index(a1: pjrt_device): cint" href="nimxla/xla_wrapper.html#pjrt_device_process_index%2Cpjrt_device">xla_wrapper: pjrt_device_process_index(a1: pjrt_device): cint</a></li>
+          data-doc-search-tag="xla_wrapper: pjrt_device_process_index(a1: pjrt_device): cint" href="nimxla/private/xla_wrapper.html#pjrt_device_process_index%2Cpjrt_device">xla_wrapper: pjrt_device_process_index(a1: pjrt_device): cint</a></li>
           </ul></dd>
 <dt><a name="pjrt_device_to_string" href="#pjrt_device_to_string"><span>pjrt_device_to_string:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
-          data-doc-search-tag="xla_wrapper: pjrt_device_to_string(a1: pjrt_device): cstring" href="nimxla/xla_wrapper.html#pjrt_device_to_string%2Cpjrt_device">xla_wrapper: pjrt_device_to_string(a1: pjrt_device): cstring</a></li>
+          data-doc-search-tag="xla_wrapper: pjrt_device_to_string(a1: pjrt_device): cstring" href="nimxla/private/xla_wrapper.html#pjrt_device_to_string%2Cpjrt_device">xla_wrapper: pjrt_device_to_string(a1: pjrt_device): cstring</a></li>
           </ul></dd>
 <dt><a name="pjrt_device_transfer_from_outfeed" href="#pjrt_device_transfer_from_outfeed"><span>pjrt_device_transfer_from_outfeed:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
-          data-doc-search-tag="xla_wrapper: pjrt_device_transfer_from_outfeed(a1: pjrt_device; a2: literal_t): status_t" href="nimxla/xla_wrapper.html#pjrt_device_transfer_from_outfeed%2Cpjrt_device%2Cliteral_t">xla_wrapper: pjrt_device_transfer_from_outfeed(a1: pjrt_device; a2: literal_t): status_t</a></li>
+          data-doc-search-tag="xla_wrapper: pjrt_device_transfer_from_outfeed(a1: pjrt_device; a2: literal_t): status_t" href="nimxla/private/xla_wrapper.html#pjrt_device_transfer_from_outfeed%2Cpjrt_device%2Cliteral_t">xla_wrapper: pjrt_device_transfer_from_outfeed(a1: pjrt_device; a2: literal_t): status_t</a></li>
           </ul></dd>
 <dt><a name="pjrt_device_transfer_to_infeed" href="#pjrt_device_transfer_to_infeed"><span>pjrt_device_transfer_to_infeed:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
-          data-doc-search-tag="xla_wrapper: pjrt_device_transfer_to_infeed(a1: pjrt_device; a2: literal_t): status_t" href="nimxla/xla_wrapper.html#pjrt_device_transfer_to_infeed%2Cpjrt_device%2Cliteral_t">xla_wrapper: pjrt_device_transfer_to_infeed(a1: pjrt_device; a2: literal_t): status_t</a></li>
+          data-doc-search-tag="xla_wrapper: pjrt_device_transfer_to_infeed(a1: pjrt_device; a2: literal_t): status_t" href="nimxla/private/xla_wrapper.html#pjrt_device_transfer_to_infeed%2Cpjrt_device%2Cliteral_t">xla_wrapper: pjrt_device_transfer_to_infeed(a1: pjrt_device; a2: literal_t): status_t</a></li>
           </ul></dd>
 <dt><a name="pjrt_gpu_client_create" href="#pjrt_gpu_client_create"><span>pjrt_gpu_client_create:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
-          data-doc-search-tag="xla_wrapper: pjrt_gpu_client_create(a1: ptr pjrt_client; a2: cdouble; a3: bool): status_t" href="nimxla/xla_wrapper.html#pjrt_gpu_client_create%2Cptr.pjrt_client%2Ccdouble%2Cbool">xla_wrapper: pjrt_gpu_client_create(a1: ptr pjrt_client; a2: cdouble; a3: bool): status_t</a></li>
+          data-doc-search-tag="xla_wrapper: pjrt_gpu_client_create(a1: ptr pjrt_client; a2: cdouble; a3: bool): status_t" href="nimxla/private/xla_wrapper.html#pjrt_gpu_client_create%2Cptr.pjrt_client%2Ccdouble%2Cbool">xla_wrapper: pjrt_gpu_client_create(a1: ptr pjrt_client; a2: cdouble; a3: bool): status_t</a></li>
           </ul></dd>
 <dt><a name="pjrt_loaded_executable" href="#pjrt_loaded_executable"><span>pjrt_loaded_executable:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
-          data-doc-search-tag="xla_wrapper: pjrt_loaded_executable" href="nimxla/xla_wrapper.html#pjrt_loaded_executable">xla_wrapper: pjrt_loaded_executable</a></li>
+          data-doc-search-tag="xla_wrapper: pjrt_loaded_executable" href="nimxla/private/xla_wrapper.html#pjrt_loaded_executable">xla_wrapper: pjrt_loaded_executable</a></li>
           </ul></dd>
 <dt><a name="pjrt_loaded_executable_free" href="#pjrt_loaded_executable_free"><span>pjrt_loaded_executable_free:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
-          data-doc-search-tag="xla_wrapper: pjrt_loaded_executable_free(a1: pjrt_loaded_executable)" href="nimxla/xla_wrapper.html#pjrt_loaded_executable_free%2Cpjrt_loaded_executable">xla_wrapper: pjrt_loaded_executable_free(a1: pjrt_loaded_executable)</a></li>
+          data-doc-search-tag="xla_wrapper: pjrt_loaded_executable_free(a1: pjrt_loaded_executable)" href="nimxla/private/xla_wrapper.html#pjrt_loaded_executable_free%2Cpjrt_loaded_executable">xla_wrapper: pjrt_loaded_executable_free(a1: pjrt_loaded_executable)</a></li>
           </ul></dd>
 <dt><a name="pjrt_tpu_client_create" href="#pjrt_tpu_client_create"><span>pjrt_tpu_client_create:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
-          data-doc-search-tag="xla_wrapper: pjrt_tpu_client_create(a1: ptr pjrt_client; a2: cint): status_t" href="nimxla/xla_wrapper.html#pjrt_tpu_client_create%2Cptr.pjrt_client%2Ccint">xla_wrapper: pjrt_tpu_client_create(a1: ptr pjrt_client; a2: cint): status_t</a></li>
+          data-doc-search-tag="xla_wrapper: pjrt_tpu_client_create(a1: ptr pjrt_client; a2: cint): status_t" href="nimxla/private/xla_wrapper.html#pjrt_tpu_client_create%2Cptr.pjrt_client%2Ccint">xla_wrapper: pjrt_tpu_client_create(a1: ptr pjrt_client; a2: cint): status_t</a></li>
           </ul></dd>
 <dt><a name="platformName" href="#platformName"><span>platformName:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
@@ -1211,7 +1211,7 @@ window.addEventListener('DOMContentLoaded', main);
           </ul></dd>
 <dt><a name="ptrOffset" href="#ptrOffset"><span>ptrOffset:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
-          data-doc-search-tag="xla_wrapper: ptrOffset[T](p: ptr T; off: int): ptr T" href="nimxla/xla_wrapper.html#ptrOffset%2Cptr.T%2Cint">xla_wrapper: ptrOffset[T](p: ptr T; off: int): ptr T</a></li>
+          data-doc-search-tag="utils: ptrOffset[T](p: ptr T; off: int): ptr T" href="nimxla/private/utils.html#ptrOffset%2Cptr.T%2Cint">utils: ptrOffset[T](p: ptr T; off: int): ptr T</a></li>
           </ul></dd>
 <dt><a name="raiseError" href="#raiseError"><span>raiseError:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
@@ -1262,6 +1262,10 @@ window.addEventListener('DOMContentLoaded', main);
           data-doc-search-tag="tensor: reshape(lit: Literal; dims: varargs[int]): Literal" href="nimxla/tensor.html#reshape%2CLiteral%2Cvarargs%5Bint%5D">tensor: reshape(lit: Literal; dims: varargs[int]): Literal</a></li>
           <li><a class="reference external"
           data-doc-search-tag="tensor: reshape[T: ElemType](t: Tensor[T]; dims: varargs[int]): Tensor[T]" href="nimxla/tensor.html#reshape%2CTensor%5BT%3A%20ElemType%5D%2Cvarargs%5Bint%5D">tensor: reshape[T: ElemType](t: Tensor[T]; dims: varargs[int]): Tensor[T]</a></li>
+          </ul></dd>
+<dt><a name="reshapeDims" href="#reshapeDims"><span>reshapeDims:</span></a></dt><dd><ul class="simple">
+<li><a class="reference external"
+          data-doc-search-tag="utils: reshapeDims(elems: int; dims: openArray[int]): seq[int]" href="nimxla/private/utils.html#reshapeDims%2Cint%2CopenArray%5Bint%5D">utils: reshapeDims(elems: int; dims: openArray[int]): seq[int]</a></li>
           </ul></dd>
 <dt><a name="rngNormal" href="#rngNormal"><span>rngNormal:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
@@ -1323,19 +1327,19 @@ window.addEventListener('DOMContentLoaded', main);
           </ul></dd>
 <dt><a name="shape_dimensions" href="#shape_dimensions"><span>shape_dimensions:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
-          data-doc-search-tag="xla_wrapper: shape_dimensions(a1: shape_t; a2: cint): int64" href="nimxla/xla_wrapper.html#shape_dimensions%2Cshape_t%2Ccint">xla_wrapper: shape_dimensions(a1: shape_t; a2: cint): int64</a></li>
+          data-doc-search-tag="xla_wrapper: shape_dimensions(a1: shape_t; a2: cint): int64" href="nimxla/private/xla_wrapper.html#shape_dimensions%2Cshape_t%2Ccint">xla_wrapper: shape_dimensions(a1: shape_t; a2: cint): int64</a></li>
           </ul></dd>
 <dt><a name="shape_dimensions_size" href="#shape_dimensions_size"><span>shape_dimensions_size:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
-          data-doc-search-tag="xla_wrapper: shape_dimensions_size(a1: shape_t): cint" href="nimxla/xla_wrapper.html#shape_dimensions_size%2Cshape_t">xla_wrapper: shape_dimensions_size(a1: shape_t): cint</a></li>
+          data-doc-search-tag="xla_wrapper: shape_dimensions_size(a1: shape_t): cint" href="nimxla/private/xla_wrapper.html#shape_dimensions_size%2Cshape_t">xla_wrapper: shape_dimensions_size(a1: shape_t): cint</a></li>
           </ul></dd>
 <dt><a name="shape_element_type" href="#shape_element_type"><span>shape_element_type:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
-          data-doc-search-tag="xla_wrapper: shape_element_type(a1: shape_t): cint" href="nimxla/xla_wrapper.html#shape_element_type%2Cshape_t">xla_wrapper: shape_element_type(a1: shape_t): cint</a></li>
+          data-doc-search-tag="xla_wrapper: shape_element_type(a1: shape_t): cint" href="nimxla/private/xla_wrapper.html#shape_element_type%2Cshape_t">xla_wrapper: shape_element_type(a1: shape_t): cint</a></li>
           </ul></dd>
 <dt><a name="shape_free" href="#shape_free"><span>shape_free:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
-          data-doc-search-tag="xla_wrapper: shape_free(a1: shape_t)" href="nimxla/xla_wrapper.html#shape_free%2Cshape_t">xla_wrapper: shape_free(a1: shape_t)</a></li>
+          data-doc-search-tag="xla_wrapper: shape_free(a1: shape_t)" href="nimxla/private/xla_wrapper.html#shape_free%2Cshape_t">xla_wrapper: shape_free(a1: shape_t)</a></li>
           </ul></dd>
 <dt><a name="ShapeKind" href="#ShapeKind"><span>ShapeKind:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
@@ -1343,15 +1347,15 @@ window.addEventListener('DOMContentLoaded', main);
           </ul></dd>
 <dt><a name="shape_t" href="#shape_t"><span>shape_t:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
-          data-doc-search-tag="xla_wrapper: shape_t" href="nimxla/xla_wrapper.html#shape_t">xla_wrapper: shape_t</a></li>
+          data-doc-search-tag="xla_wrapper: shape_t" href="nimxla/private/xla_wrapper.html#shape_t">xla_wrapper: shape_t</a></li>
           </ul></dd>
 <dt><a name="shape_tuple_shapes" href="#shape_tuple_shapes"><span>shape_tuple_shapes:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
-          data-doc-search-tag="xla_wrapper: shape_tuple_shapes(a1: shape_t; a2: cint): shape_t" href="nimxla/xla_wrapper.html#shape_tuple_shapes%2Cshape_t%2Ccint">xla_wrapper: shape_tuple_shapes(a1: shape_t; a2: cint): shape_t</a></li>
+          data-doc-search-tag="xla_wrapper: shape_tuple_shapes(a1: shape_t; a2: cint): shape_t" href="nimxla/private/xla_wrapper.html#shape_tuple_shapes%2Cshape_t%2Ccint">xla_wrapper: shape_tuple_shapes(a1: shape_t; a2: cint): shape_t</a></li>
           </ul></dd>
 <dt><a name="shape_tuple_shapes_size" href="#shape_tuple_shapes_size"><span>shape_tuple_shapes_size:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
-          data-doc-search-tag="xla_wrapper: shape_tuple_shapes_size(a1: shape_t): csize_t" href="nimxla/xla_wrapper.html#shape_tuple_shapes_size%2Cshape_t">xla_wrapper: shape_tuple_shapes_size(a1: shape_t): csize_t</a></li>
+          data-doc-search-tag="xla_wrapper: shape_tuple_shapes_size(a1: shape_t): csize_t" href="nimxla/private/xla_wrapper.html#shape_tuple_shapes_size%2Cshape_t">xla_wrapper: shape_tuple_shapes_size(a1: shape_t): csize_t</a></li>
           </ul></dd>
 <dt><a name="sign" href="#sign"><span>sign:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
@@ -1367,15 +1371,15 @@ window.addEventListener('DOMContentLoaded', main);
           </ul></dd>
 <dt><a name="status_error_message" href="#status_error_message"><span>status_error_message:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
-          data-doc-search-tag="xla_wrapper: status_error_message(a1: status_t): cstring" href="nimxla/xla_wrapper.html#status_error_message%2Cstatus_t">xla_wrapper: status_error_message(a1: status_t): cstring</a></li>
+          data-doc-search-tag="xla_wrapper: status_error_message(a1: status_t): cstring" href="nimxla/private/xla_wrapper.html#status_error_message%2Cstatus_t">xla_wrapper: status_error_message(a1: status_t): cstring</a></li>
           </ul></dd>
 <dt><a name="status_free" href="#status_free"><span>status_free:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
-          data-doc-search-tag="xla_wrapper: status_free(a1: status_t)" href="nimxla/xla_wrapper.html#status_free%2Cstatus_t">xla_wrapper: status_free(a1: status_t)</a></li>
+          data-doc-search-tag="xla_wrapper: status_free(a1: status_t)" href="nimxla/private/xla_wrapper.html#status_free%2Cstatus_t">xla_wrapper: status_free(a1: status_t)</a></li>
           </ul></dd>
 <dt><a name="status_t" href="#status_t"><span>status_t:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
-          data-doc-search-tag="xla_wrapper: status_t" href="nimxla/xla_wrapper.html#status_t">xla_wrapper: status_t</a></li>
+          data-doc-search-tag="xla_wrapper: status_t" href="nimxla/private/xla_wrapper.html#status_t">xla_wrapper: status_t</a></li>
           </ul></dd>
 <dt><a name="tAbs" href="#tAbs"><span>tAbs:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
@@ -1561,11 +1565,11 @@ window.addEventListener('DOMContentLoaded', main);
           </ul></dd>
 <dt><a name="trace" href="#trace"><span>trace:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
-          data-doc-search-tag="xla_wrapper: trace(msg: string): untyped" href="nimxla/xla_wrapper.html#trace.t%2Cstring">xla_wrapper: trace(msg: string): untyped</a></li>
+          data-doc-search-tag="utils: trace(msg: string): untyped" href="nimxla/private/utils.html#trace.t%2Cstring">utils: trace(msg: string): untyped</a></li>
           </ul></dd>
 <dt><a name="tracemem" href="#tracemem"><span>tracemem:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
-          data-doc-search-tag="xla_wrapper: tracemem" href="nimxla/xla_wrapper.html#tracemem">xla_wrapper: tracemem</a></li>
+          data-doc-search-tag="utils: tracemem" href="nimxla/private/utils.html#tracemem">utils: tracemem</a></li>
           </ul></dd>
 <dt><a name="transpose" href="#transpose"><span>transpose:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
@@ -1689,31 +1693,31 @@ window.addEventListener('DOMContentLoaded', main);
           </ul></dd>
 <dt><a name="withDims" href="#withDims"><span>withDims:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
-          data-doc-search-tag="xla_wrapper: withDims(dptr: untyped; dims: openArray[int]; code: untyped): untyped" href="nimxla/xla_wrapper.html#withDims.t%2Cuntyped%2CopenArray%5Bint%5D%2Cuntyped">xla_wrapper: withDims(dptr: untyped; dims: openArray[int]; code: untyped): untyped</a></li>
+          data-doc-search-tag="utils: withDims(dptr: untyped; dims: openArray[int]; code: untyped): untyped" href="nimxla/private/utils.html#withDims.t%2Cuntyped%2CopenArray%5Bint%5D%2Cuntyped">utils: withDims(dptr: untyped; dims: openArray[int]; code: untyped): untyped</a></li>
           </ul></dd>
 <dt><a name="xla_builder" href="#xla_builder"><span>xla_builder:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
-          data-doc-search-tag="xla_wrapper: xla_builder" href="nimxla/xla_wrapper.html#xla_builder">xla_wrapper: xla_builder</a></li>
+          data-doc-search-tag="xla_wrapper: xla_builder" href="nimxla/private/xla_wrapper.html#xla_builder">xla_wrapper: xla_builder</a></li>
           </ul></dd>
 <dt><a name="xla_builder_create" href="#xla_builder_create"><span>xla_builder_create:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
-          data-doc-search-tag="xla_wrapper: xla_builder_create(a1: cstring): xla_builder" href="nimxla/xla_wrapper.html#xla_builder_create%2Ccstring">xla_wrapper: xla_builder_create(a1: cstring): xla_builder</a></li>
+          data-doc-search-tag="xla_wrapper: xla_builder_create(a1: cstring): xla_builder" href="nimxla/private/xla_wrapper.html#xla_builder_create%2Ccstring">xla_wrapper: xla_builder_create(a1: cstring): xla_builder</a></li>
           </ul></dd>
 <dt><a name="xla_builder_free" href="#xla_builder_free"><span>xla_builder_free:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
-          data-doc-search-tag="xla_wrapper: xla_builder_free(a1: xla_builder)" href="nimxla/xla_wrapper.html#xla_builder_free%2Cxla_builder">xla_wrapper: xla_builder_free(a1: xla_builder)</a></li>
+          data-doc-search-tag="xla_wrapper: xla_builder_free(a1: xla_builder)" href="nimxla/private/xla_wrapper.html#xla_builder_free%2Cxla_builder">xla_wrapper: xla_builder_free(a1: xla_builder)</a></li>
           </ul></dd>
 <dt><a name="xla_computation" href="#xla_computation"><span>xla_computation:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
-          data-doc-search-tag="xla_wrapper: xla_computation" href="nimxla/xla_wrapper.html#xla_computation">xla_wrapper: xla_computation</a></li>
+          data-doc-search-tag="xla_wrapper: xla_computation" href="nimxla/private/xla_wrapper.html#xla_computation">xla_wrapper: xla_computation</a></li>
           </ul></dd>
 <dt><a name="xla_computation_free" href="#xla_computation_free"><span>xla_computation_free:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
-          data-doc-search-tag="xla_wrapper: xla_computation_free(a1: xla_computation)" href="nimxla/xla_wrapper.html#xla_computation_free%2Cxla_computation">xla_wrapper: xla_computation_free(a1: xla_computation)</a></li>
+          data-doc-search-tag="xla_wrapper: xla_computation_free(a1: xla_computation)" href="nimxla/private/xla_wrapper.html#xla_computation_free%2Cxla_computation">xla_wrapper: xla_computation_free(a1: xla_computation)</a></li>
           </ul></dd>
 <dt><a name="xla_computation_name" href="#xla_computation_name"><span>xla_computation_name:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
-          data-doc-search-tag="xla_wrapper: xla_computation_name(a1: xla_computation): cstring" href="nimxla/xla_wrapper.html#xla_computation_name%2Cxla_computation">xla_wrapper: xla_computation_name(a1: xla_computation): cstring</a></li>
+          data-doc-search-tag="xla_wrapper: xla_computation_name(a1: xla_computation): cstring" href="nimxla/private/xla_wrapper.html#xla_computation_name%2Cxla_computation">xla_wrapper: xla_computation_name(a1: xla_computation): cstring</a></li>
           </ul></dd>
 <dt><a name="XLAError" href="#XLAError"><span>XLAError:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
@@ -1721,15 +1725,15 @@ window.addEventListener('DOMContentLoaded', main);
           </ul></dd>
 <dt><a name="xla_op" href="#xla_op"><span>xla_op:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
-          data-doc-search-tag="xla_wrapper: xla_op" href="nimxla/xla_wrapper.html#xla_op">xla_wrapper: xla_op</a></li>
+          data-doc-search-tag="xla_wrapper: xla_op" href="nimxla/private/xla_wrapper.html#xla_op">xla_wrapper: xla_op</a></li>
           </ul></dd>
 <dt><a name="xla_op_free" href="#xla_op_free"><span>xla_op_free:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
-          data-doc-search-tag="xla_wrapper: xla_op_free(a1: xla_op)" href="nimxla/xla_wrapper.html#xla_op_free%2Cxla_op">xla_wrapper: xla_op_free(a1: xla_op)</a></li>
+          data-doc-search-tag="xla_wrapper: xla_op_free(a1: xla_op)" href="nimxla/private/xla_wrapper.html#xla_op_free%2Cxla_op">xla_wrapper: xla_op_free(a1: xla_op)</a></li>
           </ul></dd>
 <dt><a name="xla_op_valid" href="#xla_op_valid"><span>xla_op_valid:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
-          data-doc-search-tag="xla_wrapper: xla_op_valid(a1: xla_op): cint" href="nimxla/xla_wrapper.html#xla_op_valid%2Cxla_op">xla_wrapper: xla_op_valid(a1: xla_op): cint</a></li>
+          data-doc-search-tag="xla_wrapper: xla_op_valid(a1: xla_op): cint" href="nimxla/private/xla_wrapper.html#xla_op_valid%2Cxla_op">xla_wrapper: xla_op_valid(a1: xla_op): cint</a></li>
           </ul></dd>
 <dt><a name="zero" href="#zero"><span>zero:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
@@ -1750,7 +1754,7 @@ window.addEventListener('DOMContentLoaded', main);
       <div class="twelve-columns footer">
         <span class="nim-sprite"></span>
         <br/>
-        <small style="color: var(--hint);">Made with Nim. Generated: 2023-05-31 12:31:54 UTC</small>
+        <small style="color: var(--hint);">Made with Nim. Generated: 2023-05-31 15:21:02 UTC</small>
       </div>
     </div>
   </div>
