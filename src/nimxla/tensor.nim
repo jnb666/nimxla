@@ -9,9 +9,9 @@ runnableExamples:
     t[i, 0] = sqrt(t[i, 0])
   echo t
 
-import std/[strutils,streams,strformat,sequtils,algorithm,math,sugar]
-import xla_wrapper
-when tracemem:
+import std/[strutils, streams, strformat, sequtils, algorithm, math, sugar]
+import private/[xla_wrapper, utils]
+when defined tracemem:
   import std/logging
 
 type
@@ -239,6 +239,8 @@ proc clone*[T: ElemType](t: Tensor[T]): Tensor[T] =
 proc reshape*[T: ElemType](t: Tensor[T], dims: varargs[int]): Tensor[T] =
   ## Returns a view of the same tensor with the shape changed.
   ## Number of elements in the tensor must be unchanged or will raise an exception.
+  ## If one of the dimensions is -1 then this value is inferred from the total number of elements.
+  let dims = reshapeDims(t.len, dims)
   if prod(t.dims) != prod(dims):
     raise newException(IndexDefect, "cannot reshape tensor - size is changed")
   result = t
@@ -370,6 +372,7 @@ proc clone*(lit: Literal): Literal =
 proc reshape*(lit: Literal, dims: varargs[int]): Literal =
   ## Returns a view of the same literal with the shape changed.
   ## Total number of elements in the tensor must be unchanged or will raise an exception.
+  ## If one of the dimensions is -1 then this value is inferred from the total number of elements.
   trace "new Literal"
   result = new Literal
   withDims(dptr, dims):

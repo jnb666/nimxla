@@ -16,7 +16,8 @@
 
 
 import std/[sugar, sequtils, strformat, strutils, tables, math, macros, logging]
-import tensor, xla_wrapper
+import tensor
+import private/[xla_wrapper, utils]
 
 
 type
@@ -442,16 +443,7 @@ proc convert*(a: Node, dtype: DataType): Node =
 proc reshape*(a: Node, dims: varargs[int]): Node =
   ## Reshape the input node to dims. Total number of elements is unchanged.
   ## If one of the dimensions is -1 then this value is inferred from the total number of elements.
-  var dims2 = @dims
-  let minusAt = dims.find(-1)
-  if minusAt >= 0:
-    var other = @dims
-    other.delete(minusAt)
-    let elems = prod(a.dims)
-    let nother = prod(other)
-    if nother > 0 and elems mod nother == 0:
-      dims2[minusAt] = elems div nother
-      debug &"{a.dims} reshape {dims} => {dims2}"
+  let dims2 = reshapeDims(prod(a.dims), dims)
   withDims(dptr, dims2):
    result = wrap(op_reshape(a.op.c, csize_t(dims2.len), dptr), tReshape, [a], $dims2)
    result.indices = dims2

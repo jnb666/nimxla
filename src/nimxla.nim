@@ -26,7 +26,8 @@ runnableExamples:
 
 
 import std/[os, sugar, strformat, strutils, sequtils, sugar, macros, logging]
-import nimxla/[xla_wrapper, graph, tensor]
+import nimxla/[graph, tensor]
+import nimxla/private/[xla_wrapper, utils]
 
 
 type

@@ -6,8 +6,6 @@
 ## 
 ## The C wrapper code here is copied from the https://github.com/LaurentMazare/xla-rs Rust bindings. 
 
-const tracemem* {.booldefine.} = false
-
 {.compile(
     "xla_wrapper.cc", 
     "-std=c++17 -Wno-deprecated-declarations -Wno-defaulted-function-deleted -I/usr/local/xla_extension/include -DLLVM_ON_UNIX=1")
@@ -37,20 +35,6 @@ type
   shape_t* = ptr struct_shape
   literal_t* = ptr struct_literal
 
-
-proc ptrOffset*[T](p: ptr T, off: int): ptr T {.inline.} =
-  cast[ptr T](cast[int](p) + off*sizeOf(T))
-
-template trace*(msg: string): untyped =
-  when tracemem:
-    debug msg
-
-template withDims*(dptr: untyped, dims: openarray[int], code: untyped): untyped =
-  block:
-    var dptr: ptr int64
-    if dims.len > 0:
-      dptr = cast[ptr int64](dims[0].unsafeAddr)
-    code
 
 proc pjrt_cpu_client_create*(a1: ptr pjrt_client): status_t {.importc: "pjrt_cpu_client_create".}
 proc pjrt_gpu_client_create*(a1: ptr pjrt_client; a2: cdouble; a3: bool): status_t {.importc: "pjrt_gpu_client_create".}
