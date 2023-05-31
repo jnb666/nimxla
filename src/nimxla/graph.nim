@@ -518,25 +518,34 @@ proc rngNormal*(mean, stddev: Node, dims: openarray[int]): Node =
     result = wrap(op, tRngNormal, [mean, stddev], $dims)
     result.indices = @dims
 
-proc reduce*(a, initValue: Node, comp: Computation, dims: openarray[int] = [], nodeType = tReduce): Node =
+proc reduce*(a, initValue: Node, comp: Computation, dims: openarray[int] = [], 
+            nodeType = tReduce, keepDims = false): Node =
   ## Apply reduction across one or more dimensions.  i.e. comp is applied repeatedly with a pair of elements
   ## from the a input node. initValue defines the initial 'zero' value for the reduction.
   ## If no dims given then the reduction is applied across all of the input dimensions to reduce to a scalar.
   ## If the dimension index is negative then it is relative to the number of dimensions.
-  let r = a.op.c.rank
-  if r.err != nil:
-    return errorNode(op_builder(a.op.c), r.err)
+  ## If keepDims is set then the summed dimensions are kept with a size of 1, else they are removed
+  ## and the numbe of dimensions in the result is reduced.
+  let s = a.op.c.shape
+  if s.err != nil:
+    return errorNode(op_builder(a.op.c), s.err)
+  var shape = @(s.val.dims)
   var dims2: seq[int]
   if dims.len == 0:
-    dims2 = toSeq(0 ..< r.val)
+    dims2 = toSeq(0 ..< shape.len)
   else:
-    dims2 = map(dims, x => normalize(x, r.val))
+    dims2 = map(dims, x => normalize(x, shape.len))
   withDims(dptr, dims2):
     let op = op_reduce(a.op.c, initValue.op.c, comp.c, dptr, csize_t(dims2.len))
-    result = wrap(op, nodeType, [a, initValue], &"{comp.name}{dims2}")
+    var info = comp.name & $dims2
+    if keepDims: info.add ":keepDims" 
+    result = wrap(op, nodeType, [a, initValue], info)
     result.indices = dims2
+    if keepDims and dims2.len > 0:
+      for d in dims2: shape[d] = 1
+      result = result.reshape(shape)
 
-proc reduceSum*(a: Node, dims: varargs[int]): Node =
+proc reduceSum*(a: Node, dims: openarray[int] = [], keepDims = false): Node =
   ## Reduce to sum of elements across one or more dimensions in the input. See reduce for details.
   let b = op_builder(a.op.c)
   let dtype = a.op.c.dtype
@@ -544,9 +553,9 @@ proc reduceSum*(a: Node, dims: varargs[int]): Node =
     return errorNode(b, dtype.err)
   let b2 = newBuilder("sum")
   let sum = build(b2.parameter(0, dtype.val) + b2.parameter(1, dtype.val))
-  reduce(a, b.zero(dtype.val), sum, dims, tReduceSum)
+  reduce(a, b.zero(dtype.val), sum, dims, tReduceSum, keepDims)
 
-proc reduceMin*(a: Node, dims: varargs[int]): Node =
+proc reduceMin*(a: Node, dims: openarray[int] = [], keepDims = false): Node =
   ## Reduce to minimum value of elements across one or more dimensions in the input. See reduce for details.
   let b = op_builder(a.op.c)
   let dtype = a.op.c.dtype
@@ -554,9 +563,9 @@ proc reduceMin*(a: Node, dims: varargs[int]): Node =
     return errorNode(b, dtype.err)
   var b2 = newBuilder("min")
   let sum = build(min(b2.parameter(0, dtype.val), b2.parameter(1, dtype.val)))
-  reduce(a, b.maxValue(dtype.val), sum, dims, tReduceMin)
+  reduce(a, b.maxValue(dtype.val), sum, dims, tReduceMin, keepDims)
 
-proc reduceMax*(a: Node, dims: varargs[int]): Node =
+proc reduceMax*(a: Node, dims: openarray[int] = [], keepDims = false): Node =
   ## Reduce to maximum value of elements across one or more dimensions in the input. See reduce for details.
   let b = op_builder(a.op.c)
   let dtype = a.op.c.dtype
@@ -564,7 +573,7 @@ proc reduceMax*(a: Node, dims: varargs[int]): Node =
     return errorNode(b, dtype.err)
   var b2 = newBuilder("max")
   let sum = build(max(b2.parameter(0, dtype.val), b2.parameter(1, dtype.val)))
-  result = reduce(a, b.minValue(dtype.val), sum, dims, tReduceMax)
+  reduce(a, b.minValue(dtype.val), sum, dims, tReduceMax, keepDims)
 
 
 template defn(path, expression: untyped): untyped =

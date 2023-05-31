@@ -76,11 +76,23 @@ suite "graph":
     debug t1
     let b = newBuilder("reduce")
     let a = b.parameter(0, I32, [3, 4])
-    let comp = build(a.reduceMax(1))
+    let comp = build(a.reduceMax([1]))
     debug comp
     let res = client.compile(comp).run([t1]).toLiteral.i32
     debug res
     check res.dims == [3]
+    check res.toSeq == [4'i32, 8, 12]
+
+  test "reduce_max2":
+    let t1 = toTensor[int32](1..12).reshape(3, 4).toLiteral
+    debug t1
+    let b = newBuilder("reduce")
+    let a = b.parameter(0, I32, [3, 4])
+    let comp = build(a.reduceMax([1], keepDims=true))
+    debug comp
+    let res = client.compile(comp).run([t1]).toLiteral.i32
+    debug res
+    check res.dims == [3, 1]
     check res.toSeq == [4'i32, 8, 12]
 
   test "random":
