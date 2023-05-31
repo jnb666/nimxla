@@ -1,0 +1,146 @@
+BuilderError	nimxla/graph.html#BuilderError	graph: BuilderError	
+tConst	nimxla/graph.html#tConst	OpType.tConst	
+tParam	nimxla/graph.html#tParam	OpType.tParam	
+tError	nimxla/graph.html#tError	OpType.tError	
+tNot	nimxla/graph.html#tNot	OpType.tNot	
+tNeg	nimxla/graph.html#tNeg	OpType.tNeg	
+tAbs	nimxla/graph.html#tAbs	OpType.tAbs	
+tExp	nimxla/graph.html#tExp	OpType.tExp	
+tFloor	nimxla/graph.html#tFloor	OpType.tFloor	
+tCeil	nimxla/graph.html#tCeil	OpType.tCeil	
+tRound	nimxla/graph.html#tRound	OpType.tRound	
+tLog	nimxla/graph.html#tLog	OpType.tLog	
+tLog1p	nimxla/graph.html#tLog1p	OpType.tLog1p	
+tLogistic	nimxla/graph.html#tLogistic	OpType.tLogistic	
+tSign	nimxla/graph.html#tSign	OpType.tSign	
+tCos	nimxla/graph.html#tCos	OpType.tCos	
+tSin	nimxla/graph.html#tSin	OpType.tSin	
+tTanh	nimxla/graph.html#tTanh	OpType.tTanh	
+tSqrt	nimxla/graph.html#tSqrt	OpType.tSqrt	
+tRsqrt	nimxla/graph.html#tRsqrt	OpType.tRsqrt	
+tIsFinite	nimxla/graph.html#tIsFinite	OpType.tIsFinite	
+tCopy	nimxla/graph.html#tCopy	OpType.tCopy	
+tZerosLike	nimxla/graph.html#tZerosLike	OpType.tZerosLike	
+tTupleElement	nimxla/graph.html#tTupleElement	OpType.tTupleElement	
+tReshape	nimxla/graph.html#tReshape	OpType.tReshape	
+tBroadcast	nimxla/graph.html#tBroadcast	OpType.tBroadcast	
+tBroadcastInDim	nimxla/graph.html#tBroadcastInDim	OpType.tBroadcastInDim	
+tCollapse	nimxla/graph.html#tCollapse	OpType.tCollapse	
+tTranspose	nimxla/graph.html#tTranspose	OpType.tTranspose	
+tNarrow	nimxla/graph.html#tNarrow	OpType.tNarrow	
+tConvert	nimxla/graph.html#tConvert	OpType.tConvert	
+tReduceSum	nimxla/graph.html#tReduceSum	OpType.tReduceSum	
+tReduceMin	nimxla/graph.html#tReduceMin	OpType.tReduceMin	
+tReduceMax	nimxla/graph.html#tReduceMax	OpType.tReduceMax	
+tAdd	nimxla/graph.html#tAdd	OpType.tAdd	
+tSub	nimxla/graph.html#tSub	OpType.tSub	
+tMul	nimxla/graph.html#tMul	OpType.tMul	
+tDiv	nimxla/graph.html#tDiv	OpType.tDiv	
+tRem	nimxla/graph.html#tRem	OpType.tRem	
+tMax	nimxla/graph.html#tMax	OpType.tMax	
+tMin	nimxla/graph.html#tMin	OpType.tMin	
+tPow	nimxla/graph.html#tPow	OpType.tPow	
+tDot	nimxla/graph.html#tDot	OpType.tDot	
+tAnd	nimxla/graph.html#tAnd	OpType.tAnd	
+tOr	nimxla/graph.html#tOr	OpType.tOr	
+tEq	nimxla/graph.html#tEq	OpType.tEq	
+tNe	nimxla/graph.html#tNe	OpType.tNe	
+tGe	nimxla/graph.html#tGe	OpType.tGe	
+tGt	nimxla/graph.html#tGt	OpType.tGt	
+tLe	nimxla/graph.html#tLe	OpType.tLe	
+tLt	nimxla/graph.html#tLt	OpType.tLt	
+tRngUniform	nimxla/graph.html#tRngUniform	OpType.tRngUniform	
+tRngNormal	nimxla/graph.html#tRngNormal	OpType.tRngNormal	
+tReduce	nimxla/graph.html#tReduce	OpType.tReduce	
+tSelect	nimxla/graph.html#tSelect	OpType.tSelect	
+tTuple	nimxla/graph.html#tTuple	OpType.tTuple	
+OpType	nimxla/graph.html#OpType	graph: OpType	
+Builder	nimxla/graph.html#Builder	graph: Builder	
+Node	nimxla/graph.html#Node	graph: Node	
+Computation	nimxla/graph.html#Computation	graph: Computation	
+raiseError	nimxla/graph.html#raiseError,string,Node	graph: raiseError(message: string; node: Node = nil)	
+checkBuilderError	nimxla/graph.html#checkBuilderError,status_t,Node	graph: checkBuilderError(status: status_t; at: Node = nil)	
+uid	nimxla/graph.html#uid,Node	graph: uid(n: Node): uint64	
+dtype	nimxla/graph.html#dtype,Node	graph: dtype(n: Node): DataType	
+rank	nimxla/graph.html#rank,Node	graph: rank(n: Node): int	
+dims	nimxla/graph.html#dims,Node	graph: dims(n: Node): seq[int]	
+`[]`	nimxla/graph.html#[],Node,Natural	graph: `[]`(n: Node; i: Natural): Node	
+len	nimxla/graph.html#len,Node	graph: len(n: Node): int	
+`$`	nimxla/graph.html#$,Node	graph: `$`(n: Node): string	
+repr	nimxla/graph.html#repr,Node	graph: repr(n: Node): string	
+newBuilder	nimxla/graph.html#newBuilder,string	graph: newBuilder(name: string): Builder	
+build	nimxla/graph.html#build,Node	graph: build(root: Node): Computation	
+last	nimxla/graph.html#last,Computation	graph: last(comp: Computation): Node	
+rawPtr	nimxla/graph.html#rawPtr,Computation	graph: rawPtr(comp: Computation): xla_computation	
+name	nimxla/graph.html#name,Computation	graph: name(comp: Computation): string	
+paramNames	nimxla/graph.html#paramNames,Computation	graph: paramNames(comp: Computation): seq[string]	
+`$`	nimxla/graph.html#$,Computation	graph: `$`(comp: Computation): string	
+constant	nimxla/graph.html#constant,Builder,Literal	graph: constant(b: Builder; lit: Literal): Node	
+parameter	nimxla/graph.html#parameter,Builder,int,DataType,openArray[int],string	graph: parameter(b: Builder; index: int; dtype: DataType; dims: openArray[int] = [];\n          name = &quot;&quot;): Node	
+makeTuple	nimxla/graph.html#makeTuple,Builder,varargs[Node]	graph: makeTuple(b: Builder; args: varargs[Node]): Node	
+errorNode	nimxla/graph.html#errorNode,Node,string	graph: errorNode(n: Node; message: string): Node	
+constant	nimxla/graph.html#constant,Builder,int32	graph: constant(b`gensym30: Builder; value`gensym30: int32): Node	
+constant	nimxla/graph.html#constant,Builder,	graph: constant(b`gensym30: Builder; value`gensym30: openArray[int32]): Node	
+constant	nimxla/graph.html#constant,Builder,int64	graph: constant(b`gensym31: Builder; value`gensym31: int64): Node	
+constant	nimxla/graph.html#constant,Builder,_2	graph: constant(b`gensym31: Builder; value`gensym31: openArray[int64]): Node	
+constant	nimxla/graph.html#constant,Builder,float32	graph: constant(b`gensym32: Builder; value`gensym32: float32): Node	
+constant	nimxla/graph.html#constant,Builder,_3	graph: constant(b`gensym32: Builder; value`gensym32: openArray[float32]): Node	
+constant	nimxla/graph.html#constant,Builder,float64	graph: constant(b`gensym34: Builder; value`gensym34: float64): Node	
+constant	nimxla/graph.html#constant,Builder,_4	graph: constant(b`gensym34: Builder; value`gensym34: openArray[float64]): Node	
+constant	nimxla/graph.html#constant,Builder,float,DataType	graph: constant(b: Builder; value: float; dtype: DataType): Node	
+zero	nimxla/graph.html#zero,Builder,enum	graph: zero(b`gensym35: Builder; dtype`gensym35 = F32;\n     dims`gensym35: openArray[int] = []): Node	
+one	nimxla/graph.html#one,Builder,enum	graph: one(b`gensym37: Builder; dtype`gensym37 = F32;\n    dims`gensym37: openArray[int] = []): Node	
+minValue	nimxla/graph.html#minValue,Builder,enum	graph: minValue(b`gensym39: Builder; dtype`gensym39 = F32;\n         dims`gensym39: openArray[int] = []): Node	
+maxValue	nimxla/graph.html#maxValue,Builder,enum	graph: maxValue(b`gensym41: Builder; dtype`gensym41 = F32;\n         dims`gensym41: openArray[int] = []): Node	
+`+`	nimxla/graph.html#+,Node,Node	graph: `+`(a`gensym43, b`gensym43: Node): Node	
+`-`	nimxla/graph.html#-,Node,Node	graph: `-`(a`gensym44, b`gensym44: Node): Node	
+`*`	nimxla/graph.html#*,Node,Node	graph: `*`(a`gensym45, b`gensym45: Node): Node	
+`/`	nimxla/graph.html#/,Node,Node	graph: `/`(a`gensym46, b`gensym46: Node): Node	
+rem	nimxla/graph.html#rem,Node,Node	graph: rem(a`gensym47, b`gensym47: Node): Node	
+max	nimxla/graph.html#max,Node,Node	graph: max(a`gensym48, b`gensym48: Node): Node	
+min	nimxla/graph.html#min,Node,Node	graph: min(a`gensym49, b`gensym49: Node): Node	
+pow	nimxla/graph.html#pow,Node,Node	graph: pow(a`gensym50, b`gensym50: Node): Node	
+dot	nimxla/graph.html#dot,Node,Node	graph: dot(a`gensym51, b`gensym51: Node): Node	
+logicalAnd	nimxla/graph.html#logicalAnd,Node,Node	graph: logicalAnd(a`gensym52, b`gensym52: Node): Node	
+logicalOr	nimxla/graph.html#logicalOr,Node,Node	graph: logicalOr(a`gensym53, b`gensym53: Node): Node	
+`==`	nimxla/graph.html#==,Node,Node	graph: `==`(a`gensym54, b`gensym54: Node): Node	
+`!=`	nimxla/graph.html#!=,Node,Node	graph: `!=`(a`gensym55, b`gensym55: Node): Node	
+`&gt;=`	nimxla/graph.html#>=,Node,Node	graph: `&gt;=`(a`gensym56, b`gensym56: Node): Node	
+`&gt;`	nimxla/graph.html#>,Node,Node	graph: `&gt;`(a`gensym57, b`gensym57: Node): Node	
+`&lt;=`	nimxla/graph.html#<=,Node,Node	graph: `&lt;=`(a`gensym58, b`gensym58: Node): Node	
+`&lt;`	nimxla/graph.html#<,Node,Node	graph: `&lt;`(a`gensym59, b`gensym59: Node): Node	
+`!`	nimxla/graph.html#!,Node	graph: `!`(a`gensym60: Node): Node	
+`-`	nimxla/graph.html#-,Node	graph: `-`(a`gensym61: Node): Node	
+abs	nimxla/graph.html#abs,Node	graph: abs(a`gensym62: Node): Node	
+exp	nimxla/graph.html#exp,Node	graph: exp(a`gensym63: Node): Node	
+floor	nimxla/graph.html#floor,Node	graph: floor(a`gensym64: Node): Node	
+ceil	nimxla/graph.html#ceil,Node	graph: ceil(a`gensym65: Node): Node	
+round	nimxla/graph.html#round,Node	graph: round(a`gensym66: Node): Node	
+log	nimxla/graph.html#log,Node	graph: log(a`gensym67: Node): Node	
+log1p	nimxla/graph.html#log1p,Node	graph: log1p(a`gensym68: Node): Node	
+logistic	nimxla/graph.html#logistic,Node	graph: logistic(a`gensym69: Node): Node	
+sign	nimxla/graph.html#sign,Node	graph: sign(a`gensym70: Node): Node	
+cos	nimxla/graph.html#cos,Node	graph: cos(a`gensym71: Node): Node	
+sin	nimxla/graph.html#sin,Node	graph: sin(a`gensym72: Node): Node	
+tanh	nimxla/graph.html#tanh,Node	graph: tanh(a`gensym73: Node): Node	
+sqrt	nimxla/graph.html#sqrt,Node	graph: sqrt(a`gensym74: Node): Node	
+rsqrt	nimxla/graph.html#rsqrt,Node	graph: rsqrt(a`gensym75: Node): Node	
+isFinite	nimxla/graph.html#isFinite,Node	graph: isFinite(a`gensym76: Node): Node	
+copy	nimxla/graph.html#copy,Node	graph: copy(a`gensym77: Node): Node	
+zerosLike	nimxla/graph.html#zerosLike,Node	graph: zerosLike(a`gensym78: Node): Node	
+tupleElement	nimxla/graph.html#tupleElement,Node,int	graph: tupleElement(a: Node; index: int): Node	
+convert	nimxla/graph.html#convert,Node,DataType	graph: convert(a: Node; dtype: DataType): Node	
+reshape	nimxla/graph.html#reshape,Node,varargs[int]	graph: reshape(a: Node; dims: varargs[int]): Node	
+broadcast	nimxla/graph.html#broadcast,Node,openArray[int]	graph: broadcast(a: Node; dims: openArray[int]): Node	
+broadcastInDim	nimxla/graph.html#broadcastInDim,Node,openArray[int],openArray[int]	graph: broadcastInDim(a: Node; outSize, bcastDims: openArray[int]): Node	
+collapse	nimxla/graph.html#collapse,Node,openArray[int]	graph: collapse(a: Node; dims: openArray[int]): Node	
+transpose	nimxla/graph.html#transpose,Node,varargs[int]	graph: transpose(a: Node; axes: varargs[int]): Node	
+narrow	nimxla/graph.html#narrow,Node,int,int,int,int	graph: narrow(a: Node; dim, start, stop: int; stride = 1): Node	
+select	nimxla/graph.html#select,Node,Node,Node	graph: select(a, onTrue, onFalse: Node): Node	
+rngUniform	nimxla/graph.html#rngUniform,Node,Node,openArray[int]	graph: rngUniform(minVal, maxVal: Node; dims: openArray[int]): Node	
+rngNormal	nimxla/graph.html#rngNormal,Node,Node,openArray[int]	graph: rngNormal(mean, stddev: Node; dims: openArray[int]): Node	
+reduce	nimxla/graph.html#reduce,Node,Node,Computation,openArray[int]	graph: reduce(a, initValue: Node; comp: Computation; dims: openArray[int] = [];\n       nodeType = tReduce): Node	
+reduceSum	nimxla/graph.html#reduceSum,Node,varargs[int]	graph: reduceSum(a: Node; dims: varargs[int]): Node	
+reduceMin	nimxla/graph.html#reduceMin,Node,varargs[int]	graph: reduceMin(a: Node; dims: varargs[int]): Node	
+reduceMax	nimxla/graph.html#reduceMax,Node,varargs[int]	graph: reduceMax(a: Node; dims: varargs[int]): Node	
+gradient	nimxla/graph.html#gradient,Builder,Node,openArray[string]	graph: gradient(b: Builder; output: Node; inputs: openArray[string]): Node	

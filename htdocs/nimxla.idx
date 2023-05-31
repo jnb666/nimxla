@@ -1,0 +1,29 @@
+Info	nimxla.html#Info	LogLevel.Info	
+Warning	nimxla.html#Warning	LogLevel.Warning	
+Error	nimxla.html#Error	LogLevel.Error	
+Fatal	nimxla.html#Fatal	LogLevel.Fatal	
+LogLevel	nimxla.html#LogLevel	nimxla: LogLevel	
+Buffer	nimxla.html#Buffer	nimxla: Buffer	
+Executable	nimxla.html#Executable	nimxla: Executable	
+Client	nimxla.html#Client	nimxla: Client	
+setLogLevel	nimxla.html#setLogLevel,LogLevel	nimxla: setLogLevel(level: LogLevel)	
+deviceCount	nimxla.html#deviceCount,Client	nimxla: deviceCount(client: Client): int	
+platformName	nimxla.html#platformName,Client	nimxla: platformName(client: Client): string	
+platformVersion	nimxla.html#platformVersion,Client	nimxla: platformVersion(client: Client): string	
+`$`	nimxla.html#$,Client	nimxla: `$`(client: Client): string	
+newCPUClient	nimxla.html#newCPUClient	nimxla: newCPUClient(logLevel = Warning): Client	
+newGPUClient	nimxla.html#newGPUClient,float	nimxla: newGPUClient(memoryFraction = 1.0; preallocate = false; logLevel = Warning): Client	
+newTPUClient	nimxla.html#newTPUClient,int	nimxla: newTPUClient(maxInflightComputations: int; logLevel = Warning): Client	
+newBuffer	nimxla.html#newBuffer,Client,Literal,int	nimxla: newBuffer(client: Client; lit: Literal; device = 0): Buffer	
+newBuffer	nimxla.html#newBuffer,Client,Tensor[T: ElemType],int	nimxla: newBuffer[T: ElemType](client: Client; t: Tensor[T]; device = 0): Buffer	
+shape	nimxla.html#shape,Buffer	nimxla: shape(buf: Buffer): Shape	
+toLiteral	nimxla.html#toLiteral,Buffer	nimxla: toLiteral(buf: Buffer): Literal	
+toTensor	nimxla.html#toTensor,Buffer	nimxla: toTensor[T: ElemType](buf: Buffer): Tensor[T]	
+`$`	nimxla.html#$,Buffer	nimxla: `$`(buf: Buffer): string	
+compile	nimxla.html#compile,Client,Computation	nimxla: compile(client: Client; comp: Computation): Executable	
+`$`	nimxla.html#$,Executable	nimxla: `$`(exec: Executable): string	
+runAndUnpack	nimxla.html#runAndUnpack,Executable,openArray[T]	nimxla: runAndUnpack[T: Buffer | Literal](exec: Executable; args: openArray[T];\n                                  checkShape = true): seq[Buffer]	
+runAndUnpack	nimxla.html#runAndUnpack,Executable	nimxla: runAndUnpack(exec: Executable; checkShape = true): seq[Buffer]	
+run	nimxla.html#run,Executable,openArray[T]	nimxla: run[T: Buffer | Literal](exec: Executable; args: openArray[T]; checkShape = true): Buffer	
+run	nimxla.html#run,Executable	nimxla: run(exec: Executable; checkShape = true): Buffer	
+toLiterals	nimxla.html#toLiterals,openArray[Buffer]	nimxla: toLiterals(buffers: openArray[Buffer]): seq[Literal]	

@@ -1,0 +1,181 @@
+tracemem	nimxla/xla_wrapper.html#tracemem	xla_wrapper: tracemem	
+pjrt_client	nimxla/xla_wrapper.html#pjrt_client	xla_wrapper: pjrt_client	
+pjrt_device	nimxla/xla_wrapper.html#pjrt_device	xla_wrapper: pjrt_device	
+pjrt_buffer	nimxla/xla_wrapper.html#pjrt_buffer	xla_wrapper: pjrt_buffer	
+pjrt_loaded_executable	nimxla/xla_wrapper.html#pjrt_loaded_executable	xla_wrapper: pjrt_loaded_executable	
+xla_builder	nimxla/xla_wrapper.html#xla_builder	xla_wrapper: xla_builder	
+xla_computation	nimxla/xla_wrapper.html#xla_computation	xla_wrapper: xla_computation	
+xla_op	nimxla/xla_wrapper.html#xla_op	xla_wrapper: xla_op	
+status_t	nimxla/xla_wrapper.html#status_t	xla_wrapper: status_t	
+shape_t	nimxla/xla_wrapper.html#shape_t	xla_wrapper: shape_t	
+literal_t	nimxla/xla_wrapper.html#literal_t	xla_wrapper: literal_t	
+ptrOffset	nimxla/xla_wrapper.html#ptrOffset,ptr.T,int	xla_wrapper: ptrOffset[T](p: ptr T; off: int): ptr T	
+trace	nimxla/xla_wrapper.html#trace.t,string	xla_wrapper: trace(msg: string): untyped	
+withDims	nimxla/xla_wrapper.html#withDims.t,untyped,openArray[int],untyped	xla_wrapper: withDims(dptr: untyped; dims: openArray[int]; code: untyped): untyped	
+pjrt_cpu_client_create	nimxla/xla_wrapper.html#pjrt_cpu_client_create,ptr.pjrt_client	xla_wrapper: pjrt_cpu_client_create(a1: ptr pjrt_client): status_t	
+pjrt_gpu_client_create	nimxla/xla_wrapper.html#pjrt_gpu_client_create,ptr.pjrt_client,cdouble,bool	xla_wrapper: pjrt_gpu_client_create(a1: ptr pjrt_client; a2: cdouble; a3: bool): status_t	
+pjrt_tpu_client_create	nimxla/xla_wrapper.html#pjrt_tpu_client_create,ptr.pjrt_client,cint	xla_wrapper: pjrt_tpu_client_create(a1: ptr pjrt_client; a2: cint): status_t	
+pjrt_client_free	nimxla/xla_wrapper.html#pjrt_client_free,pjrt_client	xla_wrapper: pjrt_client_free(a1: pjrt_client)	
+pjrt_client_device_count	nimxla/xla_wrapper.html#pjrt_client_device_count,pjrt_client	xla_wrapper: pjrt_client_device_count(a1: pjrt_client): cint	
+pjrt_client_addressable_device_count	nimxla/xla_wrapper.html#pjrt_client_addressable_device_count,pjrt_client	xla_wrapper: pjrt_client_addressable_device_count(a1: pjrt_client): cint	
+pjrt_client_devices	nimxla/xla_wrapper.html#pjrt_client_devices,pjrt_client,ptr.pjrt_device	xla_wrapper: pjrt_client_devices(a1: pjrt_client; a2: ptr pjrt_device)	
+pjrt_client_addressable_devices	nimxla/xla_wrapper.html#pjrt_client_addressable_devices,pjrt_client,ptr.pjrt_device	xla_wrapper: pjrt_client_addressable_devices(a1: pjrt_client; a2: ptr pjrt_device)	
+pjrt_client_platform_name	nimxla/xla_wrapper.html#pjrt_client_platform_name,pjrt_client	xla_wrapper: pjrt_client_platform_name(a1: pjrt_client): cstring	
+pjrt_client_platform_version	nimxla/xla_wrapper.html#pjrt_client_platform_version,pjrt_client	xla_wrapper: pjrt_client_platform_version(a1: pjrt_client): cstring	
+pjrt_loaded_executable_free	nimxla/xla_wrapper.html#pjrt_loaded_executable_free,pjrt_loaded_executable	xla_wrapper: pjrt_loaded_executable_free(a1: pjrt_loaded_executable)	
+pjrt_device_id	nimxla/xla_wrapper.html#pjrt_device_id,pjrt_device	xla_wrapper: pjrt_device_id(a1: pjrt_device): cint	
+pjrt_device_process_index	nimxla/xla_wrapper.html#pjrt_device_process_index,pjrt_device	xla_wrapper: pjrt_device_process_index(a1: pjrt_device): cint	
+pjrt_device_local_hardware_id	nimxla/xla_wrapper.html#pjrt_device_local_hardware_id,pjrt_device	xla_wrapper: pjrt_device_local_hardware_id(a1: pjrt_device): cint	
+pjrt_device_transfer_to_infeed	nimxla/xla_wrapper.html#pjrt_device_transfer_to_infeed,pjrt_device,literal_t	xla_wrapper: pjrt_device_transfer_to_infeed(a1: pjrt_device; a2: literal_t): status_t	
+pjrt_device_transfer_from_outfeed	nimxla/xla_wrapper.html#pjrt_device_transfer_from_outfeed,pjrt_device,literal_t	xla_wrapper: pjrt_device_transfer_from_outfeed(a1: pjrt_device; a2: literal_t): status_t	
+pjrt_device_kind	nimxla/xla_wrapper.html#pjrt_device_kind,pjrt_device	xla_wrapper: pjrt_device_kind(a1: pjrt_device): cstring	
+pjrt_device_debug_string	nimxla/xla_wrapper.html#pjrt_device_debug_string,pjrt_device	xla_wrapper: pjrt_device_debug_string(a1: pjrt_device): cstring	
+pjrt_device_to_string	nimxla/xla_wrapper.html#pjrt_device_to_string,pjrt_device	xla_wrapper: pjrt_device_to_string(a1: pjrt_device): cstring	
+pjrt_buffer_from_host_literal	nimxla/xla_wrapper.html#pjrt_buffer_from_host_literal,pjrt_client,pjrt_device,literal_t,ptr.pjrt_buffer	xla_wrapper: pjrt_buffer_from_host_literal(a1: pjrt_client; a2: pjrt_device; a3: literal_t;\n                              a4: ptr pjrt_buffer): status_t	
+pjrt_buffer_from_host_buffer	nimxla/xla_wrapper.html#pjrt_buffer_from_host_buffer,pjrt_client,pjrt_device,pointer,cint,cint,ptr.int64,ptr.pjrt_buffer	xla_wrapper: pjrt_buffer_from_host_buffer(a1: pjrt_client; a2: pjrt_device; a3: pointer;\n                             a4: cint; a5: cint; a6: ptr int64;\n                             a7: ptr pjrt_buffer): status_t	
+pjrt_buffer_to_literal_sync	nimxla/xla_wrapper.html#pjrt_buffer_to_literal_sync,pjrt_buffer,ptr.literal_t	xla_wrapper: pjrt_buffer_to_literal_sync(a1: pjrt_buffer; a2: ptr literal_t): status_t	
+pjrt_buffer_copy_raw_to_host_sync	nimxla/xla_wrapper.html#pjrt_buffer_copy_raw_to_host_sync,pjrt_buffer,pointer,csize_t,csize_t	xla_wrapper: pjrt_buffer_copy_raw_to_host_sync(a1: pjrt_buffer; a2: pointer; a3: csize_t;\n                                  a4: csize_t): status_t	
+pjrt_buffer_on_device_shape	nimxla/xla_wrapper.html#pjrt_buffer_on_device_shape,pjrt_buffer	xla_wrapper: pjrt_buffer_on_device_shape(a1: pjrt_buffer): shape_t	
+pjrt_buffer_copy_to_device	nimxla/xla_wrapper.html#pjrt_buffer_copy_to_device,pjrt_buffer,pjrt_device,ptr.pjrt_buffer	xla_wrapper: pjrt_buffer_copy_to_device(a1: pjrt_buffer; a2: pjrt_device; a3: ptr pjrt_buffer): status_t	
+pjrt_buffer_free	nimxla/xla_wrapper.html#pjrt_buffer_free,pjrt_buffer	xla_wrapper: pjrt_buffer_free(a1: pjrt_buffer)	
+xla_builder_create	nimxla/xla_wrapper.html#xla_builder_create,cstring	xla_wrapper: xla_builder_create(a1: cstring): xla_builder	
+xla_builder_free	nimxla/xla_wrapper.html#xla_builder_free,xla_builder	xla_wrapper: xla_builder_free(a1: xla_builder)	
+constant_literal	nimxla/xla_wrapper.html#constant_literal,xla_builder,literal_t	xla_wrapper: constant_literal(a1: xla_builder; a2: literal_t): xla_op	
+parameter	nimxla/xla_wrapper.html#parameter,xla_builder,int64,cint,cint,ptr.int64,cstring	xla_wrapper: parameter(a1: xla_builder; a2: int64; a3: cint; a4: cint; a5: ptr int64;\n          a6: cstring): xla_op	
+parameter_s	nimxla/xla_wrapper.html#parameter_s,xla_builder,int64,shape_t,cstring	xla_wrapper: parameter_s(a1: xla_builder; a2: int64; a3: shape_t; a4: cstring): xla_op	
+infeed	nimxla/xla_wrapper.html#infeed,xla_builder,cint,cint,ptr.int64,cstring	xla_wrapper: infeed(a1: xla_builder; a2: cint; a3: cint; a4: ptr int64; a5: cstring): xla_op	
+outfeed	nimxla/xla_wrapper.html#outfeed,xla_op,cint,cint,ptr.int64,cstring	xla_wrapper: outfeed(a1: xla_op; a2: cint; a3: cint; a4: ptr int64; a5: cstring)	
+get_shape	nimxla/xla_wrapper.html#get_shape,xla_builder,xla_op,ptr.shape_t	xla_wrapper: get_shape(a1: xla_builder; a2: xla_op; a3: ptr shape_t): status_t	
+get_element_type	nimxla/xla_wrapper.html#get_element_type,xla_builder,xla_op,ptr.cint	xla_wrapper: get_element_type(a1: xla_builder; a2: xla_op; a3: ptr cint): status_t	
+get_dimensions_size	nimxla/xla_wrapper.html#get_dimensions_size,xla_builder,xla_op,ptr.cint	xla_wrapper: get_dimensions_size(a1: xla_builder; a2: xla_op; a3: ptr cint): status_t	
+get_dimensions	nimxla/xla_wrapper.html#get_dimensions,xla_builder,xla_op,ptr.csize_t	xla_wrapper: get_dimensions(a1: xla_builder; a2: xla_op; a3: ptr csize_t): status_t	
+build	nimxla/xla_wrapper.html#build,xla_builder,xla_op,ptr.xla_computation	xla_wrapper: build(a1: xla_builder; a2: xla_op; a3: ptr xla_computation): status_t	
+compile	nimxla/xla_wrapper.html#compile,pjrt_client,xla_computation,ptr.pjrt_loaded_executable	xla_wrapper: compile(a1: pjrt_client; a2: xla_computation; a3: ptr pjrt_loaded_executable): status_t	
+execute	nimxla/xla_wrapper.html#execute,pjrt_loaded_executable,ptr.literal_t,cint,ptr.ptr.ptr.pjrt_buffer,bool	xla_wrapper: execute(a1: pjrt_loaded_executable; a2: ptr literal_t; a3: cint;\n        a4: ptr ptr ptr pjrt_buffer; untuple_result: bool): status_t	
+execute_b	nimxla/xla_wrapper.html#execute_b,pjrt_loaded_executable,ptr.pjrt_buffer,cint,ptr.ptr.ptr.pjrt_buffer,bool	xla_wrapper: execute_b(a1: pjrt_loaded_executable; a2: ptr pjrt_buffer; a3: cint;\n          a4: ptr ptr ptr pjrt_buffer; untuple_result: bool): status_t	
+first_error	nimxla/xla_wrapper.html#first_error,xla_builder	xla_wrapper: first_error(a1: xla_builder): status_t	
+get_current_status	nimxla/xla_wrapper.html#get_current_status,xla_builder	xla_wrapper: get_current_status(a1: xla_builder): status_t	
+xla_computation_name	nimxla/xla_wrapper.html#xla_computation_name,xla_computation	xla_wrapper: xla_computation_name(a1: xla_computation): cstring	
+xla_computation_free	nimxla/xla_wrapper.html#xla_computation_free,xla_computation	xla_wrapper: xla_computation_free(a1: xla_computation)	
+op_add	nimxla/xla_wrapper.html#op_add,xla_op,xla_op	xla_wrapper: op_add(a1: xla_op; a2: xla_op): xla_op	
+op_sub	nimxla/xla_wrapper.html#op_sub,xla_op,xla_op	xla_wrapper: op_sub(a1: xla_op; a2: xla_op): xla_op	
+op_mul	nimxla/xla_wrapper.html#op_mul,xla_op,xla_op	xla_wrapper: op_mul(a1: xla_op; a2: xla_op): xla_op	
+op_div	nimxla/xla_wrapper.html#op_div,xla_op,xla_op	xla_wrapper: op_div(a1: xla_op; a2: xla_op): xla_op	
+op_rem	nimxla/xla_wrapper.html#op_rem,xla_op,xla_op	xla_wrapper: op_rem(a1: xla_op; a2: xla_op): xla_op	
+op_max	nimxla/xla_wrapper.html#op_max,xla_op,xla_op	xla_wrapper: op_max(a1: xla_op; a2: xla_op): xla_op	
+op_min	nimxla/xla_wrapper.html#op_min,xla_op,xla_op	xla_wrapper: op_min(a1: xla_op; a2: xla_op): xla_op	
+op_and	nimxla/xla_wrapper.html#op_and,xla_op,xla_op	xla_wrapper: op_and(a1: xla_op; a2: xla_op): xla_op	
+op_or	nimxla/xla_wrapper.html#op_or,xla_op,xla_op	xla_wrapper: op_or(a1: xla_op; a2: xla_op): xla_op	
+op_xor	nimxla/xla_wrapper.html#op_xor,xla_op,xla_op	xla_wrapper: op_xor(a1: xla_op; a2: xla_op): xla_op	
+op_atan2	nimxla/xla_wrapper.html#op_atan2,xla_op,xla_op	xla_wrapper: op_atan2(a1: xla_op; a2: xla_op): xla_op	
+op_pow	nimxla/xla_wrapper.html#op_pow,xla_op,xla_op	xla_wrapper: op_pow(a1: xla_op; a2: xla_op): xla_op	
+op_dot	nimxla/xla_wrapper.html#op_dot,xla_op,xla_op	xla_wrapper: op_dot(a1: xla_op; a2: xla_op): xla_op	
+op_dot_general	nimxla/xla_wrapper.html#op_dot_general,xla_op,xla_op,ptr.int64,csize_t,ptr.int64,csize_t,ptr.int64,csize_t,ptr.int64,csize_t	xla_wrapper: op_dot_general(a1: xla_op; a2: xla_op; a3: ptr int64; a4: csize_t;\n               a5: ptr int64; a6: csize_t; a7: ptr int64; a8: csize_t;\n               a9: ptr int64; a10: csize_t): xla_op	
+op_eq	nimxla/xla_wrapper.html#op_eq,xla_op,xla_op	xla_wrapper: op_eq(a1: xla_op; a2: xla_op): xla_op	
+op_ne	nimxla/xla_wrapper.html#op_ne,xla_op,xla_op	xla_wrapper: op_ne(a1: xla_op; a2: xla_op): xla_op	
+op_ge	nimxla/xla_wrapper.html#op_ge,xla_op,xla_op	xla_wrapper: op_ge(a1: xla_op; a2: xla_op): xla_op	
+op_gt	nimxla/xla_wrapper.html#op_gt,xla_op,xla_op	xla_wrapper: op_gt(a1: xla_op; a2: xla_op): xla_op	
+op_le	nimxla/xla_wrapper.html#op_le,xla_op,xla_op	xla_wrapper: op_le(a1: xla_op; a2: xla_op): xla_op	
+op_lt	nimxla/xla_wrapper.html#op_lt,xla_op,xla_op	xla_wrapper: op_lt(a1: xla_op; a2: xla_op): xla_op	
+op_not	nimxla/xla_wrapper.html#op_not,xla_op	xla_wrapper: op_not(a1: xla_op): xla_op	
+op_abs	nimxla/xla_wrapper.html#op_abs,xla_op	xla_wrapper: op_abs(a1: xla_op): xla_op	
+op_exp	nimxla/xla_wrapper.html#op_exp,xla_op	xla_wrapper: op_exp(a1: xla_op): xla_op	
+op_expm1	nimxla/xla_wrapper.html#op_expm1,xla_op	xla_wrapper: op_expm1(a1: xla_op): xla_op	
+op_floor	nimxla/xla_wrapper.html#op_floor,xla_op	xla_wrapper: op_floor(a1: xla_op): xla_op	
+op_ceil	nimxla/xla_wrapper.html#op_ceil,xla_op	xla_wrapper: op_ceil(a1: xla_op): xla_op	
+op_round	nimxla/xla_wrapper.html#op_round,xla_op	xla_wrapper: op_round(a1: xla_op): xla_op	
+op_log	nimxla/xla_wrapper.html#op_log,xla_op	xla_wrapper: op_log(a1: xla_op): xla_op	
+op_log1p	nimxla/xla_wrapper.html#op_log1p,xla_op	xla_wrapper: op_log1p(a1: xla_op): xla_op	
+op_logistic	nimxla/xla_wrapper.html#op_logistic,xla_op	xla_wrapper: op_logistic(a1: xla_op): xla_op	
+op_sign	nimxla/xla_wrapper.html#op_sign,xla_op	xla_wrapper: op_sign(a1: xla_op): xla_op	
+op_clz	nimxla/xla_wrapper.html#op_clz,xla_op	xla_wrapper: op_clz(a1: xla_op): xla_op	
+op_cos	nimxla/xla_wrapper.html#op_cos,xla_op	xla_wrapper: op_cos(a1: xla_op): xla_op	
+op_sin	nimxla/xla_wrapper.html#op_sin,xla_op	xla_wrapper: op_sin(a1: xla_op): xla_op	
+op_tanh	nimxla/xla_wrapper.html#op_tanh,xla_op	xla_wrapper: op_tanh(a1: xla_op): xla_op	
+op_real	nimxla/xla_wrapper.html#op_real,xla_op	xla_wrapper: op_real(a1: xla_op): xla_op	
+op_imag	nimxla/xla_wrapper.html#op_imag,xla_op	xla_wrapper: op_imag(a1: xla_op): xla_op	
+op_sqrt	nimxla/xla_wrapper.html#op_sqrt,xla_op	xla_wrapper: op_sqrt(a1: xla_op): xla_op	
+op_rsqrt	nimxla/xla_wrapper.html#op_rsqrt,xla_op	xla_wrapper: op_rsqrt(a1: xla_op): xla_op	
+op_cbrt	nimxla/xla_wrapper.html#op_cbrt,xla_op	xla_wrapper: op_cbrt(a1: xla_op): xla_op	
+op_is_finite	nimxla/xla_wrapper.html#op_is_finite,xla_op	xla_wrapper: op_is_finite(a1: xla_op): xla_op	
+op_neg	nimxla/xla_wrapper.html#op_neg,xla_op	xla_wrapper: op_neg(a1: xla_op): xla_op	
+op_lower_triangle	nimxla/xla_wrapper.html#op_lower_triangle,xla_op	xla_wrapper: op_lower_triangle(a1: xla_op): xla_op	
+op_upper_triangle	nimxla/xla_wrapper.html#op_upper_triangle,xla_op	xla_wrapper: op_upper_triangle(a1: xla_op): xla_op	
+op_einsum1	nimxla/xla_wrapper.html#op_einsum1,xla_op,cstring	xla_wrapper: op_einsum1(a1: xla_op; a2: cstring): xla_op	
+op_einsum2	nimxla/xla_wrapper.html#op_einsum2,xla_op,xla_op,cstring	xla_wrapper: op_einsum2(a1: xla_op; a2: xla_op; a3: cstring): xla_op	
+op_copy	nimxla/xla_wrapper.html#op_copy,xla_op	xla_wrapper: op_copy(a1: xla_op): xla_op	
+op_clone	nimxla/xla_wrapper.html#op_clone,xla_op	xla_wrapper: op_clone(a1: xla_op): xla_op	
+op_zeros_like	nimxla/xla_wrapper.html#op_zeros_like,xla_op	xla_wrapper: op_zeros_like(a1: xla_op): xla_op	
+op_zero_like	nimxla/xla_wrapper.html#op_zero_like,xla_op	xla_wrapper: op_zero_like(a1: xla_op): xla_op	
+op_zero	nimxla/xla_wrapper.html#op_zero,xla_builder,cint	xla_wrapper: op_zero(a1: xla_builder; a2: cint): xla_op	
+op_one	nimxla/xla_wrapper.html#op_one,xla_builder,cint	xla_wrapper: op_one(a1: xla_builder; a2: cint): xla_op	
+op_min_value	nimxla/xla_wrapper.html#op_min_value,xla_builder,cint	xla_wrapper: op_min_value(a1: xla_builder; a2: cint): xla_op	
+op_max_value	nimxla/xla_wrapper.html#op_max_value,xla_builder,cint	xla_wrapper: op_max_value(a1: xla_builder; a2: cint): xla_op	
+op_reshape	nimxla/xla_wrapper.html#op_reshape,xla_op,csize_t,ptr.int64	xla_wrapper: op_reshape(a1: xla_op; a2: csize_t; a3: ptr int64): xla_op	
+op_broadcast	nimxla/xla_wrapper.html#op_broadcast,xla_op,csize_t,ptr.int64	xla_wrapper: op_broadcast(a1: xla_op; a2: csize_t; a3: ptr int64): xla_op	
+op_broadcast_in_dim	nimxla/xla_wrapper.html#op_broadcast_in_dim,xla_op,csize_t,ptr.int64,csize_t,ptr.int64	xla_wrapper: op_broadcast_in_dim(a1: xla_op; a2: csize_t; a3: ptr int64; a4: csize_t;\n                    a5: ptr int64): xla_op	
+op_collapse	nimxla/xla_wrapper.html#op_collapse,xla_op,csize_t,ptr.int64	xla_wrapper: op_collapse(a1: xla_op; a2: csize_t; a3: ptr int64): xla_op	
+op_transpose	nimxla/xla_wrapper.html#op_transpose,xla_op,csize_t,ptr.int64	xla_wrapper: op_transpose(a1: xla_op; a2: csize_t; a3: ptr int64): xla_op	
+op_clamp	nimxla/xla_wrapper.html#op_clamp,xla_op,xla_op,xla_op	xla_wrapper: op_clamp(a1: xla_op; a2: xla_op; a3: xla_op): xla_op	
+op_select	nimxla/xla_wrapper.html#op_select,xla_op,xla_op,xla_op	xla_wrapper: op_select(a1: xla_op; a2: xla_op; a3: xla_op): xla_op	
+op_rng_uniform	nimxla/xla_wrapper.html#op_rng_uniform,xla_op,xla_op,cint,cint,ptr.int64	xla_wrapper: op_rng_uniform(a1: xla_op; a2: xla_op; a3: cint; a4: cint; a5: ptr int64): xla_op	
+op_rng_normal	nimxla/xla_wrapper.html#op_rng_normal,xla_op,xla_op,cint,cint,ptr.int64	xla_wrapper: op_rng_normal(a1: xla_op; a2: xla_op; a3: cint; a4: cint; a5: ptr int64): xla_op	
+op_slice_in_dim	nimxla/xla_wrapper.html#op_slice_in_dim,xla_op,int64,int64,int64,int64	xla_wrapper: op_slice_in_dim(a1: xla_op; a2: int64; a3: int64; a4: int64; a5: int64): xla_op	
+op_concat_in_dim	nimxla/xla_wrapper.html#op_concat_in_dim,xla_op,ptr.xla_op,csize_t,int64	xla_wrapper: op_concat_in_dim(a1: xla_op; a2: ptr xla_op; a3: csize_t; a4: int64): xla_op	
+op_tuple	nimxla/xla_wrapper.html#op_tuple,xla_builder,ptr.xla_op,csize_t	xla_wrapper: op_tuple(a1: xla_builder; a2: ptr xla_op; a3: csize_t): xla_op	
+op_get_tuple_element	nimxla/xla_wrapper.html#op_get_tuple_element,xla_op,int64	xla_wrapper: op_get_tuple_element(a1: xla_op; a2: int64): xla_op	
+op_gather	nimxla/xla_wrapper.html#op_gather,xla_op,xla_op,ptr.int64,csize_t,ptr.int64,csize_t,ptr.int64,csize_t,ptr.int64,ptr.int64,csize_t	xla_wrapper: op_gather(a1: xla_op; a2: xla_op; a3: ptr int64; a4: csize_t; a5: ptr int64;\n          a6: csize_t; a7: ptr int64; a8: csize_t; a9: ptr int64;\n          a10: ptr int64; a11: csize_t): xla_op	
+op_convert_element_type	nimxla/xla_wrapper.html#op_convert_element_type,xla_op,cint	xla_wrapper: op_convert_element_type(a1: xla_op; a2: cint): xla_op	
+op_dimensions_size	nimxla/xla_wrapper.html#op_dimensions_size,xla_op,int64	xla_wrapper: op_dimensions_size(a1: xla_op; a2: int64): xla_op	
+op_reduce	nimxla/xla_wrapper.html#op_reduce,xla_op,xla_op,xla_computation,ptr.int64,csize_t	xla_wrapper: op_reduce(a1: xla_op; a2: xla_op; a3: xla_computation; a4: ptr int64;\n          a5: csize_t): xla_op	
+op_internal_error	nimxla/xla_wrapper.html#op_internal_error,xla_builder,cstring	xla_wrapper: op_internal_error(a1: xla_builder; a2: cstring): xla_op	
+op_unknown_error	nimxla/xla_wrapper.html#op_unknown_error,xla_builder,cstring	xla_wrapper: op_unknown_error(a1: xla_builder; a2: cstring): xla_op	
+op_invalid_argument_error	nimxla/xla_wrapper.html#op_invalid_argument_error,xla_builder,cstring	xla_wrapper: op_invalid_argument_error(a1: xla_builder; a2: cstring): xla_op	
+op_iota1	nimxla/xla_wrapper.html#op_iota1,xla_builder,cint,csize_t	xla_wrapper: op_iota1(a1: xla_builder; a2: cint; a3: csize_t): xla_op	
+op_iota	nimxla/xla_wrapper.html#op_iota,xla_builder,cint,csize_t,ptr.int64,int64	xla_wrapper: op_iota(a1: xla_builder; a2: cint; a3: csize_t; a4: ptr int64; a5: int64): xla_op	
+op_while	nimxla/xla_wrapper.html#op_while,xla_computation,xla_computation,xla_op	xla_wrapper: op_while(a1: xla_computation; a2: xla_computation; a3: xla_op): xla_op	
+op_conditional	nimxla/xla_wrapper.html#op_conditional,xla_op,xla_op,xla_computation,xla_op,xla_computation	xla_wrapper: op_conditional(a1: xla_op; a2: xla_op; a3: xla_computation; a4: xla_op;\n               a5: xla_computation): xla_op	
+op_builder	nimxla/xla_wrapper.html#op_builder,xla_op	xla_wrapper: op_builder(a1: xla_op): xla_builder	
+xla_op_valid	nimxla/xla_wrapper.html#xla_op_valid,xla_op	xla_wrapper: xla_op_valid(a1: xla_op): cint	
+xla_op_free	nimxla/xla_wrapper.html#xla_op_free,xla_op	xla_wrapper: xla_op_free(a1: xla_op)	
+literal_create_from_shape	nimxla/xla_wrapper.html#literal_create_from_shape,cint,ptr.int64,csize_t	xla_wrapper: literal_create_from_shape(a1: cint; a2: ptr int64; a3: csize_t): literal_t	
+literal_create_from_shape_and_data	nimxla/xla_wrapper.html#literal_create_from_shape_and_data,cint,ptr.int64,csize_t,pointer,csize_t	xla_wrapper: literal_create_from_shape_and_data(a1: cint; a2: ptr int64; a3: csize_t;\n                                   a4: pointer; a5: csize_t): literal_t	
+literal_clone	nimxla/xla_wrapper.html#literal_clone,literal_t	xla_wrapper: literal_clone(a1: literal_t): literal_t	
+literal_reshape	nimxla/xla_wrapper.html#literal_reshape,literal_t,ptr.int64,csize_t,ptr.literal_t	xla_wrapper: literal_reshape(a1: literal_t; a2: ptr int64; a3: csize_t; a4: ptr literal_t): status_t	
+literal_convert	nimxla/xla_wrapper.html#literal_convert,literal_t,cint,ptr.literal_t	xla_wrapper: literal_convert(a1: literal_t; a2: cint; a3: ptr literal_t): status_t	
+literal_element_count	nimxla/xla_wrapper.html#literal_element_count,literal_t	xla_wrapper: literal_element_count(a1: literal_t): int64	
+literal_element_type	nimxla/xla_wrapper.html#literal_element_type,literal_t	xla_wrapper: literal_element_type(a1: literal_t): cint	
+literal_shape	nimxla/xla_wrapper.html#literal_shape,literal_t,ptr.shape_t	xla_wrapper: literal_shape(a1: literal_t; a2: ptr shape_t)	
+literal_decompose_tuple	nimxla/xla_wrapper.html#literal_decompose_tuple,literal_t,ptr.literal_t,csize_t	xla_wrapper: literal_decompose_tuple(a1: literal_t; a2: ptr literal_t; a3: csize_t)	
+literal_size_bytes	nimxla/xla_wrapper.html#literal_size_bytes,literal_t	xla_wrapper: literal_size_bytes(a1: literal_t): int64	
+literal_copy_to	nimxla/xla_wrapper.html#literal_copy_to,literal_t,pointer,csize_t	xla_wrapper: literal_copy_to(a1: literal_t; a2: pointer; a3: csize_t)	
+literal_copy_from	nimxla/xla_wrapper.html#literal_copy_from,literal_t,pointer,csize_t	xla_wrapper: literal_copy_from(a1: literal_t; a2: pointer; a3: csize_t)	
+literal_make_tuple	nimxla/xla_wrapper.html#literal_make_tuple,ptr.literal_t,csize_t	xla_wrapper: literal_make_tuple(a1: ptr literal_t; a2: csize_t): literal_t	
+literal_make_tuple_owned	nimxla/xla_wrapper.html#literal_make_tuple_owned,ptr.literal_t,csize_t	xla_wrapper: literal_make_tuple_owned(a1: ptr literal_t; a2: csize_t): literal_t	
+literal_free	nimxla/xla_wrapper.html#literal_free,literal_t	xla_wrapper: literal_free(a1: literal_t)	
+shape_dimensions_size	nimxla/xla_wrapper.html#shape_dimensions_size,shape_t	xla_wrapper: shape_dimensions_size(a1: shape_t): cint	
+shape_tuple_shapes_size	nimxla/xla_wrapper.html#shape_tuple_shapes_size,shape_t	xla_wrapper: shape_tuple_shapes_size(a1: shape_t): csize_t	
+shape_tuple_shapes	nimxla/xla_wrapper.html#shape_tuple_shapes,shape_t,cint	xla_wrapper: shape_tuple_shapes(a1: shape_t; a2: cint): shape_t	
+shape_element_type	nimxla/xla_wrapper.html#shape_element_type,shape_t	xla_wrapper: shape_element_type(a1: shape_t): cint	
+shape_dimensions	nimxla/xla_wrapper.html#shape_dimensions,shape_t,cint	xla_wrapper: shape_dimensions(a1: shape_t; a2: cint): int64	
+shape_free	nimxla/xla_wrapper.html#shape_free,shape_t	xla_wrapper: shape_free(a1: shape_t)	
+make_shape_array	nimxla/xla_wrapper.html#make_shape_array,cint,csize_t,ptr.int64	xla_wrapper: make_shape_array(a1: cint; a2: csize_t; a3: ptr int64): shape_t	
+make_shape_tuple	nimxla/xla_wrapper.html#make_shape_tuple,csize_t,ptr.shape_t	xla_wrapper: make_shape_tuple(a1: csize_t; a2: ptr shape_t): shape_t	
+status_free	nimxla/xla_wrapper.html#status_free,status_t	xla_wrapper: status_free(a1: status_t)	
+status_error_message	nimxla/xla_wrapper.html#status_error_message,status_t	xla_wrapper: status_error_message(a1: status_t): cstring	
+constant_r0_int32_t	nimxla/xla_wrapper.html#constant_r0_int32_t,xla_builder,int32	xla_wrapper: constant_r0_int32_t(a0: xla_builder; a1: int32): xla_op	
+constant_r1_int32_t	nimxla/xla_wrapper.html#constant_r1_int32_t,xla_builder,ptr.int32,csize_t	xla_wrapper: constant_r1_int32_t(a0: xla_builder; a1: ptr int32; a2: csize_t): xla_op	
+create_r0_int32_t	nimxla/xla_wrapper.html#create_r0_int32_t,int32	xla_wrapper: create_r0_int32_t(a0: int32): literal_t	
+create_r1_int32_t	nimxla/xla_wrapper.html#create_r1_int32_t,ptr.int32,csize_t	xla_wrapper: create_r1_int32_t(a0: ptr int32; a1: csize_t): literal_t	
+constant_r0_int64_t	nimxla/xla_wrapper.html#constant_r0_int64_t,xla_builder,int64	xla_wrapper: constant_r0_int64_t(a0: xla_builder; a1: int64): xla_op	
+constant_r1_int64_t	nimxla/xla_wrapper.html#constant_r1_int64_t,xla_builder,ptr.int64,csize_t	xla_wrapper: constant_r1_int64_t(a0: xla_builder; a1: ptr int64; a2: csize_t): xla_op	
+create_r0_int64_t	nimxla/xla_wrapper.html#create_r0_int64_t,int64	xla_wrapper: create_r0_int64_t(a0: int64): literal_t	
+create_r1_int64_t	nimxla/xla_wrapper.html#create_r1_int64_t,ptr.int64,csize_t	xla_wrapper: create_r1_int64_t(a0: ptr int64; a1: csize_t): literal_t	
+constant_r0_float	nimxla/xla_wrapper.html#constant_r0_float,xla_builder,cfloat	xla_wrapper: constant_r0_float(a0: xla_builder; a1: cfloat): xla_op	
+constant_r1_float	nimxla/xla_wrapper.html#constant_r1_float,xla_builder,ptr.cfloat,csize_t	xla_wrapper: constant_r1_float(a0: xla_builder; a1: ptr cfloat; a2: csize_t): xla_op	
+create_r0_float	nimxla/xla_wrapper.html#create_r0_float,cfloat	xla_wrapper: create_r0_float(a0: cfloat): literal_t	
+create_r1_float	nimxla/xla_wrapper.html#create_r1_float,ptr.cfloat,csize_t	xla_wrapper: create_r1_float(a0: ptr cfloat; a1: csize_t): literal_t	
+constant_r0_double	nimxla/xla_wrapper.html#constant_r0_double,xla_builder,cdouble	xla_wrapper: constant_r0_double(a0: xla_builder; a1: cdouble): xla_op	
+constant_r1_double	nimxla/xla_wrapper.html#constant_r1_double,xla_builder,ptr.cdouble,csize_t	xla_wrapper: constant_r1_double(a0: xla_builder; a1: ptr cdouble; a2: csize_t): xla_op	
+create_r0_double	nimxla/xla_wrapper.html#create_r0_double,cdouble	xla_wrapper: create_r0_double(a0: cdouble): literal_t	
+create_r1_double	nimxla/xla_wrapper.html#create_r1_double,ptr.cdouble,csize_t	xla_wrapper: create_r1_double(a0: ptr cdouble; a1: csize_t): literal_t	
