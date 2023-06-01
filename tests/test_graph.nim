@@ -1,7 +1,6 @@
 {.warning[BareExcept]:off.}
 import std/[unittest, logging, strformat, math, sequtils, strutils]
 import nimxla
-import nimxla/[graph, tensor]
 
 const debug {.booldefine.} = false
 const gpu {.booldefine.} = false
@@ -20,7 +19,7 @@ suite "graph":
     let b = newBuilder("test")
     let sum = b.constant(20.0) + b.constant([22.0, 44.0])
     check sum.shape == arrayShape(F64, 2)
-    let comp = build(sum)
+    let comp = b.build(sum)
     debug comp
     let exec = client.compile(comp)
     let res = toTensor[float64](exec.run)
@@ -30,8 +29,8 @@ suite "graph":
 
   test "param":
     let b = newBuilder("getSqrt")
-    let x = b.parameter(0, F32, name="x")
-    let comp = build sqrt(x)
+    let x = b.parameter(F32, name="x")
+    let comp = b.build sqrt(x)
     debug comp
     check comp.params.len == 1
     check comp.params[0].name == "x"
@@ -44,9 +43,9 @@ suite "graph":
 
   test "param2":
     let b = newBuilder("hypotenuse")
-    let x = b.parameter(0, F32, name="x")
-    let y = b.parameter(1, F32, name="y")
-    let comp = build sqrt(x*x + y*y)
+    let x = b.parameter(F32, name="x")
+    let y = b.parameter(F32, name="y")
+    let comp = b.build sqrt(x*x + y*y)
     debug comp
     check comp.paramNames == ["x", "y"]
     let exec = client.compile(comp)
@@ -63,8 +62,8 @@ suite "graph":
     let vec = toTensor[float32](1..12).toLiteral
     debug vec
     let b = newBuilder("reduce")
-    let a = b.parameter(0, F32, [12])
-    let comp = build(a.reduceSum)
+    let a = b.parameter(F32, [12])
+    let comp = b.build(a.sum)
     debug comp
     let res = client.compile(comp).run([vec]).toLiteral.f32
     debug res
@@ -75,8 +74,8 @@ suite "graph":
     let t1 = toTensor[int32](1..12).reshape(3, 4).toLiteral
     debug t1
     let b = newBuilder("reduce")
-    let a = b.parameter(0, I32, [3, 4])
-    let comp = build(a.reduceMax([1]))
+    let a = b.parameter(I32, [3, 4])
+    let comp = b.build(a.max([1]))
     debug comp
     let res = client.compile(comp).run([t1]).toLiteral.i32
     debug res
@@ -87,23 +86,50 @@ suite "graph":
     let t1 = toTensor[int32](1..12).reshape(3, 4).toLiteral
     debug t1
     let b = newBuilder("reduce")
-    let a = b.parameter(0, I32, [3, 4])
-    let comp = build(a.reduceMax([1], keepDims=true))
+    let a = b.parameter(I32, [3, 4])
+    let comp = b.build(a.max([1], keepDims=true))
     debug comp
     let res = client.compile(comp).run([t1]).toLiteral.i32
     debug res
     check res.dims == [3, 1]
     check res.toSeq == [4'i32, 8, 12]
 
+
+  test "argmax":
+    let data = [7f32,  3,  9,   4 ,
+                   2, -1, -2,   0 ,
+                 0.5,  7,  3, 4.2]
+    let t1 = data.toTensor.reshape(3, 4).toLiteral
+    debug t1
+    let b = newBuilder("reduce")
+    let a = b.parameter(F32, [3, 4])
+    let comp = b.build(a.argmax(0))
+    debug comp
+    let res = client.compile(comp).run([t1]).toLiteral
+    debug res
+    check res.shape == arrayShape(I32, 4)
+    check res.i32.toSeq == [0i32, 2, 0, 2]
+
+  test "iota":
+    let b = newBuilder("test")
+    let comp = b.build b.iota(F32, [4, 8], 1)
+    debug comp
+    let exec = client.compile(comp)
+    let lit = exec.run.toLiteral
+    debug lit
+    check lit.shape == arrayShape(F32, 4, 8)
+    check lit.f32[0, 0] == 0.0
+    check lit.f32[3, 7] == 7.0
+
   test "random":
     setPrintOpts(floatMode=ffDecimal, precision=4)
     let b = newBuilder("test")
-    let comp = rngUniform(b.zero(BF16), b.one(BF16), [5, 10]).build
+    let comp = b.build rngUniform(b.zero(BF16), b.one(BF16), [5, 10])
     debug comp
     let exec = client.compile(comp)
     for _ in 1 .. 5:
       let lit = exec.run.toLiteral
-      debug $lit
+      debug lit
       check lit.shape == arrayShape(BF16, 5, 10)
     setPrintOpts()
 
@@ -111,8 +137,8 @@ suite "graph":
     let t1 = toTensor[int32](1..12).reshape(3, 4).toLiteral
     debug t1
     let b = newBuilder("test")
-    let a = b.parameter(0, I32, [3, 4])
-    let comp = a.transpose.build
+    let a = b.parameter(I32, [3, 4])
+    let comp = b.build a.transpose
     debug comp
     let res = client.compile(comp).run([t1]).toLiteral.i32
     debug res
@@ -123,8 +149,8 @@ suite "graph":
     let t1 = toTensor[int32](1..12).reshape(3, 4).toLiteral
     debug t1
     let b = newBuilder("test")
-    let a = b.parameter(0, I32, [3, 4])
-    let comp = a.narrow(1, 1, 3).build
+    let a = b.parameter(I32, [3, 4])
+    let comp = b.build a.narrow(1, 1, 3)
     debug comp
     let res = client.compile(comp).run([t1]).toLiteral.i32
     debug res
@@ -135,8 +161,8 @@ suite "graph":
     let t1 = toTensor[int32](1..12).reshape(3, 4).toLiteral
     debug t1
     let b = newBuilder("test")
-    let a = b.parameter(0, I32, [3, 4])
-    let comp = build(!logicalAnd(a > b.constant(2, I32), a < b.constant(10, I32)))
+    let a = b.parameter(I32, [3, 4])
+    let comp = b.build !logicalAnd(a > b.constant(2, I32), a < b.constant(10, I32))
     debug comp
     let res = toTensor[bool](client.compile(comp).run([t1]))
     debug res
@@ -146,7 +172,7 @@ suite "graph":
   test "tuple":
     # using run to return the tuple without unpacking
     let b = newBuilder("test")
-    let comp = build(b.makeTuple(b.constant(1f32), b.constant([2f32, 3])))
+    let comp = b.build b.makeTuple(b.constant(1f32), b.constant([2f32, 3]))
     debug comp
     let lit = client.compile(comp).run.toLiteral
     debug lit
@@ -161,7 +187,7 @@ suite "graph":
   test "tuple2":
     # using runAll to unpack into a list of buffers
     let b = newBuilder("test")
-    let comp = build(b.makeTuple(b.constant(1f32), b.constant([2f32, 3])))
+    let comp = b.build b.makeTuple(b.constant(1f32), b.constant([2f32, 3]))
     debug comp
     let res = client.compile(comp).runAndUnpack
     debug res
@@ -173,9 +199,9 @@ suite "graph":
 
   test "matmul":
     let b = newBuilder("test")
-    let x = b.parameter(0, F32, [2, 3], "x")
-    let y = b.parameter(1, F32, [3, 2], "y")
-    let comp = build dot(x, y)
+    let x = b.parameter(F32, [2, 3], "x")
+    let y = b.parameter(F32, [3, 2], "y")
+    let comp = b.build dot(x, y)
     let mx = toTensor[float32](1..6).reshape(2, 3).toLiteral
     let my = toTensor[float32](7..12).reshape(3, 2).toLiteral
     debug "x = ", mx
@@ -187,21 +213,21 @@ suite "graph":
 
   test "error":
     let b = newBuilder("test")
-    let x = b.parameter(0, F32, [2, 5], "x")
-    let y = b.parameter(1, F32, [3, 2], "y")
+    let x = b.parameter(F32, [2, 5], "x")
+    let y = b.parameter(F32, [3, 2], "y")
     try:
       let sum = dot(x, y + b.one(F32)) / b.constant(10f32)
     except BuilderError as e:
       debug &"got error: '{e.origMsg}' at\n{e.at.repr}"
       check e.origMsg == "Cannot infer shape for dot operation: f32[2,5] <dot> f32[3,2]. Contracting dimension sizes do not match."
       check e.at.kind == tDot
-      check e.at[0].shape.dims == [2, 5]
-      check e.at[1].shape.dims == [3, 2]
+      check e.at.args[0].dims == [2, 5]
+      check e.at.args[1].dims == [3, 2]
 
   test "check_shape":
     let b = newBuilder("test")
-    let foo = b.parameter(0, I32, [3, 4], "foo")
-    let comp = build foo * foo
+    let foo = b.parameter(I32, [3, 4], "foo")
+    let comp = b.build foo * foo
     let input = toTensor[int32](1..12).toLiteral
     let exec = client.compile(comp)
     try:
@@ -212,3 +238,4 @@ suite "graph":
     let res = exec.run([input], checkShape=false)
     debug res.toLiteral
     check res.shape == arrayShape(I32, 3, 4)
+

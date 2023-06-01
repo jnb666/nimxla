@@ -16,7 +16,7 @@
 #  processed 208363 calls - 48.0 µs/call
 
 import std/[sequtils, math, random, times, strformat, strutils]
-import nimxla, nimxla/[tensor, graph]
+import nimxla
 import cligen
 
 template timeIt(duration: float, code: untyped): untyped =
@@ -32,10 +32,10 @@ template timeIt(duration: float, code: untyped): untyped =
 
 proc buildExec(c: Client, n: int, typ: DataType, debug: bool): Executable =
   let b = newBuilder("benchmark")
-  let x = b.parameter(0, typ, [n, n])
-  let y = b.parameter(1, typ, [n, n])
-  let z = b.parameter(2, typ, [1, n])
-  let comp = build dot(x, y) + z
+  let x = b.parameter(typ, [n, n])
+  let y = b.parameter(typ, [n, n])
+  let z = b.parameter(typ, [1, n])
+  let comp = b.build dot(x, y) + z
   if debug: echo comp.last.repr
   c.compile(comp)
 

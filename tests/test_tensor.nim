@@ -1,6 +1,6 @@
 {.warning[BareExcept]:off.}
 import std/[unittest, logging, strutils, sequtils, random]
-import nimxla/tensor
+import nimxla
 
 const debug {.booldefine.} = false
 

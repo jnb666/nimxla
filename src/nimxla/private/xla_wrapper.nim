@@ -166,6 +166,8 @@ proc op_gather*(a1: xla_op; a2: xla_op; a3: ptr int64; a4: csize_t; a5: ptr int6
 proc op_convert_element_type*(a1: xla_op; a2: cint): xla_op {.importc: "op_convert_element_type".}
 proc op_dimensions_size*(a1: xla_op; a2: int64): xla_op {.importc: "op_dimensions_size".}
 proc op_reduce*(a1: xla_op; a2: xla_op; a3: xla_computation; a4: ptr int64; a5: csize_t): xla_op {.importc: "op_reduce".}
+proc op_reduce2*(b: xla_builder, a1: xla_op; a2: xla_op; a3: xla_op; a4: xla_op; a5: xla_computation; 
+  a6: ptr int64; a7: csize_t): xla_op {.importc: "op_reduce2".}
 proc op_internal_error*(a1: xla_builder; a2: cstring): xla_op {.importc: "op_internal_error".}
 proc op_unknown_error*(a1: xla_builder; a2: cstring): xla_op {.importc: "op_unknown_error".}
 proc op_invalid_argument_error*(a1: xla_builder; a2: cstring): xla_op {.importc: "op_invalid_argument_error".}

@@ -1,8 +1,20 @@
 ## A few internal definitions which are shared across multiple modules
 
 import std/math
+import xla_wrapper
 
 const tracemem* {.booldefine.} = false
+
+type
+  XLAError* = object of CatchableError
+
+
+proc checkError*(status: status_t) =
+  ## Check error status and raises an XLAError exception if not nil.
+  if status != nil:
+    let message = $status_error_message(status)
+    status_free(status)
+    raise newException(XLAError, message)
 
 proc ptrOffset*[T](p: ptr T, off: int): ptr T {.inline.} =
   cast[ptr T](cast[int](p) + off*sizeOf(T))

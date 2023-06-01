@@ -740,6 +740,21 @@ xla_op op_reduce(const xla_op arg, const xla_op init,
   END_PROTECT_OP(arg)
 }
 
+xla_op op_reduce2(const xla_builder b, const xla_op arg1, const xla_op init1,
+                 const xla_op arg2, const xla_op init2, const xla_computation comp, 
+                 const int64_t *dims, size_t ndims) {
+  BEGIN_PROTECT_OP
+  std::vector<xla::XlaOp> args;
+  args.push_back(*arg1);
+  args.push_back(*arg2);
+  std::vector<xla::XlaOp> init;  
+  init.push_back(*init1);
+  init.push_back(*init2);
+  return new XlaOp(
+      Reduce(b, args, init, *comp, absl::Span<const int64_t>(dims, ndims)));
+  END_PROTECT_OP(arg1)
+}
+
 xla_op op_internal_error(const xla_builder b, const char *error) {
   BEGIN_PROTECT_OP
   return new XlaOp(b->ReportError(tsl::errors::Internal(error)));

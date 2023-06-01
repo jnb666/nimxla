@@ -11,14 +11,12 @@
 ##
 
 runnableExamples:
-  import nimxla/[tensor, graph]
-  
   let c = newCPUClient()
   echo c
   let b = newBuilder("example")
-  let x = b.parameter(0, F32, [50])
+  let x = b.parameter(F32, [50])
   let sum = x * x + b.constant(10f32)
-  let comp = build sum.reshape(10, 5).transpose
+  let comp = b.build sum.reshape(10, 5).transpose
   let exec = c.compile(comp)
   let input = toTensor[float32](1..50).toLiteral
   let res = exec.run([input]).toLiteral
@@ -26,8 +24,11 @@ runnableExamples:
 
 
 import std/[os, sugar, strformat, strutils, sequtils, sugar, macros, logging]
-import nimxla/[graph, tensor]
+import nimxla/[graph, tensor, literal, shape]
 import nimxla/private/[xla_wrapper, utils]
+
+export graph, tensor, literal, shape
+export utils.XLAError
 
 
 type

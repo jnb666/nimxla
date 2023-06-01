@@ -1,7 +1,6 @@
 {.warning[BareExcept]:off.}
 import std/[unittest, logging, math]
 import nimxla
-import nimxla/tensor
 
 const debug {.booldefine.} = false
 const gpu {.booldefine.} = false
