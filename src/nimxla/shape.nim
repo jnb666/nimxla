@@ -6,7 +6,7 @@ import private/[xla_wrapper, utils]
 
 type
   ElemType* = float32 or float64 or int64 or int32 or uint8 or bool
-  ## Allowed types for native nim Tensors
+    ## Allowed types for native nim Tensors
 
   DataType* = enum
     ## DataType lists all of the XLA data types.

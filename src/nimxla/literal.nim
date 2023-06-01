@@ -97,13 +97,21 @@ proc toTensor*[T: ElemType](lit: Literal): Tensor[T] =
   result = newTensor[T](s.dims)
   literal_copy_to(lit.c, result.rawPtr, csize_t(result.len*sizeOf(T)))
 
-proc i32*(lit: Literal): Tensor[int32] = toTensor[int32](lit)
+proc i32*(lit: Literal): Tensor[int32] =
+  ## Convert to int32 Tensor. Data type must be I32.
+  toTensor[int32](lit)
 
-proc i64*(lit: Literal): Tensor[int64] = toTensor[int64](lit)
+proc i64*(lit: Literal): Tensor[int64] =
+  ## Convert to int64 Tensor. Data type must by I64.
+  toTensor[int64](lit)
 
-proc f32*(lit: Literal): Tensor[float32] = toTensor[float32](lit)
+proc f32*(lit: Literal): Tensor[float32] = 
+  ## Convert to float32 Tensor. Data type must be F32.
+  toTensor[float32](lit)
 
-proc f64*(lit: Literal): Tensor[float64] = toTensor[float64](lit)
+proc f64*(lit: Literal): Tensor[float64] =
+  ## Convert to float64 Tensor. Data type must be F64.
+  toTensor[float64](lit)
 
 proc decomposeTuple*(lit: Literal): seq[Literal] =
   ## Decompose a literal containing a tuple into a seq of literals.

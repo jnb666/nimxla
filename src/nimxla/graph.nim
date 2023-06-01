@@ -379,51 +379,61 @@ namedConstant(maxValue, op_max_value, "max_value")
 
 
 # operations
-template binop(name, opname, typ: untyped): untyped =
-  proc `name`*(a, b: Node): Node =
-    wrap(`opname`(a.op.c, b.op.c), typ, [a, b])
+macro binop(name, opname, typ: untyped, docs: static string): untyped =
+  let (a, b) = (ident "a", ident "b")
+  var docComment = newNimNode(nnkCommentStmt)
+  docComment.strVal = docs
+  quote do:
+    proc `name`*(`a`, `b`: Node): Node =
+      `docComment`
+      wrap(`opname`(`a`.op.c, `b`.op.c), `typ`, [`a`, `b`])
 
-binop(`+`, op_add, tAdd)
-binop(`-`, op_sub, tSub)
-binop(`*`, op_mul, tMul)
-binop(`/`, op_div, tDiv)
-binop(rem, op_rem, tRem)
-binop(max, op_max, tMax)
-binop(min, op_min, tMin)
-binop(pow, op_pow, tPow)
-binop(dot, op_dot, tDot)
-binop(logicalAnd, op_and, tAnd)
-binop(logicalOr, op_or, tOr)
-binop(`==`, op_eq, tEq)
-binop(`!=`, op_ne, tNe)
-binop(`>=`, op_ge, tGe)
-binop(`>`, op_gt, tGt)
-binop(`<=`, op_le, tLe)
-binop(`<`, op_lt, tLt)
+binop(`+`, op_add, tAdd, "Elementwise add")
+binop(`-`, op_sub, tSub, "Elementwise subtract")
+binop(`*`, op_mul, tMul, "Elementwise multiply")
+binop(`/`, op_div, tDiv, "Elementwise divide")
+binop(rem, op_rem, tRem, "Elementwise remainder")
+binop(max, op_max, tMax, "Elementwise maximum of 2 arrays")
+binop(min, op_min, tMin, "Elementwise minimum of 2 arrays")
+binop(pow, op_pow, tPow, "Elementwise a raised to power b")
+binop(dot, op_dot, tDot, "Vector or matrix doc product per https://www.tensorflow.org/xla/operation_semantics#dot")
+binop(logicalAnd, op_and, tAnd, "Elementwise logical and between two Bool arrays")
+binop(logicalOr, op_or, tOr, "Elementwise logical or between two Bool arrays")
+binop(`==`, op_eq, tEq, "Elementwise equal. Returns a Bool array.")
+binop(`!=`, op_ne, tNe, "Elementwise not equal. Returns a Bool array.")
+binop(`>=`, op_ge, tGe, "Elementwise greater or equal. Returns a Bool array.")
+binop(`>`, op_gt, tGt, "Elementwise greater than. Returns a Bool array.")
+binop(`<=`, op_le, tLe, "Elementwise less than or equal. Returns a Bool array.")
+binop(`<`, op_lt, tLt, "Elementwise less than. Returns a Bool array.")
 
-template unary(name, opname, typ: untyped): untyped =
-  proc `name`*(a: Node): Node =
-    wrap(`opname`(a.op.c), typ, [a])
+macro unary(name, opname, typ: untyped, docs: static string): untyped =
+  let a = ident "a"
+  var docComment = newNimNode(nnkCommentStmt)
+  docComment.strVal = docs
+  quote do:
+    proc `name`*(`a`: Node): Node =
+      `docComment`
+      wrap(`opname`(`a`.op.c), `typ`, [`a`])
 
-unary(`!`, op_not, tNot)
-unary(`-`, op_neg, tNeg)
-unary(abs, op_abs, tAbs)
-unary(exp, op_exp, tExp)
-unary(floor, op_floor, tFloor)
-unary(ceil, op_ceil, tCeil)
-unary(round, op_round, tRound)
-unary(log, op_log, tLog)
-unary(log1p, op_log1p, tLog1p)
-unary(logistic, op_logistic, tLogistic)
-unary(sign, op_sign, tSign)
-unary(cos, op_cos, tCos)
-unary(sin, op_sin, tSin)
-unary(tanh, op_tanh, tTanh)
-unary(sqrt, op_sqrt, tSqrt)
-unary(rsqrt, op_rsqrt, tRsqrt)
-unary(isFinite, op_is_finite, tIsFinite)
-unary(copy, op_copy, tCopy)
-unary(zerosLike, op_zeros_like, tZerosLike)
+unary(`!`, op_not, tNot, "Elementwise logical not.")
+unary(`-`, op_neg, tNeg, "Elementwise arithmetic negation")
+unary(abs, op_abs, tAbs, "Elementwise absolute value")
+unary(exp, op_exp, tExp, "Elementwise natural exponential")
+unary(floor, op_floor, tFloor, "Elementwise floor rounding")
+unary(ceil, op_ceil, tCeil, "Elementwise ceil rounding")
+unary(round, op_round, tRound, "Elementwise nearest rounding")
+unary(log, op_log, tLog, "Elementwise natural log")
+unary(log1p, op_log1p, tLog1p, "Elementwise log(1 + a)")
+unary(logistic, op_logistic, tLogistic, "Elementwise 1/(1 + exp(-a))")
+unary(sign, op_sign, tSign, "Elementwise sign. Returns -1, 0, +1 or Nan" )
+unary(cos, op_cos, tCos, "Elementwise cosine")
+unary(sin, op_sin, tSin, "Elementwise sine")
+unary(tanh, op_tanh, tTanh, "Elementwise hyperbolic tangent")
+unary(sqrt, op_sqrt, tSqrt, "Elementwise square root")
+unary(rsqrt, op_rsqrt, tRsqrt, "Elementwise 1/sqrt(a)")
+unary(isFinite, op_is_finite, tIsFinite, "Elementwise is not Nan or +=Inf for each. Returns a Bool array.")
+unary(copy, op_copy, tCopy, "Returns a copy of the input.")
+unary(zerosLike, op_zeros_like, tZerosLike, "Creates a new zero value with element type and shape from input.")
 
 proc normalize(index, rank: int): int =
   if index < 0: rank+index else: index
@@ -543,7 +553,8 @@ proc reduce*(a, initValue: Node, comp: Computation, dims: openarray[int] = [],
       result = result.reshape(shape)
 
 proc sum*(a: Node, dims: openarray[int] = [], keepDims = false): Node =
-  ## Reduce to sum of elements across one or more dimensions in the input. See reduce for details.
+  ## Reduce to sum of elements across one or more dimensions in the input.
+  ## See `reduce<#reduce%2CNode%2CNode%2CComputation%2CopenArray%5Bint%5D>`_ for details
   let b = op_builder(a.op.c)
   let dtype = a.op.c.dtype
   if dtype.err != nil:
@@ -553,7 +564,8 @@ proc sum*(a: Node, dims: openarray[int] = [], keepDims = false): Node =
   reduce(a, b.zero(dtype.val), sum, dims, tReduceSum, keepDims)
 
 proc min*(a: Node, dims: openarray[int] = [], keepDims = false): Node =
-  ## Reduce to minimum value of elements across one or more dimensions in the input. See reduce for details.
+  ## Reduce to minimum value of elements across one or more dimensions in the input. 
+  ## See `reduce<#reduce%2CNode%2CNode%2CComputation%2CopenArray%5Bint%5D>`_ for details
   let b = op_builder(a.op.c)
   let dtype = a.op.c.dtype
   if dtype.err != nil:
@@ -563,7 +575,8 @@ proc min*(a: Node, dims: openarray[int] = [], keepDims = false): Node =
   reduce(a, b.maxValue(dtype.val), sum, dims, tReduceMin, keepDims)
 
 proc max*(a: Node, dims: openarray[int] = [], keepDims = false): Node =
-  ## Reduce to maximum value of elements across one or more dimensions in the input. See reduce for details.
+  ## Reduce to maximum value of elements across one or more dimensions in the input. 
+  ## See `reduce<#reduce%2CNode%2CNode%2CComputation%2CopenArray%5Bint%5D>`_ for details
   let b = op_builder(a.op.c)
   let dtype = a.op.c.dtype
   if dtype.err != nil:
@@ -572,38 +585,43 @@ proc max*(a: Node, dims: openarray[int] = [], keepDims = false): Node =
   let sum = b2.build(max(b2.parameter(dtype.val), b2.parameter(dtype.val)))
   reduce(a, b.minValue(dtype.val), sum, dims, tReduceMax, keepDims)
 
-template argMinMax(procName, compare, initVal, opType: untyped): untyped =
-  proc `procName`*(a: Node, axis: int, keepDims = false, ixType = I32): Node =
-    ## Get the indices of the minimum or maxiumum values along the given axis.
-    let b = op_builder(a.op.c)
-    let s = a.op.c.shape
-    if s.err != nil:
-      return errorNode(b, s.err)
-    let dtype = s.val.dtype
-    let b2 = newBuilder("reduce")
-    let v0 = b2.parameter(dtype)
-    let i0 = b2.parameter(ixType)
-    let v1 = b2.parameter(dtype)
-    let i1 = b2.parameter(ixType)
-    let vMax = select(`compare`(v0, v1), v0, v1)
-    let iMax = select(v0 == v1, min(i0, i1), select(`compare`(v0, v1), i0, i1))
-    let comp = b2.build b2.makeTuple(vMax, iMax)
-    let initValue = b.`initVal`(dtype)
-    let initIndex = b.zero(ixType)
-    let axis = normalize(axis, s.val.dims.len)
-    let indexes = b.iota(ixType, s.val.dims, axis)
-    var dims = @[axis]
-    withDims(dptr, dims):
-      let op = op_reduce2(b, a.op.c, initValue.op.c, indexes.op.c, initIndex.op.c, comp.c, dptr, csize_t(dims.len))
-      var info = $dims
-      if keepDims: info.add ":keepDims" 
-      # calc both min/max and argmin/argmax, but just use the latter
-      result = wrap(op_get_tuple_element(op, 1), `opType`, [], info)
-      result.indices = dims
-      if keepDims:
-        var shape = @(s.val.dims)
-        shape[axis] = 1
-        result = result.reshape(shape)
+macro argMinMax(procName, compare, initVal, opType: untyped): untyped =
+  let (a, axis, keepDims, ixType) = (ident "a", ident "axis", ident "keepDims", ident "ixType")
+  quote do:
+    proc `procName`*(`a`: Node, `axis`: int, `keepDims` = false, `ixType` = I32): Node =
+      ## Get the indices of the minimum or maxiumum values along the given axis for argmin and argmax respectively.
+      ## By default the shape of the result will be as per the input with this axis removed.
+      ## If keepDims is set the axis for the reduction is kept in the output with size of 1.
+      ## If a negative axis is given then this is taken relative to the number of dimensions of the input.
+      let b = op_builder(`a`.op.c)
+      let s = `a`.op.c.shape
+      if s.err != nil:
+        return errorNode(b, s.err)
+      let dtype = s.val.dtype
+      let b2 = newBuilder("reduce")
+      let v0 = b2.parameter(dtype)
+      let i0 = b2.parameter(`ixType`)
+      let v1 = b2.parameter(dtype)
+      let i1 = b2.parameter(`ixType`)
+      let vMax = select(`compare`(v0, v1), v0, v1)
+      let iMax = select(v0 == v1, min(i0, i1), select(`compare`(v0, v1), i0, i1))
+      let comp = b2.build b2.makeTuple(vMax, iMax)
+      let initValue = b.`initVal`(dtype)
+      let initIndex = b.zero(`ixType`)
+      let axis = normalize(`axis`, s.val.dims.len)
+      let indexes = b.iota(`ixType`, s.val.dims, axis)
+      var dims = @[`axis`]
+      withDims(dptr, dims):
+        let op = op_reduce2(b, `a`.op.c, initValue.op.c, indexes.op.c, initIndex.op.c, comp.c, dptr, csize_t(dims.len))
+        var info = $dims
+        if `keepDims`: info.add ":keepDims" 
+        # calc both min/max and argmin/argmax, but just use the latter
+        result = wrap(op_get_tuple_element(op, 1), `opType`, [], info)
+        result.indices = dims
+        if `keepDims`:
+          var shape = @(s.val.dims)
+          shape[axis] = 1
+          result = result.reshape(shape)
 
 argMinMax(argMax, `>=`, minValue, tArgmax)
 argMinMax(argMin, `<=`, maxValue, tArgmin)
