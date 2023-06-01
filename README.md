@@ -30,13 +30,17 @@ A simple example to build and executing a graph which squares the elements from 
 ## Module structure
 - [nimxla](https://jnb666.github.io/nimxla/htdocs/nimxla.html): Contains the Client type for interfacing with the CPU or GPU device, procs to copy data between host memory and device buffers and procs for compiling and executing a Computation which has been defined using the graph module.
 
-- [nimxla/tensor](https://jnb666.github.io/nimxla/htdocs/nimxla/tensor.html): Defines a generic host resident n dimensional array Tensor type which can be accessed from Nim, the Shape type which holds the data type and dimesions of either one or a tuple of tensors and the Literal type which is a host resident tensor or tuple of tensors in a format compatible with XLA.
+- [nimxla/tensor](https://jnb666.github.io/nimxla/htdocs/tensor.html): Defines a generic host resident n dimensional array Tensor type which can be accessed from Nim.
 
-- [nimxla/graph](https://jnb666.github.io/nimxla/htdocs/nimxla/graph.html): Wraps the XLA Builder and Op classes and is used to construct a tree of Nodes which can then be finalised using the build function to generate a Computation. Regular arithmetic ops and math functions are overloaded so they can be used with nodes. Extra metadata is stored so that graphs can be inspected easily. The gradient function can be used to generate a graph to perform reverse mode automatic differentiation. The autodiff implementation is inspired by the python [smallpebble](https://github.com/sradc/smallpebble) project.
+- [nimxla/literal](https://jnb666.github.io/nimxla/htdocs/literal.html). Defines the Literal type which is a host resident tensor or tuple of tensors in a format compatible with XLA.
 
-- [nimxla/xla_wrapper](https://jnb666.github.io/nimxla/htdocs/nimxla/xla_wrapper.html): Nim bindings for the C wrapper functions which call the XLA X++ API. The C wrapper code here is based on the Rust bindings from [xla-rs](https://github.com/LaurentMazare/xla-rs). This is for internal use by the above modules.
+- [nimxla/shape](https://jnb666.github.io/nimxla/htdocs/shape.html). Defines the Shape type which describes the memory layout, i.e. element data type and array dimensions, for all the above datatypes.
 
-See the docs linked above for more details.
+- [nimxla/graph](https://jnb666.github.io/nimxla/htdocs/graph.html): Wraps the XLA Builder and Op classes and is used to construct a tree of Nodes which can then be finalised using the build function to generate a Computation. Regular arithmetic ops and math functions are overloaded so they can be used with nodes. Extra metadata is stored so that graphs can be inspected easily. The gradient function can be used to generate a graph to perform reverse mode automatic differentiation. The autodiff implementation is inspired by the python [smallpebble](https://github.com/sradc/smallpebble) project.
+
+The submodules under nimxla are exported by the main package. Other internal functions and bindings to the XLA C++ library are under the nimxla/private directory. The C wrapper code here is based on the Rust bindings from [xla-rs](https://github.com/LaurentMazare/xla-rs).
+
+Or see [the documentation index](https://jnb666.github.io/nimxla/htdocs/theindex.html).
 
 ## Memory management
 Each object on the C++ side is wrapped in a Nim object with a corresponding destructor to free the resource. These are marked with `=copy(...) {.error.}` so that they cannot be duplicated. Where it's useful to move these around the wrapper object is private and a ref object linked to this is exported. It's recommended to use the ORC garbage collector as this will ensure they get destroyed as soon as the ref count goes to zero.
@@ -45,6 +49,7 @@ Each object on the C++ side is wrapped in a Nim object with a corresponding dest
 XLA headers and shared library only. No nim module dependencies outside the standard library.
 
 ## TODO
+- linear regression example
 - complete autograd for all of the defined ops
 - additonal op types: convolutions, control flow etc.
 - higher level neural network module

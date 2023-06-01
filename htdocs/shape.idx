@@ -1,0 +1,30 @@
+ElemType	shape.html#ElemType	shape: ElemType	
+InvalidType	shape.html#InvalidType	DataType.InvalidType	
+Bool	shape.html#Bool	DataType.Bool	
+I8	shape.html#I8	DataType.I8	
+I16	shape.html#I16	DataType.I16	
+I32	shape.html#I32	DataType.I32	
+I64	shape.html#I64	DataType.I64	
+U8	shape.html#U8	DataType.U8	
+U16	shape.html#U16	DataType.U16	
+U32	shape.html#U32	DataType.U32	
+U64	shape.html#U64	DataType.U64	
+F16	shape.html#F16	DataType.F16	
+F32	shape.html#F32	DataType.F32	
+F64	shape.html#F64	DataType.F64	
+Tuple	shape.html#Tuple	DataType.Tuple	
+OpaqueType	shape.html#OpaqueType	DataType.OpaqueType	
+C64	shape.html#C64	DataType.C64	
+BF16	shape.html#BF16	DataType.BF16	
+Token	shape.html#Token	DataType.Token	
+C128	shape.html#C128	DataType.C128	
+DataType	shape.html#DataType	shape: DataType	
+ArrayKind	shape.html#ArrayKind	ShapeKind.ArrayKind	
+TupleKind	shape.html#TupleKind	ShapeKind.TupleKind	
+ShapeKind	shape.html#ShapeKind	shape: ShapeKind	
+Shape	shape.html#Shape	shape: Shape	
+arrayShape	shape.html#arrayShape,DataType,varargs[int]	shape: arrayShape(dtype: DataType; dims: varargs[int]): Shape	
+dtypeOf	shape.html#dtypeOf,typedesc[ElemType]	shape: dtypeOf(T: typedesc[ElemType]): DataType	
+`==`	shape.html#==,Shape,Shape	shape: `==`(s1, s2: Shape): bool	
+`$`	shape.html#$,Shape	shape: `$`(s: Shape): string	
+toShape	shape.html#toShape,shape_t	shape: toShape(s: shape_t; topLevel = true): Shape	
