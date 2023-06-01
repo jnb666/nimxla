@@ -76,11 +76,11 @@ rawPtr	graph.html#rawPtr,Computation	graph: rawPtr(comp: Computation): xla_compu
 name	graph.html#name,Computation	graph: name(comp: Computation): string	
 paramNames	graph.html#paramNames,Computation	graph: paramNames(comp: Computation): seq[string]	
 `$`	graph.html#$,Computation	graph: `$`(comp: Computation): string	
-constant	graph.html#constant,Builder,Literal	graph: constant(b: Builder; lit: Literal): Node	
 parameter	graph.html#parameter,Builder,DataType,openArray[int],string	graph: parameter(b: Builder; dtype: DataType; dims: openArray[int] = []; name = &quot;&quot;): Node	
 makeTuple	graph.html#makeTuple,Builder,varargs[Node]	graph: makeTuple(b: Builder; args: varargs[Node]): Node	
 iota	graph.html#iota,Builder,DataType,openArray[int],int	graph: iota(b: Builder; dtype: DataType; dims: openArray[int]; axis: int): Node	
 errorNode	graph.html#errorNode,Node,string	graph: errorNode(n: Node; message: string): Node	
+constant	graph.html#constant,Builder,Literal	graph: constant(b: Builder; lit: Literal): Node	
 constant	graph.html#constant,Builder,int32	graph: constant(b: Builder; value: int32): Node	
 constant	graph.html#constant,Builder,	graph: constant(b: Builder; value: openArray[int32]): Node	
 constant	graph.html#constant,Builder,int64	graph: constant(b: Builder; value: int64): Node	

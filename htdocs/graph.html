@@ -569,6 +569,12 @@ window.addEventListener('DOMContentLoaded', main);
 
   </ul>
 </li>
+<li>
+  <a class="reference reference-toplevel" href="#19" id="69">Exports</a>
+  <ul class="simple simple-toc-section">
+    
+  </ul>
+</li>
 
 </ul>
 
@@ -604,9 +610,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 Builder is used to construct new operations.
 &nbsp;&nbsp;<a
-href="https://github.com/jnb666/nimxla/tree/main/src/nimxla/graph.nim#L56"
+href="https://github.com/jnb666/nimxla/tree/main/src/nimxla/graph.nim#L55"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/jnb666/nimxla/edit/devel/src/nimxla/graph.nim#L56" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/jnb666/nimxla/edit/devel/src/nimxla/graph.nim#L55" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -619,9 +625,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 Exception raised while building the graph. origMsg is the original status message. at indicates the node in the graph where the error occured. The repr of this node is added to the msg field. 
 &nbsp;&nbsp;<a
-href="https://github.com/jnb666/nimxla/tree/main/src/nimxla/graph.nim#L24"
+href="https://github.com/jnb666/nimxla/tree/main/src/nimxla/graph.nim#L23"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/jnb666/nimxla/edit/devel/src/nimxla/graph.nim#L24" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/jnb666/nimxla/edit/devel/src/nimxla/graph.nim#L23" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -635,9 +641,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 A Computation wraps the constructed graph after it has been finalised. The nodes sequence is a distinct list of nodes in order in which they were declared. params contatins a reference the parameters indexed by the provided index when they were defined. The Computation object owns it's xla_computation so it will be freed once it goes out of scope.
 &nbsp;&nbsp;<a
-href="https://github.com/jnb666/nimxla/tree/main/src/nimxla/graph.nim#L91"
+href="https://github.com/jnb666/nimxla/tree/main/src/nimxla/graph.nim#L90"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/jnb666/nimxla/edit/devel/src/nimxla/graph.nim#L91" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/jnb666/nimxla/edit/devel/src/nimxla/graph.nim#L90" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -675,9 +681,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 A Node is generated from each Op once it is added to the graph. The id number is the index to the nodes sequence in the Computation object and is set when the graph is built. The shape is the output data type and dimesnions for the op. This must be fixed and known at build time.
 &nbsp;&nbsp;<a
-href="https://github.com/jnb666/nimxla/tree/main/src/nimxla/graph.nim#L65"
+href="https://github.com/jnb666/nimxla/tree/main/src/nimxla/graph.nim#L64"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/jnb666/nimxla/edit/devel/src/nimxla/graph.nim#L65" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/jnb666/nimxla/edit/devel/src/nimxla/graph.nim#L64" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -698,9 +704,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/jnb666/nimxla/tree/main/src/nimxla/graph.nim#L31"
+href="https://github.com/jnb666/nimxla/tree/main/src/nimxla/graph.nim#L30"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/jnb666/nimxla/edit/devel/src/nimxla/graph.nim#L31" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/jnb666/nimxla/edit/devel/src/nimxla/graph.nim#L30" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -716,9 +722,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 Elementwise not equal. Returns a Bool array.
 &nbsp;&nbsp;<a
-href="https://github.com/jnb666/nimxla/tree/main/src/nimxla/graph.nim#L404"
+href="https://github.com/jnb666/nimxla/tree/main/src/nimxla/graph.nim#L413"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/jnb666/nimxla/edit/devel/src/nimxla/graph.nim#L404" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/jnb666/nimxla/edit/devel/src/nimxla/graph.nim#L413" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -728,9 +734,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 Elementwise logical not.
 &nbsp;&nbsp;<a
-href="https://github.com/jnb666/nimxla/tree/main/src/nimxla/graph.nim#L419"
+href="https://github.com/jnb666/nimxla/tree/main/src/nimxla/graph.nim#L428"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/jnb666/nimxla/edit/devel/src/nimxla/graph.nim#L419" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/jnb666/nimxla/edit/devel/src/nimxla/graph.nim#L428" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -752,9 +758,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 Print node id, type, shape and info fields.
 &nbsp;&nbsp;<a
-href="https://github.com/jnb666/nimxla/tree/main/src/nimxla/graph.nim#L197"
+href="https://github.com/jnb666/nimxla/tree/main/src/nimxla/graph.nim#L196"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/jnb666/nimxla/edit/devel/src/nimxla/graph.nim#L197" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/jnb666/nimxla/edit/devel/src/nimxla/graph.nim#L196" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -765,9 +771,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 Elementwise multiply
 &nbsp;&nbsp;<a
-href="https://github.com/jnb666/nimxla/tree/main/src/nimxla/graph.nim#L394"
+href="https://github.com/jnb666/nimxla/tree/main/src/nimxla/graph.nim#L403"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/jnb666/nimxla/edit/devel/src/nimxla/graph.nim#L394" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/jnb666/nimxla/edit/devel/src/nimxla/graph.nim#L403" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -778,9 +784,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 Elementwise add
 &nbsp;&nbsp;<a
-href="https://github.com/jnb666/nimxla/tree/main/src/nimxla/graph.nim#L392"
+href="https://github.com/jnb666/nimxla/tree/main/src/nimxla/graph.nim#L401"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/jnb666/nimxla/edit/devel/src/nimxla/graph.nim#L392" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/jnb666/nimxla/edit/devel/src/nimxla/graph.nim#L401" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -791,9 +797,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 Elementwise subtract
 &nbsp;&nbsp;<a
-href="https://github.com/jnb666/nimxla/tree/main/src/nimxla/graph.nim#L393"
+href="https://github.com/jnb666/nimxla/tree/main/src/nimxla/graph.nim#L402"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/jnb666/nimxla/edit/devel/src/nimxla/graph.nim#L393" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/jnb666/nimxla/edit/devel/src/nimxla/graph.nim#L402" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -803,9 +809,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 Elementwise arithmetic negation
 &nbsp;&nbsp;<a
-href="https://github.com/jnb666/nimxla/tree/main/src/nimxla/graph.nim#L420"
+href="https://github.com/jnb666/nimxla/tree/main/src/nimxla/graph.nim#L429"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/jnb666/nimxla/edit/devel/src/nimxla/graph.nim#L420" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/jnb666/nimxla/edit/devel/src/nimxla/graph.nim#L429" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -816,9 +822,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 Elementwise divide
 &nbsp;&nbsp;<a
-href="https://github.com/jnb666/nimxla/tree/main/src/nimxla/graph.nim#L395"
+href="https://github.com/jnb666/nimxla/tree/main/src/nimxla/graph.nim#L404"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/jnb666/nimxla/edit/devel/src/nimxla/graph.nim#L395" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/jnb666/nimxla/edit/devel/src/nimxla/graph.nim#L404" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -829,9 +835,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 Elementwise less than or equal. Returns a Bool array.
 &nbsp;&nbsp;<a
-href="https://github.com/jnb666/nimxla/tree/main/src/nimxla/graph.nim#L407"
+href="https://github.com/jnb666/nimxla/tree/main/src/nimxla/graph.nim#L416"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/jnb666/nimxla/edit/devel/src/nimxla/graph.nim#L407" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/jnb666/nimxla/edit/devel/src/nimxla/graph.nim#L416" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -842,9 +848,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 Elementwise less than. Returns a Bool array.
 &nbsp;&nbsp;<a
-href="https://github.com/jnb666/nimxla/tree/main/src/nimxla/graph.nim#L408"
+href="https://github.com/jnb666/nimxla/tree/main/src/nimxla/graph.nim#L417"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/jnb666/nimxla/edit/devel/src/nimxla/graph.nim#L408" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/jnb666/nimxla/edit/devel/src/nimxla/graph.nim#L417" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -855,9 +861,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 Elementwise equal. Returns a Bool array.
 &nbsp;&nbsp;<a
-href="https://github.com/jnb666/nimxla/tree/main/src/nimxla/graph.nim#L403"
+href="https://github.com/jnb666/nimxla/tree/main/src/nimxla/graph.nim#L412"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/jnb666/nimxla/edit/devel/src/nimxla/graph.nim#L403" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/jnb666/nimxla/edit/devel/src/nimxla/graph.nim#L412" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -868,9 +874,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 Elementwise greater or equal. Returns a Bool array.
 &nbsp;&nbsp;<a
-href="https://github.com/jnb666/nimxla/tree/main/src/nimxla/graph.nim#L405"
+href="https://github.com/jnb666/nimxla/tree/main/src/nimxla/graph.nim#L414"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/jnb666/nimxla/edit/devel/src/nimxla/graph.nim#L405" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/jnb666/nimxla/edit/devel/src/nimxla/graph.nim#L414" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -881,9 +887,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 Elementwise greater than. Returns a Bool array.
 &nbsp;&nbsp;<a
-href="https://github.com/jnb666/nimxla/tree/main/src/nimxla/graph.nim#L406"
+href="https://github.com/jnb666/nimxla/tree/main/src/nimxla/graph.nim#L415"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/jnb666/nimxla/edit/devel/src/nimxla/graph.nim#L406" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/jnb666/nimxla/edit/devel/src/nimxla/graph.nim#L415" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -894,9 +900,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 Return the element from the input tuple at index.
 &nbsp;&nbsp;<a
-href="https://github.com/jnb666/nimxla/tree/main/src/nimxla/graph.nim#L442"
+href="https://github.com/jnb666/nimxla/tree/main/src/nimxla/graph.nim#L451"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/jnb666/nimxla/edit/devel/src/nimxla/graph.nim#L442" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/jnb666/nimxla/edit/devel/src/nimxla/graph.nim#L451" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -906,9 +912,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 Elementwise absolute value
 &nbsp;&nbsp;<a
-href="https://github.com/jnb666/nimxla/tree/main/src/nimxla/graph.nim#L421"
+href="https://github.com/jnb666/nimxla/tree/main/src/nimxla/graph.nim#L430"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/jnb666/nimxla/edit/devel/src/nimxla/graph.nim#L421" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/jnb666/nimxla/edit/devel/src/nimxla/graph.nim#L430" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -919,9 +925,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 Get the indices of the minimum or maxiumum values along the given axis for argmin and argmax respectively. By default the shape of the result will be as per the input with this axis removed. If keepDims is set the axis for the reduction is kept in the output with size of 1. If a negative axis is given then this is taken relative to the number of dimensions of the input.
 &nbsp;&nbsp;<a
-href="https://github.com/jnb666/nimxla/tree/main/src/nimxla/graph.nim#L629"
+href="https://github.com/jnb666/nimxla/tree/main/src/nimxla/graph.nim#L618"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/jnb666/nimxla/edit/devel/src/nimxla/graph.nim#L629" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/jnb666/nimxla/edit/devel/src/nimxla/graph.nim#L618" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -932,9 +938,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 Get the indices of the minimum or maxiumum values along the given axis for argmin and argmax respectively. By default the shape of the result will be as per the input with this axis removed. If keepDims is set the axis for the reduction is kept in the output with size of 1. If a negative axis is given then this is taken relative to the number of dimensions of the input.
 &nbsp;&nbsp;<a
-href="https://github.com/jnb666/nimxla/tree/main/src/nimxla/graph.nim#L630"
+href="https://github.com/jnb666/nimxla/tree/main/src/nimxla/graph.nim#L619"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/jnb666/nimxla/edit/devel/src/nimxla/graph.nim#L630" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/jnb666/nimxla/edit/devel/src/nimxla/graph.nim#L619" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -945,9 +951,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 Add new leading dimensions to the input node per <a class="reference external" href="https://www.tensorflow.org/xla/operation_semantics#broadcast">broadcast</a>
 &nbsp;&nbsp;<a
-href="https://github.com/jnb666/nimxla/tree/main/src/nimxla/graph.nim#L459"
+href="https://github.com/jnb666/nimxla/tree/main/src/nimxla/graph.nim#L468"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/jnb666/nimxla/edit/devel/src/nimxla/graph.nim#L459" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/jnb666/nimxla/edit/devel/src/nimxla/graph.nim#L468" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -958,9 +964,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 Expand dims at each index in bcastDimes from 1 to the corresponding value in outSize as per <a class="reference external" href="https://www.tensorflow.org/xla/operation_semantics#broadcastindim">broadcastInDim</a>
 &nbsp;&nbsp;<a
-href="https://github.com/jnb666/nimxla/tree/main/src/nimxla/graph.nim#L465"
+href="https://github.com/jnb666/nimxla/tree/main/src/nimxla/graph.nim#L475"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/jnb666/nimxla/edit/devel/src/nimxla/graph.nim#L465" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/jnb666/nimxla/edit/devel/src/nimxla/graph.nim#L475" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -971,9 +977,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 Build a computation from the specified root operation. Should only be called once for a given graph.
 &nbsp;&nbsp;<a
-href="https://github.com/jnb666/nimxla/tree/main/src/nimxla/graph.nim#L243"
+href="https://github.com/jnb666/nimxla/tree/main/src/nimxla/graph.nim#L242"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/jnb666/nimxla/edit/devel/src/nimxla/graph.nim#L243" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/jnb666/nimxla/edit/devel/src/nimxla/graph.nim#L242" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -983,9 +989,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 Elementwise ceil rounding
 &nbsp;&nbsp;<a
-href="https://github.com/jnb666/nimxla/tree/main/src/nimxla/graph.nim#L424"
+href="https://github.com/jnb666/nimxla/tree/main/src/nimxla/graph.nim#L433"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/jnb666/nimxla/edit/devel/src/nimxla/graph.nim#L424" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/jnb666/nimxla/edit/devel/src/nimxla/graph.nim#L433" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -996,9 +1002,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 Collapse the given dimensions into a single dimension as per <a class="reference external" href="https://www.tensorflow.org/xla/operation_semantics#collapse">collapse</a>. dims should be an in-order consecutive subset of the input dims.
 &nbsp;&nbsp;<a
-href="https://github.com/jnb666/nimxla/tree/main/src/nimxla/graph.nim#L476"
+href="https://github.com/jnb666/nimxla/tree/main/src/nimxla/graph.nim#L486"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/jnb666/nimxla/edit/devel/src/nimxla/graph.nim#L476" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/jnb666/nimxla/edit/devel/src/nimxla/graph.nim#L486" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -1009,9 +1015,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 Create new constant from the given literal
 &nbsp;&nbsp;<a
-href="https://github.com/jnb666/nimxla/tree/main/src/nimxla/graph.nim#L274"
+href="https://github.com/jnb666/nimxla/tree/main/src/nimxla/graph.nim#L323"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/jnb666/nimxla/edit/devel/src/nimxla/graph.nim#L274" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/jnb666/nimxla/edit/devel/src/nimxla/graph.nim#L323" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -1022,9 +1028,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 Create a new scalar constant from the given value.
 &nbsp;&nbsp;<a
-href="https://github.com/jnb666/nimxla/tree/main/src/nimxla/graph.nim#L336"
+href="https://github.com/jnb666/nimxla/tree/main/src/nimxla/graph.nim#L338"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/jnb666/nimxla/edit/devel/src/nimxla/graph.nim#L336" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/jnb666/nimxla/edit/devel/src/nimxla/graph.nim#L338" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -1035,9 +1041,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 Create a new scalar constant from the given value.
 &nbsp;&nbsp;<a
-href="https://github.com/jnb666/nimxla/tree/main/src/nimxla/graph.nim#L336"
+href="https://github.com/jnb666/nimxla/tree/main/src/nimxla/graph.nim#L338"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/jnb666/nimxla/edit/devel/src/nimxla/graph.nim#L336" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/jnb666/nimxla/edit/devel/src/nimxla/graph.nim#L338" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -1048,9 +1054,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 Create a new scalar constant with the given type.
 &nbsp;&nbsp;<a
-href="https://github.com/jnb666/nimxla/tree/main/src/nimxla/graph.nim#L350"
+href="https://github.com/jnb666/nimxla/tree/main/src/nimxla/graph.nim#L352"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/jnb666/nimxla/edit/devel/src/nimxla/graph.nim#L350" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/jnb666/nimxla/edit/devel/src/nimxla/graph.nim#L352" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -1061,9 +1067,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 Create a new scalar constant from the given value.
 &nbsp;&nbsp;<a
-href="https://github.com/jnb666/nimxla/tree/main/src/nimxla/graph.nim#L336"
+href="https://github.com/jnb666/nimxla/tree/main/src/nimxla/graph.nim#L338"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/jnb666/nimxla/edit/devel/src/nimxla/graph.nim#L336" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/jnb666/nimxla/edit/devel/src/nimxla/graph.nim#L338" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -1074,14 +1080,40 @@ class="link-seesrc" target="_blank">Source</a>
 
 Create a new scalar constant from the given value.
 &nbsp;&nbsp;<a
-href="https://github.com/jnb666/nimxla/tree/main/src/nimxla/graph.nim#L336"
+href="https://github.com/jnb666/nimxla/tree/main/src/nimxla/graph.nim#L338"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/jnb666/nimxla/edit/devel/src/nimxla/graph.nim#L336" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/jnb666/nimxla/edit/devel/src/nimxla/graph.nim#L338" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
 <div id="constant,Builder,_3">
 <dt><pre><span class="Keyword">proc</span> <a href="#constant%2CBuilder%2C_3"><span class="Identifier">constant</span></a><span class="Other">(</span><span class="Identifier">b</span><span class="Other">:</span> <a href="graph.html#Builder"><span class="Identifier">Builder</span></a><span class="Other">;</span> <span class="Identifier">value</span><span class="Other">:</span> <span class="Identifier">openArray</span><span class="Other">[</span><span class="Identifier">float32</span><span class="Other">]</span><span class="Other">)</span><span class="Other">:</span> <a href="graph.html#Node"><span class="Identifier">Node</span></a> {.
+    <span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Identifier">Exception</span><span class="Other">,</span> <span class="Identifier">BuilderError</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Identifier">RootEffect</span><span class="Other">]</span></span>.}</pre></dt>
+<dd>
+
+Create a new vector constant from the given value.
+&nbsp;&nbsp;<a
+href="https://github.com/jnb666/nimxla/tree/main/src/nimxla/graph.nim#L349"
+class="link-seesrc" target="_blank">Source</a>
+&nbsp;&nbsp;<a href="https://github.com/jnb666/nimxla/edit/devel/src/nimxla/graph.nim#L349" class="link-seesrc" target="_blank" >Edit</a>
+
+</dd>
+</div>
+<div id="constant,Builder,_4">
+<dt><pre><span class="Keyword">proc</span> <a href="#constant%2CBuilder%2C_4"><span class="Identifier">constant</span></a><span class="Other">(</span><span class="Identifier">b</span><span class="Other">:</span> <a href="graph.html#Builder"><span class="Identifier">Builder</span></a><span class="Other">;</span> <span class="Identifier">value</span><span class="Other">:</span> <span class="Identifier">openArray</span><span class="Other">[</span><span class="Identifier">float64</span><span class="Other">]</span><span class="Other">)</span><span class="Other">:</span> <a href="graph.html#Node"><span class="Identifier">Node</span></a> {.
+    <span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Identifier">Exception</span><span class="Other">,</span> <span class="Identifier">BuilderError</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Identifier">RootEffect</span><span class="Other">]</span></span>.}</pre></dt>
+<dd>
+
+Create a new vector constant from the given value.
+&nbsp;&nbsp;<a
+href="https://github.com/jnb666/nimxla/tree/main/src/nimxla/graph.nim#L350"
+class="link-seesrc" target="_blank">Source</a>
+&nbsp;&nbsp;<a href="https://github.com/jnb666/nimxla/edit/devel/src/nimxla/graph.nim#L350" class="link-seesrc" target="_blank" >Edit</a>
+
+</dd>
+</div>
+<div id="constant,Builder,">
+<dt><pre><span class="Keyword">proc</span> <a href="#constant%2CBuilder%2C"><span class="Identifier">constant</span></a><span class="Other">(</span><span class="Identifier">b</span><span class="Other">:</span> <a href="graph.html#Builder"><span class="Identifier">Builder</span></a><span class="Other">;</span> <span class="Identifier">value</span><span class="Other">:</span> <span class="Identifier">openArray</span><span class="Other">[</span><span class="Identifier">int32</span><span class="Other">]</span><span class="Other">)</span><span class="Other">:</span> <a href="graph.html#Node"><span class="Identifier">Node</span></a> {.
     <span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Identifier">Exception</span><span class="Other">,</span> <span class="Identifier">BuilderError</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Identifier">RootEffect</span><span class="Other">]</span></span>.}</pre></dt>
 <dd>
 
@@ -1093,8 +1125,8 @@ class="link-seesrc" target="_blank">Source</a>
 
 </dd>
 </div>
-<div id="constant,Builder,_4">
-<dt><pre><span class="Keyword">proc</span> <a href="#constant%2CBuilder%2C_4"><span class="Identifier">constant</span></a><span class="Other">(</span><span class="Identifier">b</span><span class="Other">:</span> <a href="graph.html#Builder"><span class="Identifier">Builder</span></a><span class="Other">;</span> <span class="Identifier">value</span><span class="Other">:</span> <span class="Identifier">openArray</span><span class="Other">[</span><span class="Identifier">float64</span><span class="Other">]</span><span class="Other">)</span><span class="Other">:</span> <a href="graph.html#Node"><span class="Identifier">Node</span></a> {.
+<div id="constant,Builder,_2">
+<dt><pre><span class="Keyword">proc</span> <a href="#constant%2CBuilder%2C_2"><span class="Identifier">constant</span></a><span class="Other">(</span><span class="Identifier">b</span><span class="Other">:</span> <a href="graph.html#Builder"><span class="Identifier">Builder</span></a><span class="Other">;</span> <span class="Identifier">value</span><span class="Other">:</span> <span class="Identifier">openArray</span><span class="Other">[</span><span class="Identifier">int64</span><span class="Other">]</span><span class="Other">)</span><span class="Other">:</span> <a href="graph.html#Node"><span class="Identifier">Node</span></a> {.
     <span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Identifier">Exception</span><span class="Other">,</span> <span class="Identifier">BuilderError</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Identifier">RootEffect</span><span class="Other">]</span></span>.}</pre></dt>
 <dd>
 
@@ -1106,32 +1138,6 @@ class="link-seesrc" target="_blank">Source</a>
 
 </dd>
 </div>
-<div id="constant,Builder,">
-<dt><pre><span class="Keyword">proc</span> <a href="#constant%2CBuilder%2C"><span class="Identifier">constant</span></a><span class="Other">(</span><span class="Identifier">b</span><span class="Other">:</span> <a href="graph.html#Builder"><span class="Identifier">Builder</span></a><span class="Other">;</span> <span class="Identifier">value</span><span class="Other">:</span> <span class="Identifier">openArray</span><span class="Other">[</span><span class="Identifier">int32</span><span class="Other">]</span><span class="Other">)</span><span class="Other">:</span> <a href="graph.html#Node"><span class="Identifier">Node</span></a> {.
-    <span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Identifier">Exception</span><span class="Other">,</span> <span class="Identifier">BuilderError</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Identifier">RootEffect</span><span class="Other">]</span></span>.}</pre></dt>
-<dd>
-
-Create a new vector constant from the given value.
-&nbsp;&nbsp;<a
-href="https://github.com/jnb666/nimxla/tree/main/src/nimxla/graph.nim#L345"
-class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/jnb666/nimxla/edit/devel/src/nimxla/graph.nim#L345" class="link-seesrc" target="_blank" >Edit</a>
-
-</dd>
-</div>
-<div id="constant,Builder,_2">
-<dt><pre><span class="Keyword">proc</span> <a href="#constant%2CBuilder%2C_2"><span class="Identifier">constant</span></a><span class="Other">(</span><span class="Identifier">b</span><span class="Other">:</span> <a href="graph.html#Builder"><span class="Identifier">Builder</span></a><span class="Other">;</span> <span class="Identifier">value</span><span class="Other">:</span> <span class="Identifier">openArray</span><span class="Other">[</span><span class="Identifier">int64</span><span class="Other">]</span><span class="Other">)</span><span class="Other">:</span> <a href="graph.html#Node"><span class="Identifier">Node</span></a> {.
-    <span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Identifier">Exception</span><span class="Other">,</span> <span class="Identifier">BuilderError</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Identifier">RootEffect</span><span class="Other">]</span></span>.}</pre></dt>
-<dd>
-
-Create a new vector constant from the given value.
-&nbsp;&nbsp;<a
-href="https://github.com/jnb666/nimxla/tree/main/src/nimxla/graph.nim#L346"
-class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/jnb666/nimxla/edit/devel/src/nimxla/graph.nim#L346" class="link-seesrc" target="_blank" >Edit</a>
-
-</dd>
-</div>
 <div id="convert,Node,DataType">
 <dt><pre><span class="Keyword">proc</span> <a href="#convert%2CNode%2CDataType"><span class="Identifier">convert</span></a><span class="Other">(</span><span class="Identifier">a</span><span class="Other">:</span> <a href="graph.html#Node"><span class="Identifier">Node</span></a><span class="Other">;</span> <span class="Identifier">dtype</span><span class="Other">:</span> <a href="shape.html#DataType"><span class="Identifier">DataType</span></a><span class="Other">)</span><span class="Other">:</span> <a href="graph.html#Node"><span class="Identifier">Node</span></a> {.
     <span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Identifier">Exception</span><span class="Other">,</span> <span class="Identifier">BuilderError</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Identifier">RootEffect</span><span class="Other">]</span></span>.}</pre></dt>
@@ -1139,9 +1145,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 Convert type of elements to dtype.
 &nbsp;&nbsp;<a
-href="https://github.com/jnb666/nimxla/tree/main/src/nimxla/graph.nim#L447"
+href="https://github.com/jnb666/nimxla/tree/main/src/nimxla/graph.nim#L456"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/jnb666/nimxla/edit/devel/src/nimxla/graph.nim#L447" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/jnb666/nimxla/edit/devel/src/nimxla/graph.nim#L456" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -1151,9 +1157,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 Returns a copy of the input.
 &nbsp;&nbsp;<a
-href="https://github.com/jnb666/nimxla/tree/main/src/nimxla/graph.nim#L436"
+href="https://github.com/jnb666/nimxla/tree/main/src/nimxla/graph.nim#L445"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/jnb666/nimxla/edit/devel/src/nimxla/graph.nim#L436" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/jnb666/nimxla/edit/devel/src/nimxla/graph.nim#L445" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -1163,9 +1169,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 Elementwise cosine
 &nbsp;&nbsp;<a
-href="https://github.com/jnb666/nimxla/tree/main/src/nimxla/graph.nim#L430"
+href="https://github.com/jnb666/nimxla/tree/main/src/nimxla/graph.nim#L439"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/jnb666/nimxla/edit/devel/src/nimxla/graph.nim#L430" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/jnb666/nimxla/edit/devel/src/nimxla/graph.nim#L439" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -1175,9 +1181,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 Dimensions of this node output.
 &nbsp;&nbsp;<a
-href="https://github.com/jnb666/nimxla/tree/main/src/nimxla/graph.nim#L189"
+href="https://github.com/jnb666/nimxla/tree/main/src/nimxla/graph.nim#L188"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/jnb666/nimxla/edit/devel/src/nimxla/graph.nim#L189" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/jnb666/nimxla/edit/devel/src/nimxla/graph.nim#L188" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -1188,9 +1194,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 Vector or matrix doc product per <a class="reference external" href="https://www.tensorflow.org/xla/operation_semantics#dot">dot</a>
 &nbsp;&nbsp;<a
-href="https://github.com/jnb666/nimxla/tree/main/src/nimxla/graph.nim#L400"
+href="https://github.com/jnb666/nimxla/tree/main/src/nimxla/graph.nim#L409"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/jnb666/nimxla/edit/devel/src/nimxla/graph.nim#L400" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/jnb666/nimxla/edit/devel/src/nimxla/graph.nim#L409" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -1200,9 +1206,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 Element type for this node
 &nbsp;&nbsp;<a
-href="https://github.com/jnb666/nimxla/tree/main/src/nimxla/graph.nim#L181"
+href="https://github.com/jnb666/nimxla/tree/main/src/nimxla/graph.nim#L180"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/jnb666/nimxla/edit/devel/src/nimxla/graph.nim#L181" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/jnb666/nimxla/edit/devel/src/nimxla/graph.nim#L180" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -1213,9 +1219,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 Node used to record an error e.g. due to invalid input types or shapes.
 &nbsp;&nbsp;<a
-href="https://github.com/jnb666/nimxla/tree/main/src/nimxla/graph.nim#L321"
+href="https://github.com/jnb666/nimxla/tree/main/src/nimxla/graph.nim#L319"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/jnb666/nimxla/edit/devel/src/nimxla/graph.nim#L321" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/jnb666/nimxla/edit/devel/src/nimxla/graph.nim#L319" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -1225,9 +1231,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 Elementwise natural exponential
 &nbsp;&nbsp;<a
-href="https://github.com/jnb666/nimxla/tree/main/src/nimxla/graph.nim#L422"
+href="https://github.com/jnb666/nimxla/tree/main/src/nimxla/graph.nim#L431"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/jnb666/nimxla/edit/devel/src/nimxla/graph.nim#L422" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/jnb666/nimxla/edit/devel/src/nimxla/graph.nim#L431" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -1238,9 +1244,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 Elementwise floor rounding
 &nbsp;&nbsp;<a
-href="https://github.com/jnb666/nimxla/tree/main/src/nimxla/graph.nim#L423"
+href="https://github.com/jnb666/nimxla/tree/main/src/nimxla/graph.nim#L432"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/jnb666/nimxla/edit/devel/src/nimxla/graph.nim#L423" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/jnb666/nimxla/edit/devel/src/nimxla/graph.nim#L432" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -1249,11 +1255,24 @@ class="link-seesrc" target="_blank">Source</a>
     <span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Identifier">Exception</span><span class="Other">,</span> <span class="Identifier">BuilderError</span><span class="Other">,</span> <span class="Identifier">ValueError</span><span class="Other">,</span> <span class="Identifier">KeyError</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Identifier">RootEffect</span><span class="Other">]</span></span>.}</pre></dt>
 <dd>
 
-Generate the graph to calculate the gradients at each of the given input parameters for the graph given by output, This returns an sequence of nodes, where each one corresponds calculates the gradient of the corresponding input node.
+<p>Generate the graph to calculate the gradients at each of the given input parameters for the graph given by output, This returns an sequence of nodes, where each one corresponds calculates the gradient of the corresponding input node.</p>
+<p>Here's an example of creating an expression and it's backward graph which calculates the gradients. </p>
+
+<p><strong class="examples_text">Example:</strong></p>
+<pre class="listing"><span class="Keyword">let</span> <span class="Identifier">b</span> <span class="Operator">=</span> <span class="Identifier">newBuilder</span><span class="Punctuation">(</span><span class="StringLit">&quot;test&quot;</span><span class="Punctuation">)</span>
+<span class="Comment"># forward expression</span>
+<span class="Keyword">let</span> <span class="Identifier">x</span> <span class="Operator">=</span> <span class="Identifier">b</span><span class="Operator">.</span><span class="Identifier">parameter</span><span class="Punctuation">(</span><span class="Identifier">F32</span><span class="Punctuation">,</span> <span class="Punctuation">[</span><span class="Punctuation">]</span><span class="Punctuation">,</span> <span class="StringLit">&quot;x&quot;</span><span class="Punctuation">)</span>
+<span class="Keyword">let</span> <span class="Identifier">y</span> <span class="Operator">=</span> <span class="Identifier">b</span><span class="Operator">.</span><span class="Identifier">parameter</span><span class="Punctuation">(</span><span class="Identifier">F32</span><span class="Punctuation">,</span> <span class="Punctuation">[</span><span class="DecNumber">2</span><span class="Punctuation">,</span> <span class="DecNumber">2</span><span class="Punctuation">]</span><span class="Punctuation">,</span> <span class="StringLit">&quot;y&quot;</span><span class="Punctuation">)</span>
+<span class="Keyword">let</span> <span class="Identifier">fwd</span> <span class="Operator">=</span> <span class="Identifier">x</span> <span class="Operator">*</span> <span class="Punctuation">(</span><span class="Identifier">x</span> <span class="Operator">+</span> <span class="Identifier">y</span><span class="Punctuation">)</span>
+<span class="Comment"># will return a slice with the expression to calculate grad(x) and grad(y)</span>
+<span class="Keyword">let</span> <span class="Identifier">grads</span> <span class="Operator">=</span> <span class="Identifier">b</span><span class="Operator">.</span><span class="Identifier">gradient</span><span class="Punctuation">(</span><span class="Identifier">fwd</span><span class="Punctuation">,</span> <span class="Punctuation">[</span><span class="StringLit">&quot;x&quot;</span><span class="Punctuation">,</span> <span class="StringLit">&quot;y&quot;</span><span class="Punctuation">]</span><span class="Punctuation">)</span>
+<span class="Keyword">let</span> <span class="Identifier">comp</span> <span class="Operator">=</span> <span class="Identifier">b</span><span class="Operator">.</span><span class="Identifier">build</span> <span class="Identifier">b</span><span class="Operator">.</span><span class="Identifier">makeTuple</span><span class="Punctuation">(</span><span class="Identifier">fwd</span> <span class="Operator">&amp;</span> <span class="Identifier">grads</span><span class="Punctuation">)</span>
+<span class="Comment"># will dump out details of each node for debugging</span>
+<span class="Identifier">echo</span> <span class="Identifier">comp</span></pre>
 &nbsp;&nbsp;<a
-href="https://github.com/jnb666/nimxla/tree/main/src/nimxla/graph.nim#L757"
+href="https://github.com/jnb666/nimxla/tree/main/src/nimxla/graph.nim#L745"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/jnb666/nimxla/edit/devel/src/nimxla/graph.nim#L757" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/jnb666/nimxla/edit/devel/src/nimxla/graph.nim#L745" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -1264,9 +1283,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 Creates an array that has specified shape and holds values starting at zero and incrementing by one along the specified axis
 &nbsp;&nbsp;<a
-href="https://github.com/jnb666/nimxla/tree/main/src/nimxla/graph.nim#L308"
+href="https://github.com/jnb666/nimxla/tree/main/src/nimxla/graph.nim#L306"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/jnb666/nimxla/edit/devel/src/nimxla/graph.nim#L308" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/jnb666/nimxla/edit/devel/src/nimxla/graph.nim#L306" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -1277,9 +1296,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 Elementwise is not Nan or +=Inf for each. Returns a Bool array.
 &nbsp;&nbsp;<a
-href="https://github.com/jnb666/nimxla/tree/main/src/nimxla/graph.nim#L435"
+href="https://github.com/jnb666/nimxla/tree/main/src/nimxla/graph.nim#L444"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/jnb666/nimxla/edit/devel/src/nimxla/graph.nim#L435" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/jnb666/nimxla/edit/devel/src/nimxla/graph.nim#L444" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -1289,9 +1308,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 Last node defined in the graph
 &nbsp;&nbsp;<a
-href="https://github.com/jnb666/nimxla/tree/main/src/nimxla/graph.nim#L252"
+href="https://github.com/jnb666/nimxla/tree/main/src/nimxla/graph.nim#L251"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/jnb666/nimxla/edit/devel/src/nimxla/graph.nim#L252" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/jnb666/nimxla/edit/devel/src/nimxla/graph.nim#L251" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -1301,9 +1320,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 Get number of inputs to the node
 &nbsp;&nbsp;<a
-href="https://github.com/jnb666/nimxla/tree/main/src/nimxla/graph.nim#L193"
+href="https://github.com/jnb666/nimxla/tree/main/src/nimxla/graph.nim#L192"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/jnb666/nimxla/edit/devel/src/nimxla/graph.nim#L193" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/jnb666/nimxla/edit/devel/src/nimxla/graph.nim#L192" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -1313,9 +1332,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 Elementwise natural log
 &nbsp;&nbsp;<a
-href="https://github.com/jnb666/nimxla/tree/main/src/nimxla/graph.nim#L426"
+href="https://github.com/jnb666/nimxla/tree/main/src/nimxla/graph.nim#L435"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/jnb666/nimxla/edit/devel/src/nimxla/graph.nim#L426" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/jnb666/nimxla/edit/devel/src/nimxla/graph.nim#L435" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -1326,9 +1345,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 Elementwise log(1 + a)
 &nbsp;&nbsp;<a
-href="https://github.com/jnb666/nimxla/tree/main/src/nimxla/graph.nim#L427"
+href="https://github.com/jnb666/nimxla/tree/main/src/nimxla/graph.nim#L436"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/jnb666/nimxla/edit/devel/src/nimxla/graph.nim#L427" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/jnb666/nimxla/edit/devel/src/nimxla/graph.nim#L436" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -1339,9 +1358,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 Elementwise logical and between two Bool arrays
 &nbsp;&nbsp;<a
-href="https://github.com/jnb666/nimxla/tree/main/src/nimxla/graph.nim#L401"
+href="https://github.com/jnb666/nimxla/tree/main/src/nimxla/graph.nim#L410"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/jnb666/nimxla/edit/devel/src/nimxla/graph.nim#L401" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/jnb666/nimxla/edit/devel/src/nimxla/graph.nim#L410" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -1352,9 +1371,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 Elementwise logical or between two Bool arrays
 &nbsp;&nbsp;<a
-href="https://github.com/jnb666/nimxla/tree/main/src/nimxla/graph.nim#L402"
+href="https://github.com/jnb666/nimxla/tree/main/src/nimxla/graph.nim#L411"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/jnb666/nimxla/edit/devel/src/nimxla/graph.nim#L402" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/jnb666/nimxla/edit/devel/src/nimxla/graph.nim#L411" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -1365,9 +1384,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 Elementwise 1/(1 + exp(-a))
 &nbsp;&nbsp;<a
-href="https://github.com/jnb666/nimxla/tree/main/src/nimxla/graph.nim#L428"
+href="https://github.com/jnb666/nimxla/tree/main/src/nimxla/graph.nim#L437"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/jnb666/nimxla/edit/devel/src/nimxla/graph.nim#L428" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/jnb666/nimxla/edit/devel/src/nimxla/graph.nim#L437" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -1378,9 +1397,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 Creates a new tuple from a list of ops.
 &nbsp;&nbsp;<a
-href="https://github.com/jnb666/nimxla/tree/main/src/nimxla/graph.nim#L299"
+href="https://github.com/jnb666/nimxla/tree/main/src/nimxla/graph.nim#L297"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/jnb666/nimxla/edit/devel/src/nimxla/graph.nim#L299" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/jnb666/nimxla/edit/devel/src/nimxla/graph.nim#L297" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -1391,9 +1410,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 Elementwise maximum of 2 arrays
 &nbsp;&nbsp;<a
-href="https://github.com/jnb666/nimxla/tree/main/src/nimxla/graph.nim#L397"
+href="https://github.com/jnb666/nimxla/tree/main/src/nimxla/graph.nim#L406"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/jnb666/nimxla/edit/devel/src/nimxla/graph.nim#L397" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/jnb666/nimxla/edit/devel/src/nimxla/graph.nim#L406" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -1404,9 +1423,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 Reduce to maximum value of elements across one or more dimensions in the input. See <a class="reference external" href="#reduce%2CNode%2CNode%2CComputation%2CopenArray%5Bint%5D">reduce</a> for details
 &nbsp;&nbsp;<a
-href="https://github.com/jnb666/nimxla/tree/main/src/nimxla/graph.nim#L580"
+href="https://github.com/jnb666/nimxla/tree/main/src/nimxla/graph.nim#L573"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/jnb666/nimxla/edit/devel/src/nimxla/graph.nim#L580" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/jnb666/nimxla/edit/devel/src/nimxla/graph.nim#L573" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -1415,11 +1434,11 @@ class="link-seesrc" target="_blank">Source</a>
     <span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Identifier">Exception</span><span class="Other">,</span> <span class="Identifier">BuilderError</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Identifier">RootEffect</span><span class="Other">]</span></span>.}</pre></dt>
 <dd>
 
-Create a constant of given type and value. If dims is given then it is broadcast to that shape.
+Create a node with the maximum value for the given datatype. i.e. +Inf for floating point types.This is broadcast to dims if provided.
 &nbsp;&nbsp;<a
-href="https://github.com/jnb666/nimxla/tree/main/src/nimxla/graph.nim#L379"
+href="https://github.com/jnb666/nimxla/tree/main/src/nimxla/graph.nim#L387"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/jnb666/nimxla/edit/devel/src/nimxla/graph.nim#L379" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/jnb666/nimxla/edit/devel/src/nimxla/graph.nim#L387" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -1430,9 +1449,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 Elementwise minimum of 2 arrays
 &nbsp;&nbsp;<a
-href="https://github.com/jnb666/nimxla/tree/main/src/nimxla/graph.nim#L398"
+href="https://github.com/jnb666/nimxla/tree/main/src/nimxla/graph.nim#L407"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/jnb666/nimxla/edit/devel/src/nimxla/graph.nim#L398" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/jnb666/nimxla/edit/devel/src/nimxla/graph.nim#L407" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -1443,9 +1462,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 Reduce to minimum value of elements across one or more dimensions in the input. See <a class="reference external" href="#reduce%2CNode%2CNode%2CComputation%2CopenArray%5Bint%5D">reduce</a> for details
 &nbsp;&nbsp;<a
-href="https://github.com/jnb666/nimxla/tree/main/src/nimxla/graph.nim#L569"
+href="https://github.com/jnb666/nimxla/tree/main/src/nimxla/graph.nim#L565"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/jnb666/nimxla/edit/devel/src/nimxla/graph.nim#L569" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/jnb666/nimxla/edit/devel/src/nimxla/graph.nim#L565" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -1454,11 +1473,11 @@ class="link-seesrc" target="_blank">Source</a>
     <span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Identifier">Exception</span><span class="Other">,</span> <span class="Identifier">BuilderError</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Identifier">RootEffect</span><span class="Other">]</span></span>.}</pre></dt>
 <dd>
 
-Create a constant of given type and value. If dims is given then it is broadcast to that shape.
+Create a node with the minimum value for the given datatype. i.e. -Inf for floating point types.This is broadcast to dims if provided.
 &nbsp;&nbsp;<a
-href="https://github.com/jnb666/nimxla/tree/main/src/nimxla/graph.nim#L378"
+href="https://github.com/jnb666/nimxla/tree/main/src/nimxla/graph.nim#L384"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/jnb666/nimxla/edit/devel/src/nimxla/graph.nim#L378" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/jnb666/nimxla/edit/devel/src/nimxla/graph.nim#L384" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -1466,11 +1485,11 @@ class="link-seesrc" target="_blank">Source</a>
 <dt><pre><span class="Keyword">proc</span> <a href="#name%2CComputation"><span class="Identifier">name</span></a><span class="Other">(</span><span class="Identifier">comp</span><span class="Other">:</span> <a href="graph.html#Computation"><span class="Identifier">Computation</span></a><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">string</span> {.<span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span>.}</pre></dt>
 <dd>
 
-
+Name of the computation specified when the builder was created + count of number of ops.
 &nbsp;&nbsp;<a
-href="https://github.com/jnb666/nimxla/tree/main/src/nimxla/graph.nim#L258"
+href="https://github.com/jnb666/nimxla/tree/main/src/nimxla/graph.nim#L257"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/jnb666/nimxla/edit/devel/src/nimxla/graph.nim#L258" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/jnb666/nimxla/edit/devel/src/nimxla/graph.nim#L257" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -1481,9 +1500,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 Returns the data narrowed such that dimension dim ranges from start..stop-1 with step of stride. As per <a class="reference external" href="https://www.tensorflow.org/xla/operation_semantics#slice">slice</a>
 &nbsp;&nbsp;<a
-href="https://github.com/jnb666/nimxla/tree/main/src/nimxla/graph.nim#L498"
+href="https://github.com/jnb666/nimxla/tree/main/src/nimxla/graph.nim#L506"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/jnb666/nimxla/edit/devel/src/nimxla/graph.nim#L498" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/jnb666/nimxla/edit/devel/src/nimxla/graph.nim#L506" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -1493,9 +1512,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 Create a new builder which is used to generate a new graph. The name is used for debug info.
 &nbsp;&nbsp;<a
-href="https://github.com/jnb666/nimxla/tree/main/src/nimxla/graph.nim#L209"
+href="https://github.com/jnb666/nimxla/tree/main/src/nimxla/graph.nim#L208"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/jnb666/nimxla/edit/devel/src/nimxla/graph.nim#L209" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/jnb666/nimxla/edit/devel/src/nimxla/graph.nim#L208" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -1504,11 +1523,11 @@ class="link-seesrc" target="_blank">Source</a>
     <span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Identifier">Exception</span><span class="Other">,</span> <span class="Identifier">BuilderError</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Identifier">RootEffect</span><span class="Other">]</span></span>.}</pre></dt>
 <dd>
 
-Create a constant of given type and value. If dims is given then it is broadcast to that shape.
+Create a node with the unit value for the given datatype. This is broadcast to dims if provided.
 &nbsp;&nbsp;<a
-href="https://github.com/jnb666/nimxla/tree/main/src/nimxla/graph.nim#L377"
+href="https://github.com/jnb666/nimxla/tree/main/src/nimxla/graph.nim#L382"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/jnb666/nimxla/edit/devel/src/nimxla/graph.nim#L377" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/jnb666/nimxla/edit/devel/src/nimxla/graph.nim#L382" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -1519,9 +1538,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 Create a new parameter with the given shape. The parameter index is set automatically based on number of parameters set by this builder. If the name is blank then uses p&lt;index&gt; format.
 &nbsp;&nbsp;<a
-href="https://github.com/jnb666/nimxla/tree/main/src/nimxla/graph.nim#L278"
+href="https://github.com/jnb666/nimxla/tree/main/src/nimxla/graph.nim#L276"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/jnb666/nimxla/edit/devel/src/nimxla/graph.nim#L278" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/jnb666/nimxla/edit/devel/src/nimxla/graph.nim#L276" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -1544,9 +1563,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 Elementwise a raised to power b
 &nbsp;&nbsp;<a
-href="https://github.com/jnb666/nimxla/tree/main/src/nimxla/graph.nim#L399"
+href="https://github.com/jnb666/nimxla/tree/main/src/nimxla/graph.nim#L408"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/jnb666/nimxla/edit/devel/src/nimxla/graph.nim#L399" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/jnb666/nimxla/edit/devel/src/nimxla/graph.nim#L408" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -1557,9 +1576,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 Raise a BuilderError exception annotated with the repr for the given node.
 &nbsp;&nbsp;<a
-href="https://github.com/jnb666/nimxla/tree/main/src/nimxla/graph.nim#L128"
+href="https://github.com/jnb666/nimxla/tree/main/src/nimxla/graph.nim#L127"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/jnb666/nimxla/edit/devel/src/nimxla/graph.nim#L128" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/jnb666/nimxla/edit/devel/src/nimxla/graph.nim#L127" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -1569,9 +1588,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 Number of dimensions in the node output.
 &nbsp;&nbsp;<a
-href="https://github.com/jnb666/nimxla/tree/main/src/nimxla/graph.nim#L185"
+href="https://github.com/jnb666/nimxla/tree/main/src/nimxla/graph.nim#L184"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/jnb666/nimxla/edit/devel/src/nimxla/graph.nim#L185" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/jnb666/nimxla/edit/devel/src/nimxla/graph.nim#L184" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -1581,9 +1600,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/jnb666/nimxla/tree/main/src/nimxla/graph.nim#L256"
+href="https://github.com/jnb666/nimxla/tree/main/src/nimxla/graph.nim#L255"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/jnb666/nimxla/edit/devel/src/nimxla/graph.nim#L256" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/jnb666/nimxla/edit/devel/src/nimxla/graph.nim#L255" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -1595,9 +1614,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 Apply reduction across one or more dimensions.  i.e. comp is applied repeatedly with a pair of elements from the a input node. initValue defines the initial 'zero' value for the reduction. If no dims given then the reduction is applied across all of the input dimensions to reduce to a scalar. If the dimension index is negative then it is relative to the number of dimensions. If keepDims is set then the summed dimensions are kept with a size of 1, else they are removed and the numbe of dimensions in the result is reduced.
 &nbsp;&nbsp;<a
-href="https://github.com/jnb666/nimxla/tree/main/src/nimxla/graph.nim#L531"
+href="https://github.com/jnb666/nimxla/tree/main/src/nimxla/graph.nim#L533"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/jnb666/nimxla/edit/devel/src/nimxla/graph.nim#L531" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/jnb666/nimxla/edit/devel/src/nimxla/graph.nim#L533" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -1608,9 +1627,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 Elementwise remainder
 &nbsp;&nbsp;<a
-href="https://github.com/jnb666/nimxla/tree/main/src/nimxla/graph.nim#L396"
+href="https://github.com/jnb666/nimxla/tree/main/src/nimxla/graph.nim#L405"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/jnb666/nimxla/edit/devel/src/nimxla/graph.nim#L396" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/jnb666/nimxla/edit/devel/src/nimxla/graph.nim#L405" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -1620,9 +1639,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 Formatted AST tree of this node and all of it's children.
 &nbsp;&nbsp;<a
-href="https://github.com/jnb666/nimxla/tree/main/src/nimxla/graph.nim#L203"
+href="https://github.com/jnb666/nimxla/tree/main/src/nimxla/graph.nim#L202"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/jnb666/nimxla/edit/devel/src/nimxla/graph.nim#L203" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/jnb666/nimxla/edit/devel/src/nimxla/graph.nim#L202" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -1633,9 +1652,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 Reshape the input node to dims. Total number of elements is unchanged. If one of the dimensions is -1 then this value is inferred from the total number of elements.
 &nbsp;&nbsp;<a
-href="https://github.com/jnb666/nimxla/tree/main/src/nimxla/graph.nim#L451"
+href="https://github.com/jnb666/nimxla/tree/main/src/nimxla/graph.nim#L460"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/jnb666/nimxla/edit/devel/src/nimxla/graph.nim#L451" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/jnb666/nimxla/edit/devel/src/nimxla/graph.nim#L460" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -1646,9 +1665,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 Generate a tensor with a normal random distribution described by mean, std deviation, data type and dimensions. Inputs must have the same data type. This is used the as element type for the output.
 &nbsp;&nbsp;<a
-href="https://github.com/jnb666/nimxla/tree/main/src/nimxla/graph.nim#L520"
+href="https://github.com/jnb666/nimxla/tree/main/src/nimxla/graph.nim#L525"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/jnb666/nimxla/edit/devel/src/nimxla/graph.nim#L520" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/jnb666/nimxla/edit/devel/src/nimxla/graph.nim#L525" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -1659,9 +1678,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 Generate a tensor with a uniform random distribution with values from minVal to maxVal and given dimensions. Inputs must have the same data type. This is used as the element type for the output.
 &nbsp;&nbsp;<a
-href="https://github.com/jnb666/nimxla/tree/main/src/nimxla/graph.nim#L509"
+href="https://github.com/jnb666/nimxla/tree/main/src/nimxla/graph.nim#L517"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/jnb666/nimxla/edit/devel/src/nimxla/graph.nim#L509" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/jnb666/nimxla/edit/devel/src/nimxla/graph.nim#L517" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -1672,9 +1691,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 Elementwise nearest rounding
 &nbsp;&nbsp;<a
-href="https://github.com/jnb666/nimxla/tree/main/src/nimxla/graph.nim#L425"
+href="https://github.com/jnb666/nimxla/tree/main/src/nimxla/graph.nim#L434"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/jnb666/nimxla/edit/devel/src/nimxla/graph.nim#L425" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/jnb666/nimxla/edit/devel/src/nimxla/graph.nim#L434" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -1685,9 +1704,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 Elementwise 1/sqrt(a)
 &nbsp;&nbsp;<a
-href="https://github.com/jnb666/nimxla/tree/main/src/nimxla/graph.nim#L434"
+href="https://github.com/jnb666/nimxla/tree/main/src/nimxla/graph.nim#L443"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/jnb666/nimxla/edit/devel/src/nimxla/graph.nim#L434" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/jnb666/nimxla/edit/devel/src/nimxla/graph.nim#L443" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -1698,9 +1717,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 Select values from onTrue where a is true else from onFalse.
 &nbsp;&nbsp;<a
-href="https://github.com/jnb666/nimxla/tree/main/src/nimxla/graph.nim#L505"
+href="https://github.com/jnb666/nimxla/tree/main/src/nimxla/graph.nim#L513"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/jnb666/nimxla/edit/devel/src/nimxla/graph.nim#L505" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/jnb666/nimxla/edit/devel/src/nimxla/graph.nim#L513" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -1710,9 +1729,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 Elementwise sign. Returns -1, 0, +1 or Nan
 &nbsp;&nbsp;<a
-href="https://github.com/jnb666/nimxla/tree/main/src/nimxla/graph.nim#L429"
+href="https://github.com/jnb666/nimxla/tree/main/src/nimxla/graph.nim#L438"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/jnb666/nimxla/edit/devel/src/nimxla/graph.nim#L429" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/jnb666/nimxla/edit/devel/src/nimxla/graph.nim#L438" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -1722,9 +1741,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 Elementwise sine
 &nbsp;&nbsp;<a
-href="https://github.com/jnb666/nimxla/tree/main/src/nimxla/graph.nim#L431"
+href="https://github.com/jnb666/nimxla/tree/main/src/nimxla/graph.nim#L440"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/jnb666/nimxla/edit/devel/src/nimxla/graph.nim#L431" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/jnb666/nimxla/edit/devel/src/nimxla/graph.nim#L440" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -1735,9 +1754,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 Softmax operation, shifted for numerical stability. Will apply to the last axis by default.
 &nbsp;&nbsp;<a
-href="https://github.com/jnb666/nimxla/tree/main/src/nimxla/graph.nim#L633"
+href="https://github.com/jnb666/nimxla/tree/main/src/nimxla/graph.nim#L621"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/jnb666/nimxla/edit/devel/src/nimxla/graph.nim#L633" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/jnb666/nimxla/edit/devel/src/nimxla/graph.nim#L621" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -1747,9 +1766,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 Elementwise square root
 &nbsp;&nbsp;<a
-href="https://github.com/jnb666/nimxla/tree/main/src/nimxla/graph.nim#L433"
+href="https://github.com/jnb666/nimxla/tree/main/src/nimxla/graph.nim#L442"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/jnb666/nimxla/edit/devel/src/nimxla/graph.nim#L433" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/jnb666/nimxla/edit/devel/src/nimxla/graph.nim#L442" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -1760,9 +1779,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 Reduce to sum of elements across one or more dimensions in the input. See <a class="reference external" href="#reduce%2CNode%2CNode%2CComputation%2CopenArray%5Bint%5D">reduce</a> for details
 &nbsp;&nbsp;<a
-href="https://github.com/jnb666/nimxla/tree/main/src/nimxla/graph.nim#L558"
+href="https://github.com/jnb666/nimxla/tree/main/src/nimxla/graph.nim#L557"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/jnb666/nimxla/edit/devel/src/nimxla/graph.nim#L558" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/jnb666/nimxla/edit/devel/src/nimxla/graph.nim#L557" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -1772,9 +1791,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 Elementwise hyperbolic tangent
 &nbsp;&nbsp;<a
-href="https://github.com/jnb666/nimxla/tree/main/src/nimxla/graph.nim#L432"
+href="https://github.com/jnb666/nimxla/tree/main/src/nimxla/graph.nim#L441"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/jnb666/nimxla/edit/devel/src/nimxla/graph.nim#L432" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/jnb666/nimxla/edit/devel/src/nimxla/graph.nim#L441" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -1785,9 +1804,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 Permute the the given axes. If no axes are given then will swap the last 2 axes. Axes indices may be negative - in this case they will be relative to the number of dimensions.
 &nbsp;&nbsp;<a
-href="https://github.com/jnb666/nimxla/tree/main/src/nimxla/graph.nim#L483"
+href="https://github.com/jnb666/nimxla/tree/main/src/nimxla/graph.nim#L494"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/jnb666/nimxla/edit/devel/src/nimxla/graph.nim#L483" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/jnb666/nimxla/edit/devel/src/nimxla/graph.nim#L494" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -1796,11 +1815,11 @@ class="link-seesrc" target="_blank">Source</a>
     <span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Identifier">Exception</span><span class="Other">,</span> <span class="Identifier">BuilderError</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Identifier">RootEffect</span><span class="Other">]</span></span>.}</pre></dt>
 <dd>
 
-Create a constant of given type and value. If dims is given then it is broadcast to that shape.
+Create a node with the zero value for the given datatype. This is broadcast to dims if provided.
 &nbsp;&nbsp;<a
-href="https://github.com/jnb666/nimxla/tree/main/src/nimxla/graph.nim#L376"
+href="https://github.com/jnb666/nimxla/tree/main/src/nimxla/graph.nim#L380"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/jnb666/nimxla/edit/devel/src/nimxla/graph.nim#L376" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/jnb666/nimxla/edit/devel/src/nimxla/graph.nim#L380" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -1811,13 +1830,18 @@ class="link-seesrc" target="_blank">Source</a>
 
 Creates a new zero value with element type and shape from input.
 &nbsp;&nbsp;<a
-href="https://github.com/jnb666/nimxla/tree/main/src/nimxla/graph.nim#L437"
+href="https://github.com/jnb666/nimxla/tree/main/src/nimxla/graph.nim#L446"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/jnb666/nimxla/edit/devel/src/nimxla/graph.nim#L437" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/jnb666/nimxla/edit/devel/src/nimxla/graph.nim#L446" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
 
+</dl></div>
+<div class="section" id="19">
+<h1><a class="toc-backref" href="#19">Exports</a></h1>
+<dl class="item">
+<a href="shape.html#DataType"><span class="Identifier">DataType</span></a>, <a href="shape.html#dtypeOf,typedesc[ElemType]"><span class="Identifier">dtypeOf</span></a>, <a href="shape.html#$,Shape"><span class="Identifier">$</span></a>, <a href="shape.html#ElemType"><span class="Identifier">ElemType</span></a>, <a href="shape.html#ShapeKind"><span class="Identifier">ShapeKind</span></a>, <a href="shape.html#==,Shape,Shape"><span class="Identifier">==</span></a>, <a href="shape.html#arrayShape,DataType,varargs[int]"><span class="Identifier">arrayShape</span></a>, <a href="shape.html#toShape,shape_t"><span class="Identifier">toShape</span></a>, <a href="shape.html#Shape"><span class="Identifier">Shape</span></a>
 </dl></div>
 
   </div>
@@ -1827,7 +1851,7 @@ class="link-seesrc" target="_blank">Source</a>
       <div class="twelve-columns footer">
         <span class="nim-sprite"></span>
         <br/>
-        <small style="color: var(--hint);">Made with Nim. Generated: 2023-06-01 12:48:28 UTC</small>
+        <small style="color: var(--hint);">Made with Nim. Generated: 2023-06-01 17:03:25 UTC</small>
       </div>
     </div>
   </div>
