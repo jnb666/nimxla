@@ -191,7 +191,10 @@ proc compile*(client: Client, comp: Computation): Executable =
   ## Compile a computation so that it can be executed on this client.
   trace "new Executable"
   let status = compile(client.c, comp.rawPtr, result.c.addr)
-  checkBuilderError(status, comp.last)
+  if status != nil:
+    let message = $status_error_message(status)
+    status_free(status)
+    raiseError(message, comp.last)
   result.name = comp.name
   for param in comp.params:
     result.params.add param.name

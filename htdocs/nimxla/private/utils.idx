@@ -1,5 +1,0 @@
-tracemem	nimxla/private/utils.html#tracemem	utils: tracemem	
-ptrOffset	nimxla/private/utils.html#ptrOffset,ptr.T,int	utils: ptrOffset[T](p: ptr T; off: int): ptr T	
-trace	nimxla/private/utils.html#trace.t,string	utils: trace(msg: string): untyped	
-withDims	nimxla/private/utils.html#withDims.t,untyped,openArray[int],untyped	utils: withDims(dptr: untyped; dims: openArray[int]; code: untyped): untyped	
-reshapeDims	nimxla/private/utils.html#reshapeDims,int,openArray[int]	utils: reshapeDims(elems: int; dims: openArray[int]): seq[int]	

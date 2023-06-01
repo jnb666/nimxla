@@ -137,7 +137,7 @@ proc raiseError*(message: string, node: Node = nil) =
     err.msg &= " at\n" & node.repr & "\n"
   raise err
 
-proc checkBuilderError*(status: status_t, at: Node = nil) =
+proc checkBuilderError(status: status_t, at: Node = nil) =
   ## Check status code returned from XLA. If non nil then raise a BuilderError exception. 
   if status != nil:
     let message = $status_error_message(status)
@@ -171,7 +171,7 @@ proc shape(op: xla_op): Result[Shape] =
   else:
     res(Shape(), status)
 
-proc uid*(n: Node): uint64 = 
+proc uid(n: Node): uint64 = 
   ## Unique node id from pointer to xla_op
   if n.op != nil:
     cast[uint64](n.op.c)
@@ -287,7 +287,7 @@ proc parameter*(b: Builder, dtype: DataType, dims: openarray[int] = [], name = "
     result.paramId = index
     b.params.add result
 
-proc makeTuple*(b: xla_builder, args: varargs[Node]): Node =
+proc makeTuple(b: xla_builder, args: varargs[Node]): Node =
   if args.len == 0:
     return wrap(op_tuple(b, nil, 0), tTuple)  
   var ops = cast[ptr xla_op](alloc(args.len*sizeOf(xla_op)))
@@ -300,7 +300,7 @@ proc makeTuple*(b: Builder, args: varargs[Node]): Node =
   ## Creates a new tuple from a list of ops.
   makeTuple(b.obj.c, args)
 
-proc iota*(b: xla_builder, dtype: DataType, dims: openarray[int], axis: int): Node =
+proc iota(b: xla_builder, dtype: DataType, dims: openarray[int], axis: int): Node =
   withDims(dptr, dims):
     let op = b.op_iota(cint(dtype), csize_t(dims.len), dptr, axis)
     result = wrap(op, tIota, info = $dims & $axis)
@@ -330,16 +330,17 @@ proc convert*(a: Node, dtype: DataType): Node
 macro makeConstant(typ: untyped, ctyp: static string): untyped =
   let const_r0 = ident("constant_r0_" & ctyp)
   let const_r1 = ident("constant_r1_" & ctyp)
-  
-  result = quote do:
-    proc constant*(b: Builder, value: `typ`): Node =
-      ## Create a new scalar constant from the given value.
-      wrap(`const_r0`(b.obj.c, value), tConst, [], $value)
+  let (b, value) = (ident "b", ident "value")
 
-    proc constant*(b: Builder, value: openarray[`typ`]): Node =
+  result = quote do:
+    proc constant*(`b`: Builder, `value`: `typ`): Node =
+      ## Create a new scalar constant from the given value.
+      wrap(`const_r0`(`b`.obj.c, `value`), tConst, [], $`value`)
+
+    proc constant*(`b`: Builder, `value`: openarray[`typ`]): Node =
       ## Create a new vector constant from the given value.
-      let xop = `const_r1`(b.obj.c, value[0].unsafeAddr, csize_t(value.len))
-      wrap(xop, tConst, [], $value)
+      let xop = `const_r1`(`b`.obj.c, `value`[0].unsafeAddr, csize_t(`value`.len))
+      wrap(xop, tConst, [], $`value`)
 
 makeConstant(int32, "int32_t")
 makeConstant(int64, "int64_t")
@@ -347,6 +348,7 @@ makeConstant(float32, "float")
 makeConstant(float64, "double")
 
 proc constant*(b: Builder, value: float, dtype: Datatype): Node =
+  ## Create a new scalar constant with the given type.
   case dtype
   of I32:
     b.constant(value.int32)
@@ -359,18 +361,17 @@ proc constant*(b: Builder, value: float, dtype: Datatype): Node =
   else:
     convert(b.constant(value.float32), dtype)
 
+macro namedConstant(symbol, call, name: untyped) =
+  let (b, dtype, dims) = (ident "b", ident "dtype", ident "dims")
 
-template namedConstant(symbol, call, name: untyped) =
-  proc `symbol`(b: xla_builder, dtype = F32, dims: openarray[int] = []): Node =
-    let node = wrap(`call`(b, cint(dtype)), tConst, [], `name`)
-    if dims.len > 0:
-      broadcast(node, dims)
-    else:
-      node
+  result = quote do:
+    proc `symbol`(`b`: xla_builder, `dtype` = F32, `dims`: openarray[int] = []): Node =
+      let node = wrap(`call`(`b`, cint(`dtype`)), tConst, [], `name`)
+      if `dims`.len > 0: broadcast(node, `dims`) else: node
 
-  proc `symbol`*(b: Builder, dtype = F32, dims: openarray[int] = []): Node =
-    ## Constant op of given type and value. If dims is given then it is brooadcast to that shape.
-    `symbol`(b.obj.c, dtype, dims)
+    proc `symbol`*(`b`: Builder, `dtype` = F32, `dims`: openarray[int] = []): Node =
+      ## Create a constant of given type and value. If dims is given then it is broadcast to that shape.
+      `symbol`(`b`.obj.c, `dtype`, `dims`)
 
 namedConstant(zero, op_zero, "0")
 namedConstant(one, op_one, "1")
@@ -396,7 +397,7 @@ binop(rem, op_rem, tRem, "Elementwise remainder")
 binop(max, op_max, tMax, "Elementwise maximum of 2 arrays")
 binop(min, op_min, tMin, "Elementwise minimum of 2 arrays")
 binop(pow, op_pow, tPow, "Elementwise a raised to power b")
-binop(dot, op_dot, tDot, "Vector or matrix doc product per https://www.tensorflow.org/xla/operation_semantics#dot")
+binop(dot, op_dot, tDot, "Vector or matrix doc product per [dot](https://www.tensorflow.org/xla/operation_semantics#dot)")
 binop(logicalAnd, op_and, tAnd, "Elementwise logical and between two Bool arrays")
 binop(logicalOr, op_or, tOr, "Elementwise logical or between two Bool arrays")
 binop(`==`, op_eq, tEq, "Elementwise equal. Returns a Bool array.")
@@ -456,13 +457,14 @@ proc reshape*(a: Node, dims: varargs[int]): Node =
    result.indices = dims2
 
 proc broadcast*(a: Node, dims: openarray[int]): Node =
-  ## Add new leading dimensions to the input node.
+  ## Add new leading dimensions to the input node per [broadcast](https://www.tensorflow.org/xla/operation_semantics#broadcast)
   withDims(dptr, dims):
     result = wrap(op_broadcast(a.op.c, csize_t(dims.len), dptr), tBroadcast, [a], $dims)
     result.indices = @dims
 
 proc broadcastInDim*(a: Node, outSize, bcastDims: openarray[int]): Node =
-  ## Expand dims at each index in bcastDimes from 1 to the corresponding value in outSize.
+  ## Expand dims at each index in bcastDimes from 1 to the corresponding value in outSize as 
+  ## per [broadcastInDim](https://www.tensorflow.org/xla/operation_semantics#broadcastindim)
   withDims(dptr1, outSize):
     withDims(dptr2, bcastDims):
       let op = op_broadcast_in_dim(a.op.c, csize_t(outSize.len), dptr1, csize_t(bcastDims.len), dptr2)
@@ -472,7 +474,7 @@ proc broadcastInDim*(a: Node, outSize, bcastDims: openarray[int]): Node =
 
 # collapse given dimensions
 proc collapse*(a: Node, dims: openarray[int]): Node =
-  ## Collapse the given dimensions into a single dimension.
+  ## Collapse the given dimensions into a single dimension as per [collapse](https://www.tensorflow.org/xla/operation_semantics#collapse).
   ## dims should be an in-order consecutive subset of the input dims.
   withDims(dptr, dims):
     result = wrap(op_collapse(a.op.c, csize_t(dims.len), dptr), tCollapse, [a], $dims)
@@ -495,6 +497,7 @@ proc transpose*(a: Node, axes: varargs[int]): Node =
 
 proc narrow*(a: Node, dim, start, stop: int, stride = 1): Node =
   ## Returns the data narrowed such that dimension dim ranges from start..stop-1 with step of stride.
+  ## As per [slice](https://www.tensorflow.org/xla/operation_semantics#slice)
   let op = op_slice_in_dim(a.op.c, start, stop, stride, dim)
   result = wrap(op, tNarrow, [a], &"(dim:{dim} start:{start} stop:{stop} stride:{stride})")
   result.indices = @[dim, start, stop]
