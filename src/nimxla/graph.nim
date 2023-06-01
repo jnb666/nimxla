@@ -14,11 +14,10 @@
 ## Shapes and host literal types are defined in the literal module.
 ##
 
-
 import std/[sugar, sequtils, strformat, strutils, tables, math, macros, logging]
 import tensor, literal, shape
 import private/[xla_wrapper, utils]
-
+export shape
 
 type
   BuilderError* = ref object of CatchableError
@@ -746,8 +745,25 @@ proc calcGrads(b: Builder, node, pathValue: Node, inputs: openarray[string],
 proc gradient*(b: Builder, output: Node, inputs: openarray[string]): seq[Node] =
   ## Generate the graph to calculate the gradients at each of the given input
   ## parameters for the graph given by output,
-  ## This returns an sequence of nodes, where each one corresponds
-  ## calculates the gradient of the corresponding input node.
+  ## This returns an sequence of nodes, where each one calculates the gradient 
+  ## of the corresponding input node.
+  ##
+  ## Here's an example of creating an expression and it's backward graph which calculates the gradients.
+  ##
+  runnableExamples:
+    let b = newBuilder("test")
+    # forward expression
+    let x = b.parameter(F32, [], "x")
+    let y = b.parameter(F32, [2, 2], "y")
+    let fwd = x * (x + y)
+    # will return a slice with the expression to calculate grad(x) and grad(y)
+    let grads = b.gradient(fwd, ["x", "y"])
+    # builds a computation with 2 input parameters which will return a tuple with 3 results
+    let comp = b.build b.makeTuple(fwd & grads)
+    # will dump out details of each node for debugging
+    echo comp
+
+
   let pathValue = b.one(output.dtype, output.dims)
   var dict = initTable[uint64, Node]()
   result = newSeq[Node](inputs.len)
