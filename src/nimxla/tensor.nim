@@ -9,7 +9,7 @@ runnableExamples:
   echo t
 
 
-import std/[strutils, streams, strformat, sequtils, algorithm, math]
+import std/[strutils, streams, strformat, sequtils, sugar, algorithm, math, macros]
 import private/utils
 import shape
 when defined tracemem:
@@ -18,6 +18,8 @@ when defined tracemem:
 type
   TensorDataObj[T: ElemType] = object
     arr: ptr UncheckedArray[T]
+
+  ElemTypeOrInt* = ElemType or int
 
   TensorData[T: ElemType] = ref TensorDataObj[T]
 
@@ -96,6 +98,10 @@ proc toTensor*[T: ElemType](values: openarray[T]): Tensor[T] =
   result = newTensor[T](values.len)
   copyMem(result.data.arr[0].addr, values[0].unsafeAddr, result.len*sizeOf(T))
 
+proc toTensor*(values: openarray[int]): Tensor[int64] =
+  ## Create a new 1D int64 tensor from an array of int values
+  toTensor[int64](map(values, x => x.int64))
+
 proc toTensor*[T: ElemType](slice: HSlice[int, int]): Tensor[T] =
   ## Create a new 1D tensor of given type with elements set to the values from iterating over the slice.
   result = newTensor[T](slice.len)
@@ -103,6 +109,67 @@ proc toTensor*[T: ElemType](slice: HSlice[int, int]): Tensor[T] =
   for value in slice.a .. slice.b:
     result.data.arr[i] = T(value)
     i += 1
+
+
+type
+  LiteralArray = object
+    typ:    string
+    shape:  seq[int]
+    value:  NimNode
+
+proc parseLiteral(n: NimNode, first = false): LiteralArray =
+  case n.kind
+  of nnkFloatLit, nnkFloat64Lit:
+    return LiteralArray(typ: "float64", value: n)
+  of nnkFloat32Lit:
+    return LiteralArray(typ: "float32", value: n)
+  of nnkIntLit:
+    if first:
+      return LiteralArray(typ: "int64", value: newLit(n.intVal.int64))
+    else:
+      return LiteralArray(typ: "int64", value: n)
+  of nnkInt64Lit:
+    return LiteralArray(typ: "int64", value: n)
+  of nnkInt32Lit:
+    return LiteralArray(typ: "int32", value: n)
+  of nnkUint8Lit:
+    return LiteralArray(typ: "uint8", value: n)
+  of nnkIdent:
+    if n.strVal == "true" or n.strVal == "false":
+      return LiteralArray(typ: "bool", value: n)
+  of nnkBracket:
+    n.expectMinLen 1
+    result.value = newNimNode(nnkBracket)
+    result.shape = @[n.len]
+    var childShape: seq[int]
+    for i, elem in n:
+      let v = parseLiteral(elem, first and i == 0)
+      if i == 0:
+        result.typ = v.typ
+        childShape = v.shape
+      elif v.shape != childShape:
+        error("shape of each dimension for @@ must be uniform", n)
+      if v.value.kind == nnkBracket:
+        for child in v.value: result.value.add child
+      else:
+        result.value.add v.value
+    result.shape.add childShape
+    return result
+  else:
+    discard
+  error("unsupported type for @@ - elements must be integer, float or bool literal", n)
+
+macro `@@`*(value: untyped): untyped =
+  ## Generate a tensor literal from a scalar or array e.g.
+  ## ```
+  ##  @@42f32               -> 0 dimensional float32 tensor
+  ##  @@[1.0, 2, 3]         -> 1 dimensional float64 tensor
+  ##  @@[[1, 2], [3, 4]]    -> 2 dimensional int64 tensor
+  ## ```
+  let v = parseLiteral(value, first=true)
+  result = newCall(newTree(nnkBracketExpr, ident("toTensor"), ident(v.typ)), v.value)
+  if v.shape.len > 1:
+    result = newCall("reshape", result, newTree(nnkBracket, map(v.shape, x => newLit(x))))
 
 proc normalizeIndex(ix, rank: int): int =
   ## check index in range and convert -ve value to offset from end

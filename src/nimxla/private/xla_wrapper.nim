@@ -162,7 +162,9 @@ proc op_concat_in_dim*(a1: xla_op; a2: ptr xla_op; a3: csize_t; a4: int64): xla_
 proc op_tuple*(a1: xla_builder; a2: ptr xla_op; a3: csize_t): xla_op {.importc: "op_tuple".}
 proc op_get_tuple_element*(a1: xla_op; a2: int64): xla_op {.importc: "op_get_tuple_element".}
 proc op_gather*(a1: xla_op; a2: xla_op; a3: ptr int64; a4: csize_t; a5: ptr int64; a6: csize_t; 
-  a7: ptr int64; a8: csize_t; a9: ptr int64; a10: ptr int64; a11: csize_t): xla_op {.importc: "op_gather".}
+  a7: ptr int64; a8: csize_t; a9: int64; a10: ptr int64; a11: csize_t): xla_op {.importc: "op_gather".}
+proc op_scatter*(a1: xla_op; a2: xla_op; a3: xla_op, a4: xla_computation, a5: int64, 
+  a6: ptr int64; a7: csize_t; a8: ptr int64; a9: csize_t, a10: ptr int64; a11: csize_t): xla_op {.importc: "op_scatter".}
 proc op_convert_element_type*(a1: xla_op; a2: cint): xla_op {.importc: "op_convert_element_type".}
 proc op_dimensions_size*(a1: xla_op; a2: int64): xla_op {.importc: "op_dimensions_size".}
 proc op_reduce*(a1: xla_op; a2: xla_op; a3: xla_computation; a4: ptr int64; a5: csize_t): xla_op {.importc: "op_reduce".}

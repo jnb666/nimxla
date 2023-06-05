@@ -11,22 +11,40 @@ suite "tensor":
   let t1 = toTensor[float32](1..24).reshape(2, 3, 4)
 
   test "scalar":
-    let s = 42.0.toTensor
+    let s = @@42.0
     debug s
     check s.len == 1
     check s.dims == []
     check s[] == 42.0
     check s is Tensor[float64]
 
+  test "bool_literal":
+    let s = @@true
+    debug s
+    check s.len == 1
+    check s.dims == []
+    check s[] == true
+    check s is Tensor[bool]
+
   test "vector":
-    var v = [2'i32, 3, 5, 7].toTensor
+    var v = @@[2i32, 3, 5, 7]
     debug v
     for ix in 0 ..< v.len:
       v[ix] = v[ix] * v[ix]
     debug v
     check v.len == 4
     check v.dims == [4]
-    check v.toSeq == [4'i32, 9, 25, 49]
+    check v.toSeq == [4i32, 9, 25, 49]
+
+  test "const_tensor":
+    let t = @@[
+      [[ 1, -1, 4, 1], [ 3, -3, 9, 0]],
+      [[ 9,  9, 2,-1], [ 7,  7, 3, 4]],
+      [[-2,  2, 1, 3], [-4,  4, 2, 6]]
+    ]
+    debug t
+    check t.dims == [3, 2, 4]
+    check t[2, 1, 3] == 6
 
   test "matrix":
     let m = fill([2, 3], 0.5f32)

@@ -15,11 +15,11 @@ runnableExamples:
   echo c
   let b = newBuilder("example")
   let x = b.parameter(F32, [50])
-  let sum = x * x + b.constant(10f32)
+  let sum = x * x + b^10f32
   let comp = b.build sum.reshape(10, 5).transpose
   let exec = c.compile(comp)
   let input = toTensor[float32](1..50).toLiteral
-  let res = exec.run([input]).toLiteral
+  let res = exec.run([input]).f32
   echo res
 
 
@@ -183,6 +183,26 @@ proc toTensor*[T: ElemType](buf: Buffer): Tensor[T] =
   # since the PjRtBuffer->CopyRawToHost method returns a not implemented error, goes via a literal
   result = toTensor[T](buf.toLiteral)
 
+proc i32*(buf: Buffer): Tensor[int32] =
+  ## Convert to int32 Tensor. Data type must be I32.
+  toTensor[int32](buf)
+
+proc i64*(buf: Buffer): Tensor[int64] =
+  ## Convert to int64 Tensor. Data type must by I64.
+  toTensor[int64](buf)
+
+proc f32*(buf: Buffer): Tensor[float32] =
+  ## Convert to float32 Tensor. Data type must be F32.
+  toTensor[float32](buf)
+
+proc f64*(buf: Buffer): Tensor[float64] =
+  ## Convert to float64 Tensor. Data type must be F64.
+  toTensor[float64](buf)
+
+proc boolean*(buf: Buffer): Tensor[bool] =
+  ## Convert to float64 Tensor. Data type must be Bool.
+  toTensor[bool](buf)
+
 proc `$`*(buf: Buffer): string =
   ## Print shape info
   "buffer::" & $buf.shape
@@ -211,11 +231,15 @@ proc `$`*(exec: Executable): string =
 # execute kernel
 template makeExecute(T: typedesc, ctype, ccall: untyped): untyped =
   proc execute(exec: Executable, args: openarray[T], outputs: ptr ptr ptr pjrt_buffer, untupleResult: bool) =
-    #debug "execute: ", exec, " untupleResult=", untupleResult
+    when T is Tensor:
+      var args2 = map(args, x => x.toLiteral)
+    else:
+      var args2 = @args
     var argp: ptr `ctype`
     if args.len > 0:
       argp = cast[ptr `ctype`](alloc(args.len * sizeOf(ctype)))
-      for i, arg in args: ptrOffset(argp, i)[] = arg.rawPtr
+      for i, arg in args2:
+        ptrOffset(argp, i)[] = arg.rawPtr
     let status = `ccall`(exec.c, argp, args.len.cint, outputs, untupleResult)
     if args.len > 0:
       dealloc(argp)
@@ -239,7 +263,7 @@ proc firstOutput(outputs: ptr ptr pjrt_buffer): Buffer =
   free(p1)
   free(outputs)
 
-proc checkArgs[T: Buffer|Literal](exec: Executable, args: openarray[T]) =
+proc checkArgs[T: Buffer|Literal|Tensor](exec: Executable, args: openarray[T]) =
   ## check the args match the parameters set when the executable was compiled
   if args.len != exec.params.len:
     raise newException(XLAError, &"{exec.name}: expecting {exec.params.len} arguments - got {args.len}")
@@ -251,9 +275,9 @@ proc runAndUnpack*[T: Buffer|Literal](exec: Executable, args: openarray[T], chec
   ## For use where the executable returns a tuple of results.
   ## Passes the given literal or buffer arguments to the executable, launches the kernel on the associated device
   ## and returns a list of buffers unpacked from the returned tuple.
-  ## By default will check that the data type and shape of the parameters matches the inputs 
-  ## and raise an exception if there is a mismatch. Set checkShape to false to only have
-  ## the runtime check the size of the input buffers.
+  ##
+  ## By default will check that the data type and shape of the parameters matches the inputs and raise an exception
+  ## if there is a mismatch. Set checkShape to false to only have the runtime check the size of the input buffers.
   if checkShape:
     checkArgs[T](exec, args)
   var outputs: ptr ptr pjrt_buffer
@@ -269,11 +293,11 @@ proc runAndUnpack*(exec: Executable, checkShape = true): seq[Buffer] =
   tupleOutputs(outputs)
 
 proc run*[T: Buffer|Literal](exec: Executable, args: openarray[T], checkShape = true): Buffer =
-  ## Pass the given literal or buffer arguments to the executable, launch the kernel on the associated device
-  ## and return a single buffer with the results. i.e. tuple results are not unpacked.
-  ## By default will check that the data type and shape of the parameters matches the inputs 
-  ## and raise an exception if there is a mismatch. Set checkShape to false to only have
-  ## the runtime check the size of the input buffers.
+  ## Pass the given literal or buffer arguments to the executable, launch the kernel on the associated
+  ## device and return a single buffer with the results. i.e. tuple results are not unpacked.
+  ##
+  ## By default will check that the data type and shape of the parameters matches the inputs and raise an exception
+  ## there is a mismatch. Set checkShape to false to only have the runtime check the size of the input buffers.
   if checkShape:
     checkArgs[T](exec, args)
   var outputs: ptr ptr pjrt_buffer
@@ -290,3 +314,23 @@ proc run*(exec: Executable, checkShape = true): Buffer =
 proc toLiterals*(buffers: openarray[Buffer]): seq[Literal] =
   ## Copy list of buffers back to host
   map(buffers, x => x.toLiteral)
+
+proc tuple2*(res: openarray[Buffer]): (Buffer, Buffer) =
+  ## Convenienve method to destructure list of 2 buffers to tuple
+  assert res.len == 2
+  (res[0], res[1])
+
+proc tuple3*(res: openarray[Buffer]): (Buffer, Buffer, Buffer) =
+  ## Convenienve method to destructure list of 3 buffers to tuple
+  assert res.len == 3
+  (res[0], res[1], res[2])
+
+proc tuple4*(res: openarray[Buffer]): (Buffer, Buffer, Buffer, Buffer) =
+  ## Convenienve method to destructure list of 4 buffers to tuple
+  assert res.len == 4
+  (res[0], res[1], res[2], res[3])
+
+proc tuple5*(res: openarray[Buffer]): (Buffer, Buffer, Buffer, Buffer, Buffer) =
+  ## Convenienve method to destructure list of 5 buffers to tuple
+  assert res.len == 5
+  (res[0], res[1], res[2], res[3], res[4])

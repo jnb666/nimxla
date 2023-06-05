@@ -14,9 +14,12 @@
 ## Shapes and host literal types are defined in the literal module.
 ##
 
-import std/[sugar, sequtils, strformat, strutils, tables, math, macros, logging]
+import std/[sugar, sequtils, strformat, strutils, tables, math, macros]
 import tensor, literal, shape
 import private/[xla_wrapper, utils]
+when defined tracemem:
+  import std/logging
+
 export shape
 
 type
@@ -33,12 +36,12 @@ type
     tLog1p, tLogistic, tSign, tCos, tSin, tTanh, tSqrt,         ## ..
     tRsqrt, tIsFinite, tCopy, tZerosLike, tTupleElement,        ## ..
     tReshape, tBroadcast, tBroadcastInDim, tCollapse,           ## ..
-    tTranspose, tNarrow, tConvert, tSoftmax                     ## ..
+    tTranspose, tNarrow, tConvert,                              ## ..
     tReduceSum, tReduceMin, tReduceMax, tArgmin, tArgmax        ## ..
     tAdd, tSub, tMul, tDiv, tRem, tMax, tMin, tPow, tDot,       ## 2 arg ops
     tAnd, tOr, tEq, tNe, tGe, tGt, tLe, tLt, tRngUniform,       ## ..
-    tRngNormal, tReduce                                         ## ..
-    tSelect, tTuple                                             ## 3 or more arg ops
+    tRngNormal, tReduce, tGather                                ## ..
+    tSelect, tClamp, tTuple, tConcat, tScatter                  ## 3 or more arg ops
 
   Result[T] = object
     ## Val holds the result if err is nil, else err has the error status
@@ -65,16 +68,18 @@ type
     ## A Node is generated from each Op once it is added to the graph.
     ## The id number is the index to the nodes sequence in the Computation object and is set when the graph is built. 
     ## The shape is the output data type and dimesnions for the op. This must be fixed and known at build time.
-    id*:    int
-    shape*: Shape
-    args*:  seq[Node]
+    ## If the noGrad attribute is set then gradients are not accumulated from this node or it's inputs.
+    id*:     int
+    shape*:  Shape
+    args*:   seq[Node]
+    noGrad*: bool
     case kind*: OpType:
     of tParam:
       name*:     string
       paramId*:  int
     of tError:
       message*:  string
-    of tTupleElement, tSoftmax:
+    of tTupleElement, tConcat:
       index:     int
     of tReshape, tBroadcast, tCollapse, tTranspose, tNarrow, tRngUniform, tRngNormal, tReduce, tReduceSum, 
        tReduceMin, tReduceMax, tArgmin, tArgmax:
@@ -91,7 +96,6 @@ type
     ## A Computation wraps the constructed graph after it has been finalised.
     ## The nodes sequence is a distinct list of nodes in order in which they were declared.
     ## params contatins a reference the parameters indexed by the provided index when they were defined.
-    ## The Computation object owns it's xla_computation so it will be freed once it goes out of scope.
     nodes*:  seq[Node]
     params*: seq[Node]
     c: xla_computation
@@ -205,6 +209,19 @@ proc repr*(n: Node): string =
   for arg in n.args:
     result.add "\n" & indent(arg.repr, 2)
 
+proc toString*(n: Node): string =
+  ## Node name and argument names, expanded
+  if n == nil:
+    return "<nil>"
+  case n.kind
+  of tConst, tParam:
+    n.info
+  else:
+    var name = ($n.kind)[1 .. ^1]
+    name.removePrefix("reduce")
+    name[0] = name[0].toLowerAscii
+    name & "(" & map(n.args, x => x.toString).join(", ") & ")"
+
 proc newBuilder*(name: string): Builder =
   ## Create a new builder which is used to generate a new graph. The name is used for debug info.
   trace "new Builder"
@@ -272,7 +289,6 @@ proc `$`*(comp: Computation): string =
       result.add "(" & map(node.args, x => $x.id).join(", ") & ")"
 
 
-
 proc parameter*(b: Builder, dtype: DataType, dims: openarray[int] = [], name = ""): Node =
   ## Create a new parameter with the given shape. The parameter index is set automatically
   ## based on number of parameters set by this builder. If the name is blank then uses p<index> format.
@@ -320,13 +336,17 @@ proc errorNode*(n: Node, message: string): Node =
   ## Node used to record an error e.g. due to invalid input types or shapes.
   errorNode(op_builder(n.op.c), message)
 
+# forward defs
+proc broadcast*(a: Node, dims: openarray[int]): Node
+proc convert*(a: Node, dtype: DataType): Node
+
 proc constant*(b: Builder, lit: Literal): Node =
   ## Create new constant from the given literal
   wrap(constant_literal(b.obj.c, lit.rawPtr), tConst, info="literal")
 
-# forward defs
-proc broadcast*(a: Node, dims: openarray[int]): Node
-proc convert*(a: Node, dtype: DataType): Node
+proc constant*[T: ElemType](b: Builder, t: Tensor[T]): Node =
+  ## Create new constant from the given tensor
+  b.constant(t.toLiteral)
 
 # constant builder
 macro makeConstant(typ: untyped, ctyp: static string): untyped =
@@ -349,7 +369,15 @@ makeConstant(int64, "int64_t")
 makeConstant(float32, "float")
 makeConstant(float64, "double")
 
-proc constant*(b: Builder, value: float, dtype: Datatype): Node =
+proc constant*(b: Builder, value: int): Node =
+  ## Create a new int64 scalar constant
+  b.constant value.int64
+
+proc constant*(b: Builder, value: openarray[int]): Node =
+  ## Create a new int64 vector constant
+  b.constant map(value, x => x.int64)
+
+proc constant*[T: float|int](b: Builder, value: T, dtype: Datatype): Node =
   ## Create a new scalar constant with the given type.
   case dtype
   of I32:
@@ -361,7 +389,14 @@ proc constant*(b: Builder, value: float, dtype: Datatype): Node =
   of F64:
     b.constant(value.float64)
   else:
-    convert(b.constant(value.float32), dtype)
+    when T is float:
+      convert(b.constant(value.float64), dtype)
+    else:
+      convert(b.constant(value.int64), dtype)
+
+template `^`*(b: Builder, value: untyped): Node =
+  ## Shorthand to generate a new constant node
+  b.constant(value)
 
 macro namedConstant(symbol, call, name: untyped, docs: static string) =
   let (b, dtype, dims) = (ident "b", ident "dtype", ident "dims")
@@ -377,14 +412,14 @@ macro namedConstant(symbol, call, name: untyped, docs: static string) =
       `docComment`
       `symbol`(`b`.obj.c, `dtype`, `dims`)
 
-namedConstant(zero, op_zero, "0", 
+namedConstant(zero, op_zero, "0",
   "Create a node with the zero value for the given datatype. This is broadcast to dims if provided.")
-namedConstant(one, op_one, "1", 
+namedConstant(one, op_one, "1",
   "Create a node with the unit value for the given datatype. This is broadcast to dims if provided.")
-namedConstant(minValue, op_min_value, "min_value",  
+namedConstant(minValue, op_min_value, "min_value",
   "Create a node with the minimum value for the given datatype. i.e. -Inf for floating point types." & 
   "This is broadcast to dims if provided.")
-namedConstant(maxValue, op_max_value, "max_value", 
+namedConstant(maxValue, op_max_value, "max_value",
   "Create a node with the maximum value for the given datatype. i.e. +Inf for floating point types." & 
   "This is broadcast to dims if provided.")
 
@@ -466,7 +501,7 @@ proc reshape*(a: Node, dims: varargs[int]): Node =
    result.indices = dims2
 
 proc broadcast*(a: Node, dims: openarray[int]): Node =
-  ## Add new leading dimensions to the input node per 
+  ## Add new leading dimensions to the input node per
   ## [broadcast](https://www.tensorflow.org/xla/operation_semantics#broadcast)
   withDims(dptr, dims):
     result = wrap(op_broadcast(a.op.c, csize_t(dims.len), dptr), tBroadcast, [a], $dims)
@@ -514,6 +549,10 @@ proc select*(a, onTrue, onFalse: Node): Node =
   ## Select values from onTrue where a is true else from onFalse.
   wrap(op_select(a.op.c, onTrue.op.c, onFalse.op.c), tSelect, [a, onTrue, onFalse])
 
+proc clamp*(a, minValue, maxValue: Node): Node =
+  ## Clamp values in a to be between minValue and maxValue.
+  wrap(op_clamp(minValue.op.c, a.op.c, maxValue.op.c), tClamp, [a, minValue, maxValue])
+
 proc rngUniform*(minVal, maxVal: Node, dims: openarray[int]): Node =
   ## Generate a tensor with a uniform random distribution with values from minVal to maxVal and 
   ## given dimensions. Inputs must have the same data type. This is used as the element type for the output.
@@ -529,6 +568,83 @@ proc rngNormal*(mean, stddev: Node, dims: openarray[int]): Node =
     let op = op_rng_normal(mean.op.c, stddev.op.c, cint(mean.dtype), cint(dims.len), dptr)
     result = wrap(op, tRngNormal, [mean, stddev], $dims)
     result.indices = @dims
+
+proc concat*(a: Node, nodes: openarray[Node], axis: int): Node =
+  ## Concatenate the given nodes with a along the given axis.
+  var args = map(nodes, x => x.op.c)
+  let op = op_concat_in_dim(a.op.c, args[0].addr, csize_t(args.len), axis)
+  result = wrap(op, tConcat, nodes, &"axis={axis}")
+  result.index = axis
+
+proc gather*(a, indices: Node): Node =
+  ## Builds a new tensor by taking individual values from the original tensor at the given indices.
+  ## The last dimension in indices should have the same size as the tensor rank, i.e. you can
+  ## think of indices as a 'list' of indexes which we iterate over each one of which describes a position
+  ## in the source array.
+  ##
+  ## For example:
+  ## ```
+  ## a = <f32 2 2>[[1 2]    ix = <i32 3 2>[[1 1]
+  ##                3 4]]                  [0 1]
+  ##                                       [1 0]]
+  ## a.gather(ix) = <f32 3>[4 2 3]`
+  ## ```
+  ##
+  ## This is a simplified version of the [gather](https://www.tensorflow.org/xla/operation_semantics#gather) op.
+  let sliceSizes = repeat(1, a.rank)
+  let axes = toSeq(0 ..< a.rank)
+  let ndims = csize_t(a.rank)
+  withDims(dptr1, axes):
+    withDims(dptr2, sliceSizes):
+      let op = op_gather(a.op.c, indices.op.c,
+                        nil, 0,                     # offset_dims
+                        dptr1, ndims,               # collapsed_slice_dims
+                        dptr1, ndims,               # start_index_map
+                        indices.rank-1,             # index_vector_dim
+                        dptr2, ndims)               # slice_sizes
+      result = wrap(op, tGather, [a, indices])
+
+proc scatter*(a, indices, b: Node, comp: Computation): Node =
+  ## Get the values of input array a at the specified indices and updated with values
+  ## in b using comp. Indices should have shape [n, a.rank] - i.e. each row is an element
+  ## to update and the columns indicate the location in the target vector (which can be repeated.)
+  ##
+  ## This is the opposite of gather. It is a simplified version of the
+  ## [scatter](https://www.tensorflow.org/xla/operation_semantics#scatter) for details.
+  var ixdims = indices.dims
+  if ixdims.len != 2 or ixdims[1] != a.rank:
+    raiseError("Index dimensions for scatter should be [n, a.rank] - got " & $ixdims, a)
+  # reshape indices to [..., x, y] and updates to [..., x]
+  let rankDiff = a.rank - 1
+  if rankDiff > 0:
+    ixdims = repeat(1, rankDiff) & ixdims
+  let indices = indices.reshape(ixdims)
+  let b = b.reshape(ixdims[0 .. ^2])
+  let axes = toSeq(0 ..< a.rank)
+  let ndims = csize_t(a.rank)
+  withDims(dptr, axes):
+    let op = op_scatter(a.op.c, indices.op.c, b.op.c, comp.c,
+                      a.rank,                  # index_vector_dim
+                      nil, 0,                  # update_window_dims
+                      dptr, ndims,             # inserted_window_dims
+                      dptr, ndims)             # scatter_dims_to_operand_dims
+    result = wrap(op, tScatter, [a, indices, b])
+
+proc addAt*(a, indices, b: Node): Node =
+  ## Adds values from array b to array a at the given indices.
+  ##
+  ## For example:
+  ## ```
+  ## a = <f32 2 3>[[1 2 3]    ix = <i64 3 2>[[0 0]   b = <f32 3>[1 2 3]
+  ##               [4 5 6]]                  [1 2]
+  ##                                         [0 0]]
+  ## a.addAt(ix, b) = <f32 2 3>[[5 2 3]
+  ##                             4 5 8]]
+  ## ```
+  ## This is implemented using the scatter op.
+  let b2 = newBuilder("addAt")
+  let sum = b2.build(b2.parameter(a.dtype) + b2.parameter(a.dtype))
+  a.scatter(indices, b, sum)
 
 proc reduce*(a, initValue: Node, comp: Computation, dims: openarray[int] = [], 
             nodeType = tReduce, keepDims = false): Node =
@@ -562,26 +678,41 @@ proc sum*(a: Node, dims: openarray[int] = [], keepDims = false): Node =
   let sum = b2.build(b2.parameter(a.dtype) + b2.parameter(a.dtype))
   reduce(a, b.zero(a.dtype), sum, dims, tReduceSum, keepDims)
 
+proc sum*(a: Node, axis: int, keepDims = false): Node =
+  ## Reduce to sum of elements across the given axis in the input.
+  ## See `reduce<#reduce%2CNode%2CNode%2CComputation%2CopenArray%5Bint%5D>`_ for details
+  sum(a, [axis], keepDims)
+
 proc min*(a: Node, dims: openarray[int] = [], keepDims = false): Node =
-  ## Reduce to minimum value of elements across one or more dimensions in the input. 
+  ## Reduce to minimum value of elements across one or more dimensions in the input.
   ## See `reduce<#reduce%2CNode%2CNode%2CComputation%2CopenArray%5Bint%5D>`_ for details
   let b = op_builder(a.op.c)
   let b2 = newBuilder("reduce")
   let sum = b2.build(min(b2.parameter(a.dtype), b2.parameter(a.dtype)))
   reduce(a, b.maxValue(a.dtype), sum, dims, tReduceMin, keepDims)
 
+proc min*(a: Node, axis: int, keepDims = false): Node =
+  ## Reduce to minimum value of elements across the given axis in the input.
+  ## See `reduce<#reduce%2CNode%2CNode%2CComputation%2CopenArray%5Bint%5D>`_ for details
+  min(a, [axis], keepDims)
+
 proc max*(a: Node, dims: openarray[int] = [], keepDims = false): Node =
-  ## Reduce to maximum value of elements across one or more dimensions in the input. 
+  ## Reduce to maximum value of elements across one or more dimensions in the input.
   ## See `reduce<#reduce%2CNode%2CNode%2CComputation%2CopenArray%5Bint%5D>`_ for details
   let b = op_builder(a.op.c)
   let b2 = newBuilder("reduce")
   let sum = b2.build(max(b2.parameter(a.dtype), b2.parameter(a.dtype)))
   reduce(a, b.minValue(a.dtype), sum, dims, tReduceMax, keepDims)
 
+proc max*(a: Node, axis: int, keepDims = false): Node =
+  ## Reduce to maximum value of elements across the given axis in the input. 
+  ## See `reduce<#reduce%2CNode%2CNode%2CComputation%2CopenArray%5Bint%5D>`_ for details
+  max(a, [axis], keepDims)
+
 macro argMinMax(procName, compare, initVal, opType: untyped): untyped =
   let (a, axis, keepDims, ixType) = (ident "a", ident "axis", ident "keepDims", ident "ixType")
   quote do:
-    proc `procName`*(`a`: Node, `axis`: int, `keepDims` = false, `ixType` = I32): Node =
+    proc `procName`*(`a`: Node, `axis`: int, `keepDims` = false, `ixType` = I64): Node =
       ## Get the indices of the minimum or maxiumum values along the given axis for argmin and argmax respectively.
       ## By default the shape of the result will be as per the input with this axis removed.
       ## If keepDims is set the axis for the reduction is kept in the output with size of 1.
@@ -618,14 +749,6 @@ macro argMinMax(procName, compare, initVal, opType: untyped): untyped =
 argMinMax(argMax, `>=`, minValue, tArgmax)
 argMinMax(argMin, `<=`, maxValue, tArgmin)
 
-proc softmax*(a: Node, axis = -1): Node =
-  ## Softmax operation, shifted for numerical stability. Will apply to the last axis by default.
-  let exp_a = exp(a - a.max([axis], keepDims=true))
-  let sum_a = exp_a.sum([axis], keepDims=true)
-  result = exp_a / sum_a
-  result.kind = tSoftmax
-  result.args = @[a] 
-  result.index = axis
 
 template defn(path, expression: untyped): untyped =
   GradFn(proc(path: Node): Node = expression)
@@ -719,15 +842,15 @@ proc localGrad(b: Builder, n: Node): seq[GradFn] =
     return @[ defn(v, v.transpose(x.indices) ) ]
   of tConvert:
     return @[ defn(v, v.convert(x.dtype) ) ]
-  of tSoftmax:
-    return @[ defn(v, n-v) ]
+  of tGather:
+    let indices = y.reshape(-1, x.rank)
+    return @[ defn(v, b.zero(x.dtype, x.dims).addAt(indices, v) ) ]
   else:
     raiseError("Node type not supported for autograd", n)
 
 proc calcGrads(b: Builder, node, pathValue: Node, inputs: openarray[string], 
                 grads: var openarray[Node], dict: var Table[uint64, Node]) =
   ## Recursively accumulate gradients from node where pathValue is prior value to this point
-  debug "grad at ", node
   for i, fn in b.localGrad(node):
     let input = node.args[i]
     var grad = fn(pathValue)
@@ -736,7 +859,7 @@ proc calcGrads(b: Builder, node, pathValue: Node, inputs: openarray[string],
       dict[id] + grad
     else:
       grad
-    if input.len > 0:
+    if input.len > 0 and not input.noGrad:
       b.calcGrads(input, grad, inputs, grads, dict)
     elif input.kind == tParam:
       let n = inputs.find(input.name)
@@ -744,8 +867,9 @@ proc calcGrads(b: Builder, node, pathValue: Node, inputs: openarray[string],
 
 proc gradient*(b: Builder, output: Node, inputs: openarray[string]): seq[Node] =
   ## Generate the graph to calculate the gradients at each of the given input
-  ## parameters for the graph given by output,
-  ## This returns an sequence of nodes, where each one calculates the gradient 
+  ## parameters for the graph given by output.
+  ##
+  ## This returns a sequence of nodes, where each one calculates the gradient
   ## of the corresponding input node.
   ##
   ## Here's an example of creating an expression and it's backward graph which calculates the gradients.

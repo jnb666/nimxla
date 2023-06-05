@@ -61,6 +61,7 @@ proc reshape*(lit: Literal, dims: varargs[int]): Literal =
   ## Total number of elements in the tensor must be unchanged or will raise an exception.
   ## If one of the dimensions is -1 then this value is inferred from the total number of elements.
   trace "new Literal"
+  let dims = reshapeDims(lit.len, dims)
   result = new Literal
   withDims(dptr, dims):
     let status = literal_reshape(lit.c, dptr, csize_t(dims.len), result.c.addr)

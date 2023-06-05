@@ -698,7 +698,7 @@ xla_op op_gather(const xla_op arg1, const xla_op arg2,
                  const int64_t *offset_dims, size_t noffset_dims,
                  const int64_t *collapsed_slice_dims,
                  size_t ncollapsed_slice_dims, const int64_t *start_index_map,
-                 size_t nstart_index_map, const int64_t *set_index_vector_dim,
+                 size_t nstart_index_map, int64_t index_vector_dim,
                  const int64_t *slice_sizes, size_t nslice_sizes) {
   BEGIN_PROTECT_OP
   GatherDimensionNumbers dn;
@@ -711,11 +711,30 @@ xla_op op_gather(const xla_op arg1, const xla_op arg2,
   for (size_t i = 0; i < nstart_index_map; ++i) {
     dn.add_start_index_map(start_index_map[i]);
   }
-  if (set_index_vector_dim) {
-    dn.set_index_vector_dim(*set_index_vector_dim);
-  }
+  dn.set_index_vector_dim(index_vector_dim);
   auto ss = absl::Span<const int64_t>(slice_sizes, nslice_sizes);
   return new XlaOp(Gather(*arg1, *arg2, dn, ss));
+  END_PROTECT_OP(arg1)
+}
+
+xla_op op_scatter(const xla_op arg1, const xla_op arg2, const xla_op arg3,
+                  const xla_computation comp, int64_t index_vector_dim,
+                  const int64_t *update_window_dims, size_t nupdate_window_dims, 
+                  const int64_t *inserted_window_dims, size_t ninserted_window_dims,
+                  const int64_t *sdims_to_operand_dims, size_t nsdims_to_operand_dims) {
+  BEGIN_PROTECT_OP
+  ScatterDimensionNumbers dn;
+  dn.set_index_vector_dim(index_vector_dim);
+  for (size_t i = 0; i < nupdate_window_dims; ++i) {
+    dn.add_update_window_dims(update_window_dims[i]);
+  }
+  for (size_t i = 0; i < ninserted_window_dims; ++i) {
+    dn.add_inserted_window_dims(inserted_window_dims[i]);
+  }
+  for (size_t i = 0; i < nsdims_to_operand_dims; ++i) {
+    dn.add_scatter_dims_to_operand_dims(sdims_to_operand_dims[i]);
+  }
+  return new XlaOp(Scatter(*arg1, *arg2, *arg3, *comp, dn, false));
   END_PROTECT_OP(arg1)
 }
 
