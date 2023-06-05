@@ -172,13 +172,13 @@ window.addEventListener('DOMContentLoaded', main);
   </ul>
   <ul class="simple nested-toc-section">lit
       <li><a class="reference" href="#lit%2Cint32"
-    title="lit(value`gensym66: int32): Literal">lit(value`gensym66: int32): Literal</a></li>
+    title="lit(value`gensym60: int32): Literal">lit(value`gensym60: int32): Literal</a></li>
   <li><a class="reference" href="#lit%2Cint64"
-    title="lit(value`gensym68: int64): Literal">lit(value`gensym68: int64): Literal</a></li>
+    title="lit(value`gensym62: int64): Literal">lit(value`gensym62: int64): Literal</a></li>
   <li><a class="reference" href="#lit%2Cfloat32"
-    title="lit(value`gensym70: float32): Literal">lit(value`gensym70: float32): Literal</a></li>
+    title="lit(value`gensym64: float32): Literal">lit(value`gensym64: float32): Literal</a></li>
   <li><a class="reference" href="#lit%2Cfloat64"
-    title="lit(value`gensym72: float64): Literal">lit(value`gensym72: float64): Literal</a></li>
+    title="lit(value`gensym66: float64): Literal">lit(value`gensym66: float64): Literal</a></li>
 
   </ul>
   <ul class="simple nested-toc-section">newLiteral
@@ -259,9 +259,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 Convert to a tensor and pretty print the result. will convert the data type if needed to cast to a supported tensor type.
 &nbsp;&nbsp;<a
-href="https://github.com/jnb666/nimxla/tree/main/src/nimxla/literal.nim#L141"
+href="https://github.com/jnb666/nimxla/tree/main/src/nimxla/literal.nim#L142"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/jnb666/nimxla/edit/devel/src/nimxla/literal.nim#L141" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/jnb666/nimxla/edit/devel/src/nimxla/literal.nim#L142" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -296,9 +296,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 Convert type of each element. Allocates a new literal with the result. will raise an XLAError exception if conversion fails. Just returns the orginal tensor if the data type is already matching.
 &nbsp;&nbsp;<a
-href="https://github.com/jnb666/nimxla/tree/main/src/nimxla/literal.nim#L69"
+href="https://github.com/jnb666/nimxla/tree/main/src/nimxla/literal.nim#L70"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/jnb666/nimxla/edit/devel/src/nimxla/literal.nim#L69" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/jnb666/nimxla/edit/devel/src/nimxla/literal.nim#L70" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -308,9 +308,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 Decompose a literal containing a tuple into a seq of literals. If input is not a tuple then returns a single element sequence.
 &nbsp;&nbsp;<a
-href="https://github.com/jnb666/nimxla/tree/main/src/nimxla/literal.nim#L116"
+href="https://github.com/jnb666/nimxla/tree/main/src/nimxla/literal.nim#L117"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/jnb666/nimxla/edit/devel/src/nimxla/literal.nim#L116" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/jnb666/nimxla/edit/devel/src/nimxla/literal.nim#L117" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -333,9 +333,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 Convert to float32 Tensor. Data type must be F32.
 &nbsp;&nbsp;<a
-href="https://github.com/jnb666/nimxla/tree/main/src/nimxla/literal.nim#L108"
+href="https://github.com/jnb666/nimxla/tree/main/src/nimxla/literal.nim#L109"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/jnb666/nimxla/edit/devel/src/nimxla/literal.nim#L108" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/jnb666/nimxla/edit/devel/src/nimxla/literal.nim#L109" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -346,9 +346,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 Convert to float64 Tensor. Data type must be F64.
 &nbsp;&nbsp;<a
-href="https://github.com/jnb666/nimxla/tree/main/src/nimxla/literal.nim#L112"
+href="https://github.com/jnb666/nimxla/tree/main/src/nimxla/literal.nim#L113"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/jnb666/nimxla/edit/devel/src/nimxla/literal.nim#L112" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/jnb666/nimxla/edit/devel/src/nimxla/literal.nim#L113" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -358,9 +358,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 Convert to int32 Tensor. Data type must be I32.
 &nbsp;&nbsp;<a
-href="https://github.com/jnb666/nimxla/tree/main/src/nimxla/literal.nim#L100"
+href="https://github.com/jnb666/nimxla/tree/main/src/nimxla/literal.nim#L101"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/jnb666/nimxla/edit/devel/src/nimxla/literal.nim#L100" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/jnb666/nimxla/edit/devel/src/nimxla/literal.nim#L101" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -370,9 +370,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 Convert to int64 Tensor. Data type must by I64.
 &nbsp;&nbsp;<a
-href="https://github.com/jnb666/nimxla/tree/main/src/nimxla/literal.nim#L104"
+href="https://github.com/jnb666/nimxla/tree/main/src/nimxla/literal.nim#L105"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/jnb666/nimxla/edit/devel/src/nimxla/literal.nim#L104" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/jnb666/nimxla/edit/devel/src/nimxla/literal.nim#L105" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -389,19 +389,7 @@ class="link-seesrc" target="_blank">Source</a>
 </dd>
 </div>
 <div id="lit,int32">
-<dt><pre><span class="Keyword">proc</span> <a href="#lit%2Cint32"><span class="Identifier">lit</span></a><span class="Other">(</span><span class="Identifier">value`gensym66</span><span class="Other">:</span> <span class="Identifier">int32</span><span class="Other">)</span><span class="Other">:</span> <a href="literal.html#Literal"><span class="Identifier">Literal</span></a> {.<span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span>.}</pre></dt>
-<dd>
-
-Create new scalar literal from the given value.
-&nbsp;&nbsp;<a
-href="https://github.com/jnb666/nimxla/tree/main/src/nimxla/literal.nim#L176"
-class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/jnb666/nimxla/edit/devel/src/nimxla/literal.nim#L176" class="link-seesrc" target="_blank" >Edit</a>
-
-</dd>
-</div>
-<div id="lit,int64">
-<dt><pre><span class="Keyword">proc</span> <a href="#lit%2Cint64"><span class="Identifier">lit</span></a><span class="Other">(</span><span class="Identifier">value`gensym68</span><span class="Other">:</span> <span class="Identifier">int64</span><span class="Other">)</span><span class="Other">:</span> <a href="literal.html#Literal"><span class="Identifier">Literal</span></a> {.<span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span>.}</pre></dt>
+<dt><pre><span class="Keyword">proc</span> <a href="#lit%2Cint32"><span class="Identifier">lit</span></a><span class="Other">(</span><span class="Identifier">value`gensym60</span><span class="Other">:</span> <span class="Identifier">int32</span><span class="Other">)</span><span class="Other">:</span> <a href="literal.html#Literal"><span class="Identifier">Literal</span></a> {.<span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span>.}</pre></dt>
 <dd>
 
 Create new scalar literal from the given value.
@@ -412,8 +400,8 @@ class="link-seesrc" target="_blank">Source</a>
 
 </dd>
 </div>
-<div id="lit,float32">
-<dt><pre><span class="Keyword">proc</span> <a href="#lit%2Cfloat32"><span class="Identifier">lit</span></a><span class="Other">(</span><span class="Identifier">value`gensym70</span><span class="Other">:</span> <span class="Identifier">float32</span><span class="Other">)</span><span class="Other">:</span> <a href="literal.html#Literal"><span class="Identifier">Literal</span></a> {.<span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span>.}</pre></dt>
+<div id="lit,int64">
+<dt><pre><span class="Keyword">proc</span> <a href="#lit%2Cint64"><span class="Identifier">lit</span></a><span class="Other">(</span><span class="Identifier">value`gensym62</span><span class="Other">:</span> <span class="Identifier">int64</span><span class="Other">)</span><span class="Other">:</span> <a href="literal.html#Literal"><span class="Identifier">Literal</span></a> {.<span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span>.}</pre></dt>
 <dd>
 
 Create new scalar literal from the given value.
@@ -424,8 +412,8 @@ class="link-seesrc" target="_blank">Source</a>
 
 </dd>
 </div>
-<div id="lit,float64">
-<dt><pre><span class="Keyword">proc</span> <a href="#lit%2Cfloat64"><span class="Identifier">lit</span></a><span class="Other">(</span><span class="Identifier">value`gensym72</span><span class="Other">:</span> <span class="Identifier">float64</span><span class="Other">)</span><span class="Other">:</span> <a href="literal.html#Literal"><span class="Identifier">Literal</span></a> {.<span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span>.}</pre></dt>
+<div id="lit,float32">
+<dt><pre><span class="Keyword">proc</span> <a href="#lit%2Cfloat32"><span class="Identifier">lit</span></a><span class="Other">(</span><span class="Identifier">value`gensym64</span><span class="Other">:</span> <span class="Identifier">float32</span><span class="Other">)</span><span class="Other">:</span> <a href="literal.html#Literal"><span class="Identifier">Literal</span></a> {.<span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span>.}</pre></dt>
 <dd>
 
 Create new scalar literal from the given value.
@@ -433,6 +421,18 @@ Create new scalar literal from the given value.
 href="https://github.com/jnb666/nimxla/tree/main/src/nimxla/literal.nim#L179"
 class="link-seesrc" target="_blank">Source</a>
 &nbsp;&nbsp;<a href="https://github.com/jnb666/nimxla/edit/devel/src/nimxla/literal.nim#L179" class="link-seesrc" target="_blank" >Edit</a>
+
+</dd>
+</div>
+<div id="lit,float64">
+<dt><pre><span class="Keyword">proc</span> <a href="#lit%2Cfloat64"><span class="Identifier">lit</span></a><span class="Other">(</span><span class="Identifier">value`gensym66</span><span class="Other">:</span> <span class="Identifier">float64</span><span class="Other">)</span><span class="Other">:</span> <a href="literal.html#Literal"><span class="Identifier">Literal</span></a> {.<span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span>.}</pre></dt>
+<dd>
+
+Create new scalar literal from the given value.
+&nbsp;&nbsp;<a
+href="https://github.com/jnb666/nimxla/tree/main/src/nimxla/literal.nim#L180"
+class="link-seesrc" target="_blank">Source</a>
+&nbsp;&nbsp;<a href="https://github.com/jnb666/nimxla/edit/devel/src/nimxla/literal.nim#L180" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -492,9 +492,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 Create a new literal form the provided tensor shape and data. Will raise an XLAError exception if the copy fails.
 &nbsp;&nbsp;<a
-href="https://github.com/jnb666/nimxla/tree/main/src/nimxla/literal.nim#L79"
+href="https://github.com/jnb666/nimxla/tree/main/src/nimxla/literal.nim#L80"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/jnb666/nimxla/edit/devel/src/nimxla/literal.nim#L79" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/jnb666/nimxla/edit/devel/src/nimxla/literal.nim#L80" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -504,9 +504,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 Create a new tensor form the provided literal. Will raise an XLAError exception if the data type of source and destination do not match.
 &nbsp;&nbsp;<a
-href="https://github.com/jnb666/nimxla/tree/main/src/nimxla/literal.nim#L90"
+href="https://github.com/jnb666/nimxla/tree/main/src/nimxla/literal.nim#L91"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/jnb666/nimxla/edit/devel/src/nimxla/literal.nim#L90" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/jnb666/nimxla/edit/devel/src/nimxla/literal.nim#L91" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -520,7 +520,7 @@ class="link-seesrc" target="_blank">Source</a>
       <div class="twelve-columns footer">
         <span class="nim-sprite"></span>
         <br/>
-        <small style="color: var(--hint);">Made with Nim. Generated: 2023-06-01 17:03:19 UTC</small>
+        <small style="color: var(--hint);">Made with Nim. Generated: 2023-06-05 12:41:29 UTC</small>
       </div>
     </div>
   </div>

@@ -50,7 +50,6 @@ Each object on the C++ side is wrapped in a Nim object with a corresponding dest
 XLA headers and shared library only. No nim module dependencies outside the standard library.
 
 ## TODO
-- linear regression example
 - complete autograd for all of the defined ops
 - additonal op types: convolutions, control flow etc.
 - higher level neural network module

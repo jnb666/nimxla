@@ -30,7 +30,6 @@ tCollapse	graph.html#tCollapse	OpType.tCollapse
 tTranspose	graph.html#tTranspose	OpType.tTranspose	
 tNarrow	graph.html#tNarrow	OpType.tNarrow	
 tConvert	graph.html#tConvert	OpType.tConvert	
-tSoftmax	graph.html#tSoftmax	OpType.tSoftmax	
 tReduceSum	graph.html#tReduceSum	OpType.tReduceSum	
 tReduceMin	graph.html#tReduceMin	OpType.tReduceMin	
 tReduceMax	graph.html#tReduceMax	OpType.tReduceMax	
@@ -56,8 +55,12 @@ tLt	graph.html#tLt	OpType.tLt
 tRngUniform	graph.html#tRngUniform	OpType.tRngUniform	
 tRngNormal	graph.html#tRngNormal	OpType.tRngNormal	
 tReduce	graph.html#tReduce	OpType.tReduce	
+tGather	graph.html#tGather	OpType.tGather	
 tSelect	graph.html#tSelect	OpType.tSelect	
+tClamp	graph.html#tClamp	OpType.tClamp	
 tTuple	graph.html#tTuple	OpType.tTuple	
+tConcat	graph.html#tConcat	OpType.tConcat	
+tScatter	graph.html#tScatter	OpType.tScatter	
 OpType	graph.html#OpType	graph: OpType	
 Builder	graph.html#Builder	graph: Builder	
 Node	graph.html#Node	graph: Node	
@@ -69,6 +72,7 @@ dims	graph.html#dims,Node	graph: dims(n: Node): seq[int]
 len	graph.html#len,Node	graph: len(n: Node): int	
 `$`	graph.html#$,Node	graph: `$`(n: Node): string	
 repr	graph.html#repr,Node	graph: repr(n: Node): string	
+toString	graph.html#toString,Node	graph: toString(n: Node): string	
 newBuilder	graph.html#newBuilder,string	graph: newBuilder(name: string): Builder	
 build	graph.html#build,Builder,Node	graph: build(b: Builder; root: Node): Computation	
 last	graph.html#last,Computation	graph: last(comp: Computation): Node	
@@ -81,6 +85,7 @@ makeTuple	graph.html#makeTuple,Builder,varargs[Node]	graph: makeTuple(b: Builder
 iota	graph.html#iota,Builder,DataType,openArray[int],int	graph: iota(b: Builder; dtype: DataType; dims: openArray[int]; axis: int): Node	
 errorNode	graph.html#errorNode,Node,string	graph: errorNode(n: Node; message: string): Node	
 constant	graph.html#constant,Builder,Literal	graph: constant(b: Builder; lit: Literal): Node	
+constant	graph.html#constant,Builder,Tensor[T: ElemType]	graph: constant[T: ElemType](b: Builder; t: Tensor[T]): Node	
 constant	graph.html#constant,Builder,int32	graph: constant(b: Builder; value: int32): Node	
 constant	graph.html#constant,Builder,	graph: constant(b: Builder; value: openArray[int32]): Node	
 constant	graph.html#constant,Builder,int64	graph: constant(b: Builder; value: int64): Node	
@@ -89,7 +94,10 @@ constant	graph.html#constant,Builder,float32	graph: constant(b: Builder; value: 
 constant	graph.html#constant,Builder,_3	graph: constant(b: Builder; value: openArray[float32]): Node	
 constant	graph.html#constant,Builder,float64	graph: constant(b: Builder; value: float64): Node	
 constant	graph.html#constant,Builder,_4	graph: constant(b: Builder; value: openArray[float64]): Node	
-constant	graph.html#constant,Builder,float,DataType	graph: constant(b: Builder; value: float; dtype: DataType): Node	
+constant	graph.html#constant,Builder,int	graph: constant(b: Builder; value: int): Node	
+constant	graph.html#constant,Builder,openArray[int]	graph: constant(b: Builder; value: openArray[int]): Node	
+constant	graph.html#constant,Builder,T,DataType	graph: constant[T: float | int](b: Builder; value: T; dtype: DataType): Node	
+`^`	graph.html#^.t,Builder,untyped	graph: `^`(b: Builder; value: untyped): Node	
 zero	graph.html#zero,Builder,enum	graph: zero(b: Builder; dtype = F32; dims: openArray[int] = []): Node	
 one	graph.html#one,Builder,enum	graph: one(b: Builder; dtype = F32; dims: openArray[int] = []): Node	
 minValue	graph.html#minValue,Builder,enum	graph: minValue(b: Builder; dtype = F32; dims: openArray[int] = []): Node	
@@ -139,13 +147,20 @@ collapse	graph.html#collapse,Node,openArray[int]	graph: collapse(a: Node; dims: 
 transpose	graph.html#transpose,Node,varargs[int]	graph: transpose(a: Node; axes: varargs[int]): Node	
 narrow	graph.html#narrow,Node,int,int,int,int	graph: narrow(a: Node; dim, start, stop: int; stride = 1): Node	
 select	graph.html#select,Node,Node,Node	graph: select(a, onTrue, onFalse: Node): Node	
+clamp	graph.html#clamp,Node,Node,Node	graph: clamp(a, minValue, maxValue: Node): Node	
 rngUniform	graph.html#rngUniform,Node,Node,openArray[int]	graph: rngUniform(minVal, maxVal: Node; dims: openArray[int]): Node	
 rngNormal	graph.html#rngNormal,Node,Node,openArray[int]	graph: rngNormal(mean, stddev: Node; dims: openArray[int]): Node	
+concat	graph.html#concat,Node,openArray[Node],int	graph: concat(a: Node; nodes: openArray[Node]; axis: int): Node	
+gather	graph.html#gather,Node,Node	graph: gather(a, indices: Node): Node	
+scatter	graph.html#scatter,Node,Node,Node,Computation	graph: scatter(a, indices, b: Node; comp: Computation): Node	
+addAt	graph.html#addAt,Node,Node,Node	graph: addAt(a, indices, b: Node): Node	
 reduce	graph.html#reduce,Node,Node,Computation,openArray[int]	graph: reduce(a, initValue: Node; comp: Computation; dims: openArray[int] = [];\n       nodeType = tReduce; keepDims = false): Node	
 sum	graph.html#sum,Node,openArray[int]	graph: sum(a: Node; dims: openArray[int] = []; keepDims = false): Node	
+sum	graph.html#sum,Node,int	graph: sum(a: Node; axis: int; keepDims = false): Node	
 min	graph.html#min,Node,openArray[int]	graph: min(a: Node; dims: openArray[int] = []; keepDims = false): Node	
+min	graph.html#min,Node,int	graph: min(a: Node; axis: int; keepDims = false): Node	
 max	graph.html#max,Node,openArray[int]	graph: max(a: Node; dims: openArray[int] = []; keepDims = false): Node	
-argMax	graph.html#argMax,Node,int,bool,enum	graph: argMax(a: Node; axis: int; keepDims = false; ixType = I32): Node	
-argMin	graph.html#argMin,Node,int,bool,enum	graph: argMin(a: Node; axis: int; keepDims = false; ixType = I32): Node	
-softmax	graph.html#softmax,Node,int	graph: softmax(a: Node; axis = -1): Node	
+max	graph.html#max,Node,int	graph: max(a: Node; axis: int; keepDims = false): Node	
+argMax	graph.html#argMax,Node,int,bool,enum	graph: argMax(a: Node; axis: int; keepDims = false; ixType = I64): Node	
+argMin	graph.html#argMin,Node,int,bool,enum	graph: argMin(a: Node; axis: int; keepDims = false; ixType = I64): Node	
 gradient	graph.html#gradient,Builder,Node,openArray[string]	graph: gradient(b: Builder; output: Node; inputs: openArray[string]): seq[Node]	

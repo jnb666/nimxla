@@ -19,6 +19,11 @@ newBuffer	nimxla.html#newBuffer,Client,Tensor[T: ElemType],int	nimxla: newBuffer
 shape	nimxla.html#shape,Buffer	nimxla: shape(buf: Buffer): Shape	
 toLiteral	nimxla.html#toLiteral,Buffer	nimxla: toLiteral(buf: Buffer): Literal	
 toTensor	nimxla.html#toTensor,Buffer	nimxla: toTensor[T: ElemType](buf: Buffer): Tensor[T]	
+i32	nimxla.html#i32,Buffer	nimxla: i32(buf: Buffer): Tensor[int32]	
+i64	nimxla.html#i64,Buffer	nimxla: i64(buf: Buffer): Tensor[int64]	
+f32	nimxla.html#f32,Buffer	nimxla: f32(buf: Buffer): Tensor[float32]	
+f64	nimxla.html#f64,Buffer	nimxla: f64(buf: Buffer): Tensor[float64]	
+boolean	nimxla.html#boolean,Buffer	nimxla: boolean(buf: Buffer): Tensor[bool]	
 `$`	nimxla.html#$,Buffer	nimxla: `$`(buf: Buffer): string	
 compile	nimxla.html#compile,Client,Computation	nimxla: compile(client: Client; comp: Computation): Executable	
 `$`	nimxla.html#$,Executable	nimxla: `$`(exec: Executable): string	
@@ -27,3 +32,7 @@ runAndUnpack	nimxla.html#runAndUnpack,Executable	nimxla: runAndUnpack(exec: Exec
 run	nimxla.html#run,Executable,openArray[T]	nimxla: run[T: Buffer | Literal](exec: Executable; args: openArray[T]; checkShape = true): Buffer	
 run	nimxla.html#run,Executable	nimxla: run(exec: Executable; checkShape = true): Buffer	
 toLiterals	nimxla.html#toLiterals,openArray[Buffer]	nimxla: toLiterals(buffers: openArray[Buffer]): seq[Literal]	
+tuple2	nimxla.html#tuple2,openArray[Buffer]	nimxla: tuple2(res: openArray[Buffer]): (Buffer, Buffer)	
+tuple3	nimxla.html#tuple3,openArray[Buffer]	nimxla: tuple3(res: openArray[Buffer]): (Buffer, Buffer, Buffer)	
+tuple4	nimxla.html#tuple4,openArray[Buffer]	nimxla: tuple4(res: openArray[Buffer]): (Buffer, Buffer, Buffer, Buffer)	
+tuple5	nimxla.html#tuple5,openArray[Buffer]	nimxla: tuple5(res: openArray[Buffer]): (Buffer, Buffer, Buffer, Buffer, Buffer)	
