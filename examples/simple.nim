@@ -10,7 +10,7 @@ echo c
 # build the computation graph
 let b = newBuilder("example")
 let x = b.parameter(F32, [50], "x")
-let sum = x * x + b.constant(10f32)
+let sum = x * x + b^10f32
 let comp = b.build sum.reshape(10, 5).transpose
 # dump op info for debugging and compile to executable
 echo comp
