@@ -41,6 +41,11 @@ type
     indent:  int
     newline: int
 
+  LiteralArray = object
+    typ:    string
+    shape:  seq[int]
+    value:  NimNode
+
 
 # memory management
 proc `=copy`[T](a: var TensorDataObj[T], b: TensorDataObj[T]) {.error.}
@@ -110,14 +115,8 @@ proc toTensor*[T: ElemType](slice: HSlice[int, int]): Tensor[T] =
     result.data.arr[i] = T(value)
     i += 1
 
-
-type
-  LiteralArray = object
-    typ:    string
-    shape:  seq[int]
-    value:  NimNode
-
 proc parseLiteral(n: NimNode, first = false): LiteralArray =
+  ## helper for @@ macro
   case n.kind
   of nnkFloatLit, nnkFloat64Lit:
     return LiteralArray(typ: "float64", value: n)
@@ -230,6 +229,12 @@ proc reshape*[T: ElemType](t: Tensor[T], dims: varargs[int]): Tensor[T] =
     raise newException(IndexDefect, "cannot reshape tensor - size is changed")
   result = t
   result.dims = @dims
+
+proc convert*[T: ElemType](t: Tensor[T], typ: typedesc[ElemType]): Tensor[typ] =
+  ## Makes a copy of the tensor with elements converted to typ.
+  result = newTensor[typ](t.dims)
+  for i in 0 ..< t.len:
+    result.data.arr[i] = typ(t.data.arr[i])
 
 # formatting utils
 var printOpts = FormatOpts(minWidth:8, precision:6, threshold:1000, edgeitems:4)

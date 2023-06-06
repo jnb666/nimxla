@@ -23,7 +23,7 @@ runnableExamples:
   echo res
 
 
-import std/[os, sugar, strformat, strutils, sequtils, sugar, macros, logging]
+import std/[os, sugar, strformat, strutils, sequtils, sugar, macros, logging, tables]
 import nimxla/[graph, tensor, literal, shape]
 import nimxla/private/[xla_wrapper, utils]
 
@@ -41,6 +41,9 @@ type
   Buffer* = ref BufferObj
     ## Buffer represents the device memory allocated by the client for a given tensor or tuple of tensors.
 
+  Params* = Table[string, Buffer]
+    ## Set of named input parameters for an executable call.
+
   ExecutableObj = object
     c:  pjrt_loaded_executable
 
@@ -48,6 +51,7 @@ type
     ## An executable is a compiled graph of operations which can be called with a defined list of parameters.
     name*:     string
     params*:   seq[string]
+    outputs*:  seq[string]
     inShapes*: seq[Shape]
     outShape*: Shape
     obj: ref ExecutableObj
@@ -214,7 +218,11 @@ proc `$`*(buf: Buffer): string =
   ## Print shape info
   "buffer::" & $buf.shape
 
-proc compile*(client: Client, comp: Computation): Executable =
+proc noutputs*(exec: Executable): int =
+  ## If output is a tuple then tuple length, else 1
+  if exec.outShape.kind == TupleKind: exec.outShape.elems.len else: 1
+
+proc compile*(client: Client, comp: Computation, outputs: openarray[string] = []): Executable =
   ## Compile a computation so that it can be executed on this client.
   trace "new Executable"
   result.obj = new ExecutableObj
@@ -228,13 +236,26 @@ proc compile*(client: Client, comp: Computation): Executable =
     result.params.add param.name
     result.inShapes.add param.shape
   result.outShape = comp.last.shape
+  let nout = result.noutputs
+  if outputs.len > 0:
+    if outputs.len != nout:
+      raiseError("incorrect number of output parameters given", comp.last)
+    result.outputs = @outputs
+  else:
+    result.outputs = map(toSeq(0 ..< nout), x => "result" & $x)
 
 proc `$`*(exec: Executable): string =
   # returns info on the shapes of the input and output parameters
   var params: seq[string]
   for (name, shape) in zip(exec.params, exec.inShapes):
     params.add name & ":" & $shape
-  exec.name & "(" & params.join(", ") & ") => " & $exec.outShape
+  var output = $exec.outShape
+  if exec.outShape.kind == TupleKind:
+    let list = collect:
+      for (name, shape) in zip(exec.outputs, exec.outShape.elems):
+        name & ":" & $shape
+    output =  "(" & list.join(", ") & ")"
+  exec.name & "(" & params.join(", ") & ") => " & output
 
 # execute kernel
 template makeExecute(T: typedesc, ctype, ccall: untyped): untyped =
@@ -318,6 +339,21 @@ proc run*(exec: Executable, checkShape = true): Buffer =
   var args: seq[Buffer]
   execute(exec, args, outputs.addr, false)
   firstOutput(outputs)
+
+proc initParams*(pairs: openarray[(string, Buffer)]): Params =
+  ## Create new parameter list
+  pairs.toTable
+
+proc runWith*(exec: Executable, params: var Params, checkShape = true) =
+  ## Run executable with given set of named input parameters.  
+  ## Updates params table with outputs as named when compile was called, or using result<n> format
+  ## if no names were given.
+  var args: seq[Buffer]
+  for name in exec.params:
+    args.add params[name]
+  let res = runAndUnpack(exec, args, checkShape)
+  for i, name in exec.outputs:
+    params[name] = res[i]
 
 proc toLiterals*(buffers: openarray[Buffer]): seq[Literal] =
   ## Copy list of buffers back to host
