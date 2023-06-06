@@ -17,6 +17,7 @@ toTensor	tensor.html#toTensor,HSlice[int,int]	tensor: toTensor[T: ElemType](slic
 toSeq	tensor.html#toSeq,Tensor[T: ElemType]	tensor: toSeq[T: ElemType](t: Tensor[T]): seq[T]	
 clone	tensor.html#clone,Tensor[T: ElemType]	tensor: clone[T: ElemType](t: Tensor[T]): Tensor[T]	
 reshape	tensor.html#reshape,Tensor[T: ElemType],varargs[int]	tensor: reshape[T: ElemType](t: Tensor[T]; dims: varargs[int]): Tensor[T]	
+convert	tensor.html#convert,Tensor[T: ElemType],typedesc[ElemType]	tensor: convert[T: ElemType](t: Tensor[T]; typ: typedesc[ElemType]): Tensor[typ]	
 setPrintOpts	tensor.html#setPrintOpts,int,int,int,int	tensor: setPrintOpts(minWidth = 8; precision = 6; floatMode = ffDefault;\n             threshold = 1000; edgeitems = 4)	
 format	tensor.html#format,Tensor[T: ElemType]	tensor: format[T: ElemType](t: Tensor[T]): string	
 `$`	tensor.html#$,Tensor[T: ElemType]	tensor: `$`[T: ElemType](t: Tensor[T]): string	

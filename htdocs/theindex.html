@@ -253,7 +253,7 @@ window.addEventListener('DOMContentLoaded', main);
           </ul></dd>
 <dt><a name="compile" href="#compile"><span>compile:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
-          data-doc-search-tag="nimxla: compile(client: Client; comp: Computation): Executable" href="nimxla.html#compile%2CClient%2CComputation">nimxla: compile(client: Client; comp: Computation): Executable</a></li>
+          data-doc-search-tag="nimxla: compile(client: Client; comp: Computation; outputs: openArray[string] = []): Executable" href="nimxla.html#compile%2CClient%2CComputation%2CopenArray%5Bstring%5D">nimxla: compile(client: Client; comp: Computation; outputs: openArray[string] = []): Executable</a></li>
           </ul></dd>
 <dt><a name="Computation" href="#Computation"><span>Computation:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
@@ -296,6 +296,8 @@ window.addEventListener('DOMContentLoaded', main);
           data-doc-search-tag="graph: convert(a: Node; dtype: DataType): Node" href="graph.html#convert%2CNode%2CDataType">graph: convert(a: Node; dtype: DataType): Node</a></li>
           <li><a class="reference external"
           data-doc-search-tag="literal: convert(lit: Literal; dtype: DataType): Literal" href="literal.html#convert%2CLiteral%2CDataType">literal: convert(lit: Literal; dtype: DataType): Literal</a></li>
+          <li><a class="reference external"
+          data-doc-search-tag="tensor: convert[T: ElemType](t: Tensor[T]; typ: typedesc[ElemType]): Tensor[typ]" href="tensor.html#convert%2CTensor%5BT%3A%20ElemType%5D%2Ctypedesc%5BElemType%5D">tensor: convert[T: ElemType](t: Tensor[T]; typ: typedesc[ElemType]): Tensor[typ]</a></li>
           </ul></dd>
 <dt><a name="copy" href="#copy"><span>copy:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
@@ -439,6 +441,10 @@ window.addEventListener('DOMContentLoaded', main);
 <li><a class="reference external"
           data-doc-search-tag="LogLevel.Info" href="nimxla.html#Info">LogLevel.Info</a></li>
           </ul></dd>
+<dt><a name="initParams" href="#initParams"><span>initParams:</span></a></dt><dd><ul class="simple">
+<li><a class="reference external"
+          data-doc-search-tag="nimxla: initParams(pairs: openArray[(string, Buffer)]): Params" href="nimxla.html#initParams%2CopenArray%5B%5D">nimxla: initParams(pairs: openArray[(string, Buffer)]): Params</a></li>
+          </ul></dd>
 <dt><a name="InvalidType" href="#InvalidType"><span>InvalidType:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
           data-doc-search-tag="DataType.InvalidType" href="shape.html#InvalidType">DataType.InvalidType</a></li>
@@ -539,6 +545,8 @@ window.addEventListener('DOMContentLoaded', main);
           </ul></dd>
 <dt><a name="newBuffer" href="#newBuffer"><span>newBuffer:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
+          data-doc-search-tag="nimxla: newBuffer(client: Client; dtype: DataType; dims: openArray[int]): Buffer" href="nimxla.html#newBuffer%2CClient%2CDataType%2CopenArray%5Bint%5D">nimxla: newBuffer(client: Client; dtype: DataType; dims: openArray[int]): Buffer</a></li>
+          <li><a class="reference external"
           data-doc-search-tag="nimxla: newBuffer(client: Client; lit: Literal; device = 0): Buffer" href="nimxla.html#newBuffer%2CClient%2CLiteral%2Cint">nimxla: newBuffer(client: Client; lit: Literal; device = 0): Buffer</a></li>
           <li><a class="reference external"
           data-doc-search-tag="nimxla: newBuffer[T: ElemType](client: Client; t: Tensor[T]; device = 0): Buffer" href="nimxla.html#newBuffer%2CClient%2CTensor%5BT%3A%20ElemType%5D%2Cint">nimxla: newBuffer[T: ElemType](client: Client; t: Tensor[T]; device = 0): Buffer</a></li>
@@ -571,6 +579,10 @@ window.addEventListener('DOMContentLoaded', main);
 <li><a class="reference external"
           data-doc-search-tag="graph: Node" href="graph.html#Node">graph: Node</a></li>
           </ul></dd>
+<dt><a name="noutputs" href="#noutputs"><span>noutputs:</span></a></dt><dd><ul class="simple">
+<li><a class="reference external"
+          data-doc-search-tag="nimxla: noutputs(exec: Executable): int" href="nimxla.html#noutputs%2CExecutable">nimxla: noutputs(exec: Executable): int</a></li>
+          </ul></dd>
 <dt><a name="one" href="#one"><span>one:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
           data-doc-search-tag="graph: one(b: Builder; dtype = F32; dims: openArray[int] = []): Node" href="graph.html#one%2CBuilder%2Cenum">graph: one(b: Builder; dtype = F32; dims: openArray[int] = []): Node</a></li>
@@ -590,6 +602,10 @@ window.addEventListener('DOMContentLoaded', main);
 <dt><a name="paramNames" href="#paramNames"><span>paramNames:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
           data-doc-search-tag="graph: paramNames(comp: Computation): seq[string]" href="graph.html#paramNames%2CComputation">graph: paramNames(comp: Computation): seq[string]</a></li>
+          </ul></dd>
+<dt><a name="Params" href="#Params"><span>Params:</span></a></dt><dd><ul class="simple">
+<li><a class="reference external"
+          data-doc-search-tag="nimxla: Params" href="nimxla.html#Params">nimxla: Params</a></li>
           </ul></dd>
 <dt><a name="platformName" href="#platformName"><span>platformName:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
@@ -670,6 +686,10 @@ window.addEventListener('DOMContentLoaded', main);
           data-doc-search-tag="nimxla: runAndUnpack[T: Buffer | Literal](exec: Executable; args: openArray[T];
                                   checkShape = true): seq[Buffer]" href="nimxla.html#runAndUnpack%2CExecutable%2CopenArray%5BT%5D">nimxla: runAndUnpack[T: Buffer | Literal](exec: Executable; args: openArray[T];
                                   checkShape = true): seq[Buffer]</a></li>
+          </ul></dd>
+<dt><a name="runWith" href="#runWith"><span>runWith:</span></a></dt><dd><ul class="simple">
+<li><a class="reference external"
+          data-doc-search-tag="nimxla: runWith(exec: Executable; params: var Params; checkShape = true)" href="nimxla.html#runWith%2CExecutable%2CParams">nimxla: runWith(exec: Executable; params: var Params; checkShape = true)</a></li>
           </ul></dd>
 <dt><a name="scatter" href="#scatter"><span>scatter:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
@@ -1086,7 +1106,7 @@ window.addEventListener('DOMContentLoaded', main);
       <div class="twelve-columns footer">
         <span class="nim-sprite"></span>
         <br/>
-        <small style="color: var(--hint);">Made with Nim. Generated: 2023-06-05 12:41:31 UTC</small>
+        <small style="color: var(--hint);">Made with Nim. Generated: 2023-06-06 15:02:55 UTC</small>
       </div>
     </div>
   </div>
