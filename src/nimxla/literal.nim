@@ -26,7 +26,7 @@ proc `=destroy`(buf: var LiteralObj) =
     buf.c = nil
 
 proc newLiteral*(dtype: DataType, dims: openarray[int]): Literal =
-  ## Allocate a new literal tensor with the given shape.
+  ## Allocate a new literal tensor with the given shape. Initialises values to zero.
   trace "new Literal"
   new result
   withDims(dptr, dims):

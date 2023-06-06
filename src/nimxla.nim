@@ -41,13 +41,16 @@ type
   Buffer* = ref BufferObj
     ## Buffer represents the device memory allocated by the client for a given tensor or tuple of tensors.
 
+  ExecutableObj = object
+    c:  pjrt_loaded_executable
+
   Executable* = object
     ## An executable is a compiled graph of operations which can be called with a defined list of parameters.
     name*:     string
     params*:   seq[string]
     inShapes*: seq[Shape]
     outShape*: Shape
-    c:  pjrt_loaded_executable
+    obj: ref ExecutableObj
 
   ClientObj = object
     c: pjrt_client
@@ -72,14 +75,14 @@ proc `=destroy`(buf: var BufferObj) =
     pjrt_buffer_free(buf.c)
     buf.c = nil
 
-proc `=destroy`(exec: var Executable) =
+proc `=destroy`(exec: var ExecutableObj) =
   if exec.c != nil:
     trace "free Executable"
     pjrt_loaded_executable_free(exec.c)
     exec.c = nil
 
 proc `=copy`(a: var BufferObj, b: BufferObj) {.error.}
-proc `=copy`(a: var Executable, b: Executable) {.error.}
+proc `=copy`(a: var ExecutableObj, b: ExecutableObj) {.error.}
 proc `=copy`(a: var ClientObj, b: ClientObj) {.error.}
 
 
@@ -154,6 +157,10 @@ proc newBuffer*(client: Client, lit: Literal, device = 0): Buffer =
   let status = pjrt_buffer_from_host_literal(client.c, client.devs[device], lit.rawPtr, result.c.addr)
   checkError(status)
 
+proc newBuffer*(client: Client, dtype: DataType, dims: openarray[int]): Buffer =
+  ## Allocate a new buffer on the device with the given shape. Initialises values to zero.
+  client.newBuffer(newLiteral(dtype, dims))
+
 proc newBuffer*[T: ElemType](client: Client, t: Tensor[T], device = 0): Buffer =
   ## Create a new buffer on the device attached to the client and copy source data from a tensor value on the host
   trace "new Buffer"
@@ -210,7 +217,8 @@ proc `$`*(buf: Buffer): string =
 proc compile*(client: Client, comp: Computation): Executable =
   ## Compile a computation so that it can be executed on this client.
   trace "new Executable"
-  let status = compile(client.c, comp.rawPtr, result.c.addr)
+  result.obj = new ExecutableObj
+  let status = compile(client.c, comp.rawPtr, result.obj.c.addr)
   if status != nil:
     let message = $status_error_message(status)
     status_free(status)
@@ -240,7 +248,7 @@ template makeExecute(T: typedesc, ctype, ccall: untyped): untyped =
       argp = cast[ptr `ctype`](alloc(args.len * sizeOf(ctype)))
       for i, arg in args2:
         ptrOffset(argp, i)[] = arg.rawPtr
-    let status = `ccall`(exec.c, argp, args.len.cint, outputs, untupleResult)
+    let status = `ccall`(exec.obj.c, argp, args.len.cint, outputs, untupleResult)
     if args.len > 0:
       dealloc(argp)
     checkError(status)

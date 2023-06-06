@@ -52,20 +52,18 @@ type
     ## Local gradient function for autodiff
 
   BuilderObj = object
-    ## The Builder object owns it's xla_builder so it will be freed once it goes out of scope.
     c: xla_builder
 
   Builder* = ref object
-    ## Builder is used to construct new operations.
-    params*: seq[Node]
+    ## Builder is used to construct new operations. It holds a reference to a xla_builder.
+    params: seq[Node]
     obj: BuilderObj
 
   Op = object
-    ## The Op object owns it's xla_op so it will be freed once it goes out of scope.
-    c:    xla_op
+    c:  xla_op
 
   Node* = ref object
-    ## A Node is generated from each Op once it is added to the graph.
+    ## A Node is generated from each xla_op once it is added to the graph.
     ## The id number is the index to the nodes sequence in the Computation object and is set when the graph is built. 
     ## The shape is the output data type and dimesnions for the op. This must be fixed and known at build time.
     ## If the noGrad attribute is set then gradients are not accumulated from this node or it's inputs.
@@ -92,18 +90,22 @@ type
     op:     ref Op
     idnum:  uint64
 
+  ComputationObj = object
+    c: xla_computation
+
   Computation* = object
-    ## A Computation wraps the constructed graph after it has been finalised.
+    ## A Computation wraps the constructed graph after it has been finalised. It holds a reference to
+    ## the xla_computation object.
+    ##
     ## The nodes sequence is a distinct list of nodes in order in which they were declared.
     ## params contatins a reference the parameters indexed by the provided index when they were defined.
     nodes*:  seq[Node]
     params*: seq[Node]
-    c: xla_computation
-
+    obj: ref ComputationObj
 
 # memory management
 proc `=copy`(a: var BuilderObj, b: BuilderObj) {.error.}
-proc `=copy`(a: var Computation, b: Computation) {.error.}
+proc `=copy`(a: var ComputationObj, b: ComputationObj) {.error.}
 proc `=copy`(dst: var Op, src: Op) {.error.}
 
 proc `=destroy`(builder: var BuilderObj) =
@@ -112,7 +114,7 @@ proc `=destroy`(builder: var BuilderObj) =
     xla_builder_free(builder.c)
     builder.c = nil
 
-proc `=destroy`(comp: var Computation) =
+proc `=destroy`(comp: var ComputationObj) =
   if comp.c != nil:
     xla_computation_free(comp.c)
     trace "free Computation"
@@ -259,7 +261,8 @@ proc addNodes(c: var Computation, node: var Node): int =
 proc build*(b: Builder, root: Node): Computation =
   ## Build a computation from the specified root operation. Should only be called once for a given graph.
   trace "new Computation"
-  let status = b.obj.c.build(root.op.c, result.c.addr)
+  result.obj = new ComputationObj
+  let status = b.obj.c.build(root.op.c, result.obj.c.addr)
   checkBuilderError(status, root)
   var node = root
   discard result.addNodes(node)
@@ -269,11 +272,11 @@ proc last*(comp: Computation): Node =
   ## Last node defined in the graph
   comp.nodes[^1]
 
-proc rawPtr*(comp: Computation): xla_computation = comp.c
+proc rawPtr*(comp: Computation): xla_computation = comp.obj.c
 
 proc name*(comp: Computation): string =
   ## Name of the computation specified when the builder was created + count of number of ops.
-  $xla_computation_name(comp.c)
+  $xla_computation_name(comp.obj.c)
 
 proc paramNames*(comp: Computation): seq[string] =
   ## Names of the parameters which have been defined.
@@ -587,7 +590,7 @@ proc gather*(a, indices: Node): Node =
   ## a = <f32 2 2>[[1 2]    ix = <i32 3 2>[[1 1]
   ##                3 4]]                  [0 1]
   ##                                       [1 0]]
-  ## a.gather(ix) = <f32 3>[4 2 3]`
+  ## a.gather(ix) = <f32 3>[4 2 3]
   ## ```
   ##
   ## This is a simplified version of the [gather](https://www.tensorflow.org/xla/operation_semantics#gather) op.
@@ -623,7 +626,7 @@ proc scatter*(a, indices, b: Node, comp: Computation): Node =
   let axes = toSeq(0 ..< a.rank)
   let ndims = csize_t(a.rank)
   withDims(dptr, axes):
-    let op = op_scatter(a.op.c, indices.op.c, b.op.c, comp.c,
+    let op = op_scatter(a.op.c, indices.op.c, b.op.c, comp.obj.c,
                       a.rank,                  # index_vector_dim
                       nil, 0,                  # update_window_dims
                       dptr, ndims,             # inserted_window_dims
@@ -661,7 +664,7 @@ proc reduce*(a, initValue: Node, comp: Computation, dims: openarray[int] = [],
   else:
     dims2 = map(dims, x => normalize(x, shape.len))
   withDims(dptr, dims2):
-    let op = op_reduce(a.op.c, initValue.op.c, comp.c, dptr, csize_t(dims2.len))
+    let op = op_reduce(a.op.c, initValue.op.c, comp.obj.c, dptr, csize_t(dims2.len))
     var info = $dims2
     if keepDims: info.add ":keepDims" 
     result = wrap(op, nodeType, [a, initValue], info)
@@ -735,7 +738,7 @@ macro argMinMax(procName, compare, initVal, opType: untyped): untyped =
       let indexes = b.iota(`ixType`, shape, axis)
       var dims = @[`axis`]
       withDims(dptr, dims):
-        let op = op_reduce2(b, `a`.op.c, initValue.op.c, indexes.op.c, initIndex.op.c, comp.c, dptr, csize_t(dims.len))
+        let op = op_reduce2(b, `a`.op.c, initValue.op.c, indexes.op.c, initIndex.op.c, comp.obj.c, dptr, csize_t(dims.len))
         var info = $dims
         if `keepDims`: info.add ":keepDims" 
         # calc both min/max and argmin/argmax, but just use the latter
@@ -865,6 +868,16 @@ proc calcGrads(b: Builder, node, pathValue: Node, inputs: openarray[string],
       let n = inputs.find(input.name)
       if n >= 0: grads[n] = dict[id]
 
+proc reshapeAs(n: Node, b: Builder, name: string): Node =
+  ## Returns n reshaped to match the parameter with the given name.
+  for p in b.params:
+    if p.name == name:
+      if n.dims == p.dims:
+        return n
+      else:
+        return n.reshape(p.dims)
+  raiseError("gradient cannot be calculated for " & name & " parameter not found", n)
+
 proc gradient*(b: Builder, output: Node, inputs: openarray[string]): seq[Node] =
   ## Generate the graph to calculate the gradients at each of the given input
   ## parameters for the graph given by output.
@@ -892,6 +905,6 @@ proc gradient*(b: Builder, output: Node, inputs: openarray[string]): seq[Node] =
   var dict = initTable[uint64, Node]()
   result = newSeq[Node](inputs.len)
   b.calcGrads(output, pathValue, inputs, result, dict)
-
-
+  for i, grad in result:
+    result[i] = grad.reshapeAs(b, inputs[i])
 
