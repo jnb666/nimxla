@@ -1,5 +1,6 @@
 BuilderError	graph.html#BuilderError	graph: BuilderError	
 tConst	graph.html#tConst	OpType.tConst	
+tLiteral	graph.html#tLiteral	OpType.tLiteral	
 tParam	graph.html#tParam	OpType.tParam	
 tError	graph.html#tError	OpType.tError	
 tIota	graph.html#tIota	OpType.tIota	
@@ -12,7 +13,8 @@ tCeil	graph.html#tCeil	OpType.tCeil
 tRound	graph.html#tRound	OpType.tRound	
 tLog	graph.html#tLog	OpType.tLog	
 tLog1p	graph.html#tLog1p	OpType.tLog1p	
-tLogistic	graph.html#tLogistic	OpType.tLogistic	
+tSigmoid	graph.html#tSigmoid	OpType.tSigmoid	
+tRelu	graph.html#tRelu	OpType.tRelu	
 tSign	graph.html#tSign	OpType.tSign	
 tCos	graph.html#tCos	OpType.tCos	
 tSin	graph.html#tSin	OpType.tSin	
@@ -83,7 +85,7 @@ paramNames	graph.html#paramNames,Computation	graph: paramNames(comp: Computation
 parameter	graph.html#parameter,Builder,DataType,openArray[int],string	graph: parameter(b: Builder; dtype: DataType; dims: openArray[int] = []; name = &quot;&quot;): Node	
 makeTuple	graph.html#makeTuple,Builder,varargs[Node]	graph: makeTuple(b: Builder; args: varargs[Node]): Node	
 iota	graph.html#iota,Builder,DataType,openArray[int],int	graph: iota(b: Builder; dtype: DataType; dims: openArray[int]; axis: int): Node	
-errorNode	graph.html#errorNode,Node,string	graph: errorNode(n: Node; message: string): Node	
+errorNode	graph.html#errorNode,Builder,string	graph: errorNode(b: Builder; message: string): Node	
 constant	graph.html#constant,Builder,Literal	graph: constant(b: Builder; lit: Literal): Node	
 constant	graph.html#constant,Builder,Tensor[T: ElemType]	graph: constant[T: ElemType](b: Builder; t: Tensor[T]): Node	
 constant	graph.html#constant,Builder,int32	graph: constant(b: Builder; value: int32): Node	
@@ -128,7 +130,7 @@ ceil	graph.html#ceil,Node	graph: ceil(a: Node): Node
 round	graph.html#round,Node	graph: round(a: Node): Node	
 log	graph.html#log,Node	graph: log(a: Node): Node	
 log1p	graph.html#log1p,Node	graph: log1p(a: Node): Node	
-logistic	graph.html#logistic,Node	graph: logistic(a: Node): Node	
+sigmoid	graph.html#sigmoid,Node	graph: sigmoid(a: Node): Node	
 sign	graph.html#sign,Node	graph: sign(a: Node): Node	
 cos	graph.html#cos,Node	graph: cos(a: Node): Node	
 sin	graph.html#sin,Node	graph: sin(a: Node): Node	
@@ -146,9 +148,10 @@ broadcastInDim	graph.html#broadcastInDim,Node,openArray[int],openArray[int]	grap
 collapse	graph.html#collapse,Node,openArray[int]	graph: collapse(a: Node; dims: openArray[int]): Node	
 transpose	graph.html#transpose,Node,varargs[int]	graph: transpose(a: Node; axes: varargs[int]): Node	
 narrow	graph.html#narrow,Node,int,int,int,int	graph: narrow(a: Node; dim, start, stop: int; stride = 1): Node	
+relu	graph.html#relu,Node	graph: relu(a: Node): Node	
 select	graph.html#select,Node,Node,Node	graph: select(a, onTrue, onFalse: Node): Node	
-clamp	graph.html#clamp,Node,Node,Node	graph: clamp(a, minValue, maxValue: Node): Node	
-rngUniform	graph.html#rngUniform,Node,Node,openArray[int]	graph: rngUniform(minVal, maxVal: Node; dims: openArray[int]): Node	
+clamp	graph.html#clamp,Node,Node,Node	graph: clamp(a, min, max: Node): Node	
+rngUniform	graph.html#rngUniform,Node,Node,openArray[int]	graph: rngUniform(min, max: Node; dims: openArray[int]): Node	
 rngNormal	graph.html#rngNormal,Node,Node,openArray[int]	graph: rngNormal(mean, stddev: Node; dims: openArray[int]): Node	
 concat	graph.html#concat,Node,openArray[Node],int	graph: concat(a: Node; nodes: openArray[Node]; axis: int): Node	
 gather	graph.html#gather,Node,Node	graph: gather(a, indices: Node): Node	

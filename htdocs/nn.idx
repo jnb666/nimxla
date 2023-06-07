@@ -1,0 +1,18 @@
+Variable	nn.html#Variable	nn: Variable	
+InitFunc	nn.html#InitFunc	nn: InitFunc	
+Module	nn.html#Module	nn: Module	
+constantInit	nn.html#constantInit,SomeFloat	nn: constantInit(value: SomeFloat): InitFunc	
+uniformInit	nn.html#uniformInit,float,float	nn: uniformInit(min = 0.0; max = 1.0): InitFunc	
+normalInit	nn.html#normalInit,float,float	nn: normalInit(mean = 0.0; stddev = 1.0): InitFunc	
+newVariable	nn.html#newVariable,Client,string,openArray[int],DataType,InitFunc	nn: newVariable(c: Client; name: string; dims: openArray[int]; dtype: DataType;\n            init: InitFunc): Variable	
+param	nn.html#param,Builder,Variable,string	nn: param(b: Builder; p: Variable; suffix = &quot;&quot;): Node	
+add	nn.html#add,Module,varargs[Module]	nn: add(m: var Module; modules: varargs[Module])	
+varNames	nn.html#varNames,Module	nn: varNames(m: Module): seq[string]	
+gradNames	nn.html#gradNames,Module	nn: gradNames(m: Module): seq[string]	
+setParams	nn.html#setParams,Module,Params	nn: setParams(m: Module; params: var Params)	
+mseLoss	nn.html#mseLoss,Node,Node	nn: mseLoss(pred, target: Node): Node	
+crossEntropyLoss	nn.html#crossEntropyLoss,Node,Node	nn: crossEntropyLoss(pred, target: Node): Node	
+softmax	nn.html#softmax,Node,int	nn: softmax(a: Node; axis: int): Node	
+initLinear	nn.html#initLinear,Client,Builder,string,int,int,InitFunc	nn: initLinear(c: Client; b: Builder; id: string; nin, nout: int; weights: InitFunc;\n           biases = constantInit(0.0&apos;f32); dtype = F32): Module	
+buildAndCompile	nn.html#buildAndCompile,Client,Module,Node,proc(Node)	nn: buildAndCompile(c: Client; m: Module; input: Node; lossFn: proc (y: Node): Node): Executable	
+optimSGD	nn.html#optimSGD,Client,Module,float,float,float	nn: optimSGD(c: Client; m: Module; learnRate: float; weightDecay = 0.0;\n         momentum = 0.0): proc (params: Params): seq[Variable]	

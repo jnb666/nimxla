@@ -13,7 +13,7 @@ requires "nim >= 1.6.12"
 task makedocs, "build the docs":
   exec "rm -fr htdocs"
   # do this manually to exclude private stuff
-  for file in @["src/nimxla.nim", "src/nimxla/tensor.nim", "src/nimxla/literal.nim", "src/nimxla/shape.nim", "src/nimxla/graph.nim"]:
+  for file in @["src/nimxla.nim", "src/nimxla/tensor.nim", "src/nimxla/literal.nim", "src/nimxla/shape.nim", "src/nimxla/graph.nim", "src/nimxla/nn.nim"]:
     exec "nim doc --outdir:htdocs --path:./src --index:on --git.url:https://github.com/jnb666/nimxla --git.commit:main " & file 
   exec "nim buildIndex -o:htdocs/theindex.html htdocs"
 

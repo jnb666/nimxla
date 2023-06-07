@@ -61,7 +61,7 @@ suite "grad":
   test "sigmoid2":
     let g = newBuilder("sigmoid")
     let x = g.parameter(F64, name="x")
-    let grad = g.gradient(logistic(x), ["x"])
+    let grad = g.gradient(sigmoid(x), ["x"])
     let comp = g.build(grad[0])
     debug comp
     let exec = client.compile(comp)
