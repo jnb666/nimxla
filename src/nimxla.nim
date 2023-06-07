@@ -224,6 +224,7 @@ proc noutputs*(exec: Executable): int =
 
 proc compile*(client: Client, comp: Computation, outputs: openarray[string] = []): Executable =
   ## Compile a computation so that it can be executed on this client.
+  ## outputs may optionally be specified to name the output values - they are used by the runWith method.
   trace "new Executable"
   result.obj = new ExecutableObj
   let status = compile(client.c, comp.rawPtr, result.obj.c.addr)

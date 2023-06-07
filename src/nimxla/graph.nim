@@ -33,7 +33,7 @@ type
   OpType* = enum
     tConst, tLiteral, tParam, tError, tIota                     ## leaf nodes
     tNot, tNeg, tAbs, tExp, tFloor, tCeil, tRound, tLog,        ## 1 arg ops
-    tLog1p, tLogistic, tSign, tCos, tSin, tTanh, tSqrt,         ## ..
+    tLog1p, tSigmoid, tRelu, tSign, tCos, tSin, tTanh, tSqrt,   ## ..
     tRsqrt, tIsFinite, tCopy, tZerosLike, tTupleElement,        ## ..
     tReshape, tBroadcast, tBroadcastInDim, tCollapse,           ## ..
     tTranspose, tNarrow, tConvert,                              ## ..
@@ -432,7 +432,7 @@ unary(ceil, op_ceil, tCeil, "Elementwise ceil rounding")
 unary(round, op_round, tRound, "Elementwise nearest rounding")
 unary(log, op_log, tLog, "Elementwise natural log")
 unary(log1p, op_log1p, tLog1p, "Elementwise log(1 + a)")
-unary(logistic, op_logistic, tLogistic, "Elementwise 1/(1 + exp(-a))")
+unary(sigmoid, op_logistic, tSigmoid, "Elementwise 1/(1 + exp(-a))")
 unary(sign, op_sign, tSign, "Elementwise sign. Returns -1, 0, +1 or Nan" )
 unary(cos, op_cos, tCos, "Elementwise cosine")
 unary(sin, op_sin, tSin, "Elementwise sine")
@@ -508,20 +508,25 @@ proc narrow*(a: Node, dim, start, stop: int, stride = 1): Node =
   result = a.builder.wrap(op, tNarrow, [a], &"(dim:{dim} start:{start} stop:{stop} stride:{stride})")
   result.indices = @[dim, start, stop]
 
+proc relu*(a: Node): Node =
+  ## Rectified linear unit activation function: max(0, a)
+  result = max(a.builder.zero(a.dtype), a)
+  result.kind = tRelu
+
 proc select*(a, onTrue, onFalse: Node): Node =
   ## Select values from onTrue where a is true else from onFalse.
   a.builder.wrap(op_select(a.op.c, onTrue.op.c, onFalse.op.c), tSelect, [a, onTrue, onFalse])
 
-proc clamp*(a, minValue, maxValue: Node): Node =
-  ## Clamp values in a to be between minValue and maxValue.
-  a.builder.wrap(op_clamp(minValue.op.c, a.op.c, maxValue.op.c), tClamp, [a, minValue, maxValue])
+proc clamp*(a, min, max: Node): Node =
+  ## Clamp values in a to be between min and max.
+  a.builder.wrap(op_clamp(min.op.c, a.op.c, max.op.c), tClamp, [a, min, max])
 
-proc rngUniform*(minVal, maxVal: Node, dims: openarray[int]): Node =
-  ## Generate a tensor with a uniform random distribution with values from minVal to maxVal and 
+proc rngUniform*(min, max: Node, dims: openarray[int]): Node =
+  ## Generate a tensor with a uniform random distribution with values from min to max and 
   ## given dimensions. Inputs must have the same data type. This is used as the element type for the output.
   withDims(dptr, dims):
-    let op = op_rng_uniform(minVal.op.c, maxVal.op.c, cint(minVal.dtype), cint(dims.len), dptr)
-    result = minVal.builder.wrap(op, tRngUniform, [minVal, maxVal], $dims)
+    let op = op_rng_uniform(min.op.c, max.op.c, cint(min.dtype), cint(dims.len), dptr)
+    result = min.builder.wrap(op, tRngUniform, [min, max], $dims)
     result.indices = @dims
 
 proc rngNormal*(mean, stddev: Node, dims: openarray[int]): Node =
@@ -793,8 +798,11 @@ proc localGrad(b: Builder, n: Node): seq[GradFn] =
     return @[ defn(v, -sin(v)) ]
   of tAbs:
     return @[ defn(v, v * sign(x)) ]
-  of tLogistic:
+  of tSigmoid:
     return @[ defn(v, v * n * (b.one(x.dtype) - n)) ]
+  of tRelu:
+    let zero = b.zero(x.dtype)
+    return @[ defn(v, select(x >= zero, v, zero) ) ]
   of tReduceSum:
     return @[ unreduce(n, x) ]
   of tReshape:

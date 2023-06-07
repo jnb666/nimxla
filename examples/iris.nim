@@ -2,6 +2,7 @@
 
 import std/[strutils, strformat, sequtils, logging, random, math, os, parsecsv]
 import nimxla
+import nimxla/nn
 import cligen
 
 setPrintOpts(precision=4, minWidth=10, floatMode=ffDecimal, threshold=100, edgeItems=5)
@@ -46,20 +47,6 @@ proc initWeights(c: Client, nin, nout: int, seed: int64): Buffer =
   let values = newSeqWith(nin*nout, gauss(sigma = 0.1).float32)
   return c.newBuffer(values.toTensor.reshape(nin, nout))
 
-proc softmax*(a: Node, axis: int): Node =
-  ## Softmax operation, shifted for numerical stability.
-  let maxval = a.max([axis], keepDims=true)
-  maxval.noGrad = true
-  let exp_a = exp(a - maxval)
-  let sum_a = exp_a.sum([axis], keepDims=true)
-  result = exp_a / sum_a
-
-proc crossEntropyLoss(b: Builder, pred, target: Node): Node =
-  # calc loss from softmax output
-  let shape = [target.dims[0], 1]
-  let indices = concat(b.iota(I64, shape, axis=0), [target.reshape(shape)], axis=1)
-  -sum(log(pred.gather(indices.reshape(-1, 1, 2))))
-
 proc model(c: Client, batch, nin, nout: int): Executable =
   # build model to calc predictions, loss and weight gradients
   let b = newBuilder("iris")
@@ -67,8 +54,8 @@ proc model(c: Client, batch, nin, nout: int): Executable =
   let weights = b.parameter(F32, [nin, nout], "w")
   let labels = b.parameter(I64, [batch], "y")
   let batchSize = b.constant(batch.float32)
-  let output = softmax(dot(input, weights), 1)
-  let loss = b.crossEntropyLoss(output, labels)
+  let output = dot(input, weights).softmax(axis=1)
+  let loss = crossEntropyLoss(output, labels)
   debug "forward graph: ", loss.toString
   let grad = b.gradient(loss, ["w"])[0] / batchSize
   debug "weight grad: ", grad.toString
