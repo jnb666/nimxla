@@ -31,7 +31,7 @@ type
     at*:      Node
 
   OpType* = enum
-    tConst, tParam, tError, tIota                               ## leaf nodes
+    tConst, tLiteral, tParam, tError, tIota                     ## leaf nodes
     tNot, tNeg, tAbs, tExp, tFloor, tCeil, tRound, tLog,        ## 1 arg ops
     tLog1p, tLogistic, tSign, tCos, tSin, tTanh, tSqrt,         ## ..
     tRsqrt, tIsFinite, tCopy, tZerosLike, tTupleElement,        ## ..
@@ -43,11 +43,6 @@ type
     tRngNormal, tReduce, tGather                                ## ..
     tSelect, tClamp, tTuple, tConcat, tScatter                  ## 3 or more arg ops
 
-  Result[T] = object
-    ## Val holds the result if err is nil, else err has the error status
-    val: T
-    err: status_t
-
   GradFn = proc(path: Node): Node
     ## Local gradient function for autodiff
 
@@ -57,6 +52,7 @@ type
   Builder* = ref object
     ## Builder is used to construct new operations. It holds a reference to a xla_builder.
     params: seq[Node]
+    nodes:  seq[Node]
     obj: BuilderObj
 
   Op = object
@@ -64,24 +60,25 @@ type
 
   Node* = ref object
     ## A Node is generated from each xla_op once it is added to the graph.
-    ## The id number is the index to the nodes sequence in the Computation object and is set when the graph is built. 
+    ## The id number is the index to the nodes sequence in the Computation object and is set by the builder.
     ## The shape is the output data type and dimesnions for the op. This must be fixed and known at build time.
     ## If the noGrad attribute is set then gradients are not accumulated from this node or it's inputs.
-    id*:     int
-    shape*:  Shape
-    args*:   seq[Node]
-    noGrad*: bool
+    id*:      int
+    shape*:   Shape
+    args*:    seq[Node]
+    noGrad*:  bool
+    builder*: Builder
     case kind*: OpType:
     of tParam:
-      name*:     string
-      paramId*:  int
+      name*:    string
+      paramId:  int
     of tError:
-      message*:  string
+      message:  string
     of tTupleElement, tConcat:
-      index:     int
+      index:    int
     of tReshape, tBroadcast, tCollapse, tTranspose, tNarrow, tRngUniform, tRngNormal, tReduce, tReduceSum, 
        tReduceMin, tReduceMax, tArgmin, tArgmax:
-      indices:   seq[int]
+      indices:  seq[int]
     of tBroadcastInDim:
       outSize, bcastDims: seq[int]
     else:
@@ -149,32 +146,14 @@ proc checkBuilderError(status: status_t, at: Node = nil) =
     status_free(status)
     raiseError(message, at)
 
-proc res[T](val: T, err: status_t): Result[T] =
-  Result[T](val: val, err: err)
-
-proc dtype(op: xla_op): Result[DataType] =
-  ## Returns the data type of the output from the op.
-  let b = op_builder(op)
-  var typ: cint
-  let status = b.get_element_type(op, typ.addr)
-  res(DataType(typ), status)
-
-proc rank(op: xla_op): Result[int] =
-  ## Returns the number of dimensions for this op or -1 if it is a tuple.
-  let b = op_builder(op)
-  var size: cint
-  let status = b.get_dimensions_size(op, size.addr)
-  res(int(size), status)
-
-proc shape(op: xla_op): Result[Shape] =
+proc getShape(b: Builder, op: xla_op): (Shape, status_t) =
   ## Returns the shape of the output from the op.
-  let b = op_builder(op)
   var s: shape_t
-  let status = b.get_shape(op, s.addr)
+  let status = b.obj.c.get_shape(op, s.addr)
   if status == nil:
-    res(toShape(s), nil)
+    (toShape(s), nil)
   else:
-    res(Shape(), status)
+    (Shape(), status)
 
 proc uid(n: Node): uint64 = 
   ## Unique node id from pointer to xla_op
@@ -216,7 +195,7 @@ proc toString*(n: Node): string =
   if n == nil:
     return "<nil>"
   case n.kind
-  of tConst, tParam:
+  of tConst, tLiteral, tParam:
     n.info
   else:
     var name = ($n.kind)[1 .. ^1]
@@ -230,33 +209,30 @@ proc newBuilder*(name: string): Builder =
   new result
   result.obj.c = xla_builder_create(name)
 
-proc wrap(xop: xla_op, typ: OpType, args: openarray[Node] = [], info = ""): Node =
+proc addNode(b: Builder, node: var Node): Node =
+  ## If node already defined return it from the nodes list, else add it and assign it's id.
+  for n in b.nodes:
+    if n.uid == node.uid:
+      node.op = nil
+      return n
+    if node.kind == tConst and n.kind == tConst and n.shape == node.shape and n.info == node.info:
+      node.op = nil
+      return n
+  node.id = b.nodes.len + 1
+  b.nodes.add node
+  return node
+
+proc wrap(b: Builder, xop: xla_op, typ: OpType, args: openarray[Node] = [], info = ""): Node =
   ## Wrap the raw xla_op pointer as a Node. Will throw an exception if there is an error e.g. incorrect shape.
   trace "new Op"
-  result = Node(kind: typ, op: new Op, args: @args, info: info)
-  result.op.c = xop
-  var s = xop.shape
-  if s.err == nil:
-    result.shape = s.val
-    s.err = op_builder(xop).get_current_status
-  checkBuilderError(s.err, result)
-
-proc addNodes(c: var Computation, node: var Node): int =
-  ## Recursively add new nodes to c.nodes starting from op. Filters out repeated nodes. Returns the node id.
-  for n in c.nodes:
-    if n.uid == node.uid:
-      assert n.id > 0
-      node.id = n.id
-      return n.id
-  # new node we haven't seen before
-  for arg in mitems(node.args):
-    arg.id = c.addNodes(arg)
-  node.id = c.nodes.len + 1
-  c.nodes.add node
-  # clear the link to the op so it can be destroyed
-  node.idnum = node.uid
-  node.op = nil
-  return node.id
+  var node = Node(builder: b, kind: typ, op: new Op, args: @args, info: info)
+  node.op.c = xop
+  var (s, err) = b.getShape(xop)
+  if err == nil:
+    node.shape = s
+    err = b.obj.c.get_current_status
+  checkBuilderError(err, node)
+  b.addNode(node)
 
 proc build*(b: Builder, root: Node): Computation =
   ## Build a computation from the specified root operation. Should only be called once for a given graph.
@@ -264,8 +240,9 @@ proc build*(b: Builder, root: Node): Computation =
   result.obj = new ComputationObj
   let status = b.obj.c.build(root.op.c, result.obj.c.addr)
   checkBuilderError(status, root)
-  var node = root
-  discard result.addNodes(node)
+  for n in mitems(b.nodes):
+    n.op = nil
+  result.nodes = b.nodes
   result.params = b.params
 
 proc last*(comp: Computation): Node =
@@ -299,45 +276,31 @@ proc parameter*(b: Builder, dtype: DataType, dims: openarray[int] = [], name = "
   let name = if name == "": "p" & $index else: name
   withDims(dptr, dims):
     let param = parameter(b.obj.c, index, dtype.cint, dims.len.cint, dptr, name.cstring)
-    result = wrap(param, tParam, info=name)
+    result = b.wrap(param, tParam, info=name)
     result.name = name
     result.paramId = index
     b.params.add result
 
-proc makeTuple(b: xla_builder, args: varargs[Node]): Node =
+proc makeTuple*(b: Builder, args: varargs[Node]): Node =
+  ## Creates a new tuple from a list of ops.
   if args.len == 0:
-    return wrap(op_tuple(b, nil, 0), tTuple)  
+    return b.wrap(op_tuple(b.obj.c, nil, 0), tTuple)  
   var ops = cast[ptr xla_op](alloc(args.len*sizeOf(xla_op)))
   for i, arg in args:
     ptrOffset(ops, i)[] = arg.op.c
-  result = wrap(op_tuple(b, ops, csize_t(args.len)), tTuple, args)
+  result = b.wrap(op_tuple(b.obj.c, ops, csize_t(args.len)), tTuple, args)
   dealloc(ops)
-
-proc makeTuple*(b: Builder, args: varargs[Node]): Node =
-  ## Creates a new tuple from a list of ops.
-  makeTuple(b.obj.c, args)
-
-proc iota(b: xla_builder, dtype: DataType, dims: openarray[int], axis: int): Node =
-  withDims(dptr, dims):
-    let op = b.op_iota(cint(dtype), csize_t(dims.len), dptr, axis)
-    result = wrap(op, tIota, info = $dims & $axis)
 
 proc iota*(b: Builder, dtype: DataType, dims: openarray[int], axis: int): Node =
   ## Creates an array that has specified shape and holds values starting at zero and incrementing by one along 
   ## the specified axis
-  b.obj.c.iota(dtype, dims, axis)
+  withDims(dptr, dims):
+    let op = b.obj.c.op_iota(cint(dtype), csize_t(dims.len), dptr, axis)
+    result = b.wrap(op, tIota, info = $dims & $axis)
 
-proc errorNode(b: xla_builder, message: string): Node =
-  wrap(b.op_invalid_argument_error(message), tError, info="invalid argument")
-
-proc errorNode(b: xla_builder, err: status_t): Node =
-  let errMsg = $status_error_message(err)
-  result = errorNode(b, $errMsg.cstring)
-  status_free(err)
-
-proc errorNode*(n: Node, message: string): Node =
+proc errorNode*(b: Builder, message: string): Node =
   ## Node used to record an error e.g. due to invalid input types or shapes.
-  errorNode(op_builder(n.op.c), message)
+  b.wrap(b.obj.c.op_invalid_argument_error(message), tError, info="invalid argument")
 
 # forward defs
 proc broadcast*(a: Node, dims: openarray[int]): Node
@@ -345,7 +308,7 @@ proc convert*(a: Node, dtype: DataType): Node
 
 proc constant*(b: Builder, lit: Literal): Node =
   ## Create new constant from the given literal
-  wrap(constant_literal(b.obj.c, lit.rawPtr), tConst, info="literal")
+  b.wrap(constant_literal(b.obj.c, lit.rawPtr), tLiteral)
 
 proc constant*[T: ElemType](b: Builder, t: Tensor[T]): Node =
   ## Create new constant from the given tensor
@@ -360,12 +323,12 @@ macro makeConstant(typ: untyped, ctyp: static string): untyped =
   result = quote do:
     proc constant*(`b`: Builder, `value`: `typ`): Node =
       ## Create a new scalar constant from the given value.
-      wrap(`const_r0`(`b`.obj.c, `value`), tConst, [], $`value`)
+      `b`.wrap(`const_r0`(`b`.obj.c, `value`), tConst, [], $`value`)
 
     proc constant*(`b`: Builder, `value`: openarray[`typ`]): Node =
       ## Create a new vector constant from the given value.
       let xop = `const_r1`(`b`.obj.c, `value`[0].unsafeAddr, csize_t(`value`.len))
-      wrap(xop, tConst, [], $`value`)
+      `b`.wrap(xop, tConst, [], $`value`)
 
 makeConstant(int32, "int32_t")
 makeConstant(int64, "int64_t")
@@ -407,17 +370,14 @@ macro namedConstant(symbol, call, name: untyped, docs: static string) =
   docComment.strVal = docs
 
   result = quote do:
-    proc `symbol`(`b`: xla_builder, `dtype` = F32, `dims`: openarray[int] = []): Node =
-      let node = wrap(`call`(`b`, cint(`dtype`)), tConst, [], `name`)
-      if `dims`.len > 0: broadcast(node, `dims`) else: node
-
     proc `symbol`*(`b`: Builder, `dtype` = F32, `dims`: openarray[int] = []): Node =
       `docComment`
-      `symbol`(`b`.obj.c, `dtype`, `dims`)
+      let node = `b`.wrap(`call`(`b`.obj.c, cint(`dtype`)), tConst, [], `name`)
+      if `dims`.len > 0: broadcast(node, `dims`) else: node
 
-namedConstant(zero, op_zero, "0",
+namedConstant(zero, op_zero, "zero",
   "Create a node with the zero value for the given datatype. This is broadcast to dims if provided.")
-namedConstant(one, op_one, "1",
+namedConstant(one, op_one, "one",
   "Create a node with the unit value for the given datatype. This is broadcast to dims if provided.")
 namedConstant(minValue, op_min_value, "min_value",
   "Create a node with the minimum value for the given datatype. i.e. -Inf for floating point types." & 
@@ -434,7 +394,7 @@ macro binop(name, opname, typ: untyped, docs: static string): untyped =
   quote do:
     proc `name`*(`a`, `b`: Node): Node =
       `docComment`
-      wrap(`opname`(`a`.op.c, `b`.op.c), `typ`, [`a`, `b`])
+      `a`.builder.wrap(`opname`(`a`.op.c, `b`.op.c), `typ`, [`a`, `b`])
 
 binop(`+`, op_add, tAdd, "Elementwise add")
 binop(`-`, op_sub, tSub, "Elementwise subtract")
@@ -461,7 +421,7 @@ macro unary(name, opname, typ: untyped, docs: static string): untyped =
   quote do:
     proc `name`*(`a`: Node): Node =
       `docComment`
-      wrap(`opname`(`a`.op.c), `typ`, [`a`])
+      `a`.builder.wrap(`opname`(`a`.op.c), `typ`, [`a`])
 
 unary(`!`, op_not, tNot, "Elementwise logical not.")
 unary(`-`, op_neg, tNeg, "Elementwise arithmetic negation")
@@ -488,26 +448,26 @@ proc normalize(index, rank: int): int =
 
 proc `[]`*(a: Node, index: int): Node =
   ## Return the element from the input tuple at index.
-  result = wrap(op_get_tuple_element(a.op.c, index), tTupleElement, [a], $index)
+  result = a.builder.wrap(op_get_tuple_element(a.op.c, index), tTupleElement, [a], $index)
   result.index = index
 
 proc convert*(a: Node, dtype: DataType): Node =
   ## Convert type of elements to dtype.
-  wrap(op_convert_element_type(a.op.c, cint(dtype)), tConvert, [a], $dtype)
+  a.builder.wrap(op_convert_element_type(a.op.c, cint(dtype)), tConvert, [a], $dtype)
 
 proc reshape*(a: Node, dims: varargs[int]): Node =
   ## Reshape the input node to dims. Total number of elements is unchanged.
   ## If one of the dimensions is -1 then this value is inferred from the total number of elements.
   let dims2 = reshapeDims(prod(a.dims), dims)
   withDims(dptr, dims2):
-   result = wrap(op_reshape(a.op.c, csize_t(dims2.len), dptr), tReshape, [a], $dims2)
+   result = a.builder.wrap(op_reshape(a.op.c, csize_t(dims2.len), dptr), tReshape, [a], $dims2)
    result.indices = dims2
 
 proc broadcast*(a: Node, dims: openarray[int]): Node =
   ## Add new leading dimensions to the input node per
   ## [broadcast](https://www.tensorflow.org/xla/operation_semantics#broadcast)
   withDims(dptr, dims):
-    result = wrap(op_broadcast(a.op.c, csize_t(dims.len), dptr), tBroadcast, [a], $dims)
+    result = a.builder.wrap(op_broadcast(a.op.c, csize_t(dims.len), dptr), tBroadcast, [a], $dims)
     result.indices = @dims
 
 proc broadcastInDim*(a: Node, outSize, bcastDims: openarray[int]): Node =
@@ -516,7 +476,7 @@ proc broadcastInDim*(a: Node, outSize, bcastDims: openarray[int]): Node =
   withDims(dptr1, outSize):
     withDims(dptr2, bcastDims):
       let op = op_broadcast_in_dim(a.op.c, csize_t(outSize.len), dptr1, csize_t(bcastDims.len), dptr2)
-      result = wrap(op, tBroadcastInDim, [a], &"(outSize:{outSize} bcastDims:{bcastDims})")
+      result = a.builder.wrap(op, tBroadcastInDim, [a], &"(outSize:{outSize} bcastDims:{bcastDims})")
       result.outSize = @outSize
       result.bcastDims = @bcastDims
 
@@ -526,7 +486,7 @@ proc collapse*(a: Node, dims: openarray[int]): Node =
   ## [collapse](https://www.tensorflow.org/xla/operation_semantics#collapse).
   ## dims should be an in-order consecutive subset of the input dims.
   withDims(dptr, dims):
-    result = wrap(op_collapse(a.op.c, csize_t(dims.len), dptr), tCollapse, [a], $dims)
+    result = a.builder.wrap(op_collapse(a.op.c, csize_t(dims.len), dptr), tCollapse, [a], $dims)
     result.indices = @dims
 
 proc transpose*(a: Node, axes: varargs[int]): Node =
@@ -538,30 +498,30 @@ proc transpose*(a: Node, axes: varargs[int]): Node =
   else:
     axes2 = map(axes, x => normalize(x, a.rank))
   withDims(dptr, axes2):
-    result = wrap(op_transpose(a.op.c, csize_t(axes2.len), dptr), tTranspose, [a], $axes2)
+    result = a.builder.wrap(op_transpose(a.op.c, csize_t(axes2.len), dptr), tTranspose, [a], $axes2)
     result.indices = axes2
 
 proc narrow*(a: Node, dim, start, stop: int, stride = 1): Node =
   ## Returns the data narrowed such that dimension dim ranges from start..stop-1 with step of stride.
   ## As per [slice](https://www.tensorflow.org/xla/operation_semantics#slice)
   let op = op_slice_in_dim(a.op.c, start, stop, stride, dim)
-  result = wrap(op, tNarrow, [a], &"(dim:{dim} start:{start} stop:{stop} stride:{stride})")
+  result = a.builder.wrap(op, tNarrow, [a], &"(dim:{dim} start:{start} stop:{stop} stride:{stride})")
   result.indices = @[dim, start, stop]
 
 proc select*(a, onTrue, onFalse: Node): Node =
   ## Select values from onTrue where a is true else from onFalse.
-  wrap(op_select(a.op.c, onTrue.op.c, onFalse.op.c), tSelect, [a, onTrue, onFalse])
+  a.builder.wrap(op_select(a.op.c, onTrue.op.c, onFalse.op.c), tSelect, [a, onTrue, onFalse])
 
 proc clamp*(a, minValue, maxValue: Node): Node =
   ## Clamp values in a to be between minValue and maxValue.
-  wrap(op_clamp(minValue.op.c, a.op.c, maxValue.op.c), tClamp, [a, minValue, maxValue])
+  a.builder.wrap(op_clamp(minValue.op.c, a.op.c, maxValue.op.c), tClamp, [a, minValue, maxValue])
 
 proc rngUniform*(minVal, maxVal: Node, dims: openarray[int]): Node =
   ## Generate a tensor with a uniform random distribution with values from minVal to maxVal and 
   ## given dimensions. Inputs must have the same data type. This is used as the element type for the output.
   withDims(dptr, dims):
     let op = op_rng_uniform(minVal.op.c, maxVal.op.c, cint(minVal.dtype), cint(dims.len), dptr)
-    result = wrap(op, tRngUniform, [minVal, maxVal], $dims)
+    result = minVal.builder.wrap(op, tRngUniform, [minVal, maxVal], $dims)
     result.indices = @dims
 
 proc rngNormal*(mean, stddev: Node, dims: openarray[int]): Node =
@@ -569,14 +529,14 @@ proc rngNormal*(mean, stddev: Node, dims: openarray[int]): Node =
   ## data type and dimensions. Inputs must have the same data type. This is used the as element type for the output.
   withDims(dptr, dims):
     let op = op_rng_normal(mean.op.c, stddev.op.c, cint(mean.dtype), cint(dims.len), dptr)
-    result = wrap(op, tRngNormal, [mean, stddev], $dims)
+    result = mean.builder.wrap(op, tRngNormal, [mean, stddev], $dims)
     result.indices = @dims
 
 proc concat*(a: Node, nodes: openarray[Node], axis: int): Node =
   ## Concatenate the given nodes with a along the given axis.
   var args = map(nodes, x => x.op.c)
   let op = op_concat_in_dim(a.op.c, args[0].addr, csize_t(args.len), axis)
-  result = wrap(op, tConcat, nodes, &"axis={axis}")
+  result = a.builder.wrap(op, tConcat, nodes, &"axis={axis}")
   result.index = axis
 
 proc gather*(a, indices: Node): Node =
@@ -605,7 +565,7 @@ proc gather*(a, indices: Node): Node =
                         dptr1, ndims,               # start_index_map
                         indices.rank-1,             # index_vector_dim
                         dptr2, ndims)               # slice_sizes
-      result = wrap(op, tGather, [a, indices])
+      result = a.builder.wrap(op, tGather, [a, indices])
 
 proc scatter*(a, indices, b: Node, comp: Computation): Node =
   ## Get the values of input array a at the specified indices and updated with values
@@ -631,7 +591,7 @@ proc scatter*(a, indices, b: Node, comp: Computation): Node =
                       nil, 0,                  # update_window_dims
                       dptr, ndims,             # inserted_window_dims
                       dptr, ndims)             # scatter_dims_to_operand_dims
-    result = wrap(op, tScatter, [a, indices, b])
+    result = a.builder.wrap(op, tScatter, [a, indices, b])
 
 proc addAt*(a, indices, b: Node): Node =
   ## Adds values from array b to array a at the given indices.
@@ -667,7 +627,7 @@ proc reduce*(a, initValue: Node, comp: Computation, dims: openarray[int] = [],
     let op = op_reduce(a.op.c, initValue.op.c, comp.obj.c, dptr, csize_t(dims2.len))
     var info = $dims2
     if keepDims: info.add ":keepDims" 
-    result = wrap(op, nodeType, [a, initValue], info)
+    result = a.builder.wrap(op, nodeType, [a, initValue], info)
     result.indices = dims2
     if keepDims and dims2.len > 0:
       for d in dims2: shape[d] = 1
@@ -676,10 +636,9 @@ proc reduce*(a, initValue: Node, comp: Computation, dims: openarray[int] = [],
 proc sum*(a: Node, dims: openarray[int] = [], keepDims = false): Node =
   ## Reduce to sum of elements across one or more dimensions in the input.
   ## See `reduce<#reduce%2CNode%2CNode%2CComputation%2CopenArray%5Bint%5D>`_ for details
-  let b = op_builder(a.op.c)
-  let b2 = newBuilder("reduce")
-  let sum = b2.build(b2.parameter(a.dtype) + b2.parameter(a.dtype))
-  reduce(a, b.zero(a.dtype), sum, dims, tReduceSum, keepDims)
+  let b = newBuilder("reduce")
+  let sum = b.build(b.parameter(a.dtype) + b.parameter(a.dtype))
+  reduce(a, a.builder.zero(a.dtype), sum, dims, tReduceSum, keepDims)
 
 proc sum*(a: Node, axis: int, keepDims = false): Node =
   ## Reduce to sum of elements across the given axis in the input.
@@ -689,10 +648,9 @@ proc sum*(a: Node, axis: int, keepDims = false): Node =
 proc min*(a: Node, dims: openarray[int] = [], keepDims = false): Node =
   ## Reduce to minimum value of elements across one or more dimensions in the input.
   ## See `reduce<#reduce%2CNode%2CNode%2CComputation%2CopenArray%5Bint%5D>`_ for details
-  let b = op_builder(a.op.c)
-  let b2 = newBuilder("reduce")
-  let sum = b2.build(min(b2.parameter(a.dtype), b2.parameter(a.dtype)))
-  reduce(a, b.maxValue(a.dtype), sum, dims, tReduceMin, keepDims)
+  let b = newBuilder("reduce")
+  let sum = b.build(min(b.parameter(a.dtype), b.parameter(a.dtype)))
+  reduce(a, a.builder.maxValue(a.dtype), sum, dims, tReduceMin, keepDims)
 
 proc min*(a: Node, axis: int, keepDims = false): Node =
   ## Reduce to minimum value of elements across the given axis in the input.
@@ -702,10 +660,9 @@ proc min*(a: Node, axis: int, keepDims = false): Node =
 proc max*(a: Node, dims: openarray[int] = [], keepDims = false): Node =
   ## Reduce to maximum value of elements across one or more dimensions in the input.
   ## See `reduce<#reduce%2CNode%2CNode%2CComputation%2CopenArray%5Bint%5D>`_ for details
-  let b = op_builder(a.op.c)
-  let b2 = newBuilder("reduce")
-  let sum = b2.build(max(b2.parameter(a.dtype), b2.parameter(a.dtype)))
-  reduce(a, b.minValue(a.dtype), sum, dims, tReduceMax, keepDims)
+  let b = newBuilder("reduce")
+  let sum = b.build(max(b.parameter(a.dtype), b.parameter(a.dtype)))
+  reduce(a, a.builder.minValue(a.dtype), sum, dims, tReduceMax, keepDims)
 
 proc max*(a: Node, axis: int, keepDims = false): Node =
   ## Reduce to maximum value of elements across the given axis in the input. 
@@ -720,7 +677,7 @@ macro argMinMax(procName, compare, initVal, opType: untyped): untyped =
       ## By default the shape of the result will be as per the input with this axis removed.
       ## If keepDims is set the axis for the reduction is kept in the output with size of 1.
       ## If a negative axis is given then this is taken relative to the number of dimensions of the input.
-      let b = op_builder(`a`.op.c)
+      let b = `a`.builder
       var shape = `a`.dims
       let dtype = `a`.dtype
       let b2 = newBuilder("reduce")
@@ -738,12 +695,13 @@ macro argMinMax(procName, compare, initVal, opType: untyped): untyped =
       let indexes = b.iota(`ixType`, shape, axis)
       var dims = @[`axis`]
       withDims(dptr, dims):
-        let op = op_reduce2(b, `a`.op.c, initValue.op.c, indexes.op.c, initIndex.op.c, comp.obj.c, dptr, csize_t(dims.len))
+        let op = op_reduce2(b.obj.c, `a`.op.c, initValue.op.c, indexes.op.c, initIndex.op.c, 
+                            comp.obj.c, dptr, csize_t(dims.len))
         var info = $dims
         if `keepDims`: info.add ":keepDims" 
         # calc both min/max and argmin/argmax, but just use the latter
         xla_op_free(op_get_tuple_element(op, 0))
-        result = wrap(op_get_tuple_element(op, 1), `opType`, [], info)
+        result = b.wrap(op_get_tuple_element(op, 1), `opType`, [], info)
         result.indices = dims
         if `keepDims`:
           shape[axis] = 1
