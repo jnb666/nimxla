@@ -70,7 +70,7 @@ window.addEventListener('DOMContentLoaded', main);
 <div class="document" id="documentId">
   <div class="container">
     <h1 class="title">Index</h1>
-    Modules: <a href="graph.html">graph</a>, <a href="literal.html">literal</a>, <a href="nimxla.html">nimxla</a>, <a href="nn.html">nn</a>, <a href="shape.html">shape</a>, <a href="tensor.html">tensor</a>.<br/><p /><h2>API symbols</h2>
+    Modules: <a href="data.html">data</a>, <a href="graph.html">graph</a>, <a href="literal.html">literal</a>, <a href="nimxla.html">nimxla</a>, <a href="nn.html">nn</a>, <a href="shape.html">shape</a>, <a href="tensor.html">tensor</a>.<br/><p /><h2>API symbols</h2>
 <dl><dt><a name="%60%21%3D%60" href="#%60%21%3D%60"><span>`!=`:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
           data-doc-search-tag="graph: `!=`(a, b: Node): Node" href="graph.html#%21%3D%2CNode%2CNode">graph: `!=`(a, b: Node): Node</a></li>
@@ -81,6 +81,8 @@ window.addEventListener('DOMContentLoaded', main);
           </ul></dd>
 <dt><a name="%60%24%60" href="#%60%24%60"><span>`$`:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
+          data-doc-search-tag="data: `$`(d: Dataset): string" href="data.html#%24%2CDataset">data: `$`(d: Dataset): string</a></li>
+          <li><a class="reference external"
           data-doc-search-tag="graph: `$`(comp: Computation): string" href="graph.html#%24%2CComputation">graph: `$`(comp: Computation): string</a></li>
           <li><a class="reference external"
           data-doc-search-tag="graph: `$`(n: Node): string" href="graph.html#%24%2CNode">graph: `$`(n: Node): string</a></li>
@@ -189,6 +191,10 @@ window.addEventListener('DOMContentLoaded', main);
 <li><a class="reference external"
           data-doc-search-tag="shape: arrayShape(dtype: DataType; dims: varargs[int]): Shape" href="shape.html#arrayShape%2CDataType%2Cvarargs%5Bint%5D">shape: arrayShape(dtype: DataType; dims: varargs[int]): Shape</a></li>
           </ul></dd>
+<dt><a name="at" href="#at"><span>at:</span></a></dt><dd><ul class="simple">
+<li><a class="reference external"
+          data-doc-search-tag="tensor: at[T: ElemType](t: Tensor[T]; ix: int): Tensor[T]" href="tensor.html#at%2CTensor%5BT%3A%20ElemType%5D%2Cint">tensor: at[T: ElemType](t: Tensor[T]; ix: int): Tensor[T]</a></li>
+          </ul></dd>
 <dt><a name="BF16" href="#BF16"><span>BF16:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
           data-doc-search-tag="DataType.BF16" href="shape.html#BF16">DataType.BF16</a></li>
@@ -216,10 +222,6 @@ window.addEventListener('DOMContentLoaded', main);
 <dt><a name="build" href="#build"><span>build:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
           data-doc-search-tag="graph: build(b: Builder; root: Node): Computation" href="graph.html#build%2CBuilder%2CNode">graph: build(b: Builder; root: Node): Computation</a></li>
-          </ul></dd>
-<dt><a name="buildAndCompile" href="#buildAndCompile"><span>buildAndCompile:</span></a></dt><dd><ul class="simple">
-<li><a class="reference external"
-          data-doc-search-tag="nn: buildAndCompile(c: Client; m: Module; input: Node; lossFn: proc (y: Node): Node): Executable" href="nn.html#buildAndCompile%2CClient%2CModule%2CNode%2Cproc%28Node%29">nn: buildAndCompile(c: Client; m: Module; input: Node; lossFn: proc (y: Node): Node): Executable</a></li>
           </ul></dd>
 <dt><a name="Builder" href="#Builder"><span>Builder:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
@@ -262,6 +264,14 @@ window.addEventListener('DOMContentLoaded', main);
 <dt><a name="compile" href="#compile"><span>compile:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
           data-doc-search-tag="nimxla: compile(client: Client; comp: Computation; outputs: openArray[string] = []): Executable" href="nimxla.html#compile%2CClient%2CComputation%2CopenArray%5Bstring%5D">nimxla: compile(client: Client; comp: Computation; outputs: openArray[string] = []): Executable</a></li>
+          </ul></dd>
+<dt><a name="compileTest" href="#compileTest"><span>compileTest:</span></a></dt><dd><ul class="simple">
+<li><a class="reference external"
+          data-doc-search-tag="nn: compileTest(c: Client; m: Module; input: Node): Executable" href="nn.html#compileTest%2CClient%2CModule%2CNode">nn: compileTest(c: Client; m: Module; input: Node): Executable</a></li>
+          </ul></dd>
+<dt><a name="compileTrain" href="#compileTrain"><span>compileTrain:</span></a></dt><dd><ul class="simple">
+<li><a class="reference external"
+          data-doc-search-tag="nn: compileTrain(c: Client; m: Module; input: Node; lossFn: proc (y: Node): Node): Executable" href="nn.html#compileTrain%2CClient%2CModule%2CNode%2Cproc%28Node%29">nn: compileTrain(c: Client; m: Module; input: Node; lossFn: proc (y: Node): Node): Executable</a></li>
           </ul></dd>
 <dt><a name="Computation" href="#Computation"><span>Computation:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
@@ -323,6 +333,14 @@ window.addEventListener('DOMContentLoaded', main);
 <li><a class="reference external"
           data-doc-search-tag="nn: crossEntropyLoss(pred, target: Node): Node" href="nn.html#crossEntropyLoss%2CNode%2CNode">nn: crossEntropyLoss(pred, target: Node): Node</a></li>
           </ul></dd>
+<dt><a name="DataLoader" href="#DataLoader"><span>DataLoader:</span></a></dt><dd><ul class="simple">
+<li><a class="reference external"
+          data-doc-search-tag="data: DataLoader" href="data.html#DataLoader">data: DataLoader</a></li>
+          </ul></dd>
+<dt><a name="Dataset" href="#Dataset"><span>Dataset:</span></a></dt><dd><ul class="simple">
+<li><a class="reference external"
+          data-doc-search-tag="data: Dataset" href="data.html#Dataset">data: Dataset</a></li>
+          </ul></dd>
 <dt><a name="DataType" href="#DataType"><span>DataType:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
           data-doc-search-tag="shape: DataType" href="shape.html#DataType">shape: DataType</a></li>
@@ -356,10 +374,6 @@ window.addEventListener('DOMContentLoaded', main);
 <dt><a name="ElemType" href="#ElemType"><span>ElemType:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
           data-doc-search-tag="shape: ElemType" href="shape.html#ElemType">shape: ElemType</a></li>
-          </ul></dd>
-<dt><a name="ElemTypeOrInt" href="#ElemTypeOrInt"><span>ElemTypeOrInt:</span></a></dt><dd><ul class="simple">
-<li><a class="reference external"
-          data-doc-search-tag="tensor: ElemTypeOrInt" href="tensor.html#ElemTypeOrInt">tensor: ElemTypeOrInt</a></li>
           </ul></dd>
 <dt><a name="Error" href="#Error"><span>Error:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
@@ -421,6 +435,10 @@ window.addEventListener('DOMContentLoaded', main);
 <li><a class="reference external"
           data-doc-search-tag="graph: gather(a, indices: Node): Node" href="graph.html#gather%2CNode%2CNode">graph: gather(a, indices: Node): Node</a></li>
           </ul></dd>
+<dt><a name="getBatch" href="#getBatch"><span>getBatch:</span></a></dt><dd><ul class="simple">
+<li><a class="reference external"
+          data-doc-search-tag="data: getBatch[T](d: DataLoader; data: var Tensor[T]; labels: var Tensor[int32]): int" href="data.html#getBatch.i%2CDataLoader%2CTensor%5BT%5D%2CTensor%5Bint32%5D">data: getBatch[T](d: DataLoader; data: var Tensor[T]; labels: var Tensor[int32]): int</a></li>
+          </ul></dd>
 <dt><a name="gradient" href="#gradient"><span>gradient:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
           data-doc-search-tag="graph: gradient(b: Builder; output: Node; inputs: openArray[string]): seq[Node]" href="graph.html#gradient%2CBuilder%2CNode%2CopenArray%5Bstring%5D">graph: gradient(b: Builder; output: Node; inputs: openArray[string]): seq[Node]</a></li>
@@ -470,6 +488,10 @@ window.addEventListener('DOMContentLoaded', main);
           data-doc-search-tag="nn: initLinear(c: Client; b: Builder; id: string; nin, nout: int; weights: InitFunc;
            biases = constantInit(0.0&apos;f32); dtype = F32): Module" href="nn.html#initLinear%2CClient%2CBuilder%2Cstring%2Cint%2Cint%2CInitFunc">nn: initLinear(c: Client; b: Builder; id: string; nin, nout: int; weights: InitFunc;
            biases = constantInit(0.0&apos;f32); dtype = F32): Module</a></li>
+          </ul></dd>
+<dt><a name="initLoader" href="#initLoader"><span>initLoader:</span></a></dt><dd><ul class="simple">
+<li><a class="reference external"
+          data-doc-search-tag="data: initLoader(d: Dataset; batchSize = 0; shuffle = false): DataLoader" href="data.html#initLoader%2CDataset%2Cint">data: initLoader(d: Dataset; batchSize = 0; shuffle = false): DataLoader</a></li>
           </ul></dd>
 <dt><a name="initParams" href="#initParams"><span>initParams:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
@@ -561,6 +583,10 @@ window.addEventListener('DOMContentLoaded', main);
 <li><a class="reference external"
           data-doc-search-tag="graph: minValue(b: Builder; dtype = F32; dims: openArray[int] = []): Node" href="graph.html#minValue%2CBuilder%2Cenum">graph: minValue(b: Builder; dtype = F32; dims: openArray[int] = []): Node</a></li>
           </ul></dd>
+<dt><a name="mnistDataset" href="#mnistDataset"><span>mnistDataset:</span></a></dt><dd><ul class="simple">
+<li><a class="reference external"
+          data-doc-search-tag="data: mnistDataset(train = false): Dataset" href="data.html#mnistDataset">data: mnistDataset(train = false): Dataset</a></li>
+          </ul></dd>
 <dt><a name="Module" href="#Module"><span>Module:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
           data-doc-search-tag="nn: Module" href="nn.html#Module">nn: Module</a></li>
@@ -601,6 +627,10 @@ window.addEventListener('DOMContentLoaded', main);
 <li><a class="reference external"
           data-doc-search-tag="literal: newLiteral(dtype: DataType; dims: openArray[int]): Literal" href="literal.html#newLiteral%2CDataType%2CopenArray%5Bint%5D">literal: newLiteral(dtype: DataType; dims: openArray[int]): Literal</a></li>
           </ul></dd>
+<dt><a name="newModule" href="#newModule"><span>newModule:</span></a></dt><dd><ul class="simple">
+<li><a class="reference external"
+          data-doc-search-tag="nn: newModule(b: Builder; forward: proc (x: Node): Node; submodules: varargs[Module]): Module" href="nn.html#newModule%2CBuilder%2Cproc%28Node%29%2Cvarargs%5BModule%5D">nn: newModule(b: Builder; forward: proc (x: Node): Node; submodules: varargs[Module]): Module</a></li>
+          </ul></dd>
 <dt><a name="newTensor" href="#newTensor"><span>newTensor:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
           data-doc-search-tag="tensor: newTensor[T: ElemType](dims: varargs[int]): Tensor[T]" href="tensor.html#newTensor%2Cvarargs%5Bint%5D">tensor: newTensor[T: ElemType](dims: varargs[int]): Tensor[T]</a></li>
@@ -635,11 +665,15 @@ window.addEventListener('DOMContentLoaded', main);
 <li><a class="reference external"
           data-doc-search-tag="DataType.OpaqueType" href="shape.html#OpaqueType">DataType.OpaqueType</a></li>
           </ul></dd>
+<dt><a name="Optimizer" href="#Optimizer"><span>Optimizer:</span></a></dt><dd><ul class="simple">
+<li><a class="reference external"
+          data-doc-search-tag="nn: Optimizer" href="nn.html#Optimizer">nn: Optimizer</a></li>
+          </ul></dd>
 <dt><a name="optimSGD" href="#optimSGD"><span>optimSGD:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
           data-doc-search-tag="nn: optimSGD(c: Client; m: Module; learnRate: float; weightDecay = 0.0;
-         momentum = 0.0): proc (params: Params): seq[Variable]" href="nn.html#optimSGD%2CClient%2CModule%2Cfloat%2Cfloat%2Cfloat">nn: optimSGD(c: Client; m: Module; learnRate: float; weightDecay = 0.0;
-         momentum = 0.0): proc (params: Params): seq[Variable]</a></li>
+         momentum = 0.0): Optimizer" href="nn.html#optimSGD%2CClient%2CModule%2Cfloat%2Cfloat%2Cfloat">nn: optimSGD(c: Client; m: Module; learnRate: float; weightDecay = 0.0;
+         momentum = 0.0): Optimizer</a></li>
           </ul></dd>
 <dt><a name="OpType" href="#OpType"><span>OpType:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
@@ -687,7 +721,7 @@ window.addEventListener('DOMContentLoaded', main);
           <li><a class="reference external"
           data-doc-search-tag="literal: rawPtr(lit: Literal): literal_t" href="literal.html#rawPtr%2CLiteral">literal: rawPtr(lit: Literal): literal_t</a></li>
           <li><a class="reference external"
-          data-doc-search-tag="tensor: rawPtr(t: Tensor): pointer" href="tensor.html#rawPtr%2CTensor">tensor: rawPtr(t: Tensor): pointer</a></li>
+          data-doc-search-tag="tensor: rawPtr[T: ElemType](t: Tensor[T]): ptr T" href="tensor.html#rawPtr%2CTensor%5BT%3A%20ElemType%5D">tensor: rawPtr[T: ElemType](t: Tensor[T]): ptr T</a></li>
           </ul></dd>
 <dt><a name="reduce" href="#reduce"><span>reduce:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
@@ -803,7 +837,7 @@ window.addEventListener('DOMContentLoaded', main);
           </ul></dd>
 <dt><a name="softmax" href="#softmax"><span>softmax:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
-          data-doc-search-tag="nn: softmax(a: Node; axis: int): Node" href="nn.html#softmax%2CNode%2Cint">nn: softmax(a: Node; axis: int): Node</a></li>
+          data-doc-search-tag="nn: softmax(a: Node; axis = -1): Node" href="nn.html#softmax%2CNode%2Cint">nn: softmax(a: Node; axis = -1): Node</a></li>
           </ul></dd>
 <dt><a name="sqrt" href="#sqrt"><span>sqrt:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
@@ -1196,7 +1230,7 @@ window.addEventListener('DOMContentLoaded', main);
       <div class="twelve-columns footer">
         <span class="nim-sprite"></span>
         <br/>
-        <small style="color: var(--hint);">Made with Nim. Generated: 2023-06-07 17:38:00 UTC</small>
+        <small style="color: var(--hint);">Made with Nim. Generated: 2023-06-10 14:54:45 UTC</small>
       </div>
     </div>
   </div>

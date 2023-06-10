@@ -44,13 +44,15 @@ See [the documentation index](https://jnb666.github.io/nimxla/htdocs/theindex.ht
 
 - [nimxla/nn](https://jnb666.github.io/nimxla/htdocs/nn.html): Provides additional higher level functions for constructing and optimizing neural network models.
 
+- [nimxla/data](https://jnb666.github.io/nimxla/htdocs/data.html): Provides functions to load common datasets and iterate over batches of data.
+
 The submodules under nimxla are exported by the main package. Other internal functions and bindings to the XLA C++ library are under the nimxla/private directory. The C wrapper code here is based on the Rust bindings from [xla-rs](https://github.com/LaurentMazare/xla-rs).
 
 ## Memory management
 Each object on the C++ side is wrapped in a Nim object with a corresponding destructor to free the resource. These are marked with `=copy(...) {.error.}` so that they cannot be duplicated. Where it's useful to move these around the wrapper object is private and a ref object linked to this is exported. It's recommended to use the ORC garbage collector as this will ensure they get destroyed as soon as the ref count goes to zero.
 
 ## Dependencies
-XLA headers and shared library only. No nim module dependencies outside the standard library.
+Core modules depend on XLA headers and shared library only. data module uses [zippy](https://github.com/guzba/zippy) for gzip uncompress. Examples use [cligen](https://github.com/c-blake/cligen) for command line argument parsing.
 
 ## TODO
 - complete autograd for all of the defined ops

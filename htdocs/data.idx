@@ -1,0 +1,6 @@
+Dataset	data.html#Dataset	data: Dataset	
+DataLoader	data.html#DataLoader	data: DataLoader	
+initLoader	data.html#initLoader,Dataset,int	data: initLoader(d: Dataset; batchSize = 0; shuffle = false): DataLoader	
+getBatch	data.html#getBatch.i,DataLoader,Tensor[T],Tensor[int32]	data: getBatch[T](d: DataLoader; data: var Tensor[T]; labels: var Tensor[int32]): int	
+`$`	data.html#$,Dataset	data: `$`(d: Dataset): string	
+mnistDataset	data.html#mnistDataset	data: mnistDataset(train = false): Dataset	

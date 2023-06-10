@@ -107,9 +107,7 @@ window.addEventListener('DOMContentLoaded', main);
 <li>
   <a class="reference reference-toplevel" href="#7" id="57">Types</a>
   <ul class="simple simple-toc-section">
-      <li><a class="reference" href="#ElemTypeOrInt"
-    title="ElemTypeOrInt = ElemType or int">ElemTypeOrInt</a></li>
-  <li><a class="reference" href="#Tensor"
+      <li><a class="reference" href="#Tensor"
     title="Tensor[T] = object
   dims*: seq[int]
   data: TensorData[T]">Tensor</a></li>
@@ -137,6 +135,11 @@ window.addEventListener('DOMContentLoaded', main);
   <ul class="simple nested-toc-section">[]=
       <li><a class="reference" href="#%5B%5D%3D%2CTensor%2Cvarargs%5Bint%5D%2CT"
     title="`[]=`[T: ElemType](t: var Tensor; ix: varargs[int]; value: T)">`[]=`[T: ElemType](t: var Tensor; ix: varargs[int]; value: T)</a></li>
+
+  </ul>
+  <ul class="simple nested-toc-section">at
+      <li><a class="reference" href="#at%2CTensor%5BT%3A%20ElemType%5D%2Cint"
+    title="at[T: ElemType](t: Tensor[T]; ix: int): Tensor[T]">at[T: ElemType](t: Tensor[T]; ix: int): Tensor[T]</a></li>
 
   </ul>
   <ul class="simple nested-toc-section">clone
@@ -170,8 +173,8 @@ window.addEventListener('DOMContentLoaded', main);
 
   </ul>
   <ul class="simple nested-toc-section">rawPtr
-      <li><a class="reference" href="#rawPtr%2CTensor"
-    title="rawPtr(t: Tensor): pointer">rawPtr(t: Tensor): pointer</a></li>
+      <li><a class="reference" href="#rawPtr%2CTensor%5BT%3A%20ElemType%5D"
+    title="rawPtr[T: ElemType](t: Tensor[T]): ptr T">rawPtr[T: ElemType](t: Tensor[T]): ptr T</a></li>
 
   </ul>
   <ul class="simple nested-toc-section">reshape
@@ -255,18 +258,6 @@ class="link-seesrc" target="_blank">Source</a>
 <div class="section" id="7">
 <h1><a class="toc-backref" href="#7">Types</a></h1>
 <dl class="item">
-<div id="ElemTypeOrInt">
-<dt><pre><a href="tensor.html#ElemTypeOrInt"><span class="Identifier">ElemTypeOrInt</span></a> <span class="Other">=</span> <a href="shape.html#ElemType"><span class="Identifier">ElemType</span></a> <span class="Keyword">or</span> <span class="Identifier">int</span></pre></dt>
-<dd>
-
-
-&nbsp;&nbsp;<a
-href="https://github.com/jnb666/nimxla/tree/main/src/nimxla/tensor.nim#L22"
-class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/jnb666/nimxla/edit/devel/src/nimxla/tensor.nim#L22" class="link-seesrc" target="_blank" >Edit</a>
-
-</dd>
-</div>
 <div id="Tensor">
 <dt><pre><a href="tensor.html#Tensor"><span class="Identifier">Tensor</span></a><span class="Other">[</span><span class="Identifier">T</span><span class="Other">]</span> <span class="Other">=</span> <span class="Keyword">object</span>
   <span class="Identifier">dims</span><span class="Operator">*</span><span class="Other">:</span> <span class="Identifier">seq</span><span class="Other">[</span><span class="Identifier">int</span><span class="Other">]</span>
@@ -276,9 +267,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 A Tensor is a fixed size array where the data is laid out contiguously. Copying a tensor is a shallow copy - i.e. it is a view on the same data.
 &nbsp;&nbsp;<a
-href="https://github.com/jnb666/nimxla/tree/main/src/nimxla/tensor.nim#L26"
+href="https://github.com/jnb666/nimxla/tree/main/src/nimxla/tensor.nim#L24"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/jnb666/nimxla/edit/devel/src/nimxla/tensor.nim#L26" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/jnb666/nimxla/edit/devel/src/nimxla/tensor.nim#L24" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -293,9 +284,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 Pretty print tensor type, shape and summary of data.
 &nbsp;&nbsp;<a
-href="https://github.com/jnb666/nimxla/tree/main/src/nimxla/tensor.nim#L306"
+href="https://github.com/jnb666/nimxla/tree/main/src/nimxla/tensor.nim#L313"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/jnb666/nimxla/edit/devel/src/nimxla/tensor.nim#L306" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/jnb666/nimxla/edit/devel/src/nimxla/tensor.nim#L313" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -305,9 +296,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 Checks have same shape and values are equal
 &nbsp;&nbsp;<a
-href="https://github.com/jnb666/nimxla/tree/main/src/nimxla/tensor.nim#L205"
+href="https://github.com/jnb666/nimxla/tree/main/src/nimxla/tensor.nim#L203"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/jnb666/nimxla/edit/devel/src/nimxla/tensor.nim#L205" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/jnb666/nimxla/edit/devel/src/nimxla/tensor.nim#L203" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -317,9 +308,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 Update the element at the position given by the array of indices similar to [].
 &nbsp;&nbsp;<a
-href="https://github.com/jnb666/nimxla/tree/main/src/nimxla/tensor.nim#L199"
+href="https://github.com/jnb666/nimxla/tree/main/src/nimxla/tensor.nim#L197"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/jnb666/nimxla/edit/devel/src/nimxla/tensor.nim#L199" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/jnb666/nimxla/edit/devel/src/nimxla/tensor.nim#L197" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -329,9 +320,21 @@ class="link-seesrc" target="_blank">Source</a>
 
 Get the element at the position given by the array of indces or empty array for a scalar. Negative indices may be used to offset from end of the dimension. Will raise an exception if index is out of range.
 &nbsp;&nbsp;<a
-href="https://github.com/jnb666/nimxla/tree/main/src/nimxla/tensor.nim#L191"
+href="https://github.com/jnb666/nimxla/tree/main/src/nimxla/tensor.nim#L189"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/jnb666/nimxla/edit/devel/src/nimxla/tensor.nim#L191" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/jnb666/nimxla/edit/devel/src/nimxla/tensor.nim#L189" class="link-seesrc" target="_blank" >Edit</a>
+
+</dd>
+</div>
+<div id="at,Tensor[T: ElemType],int">
+<dt><pre><span class="Keyword">proc</span> <a href="#at%2CTensor%5BT%3A%20ElemType%5D%2Cint"><span class="Identifier">at</span></a><span class="Other">[</span><span class="Identifier">T</span><span class="Other">:</span> <a href="shape.html#ElemType"><span class="Identifier">ElemType</span></a><span class="Other">]</span><span class="Other">(</span><span class="Identifier">t</span><span class="Other">:</span> <a href="tensor.html#Tensor"><span class="Identifier">Tensor</span></a><span class="Other">[</span><span class="Identifier">T</span><span class="Other">]</span><span class="Other">;</span> <span class="Identifier">ix</span><span class="Other">:</span> <span class="Identifier">int</span><span class="Other">)</span><span class="Other">:</span> <a href="tensor.html#Tensor"><span class="Identifier">Tensor</span></a><span class="Other">[</span><span class="Identifier">T</span><span class="Other">]</span></pre></dt>
+<dd>
+
+Returns copy of tensor indexed by leading dimension e.g. if shape of t is [2, 3, 4] then t.at(1) =&gt; [3, 4]
+&nbsp;&nbsp;<a
+href="https://github.com/jnb666/nimxla/tree/main/src/nimxla/tensor.nim#L211"
+class="link-seesrc" target="_blank">Source</a>
+&nbsp;&nbsp;<a href="https://github.com/jnb666/nimxla/edit/devel/src/nimxla/tensor.nim#L211" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -341,9 +344,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 Return a copy of the tensor
 &nbsp;&nbsp;<a
-href="https://github.com/jnb666/nimxla/tree/main/src/nimxla/tensor.nim#L218"
+href="https://github.com/jnb666/nimxla/tree/main/src/nimxla/tensor.nim#L225"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/jnb666/nimxla/edit/devel/src/nimxla/tensor.nim#L218" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/jnb666/nimxla/edit/devel/src/nimxla/tensor.nim#L225" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -353,9 +356,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 Makes a copy of the tensor with elements converted to typ.
 &nbsp;&nbsp;<a
-href="https://github.com/jnb666/nimxla/tree/main/src/nimxla/tensor.nim#L233"
+href="https://github.com/jnb666/nimxla/tree/main/src/nimxla/tensor.nim#L240"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/jnb666/nimxla/edit/devel/src/nimxla/tensor.nim#L233" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/jnb666/nimxla/edit/devel/src/nimxla/tensor.nim#L240" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -365,9 +368,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 Create a new tensor withe the given type and dimensions and set every element to value. 
 &nbsp;&nbsp;<a
-href="https://github.com/jnb666/nimxla/tree/main/src/nimxla/tensor.nim#L90"
+href="https://github.com/jnb666/nimxla/tree/main/src/nimxla/tensor.nim#L88"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/jnb666/nimxla/edit/devel/src/nimxla/tensor.nim#L90" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/jnb666/nimxla/edit/devel/src/nimxla/tensor.nim#L88" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -377,9 +380,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 Pretty print summary of tensor data.
 &nbsp;&nbsp;<a
-href="https://github.com/jnb666/nimxla/tree/main/src/nimxla/tensor.nim#L297"
+href="https://github.com/jnb666/nimxla/tree/main/src/nimxla/tensor.nim#L304"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/jnb666/nimxla/edit/devel/src/nimxla/tensor.nim#L297" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/jnb666/nimxla/edit/devel/src/nimxla/tensor.nim#L304" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -389,9 +392,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 Number of elements in the tensor.
 &nbsp;&nbsp;<a
-href="https://github.com/jnb666/nimxla/tree/main/src/nimxla/tensor.nim#L73"
+href="https://github.com/jnb666/nimxla/tree/main/src/nimxla/tensor.nim#L71"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/jnb666/nimxla/edit/devel/src/nimxla/tensor.nim#L73" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/jnb666/nimxla/edit/devel/src/nimxla/tensor.nim#L71" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -401,21 +404,21 @@ class="link-seesrc" target="_blank">Source</a>
 
 Create a new tensor with the given type and dimnsions. Data is not initialized.
 &nbsp;&nbsp;<a
-href="https://github.com/jnb666/nimxla/tree/main/src/nimxla/tensor.nim#L82"
+href="https://github.com/jnb666/nimxla/tree/main/src/nimxla/tensor.nim#L80"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/jnb666/nimxla/edit/devel/src/nimxla/tensor.nim#L82" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/jnb666/nimxla/edit/devel/src/nimxla/tensor.nim#L80" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
-<div id="rawPtr,Tensor">
-<dt><pre><span class="Keyword">proc</span> <a href="#rawPtr%2CTensor"><span class="Identifier">rawPtr</span></a><span class="Other">(</span><span class="Identifier">t</span><span class="Other">:</span> <a href="tensor.html#Tensor"><span class="Identifier">Tensor</span></a><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">pointer</span></pre></dt>
+<div id="rawPtr,Tensor[T: ElemType]">
+<dt><pre><span class="Keyword">proc</span> <a href="#rawPtr%2CTensor%5BT%3A%20ElemType%5D"><span class="Identifier">rawPtr</span></a><span class="Other">[</span><span class="Identifier">T</span><span class="Other">:</span> <a href="shape.html#ElemType"><span class="Identifier">ElemType</span></a><span class="Other">]</span><span class="Other">(</span><span class="Identifier">t</span><span class="Other">:</span> <a href="tensor.html#Tensor"><span class="Identifier">Tensor</span></a><span class="Other">[</span><span class="Identifier">T</span><span class="Other">]</span><span class="Other">)</span><span class="Other">:</span> <span class="Keyword">ptr</span> <span class="Identifier">T</span></pre></dt>
 <dd>
 
 Pointer to start of data buffer.
 &nbsp;&nbsp;<a
-href="https://github.com/jnb666/nimxla/tree/main/src/nimxla/tensor.nim#L69"
+href="https://github.com/jnb666/nimxla/tree/main/src/nimxla/tensor.nim#L67"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/jnb666/nimxla/edit/devel/src/nimxla/tensor.nim#L69" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/jnb666/nimxla/edit/devel/src/nimxla/tensor.nim#L67" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -425,9 +428,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 Returns a view of the same tensor with the shape changed. Number of elements in the tensor must be unchanged or will raise an exception. If one of the dimensions is -1 then this value is inferred from the total number of elements.
 &nbsp;&nbsp;<a
-href="https://github.com/jnb666/nimxla/tree/main/src/nimxla/tensor.nim#L223"
+href="https://github.com/jnb666/nimxla/tree/main/src/nimxla/tensor.nim#L230"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/jnb666/nimxla/edit/devel/src/nimxla/tensor.nim#L223" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/jnb666/nimxla/edit/devel/src/nimxla/tensor.nim#L230" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -438,9 +441,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 Set the formatting options for printing the tensor data with the $ operator similar to numpy.set_printoptions. See the strutils package for details of the floatMode option.
 &nbsp;&nbsp;<a
-href="https://github.com/jnb666/nimxla/tree/main/src/nimxla/tensor.nim#L242"
+href="https://github.com/jnb666/nimxla/tree/main/src/nimxla/tensor.nim#L249"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/jnb666/nimxla/edit/devel/src/nimxla/tensor.nim#L242" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/jnb666/nimxla/edit/devel/src/nimxla/tensor.nim#L249" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -450,9 +453,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 Get the data type and dimensions of the tensor in XLA format.
 &nbsp;&nbsp;<a
-href="https://github.com/jnb666/nimxla/tree/main/src/nimxla/tensor.nim#L77"
+href="https://github.com/jnb666/nimxla/tree/main/src/nimxla/tensor.nim#L75"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/jnb666/nimxla/edit/devel/src/nimxla/tensor.nim#L77" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/jnb666/nimxla/edit/devel/src/nimxla/tensor.nim#L75" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -462,9 +465,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 Copy the data associated with the tensor to a sequence of length t.len.
 &nbsp;&nbsp;<a
-href="https://github.com/jnb666/nimxla/tree/main/src/nimxla/tensor.nim#L213"
+href="https://github.com/jnb666/nimxla/tree/main/src/nimxla/tensor.nim#L220"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/jnb666/nimxla/edit/devel/src/nimxla/tensor.nim#L213" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/jnb666/nimxla/edit/devel/src/nimxla/tensor.nim#L220" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -474,9 +477,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 Create a new 1D int64 tensor from an array of int values
 &nbsp;&nbsp;<a
-href="https://github.com/jnb666/nimxla/tree/main/src/nimxla/tensor.nim#L106"
+href="https://github.com/jnb666/nimxla/tree/main/src/nimxla/tensor.nim#L104"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/jnb666/nimxla/edit/devel/src/nimxla/tensor.nim#L106" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/jnb666/nimxla/edit/devel/src/nimxla/tensor.nim#L104" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -486,9 +489,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 Create a new 1D tensor of given type with elements set to the values from iterating over the slice.
 &nbsp;&nbsp;<a
-href="https://github.com/jnb666/nimxla/tree/main/src/nimxla/tensor.nim#L110"
+href="https://github.com/jnb666/nimxla/tree/main/src/nimxla/tensor.nim#L108"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/jnb666/nimxla/edit/devel/src/nimxla/tensor.nim#L110" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/jnb666/nimxla/edit/devel/src/nimxla/tensor.nim#L108" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -498,9 +501,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 Convert a scalar value of type T to a 0 dimensional tensor,
 &nbsp;&nbsp;<a
-href="https://github.com/jnb666/nimxla/tree/main/src/nimxla/tensor.nim#L96"
+href="https://github.com/jnb666/nimxla/tree/main/src/nimxla/tensor.nim#L94"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/jnb666/nimxla/edit/devel/src/nimxla/tensor.nim#L96" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/jnb666/nimxla/edit/devel/src/nimxla/tensor.nim#L94" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -510,9 +513,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 Create a new 1D tensor of given type and size by copying data from the provided array.
 &nbsp;&nbsp;<a
-href="https://github.com/jnb666/nimxla/tree/main/src/nimxla/tensor.nim#L101"
+href="https://github.com/jnb666/nimxla/tree/main/src/nimxla/tensor.nim#L99"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/jnb666/nimxla/edit/devel/src/nimxla/tensor.nim#L101" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/jnb666/nimxla/edit/devel/src/nimxla/tensor.nim#L99" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -522,9 +525,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 Create a new tensor with the given type and dimensions and elements set to zero.
 &nbsp;&nbsp;<a
-href="https://github.com/jnb666/nimxla/tree/main/src/nimxla/tensor.nim#L86"
+href="https://github.com/jnb666/nimxla/tree/main/src/nimxla/tensor.nim#L84"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/jnb666/nimxla/edit/devel/src/nimxla/tensor.nim#L86" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/jnb666/nimxla/edit/devel/src/nimxla/tensor.nim#L84" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -545,9 +548,9 @@ class="link-seesrc" target="_blank">Source</a>
 </pre></p>
 
 &nbsp;&nbsp;<a
-href="https://github.com/jnb666/nimxla/tree/main/src/nimxla/tensor.nim#L161"
+href="https://github.com/jnb666/nimxla/tree/main/src/nimxla/tensor.nim#L159"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/jnb666/nimxla/edit/devel/src/nimxla/tensor.nim#L161" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/jnb666/nimxla/edit/devel/src/nimxla/tensor.nim#L159" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -561,7 +564,7 @@ class="link-seesrc" target="_blank">Source</a>
       <div class="twelve-columns footer">
         <span class="nim-sprite"></span>
         <br/>
-        <small style="color: var(--hint);">Made with Nim. Generated: 2023-06-07 17:37:58 UTC</small>
+        <small style="color: var(--hint);">Made with Nim. Generated: 2023-06-10 14:54:41 UTC</small>
       </div>
     </div>
   </div>
