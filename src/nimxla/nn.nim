@@ -1,6 +1,6 @@
 ## The nn module provides higher level functions for building neural network models using the nimxla graph API.
 
-import std/[math, random, strutils, sequtils, sugar, tables, logging]
+import std/[math, random, strutils, strformat, sequtils, sugar, tables, logging]
 import ../nimxla
 
 type
@@ -135,38 +135,8 @@ proc compileTrain*(c: Client, m: Module, input: Node, lossFn: proc(y: Node): Nod
   let comp = b.build b.makeTuple(@[pred, loss] & grads)
   c.compile(comp, @["pred", "loss"] & m.gradNames)
 
-proc buildSGD(m: Module, learnRate, weightDecay, momentum: float): (Computation, seq[string]) = 
-  let b = newBuilder("sgd")
-  var outputs: seq[Node]
-  var names: seq[string]
-  for p in m.variables:
-    let x = b.param(p)
-    var dx = b.param(p, "_grad")
-    if weightDecay != 0 and not p.name.endsWith(".b"):
-      dx = dx + b.constant(weightDecay, x.dtype) * x
-    if momentum != 0:
-      let prev = b.param(p, "_mom")
-      let mu = b.constant(momentum, x.dtype)
-      dx = mu * prev + dx
-      names.add p.name & "_mom"
-      outputs.add dx
-    let lr = b.constant(learnRate, x.dtype)
-    names.add p.name
-    outputs.add x - lr*dx
-  (b.build b.makeTuple(outputs), names)
-
-proc optimSGD*(c: Client, m: Module, learnRate: float, weightDecay = 0.0, momentum = 0.0): Optimizer =
-  ## Builds and compiles a stochastic gradient descent optimizer to optimize the variables for module m.
-  ## This returns a function which takes as input a table with all of the named weight and gradient parameters and
-  ## returns the list of model weight variables.
-  let (comp, names) = buildSGD(m, learnRate, weightDecay, momentum)
-  var state = initParams([])
-  if momentum != 0:
-    for p in m.variables:
-      let s = p.data.shape
-      state[p.name & "_mom"] = c.newBuffer(s.dtype, s.dims)
-  let exec = c.compile(comp, names)
-
+proc makeOptimizer(m: Module, exec: Executable, init: proc():Params): Optimizer =
+  var state = init()
   proc (params: Params): seq[Variable] =
     var vars = params
     for key, val in state:
@@ -178,6 +148,106 @@ proc optimSGD*(c: Client, m: Module, learnRate: float, weightDecay = 0.0, moment
     for i, name in m.varNames:
       res.add Variable(name: name, data: vars[name])
     return res
+
+proc buildSGD(c: Client, m: Module, learnRate, weightDecay, momentum: float, nesterov: bool): Executable =
+  let b = newBuilder("sgd")
+  var outputs: seq[Node]
+  var names: seq[string]
+  let lr = b.constant(learnRate, F32)
+  let decay = b.constant(weightDecay, F32)
+  let mu = b.constant(momentum, F32)
+  for p in m.variables:
+    let x = b.param(p).convert(F32)
+    var dx = b.param(p, "_grad").convert(F32)
+    if weightDecay != 0 and not p.name.endsWith(".b"):
+      dx = dx + decay * x
+    if momentum != 0:
+      let prev = b.param(p, "_mom")
+      let bt = mu * prev + dx
+      names.add p.name & "_mom"
+      outputs.add bt
+      if nesterov:
+        dx = dx + mu * bt
+      else:
+        dx = bt
+    names.add p.name
+    outputs.add x - lr*dx
+  let comp = b.build b.makeTuple(outputs)
+  c.compile(comp, names)
+
+proc optimSGD*(c: Client, m: Module, learnRate: float, weightDecay = 0.0, 
+               momentum = 0.0, nesterov = false): Optimizer =
+  ## Builds and compiles a stochastic gradient descent optimizer to optimize the variables for module m.
+  ## This returns a function which takes as input a table with all of the named weight and gradient parameters and
+  ## returns the list of model weight variables.
+  let exec = c.buildSGD(m, learnRate, weightDecay, momentum, nesterov)
+  let init = proc(): Params =
+    var state = initParams([])
+    if momentum != 0:
+      for p in m.variables:
+        let s = p.data.shape
+        state[p.name & "_mom"] = c.newBuffer(s.dtype, s.dims)
+    return state
+  makeOptimizer(m, exec, init)
+
+proc buildAdam(c: Client, m: Module, learnRate, weightDecay, beta1, beta2, epsilon: float): Executable = 
+  let b = newBuilder("adam")
+  var outputs: seq[Node]
+  var names: seq[string]
+  let lr = b.constant(learnRate, F32)
+  let eps = b.constant(epsilon, F32)
+  let decay = b.constant(weightDecay, F32)
+  let b1 = b.constant(beta1, F32)
+  let b1t = b.parameter(F32, name = "beta1_t")
+  names.add "beta1_t"
+  outputs.add b1t * b1
+  let b2 = b.constant(beta2, F32)
+  let b2t = b.parameter(F32, name = "beta2_t")
+  names.add "beta2_t"
+  outputs.add b2t * b2
+  let one = b.one(F32)
+  for p in m.variables:
+    let x = b.param(p).convert(F32)
+    var dx = b.param(p, "_grad").convert(F32)
+    if weightDecay != 0 and not p.name.endsWith(".b"):
+      dx = dx + decay * x
+    let mtPrev = b.param(p, "_mt")
+    let mt = b1 * mtPrev + (one-b1) * dx
+    let mtp = mt / (one - b1t)
+    names.add p.name & "_mt"
+    outputs.add mt
+    let vtPrev = b.param(p, "_vt")
+    let vt = b2 * vtPrev + (one-b2) * dx*dx
+    let vtp = vt / (one - b2t)
+    names.add p.name & "_vt"
+    outputs.add vt
+    names.add p.name
+    outputs.add x - lr*mtp/(sqrt(vtp) + eps)
+  let comp = b.build b.makeTuple(outputs)
+  c.compile(comp, names)
+
+proc optimAdam*(c: Client, m: Module, learnRate: float, weightDecay = 0.0, 
+                beta1 = 0.9, beta2 = 0.999, eps = 1e-8): Optimizer =
+  ## Builds and compiles an optimizer using the Adam algorithm.
+  ## This returns a function which takes as input a table with all of the named weight and gradient parameters and
+  ## returns the list of model weight variables.
+  let exec = c.buildAdam(m, learnRate, weightDecay, beta1, beta2, eps)
+  let init = proc(): Params =
+    var state = initParams({
+      "beta1_t": c.newBuffer(lit(beta1.float32)),
+      "beta2_t": c.newBuffer(lit(beta2.float32))
+    })
+    for p in m.variables:
+      let s = p.data.shape
+      state[p.name & "_mt"] = c.newBuffer(s.dtype, s.dims)
+      state[p.name & "_vt"] = c.newBuffer(s.dtype, s.dims)
+    return state
+  makeOptimizer(m, exec, init)
+
+
+
+
+
 
 
 

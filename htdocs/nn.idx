@@ -18,4 +18,5 @@ softmax	nn.html#softmax,Node,int	nn: softmax(a: Node; axis = -1): Node
 initLinear	nn.html#initLinear,Client,Builder,string,int,int,InitFunc	nn: initLinear(c: Client; b: Builder; id: string; nin, nout: int; weights: InitFunc;\n           biases = constantInit(0.0&apos;f32); dtype = F32): Module	
 compileTest	nn.html#compileTest,Client,Module,Node	nn: compileTest(c: Client; m: Module; input: Node): Executable	
 compileTrain	nn.html#compileTrain,Client,Module,Node,proc(Node)	nn: compileTrain(c: Client; m: Module; input: Node; lossFn: proc (y: Node): Node): Executable	
-optimSGD	nn.html#optimSGD,Client,Module,float,float,float	nn: optimSGD(c: Client; m: Module; learnRate: float; weightDecay = 0.0;\n         momentum = 0.0): Optimizer	
+optimSGD	nn.html#optimSGD,Client,Module,float,float,float	nn: optimSGD(c: Client; m: Module; learnRate: float; weightDecay = 0.0;\n         momentum = 0.0; nesterov = false): Optimizer	
+optimAdam	nn.html#optimAdam,Client,Module,float,float,float,float,float	nn: optimAdam(c: Client; m: Module; learnRate: float; weightDecay = 0.0;\n          beta1 = 0.9; beta2 = 0.999; eps = 1e-8): Optimizer	

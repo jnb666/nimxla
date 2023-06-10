@@ -80,7 +80,7 @@ proc getAccuracy(c: Client, model: var Module, exec: Executable, loader: Dataloa
   return accuracy
 
 
-proc main(epochs = 20, learnRate = 0.75, batchSize = 500, seed: int64 = 0, gpu = false, debug = false) =
+proc main(epochs = 10, learnRate = 0.01, batchSize = 500, seed: int64 = 0, gpu = false, debug = false) =
   var logger = newConsoleLogger(levelThreshold=if debug: lvlDebug else: lvlInfo)
   addHandler(logger)
   # init client
@@ -101,7 +101,7 @@ proc main(epochs = 20, learnRate = 0.75, batchSize = 500, seed: int64 = 0, gpu =
   for p in model.variables:
     debug &"initial {p.name}: {p.data.f32}"
   # compile optimizer used to update the weights and function to calc the accuracy on the test set
-  let optim = c.optimSGD(model, learnRate)
+  let optim = c.optimAdam(model, learnRate)
   let accFn = c.calcAccuracy(batchSize, nclasses)
 
   info "training with learning rate = ", learnRate
