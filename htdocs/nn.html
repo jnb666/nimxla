@@ -111,7 +111,6 @@ window.addEventListener('DOMContentLoaded', main);
     title="InitFunc = proc (c: Client; dims: openArray[int]; dtype: DataType): Buffer">InitFunc</a></li>
   <li><a class="reference" href="#Module"
     title="Module = object
-  builder*: Builder
   variables*: seq[Variable]
   forward*: proc (x: Node): Node">Module</a></li>
   <li><a class="reference" href="#Optimizer"
@@ -157,20 +156,15 @@ window.addEventListener('DOMContentLoaded', main);
 
   </ul>
   <ul class="simple nested-toc-section">initLinear
-      <li><a class="reference" href="#initLinear%2CClient%2CBuilder%2Cstring%2Cint%2Cint%2CInitFunc"
-    title="initLinear(c: Client; b: Builder; id: string; nin, nout: int; weights: InitFunc;
-           biases = constantInit(0.0'f32); dtype = F32): Module">initLinear(c: Client; b: Builder; id: string; nin, nout: int; weights: InitFunc;
+      <li><a class="reference" href="#initLinear%2CClient%2Cstring%2Cint%2Cint%2CInitFunc"
+    title="initLinear(c: Client; id: string; nin, nout: int; weights: InitFunc;
+           biases = constantInit(0.0'f32); dtype = F32): Module">initLinear(c: Client; id: string; nin, nout: int; weights: InitFunc;
            biases = constantInit(0.0'f32); dtype = F32): Module</a></li>
 
   </ul>
   <ul class="simple nested-toc-section">mseLoss
       <li><a class="reference" href="#mseLoss%2CNode%2CNode"
     title="mseLoss(pred, target: Node): Node">mseLoss(pred, target: Node): Node</a></li>
-
-  </ul>
-  <ul class="simple nested-toc-section">newModule
-      <li><a class="reference" href="#newModule%2CBuilder%2Cproc%28Node%29%2Cvarargs%5BModule%5D"
-    title="newModule(b: Builder; forward: proc (x: Node): Node; submodules: varargs[Module]): Module">newModule(b: Builder; forward: proc (x: Node): Node; submodules: varargs[Module]): Module</a></li>
 
   </ul>
   <ul class="simple nested-toc-section">newVariable
@@ -262,7 +256,6 @@ class="link-seesrc" target="_blank">Source</a>
 </div>
 <div id="Module">
 <dt><pre><a href="nn.html#Module"><span class="Identifier">Module</span></a> <span class="Other">=</span> <span class="Keyword">object</span>
-  <span class="Identifier">builder</span><span class="Operator">*</span><span class="Other">:</span> <a href="graph.html#Builder"><span class="Identifier">Builder</span></a>
   <span class="Identifier">variables</span><span class="Operator">*</span><span class="Other">:</span> <span class="Identifier">seq</span><span class="Other">[</span><a href="nn.html#Variable"><span class="Identifier">Variable</span></a><span class="Other">]</span>
   <span class="Identifier">forward</span><span class="Operator">*</span><span class="Other">:</span> <span class="Keyword">proc</span> <span class="Other">(</span><span class="Identifier">x</span><span class="Other">:</span> <a href="graph.html#Node"><span class="Identifier">Node</span></a><span class="Other">)</span><span class="Other">:</span> <a href="graph.html#Node"><span class="Identifier">Node</span></a>
 </pre></dt>
@@ -314,9 +307,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 Add variables from modules to m.
 &nbsp;&nbsp;<a
-href="https://github.com/jnb666/nimxla/tree/main/src/nimxla/nn.nim#L60"
+href="https://github.com/jnb666/nimxla/tree/main/src/nimxla/nn.nim#L52"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/jnb666/nimxla/edit/devel/src/nimxla/nn.nim#L60" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/jnb666/nimxla/edit/devel/src/nimxla/nn.nim#L52" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -327,9 +320,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 Build the execution graph for the given module and compile it to an executable. The executable returns the output from <tt class="docutils literal"><span class="pre"><span class="Identifier">m</span><span class="Operator">.</span><span class="Identifier">forward</span><span class="Punctuation">(</span><span class="Identifier">input</span><span class="Punctuation">)</span></span></tt>
 &nbsp;&nbsp;<a
-href="https://github.com/jnb666/nimxla/tree/main/src/nimxla/nn.nim#L117"
+href="https://github.com/jnb666/nimxla/tree/main/src/nimxla/nn.nim#L111"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/jnb666/nimxla/edit/devel/src/nimxla/nn.nim#L117" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/jnb666/nimxla/edit/devel/src/nimxla/nn.nim#L111" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -345,9 +338,9 @@ Build the execution graph for the given module and compile it to an executable. 
 </ul>
 
 &nbsp;&nbsp;<a
-href="https://github.com/jnb666/nimxla/tree/main/src/nimxla/nn.nim#L124"
+href="https://github.com/jnb666/nimxla/tree/main/src/nimxla/nn.nim#L118"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/jnb666/nimxla/edit/devel/src/nimxla/nn.nim#L124" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/jnb666/nimxla/edit/devel/src/nimxla/nn.nim#L118" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -357,9 +350,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 Create a new buffer with a constant value.
 &nbsp;&nbsp;<a
-href="https://github.com/jnb666/nimxla/tree/main/src/nimxla/nn.nim#L33"
+href="https://github.com/jnb666/nimxla/tree/main/src/nimxla/nn.nim#L25"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/jnb666/nimxla/edit/devel/src/nimxla/nn.nim#L33" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/jnb666/nimxla/edit/devel/src/nimxla/nn.nim#L25" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -370,9 +363,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 Mean cross entropy loss function calculated from softmax output. Pred should be predicted values with shape [n, classes] while target is a 1d vector of I64 labels each in range 0..classes.
 &nbsp;&nbsp;<a
-href="https://github.com/jnb666/nimxla/tree/main/src/nimxla/nn.nim#L83"
+href="https://github.com/jnb666/nimxla/tree/main/src/nimxla/nn.nim#L75"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/jnb666/nimxla/edit/devel/src/nimxla/nn.nim#L83" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/jnb666/nimxla/edit/devel/src/nimxla/nn.nim#L75" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -382,23 +375,23 @@ class="link-seesrc" target="_blank">Source</a>
 
 List of all the variable gradient output names for this module.
 &nbsp;&nbsp;<a
-href="https://github.com/jnb666/nimxla/tree/main/src/nimxla/nn.nim#L69"
+href="https://github.com/jnb666/nimxla/tree/main/src/nimxla/nn.nim#L61"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/jnb666/nimxla/edit/devel/src/nimxla/nn.nim#L69" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/jnb666/nimxla/edit/devel/src/nimxla/nn.nim#L61" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
-<div id="initLinear,Client,Builder,string,int,int,InitFunc">
-<dt><pre><span class="Keyword">proc</span> <a href="#initLinear%2CClient%2CBuilder%2Cstring%2Cint%2Cint%2CInitFunc"><span class="Identifier">initLinear</span></a><span class="Other">(</span><span class="Identifier">c</span><span class="Other">:</span> <a href="nimxla.html#Client"><span class="Identifier">Client</span></a><span class="Other">;</span> <span class="Identifier">b</span><span class="Other">:</span> <a href="graph.html#Builder"><span class="Identifier">Builder</span></a><span class="Other">;</span> <span class="Identifier">id</span><span class="Other">:</span> <span class="Identifier">string</span><span class="Other">;</span> <span class="Identifier">nin</span><span class="Other">,</span> <span class="Identifier">nout</span><span class="Other">:</span> <span class="Identifier">int</span><span class="Other">;</span>
-                <span class="Identifier">weights</span><span class="Other">:</span> <a href="nn.html#InitFunc"><span class="Identifier">InitFunc</span></a><span class="Other">;</span> <span class="Identifier">biases</span> <span class="Other">=</span> <span class="Identifier">constantInit</span><span class="Other">(</span><span class="FloatNumber">0.0'f32</span><span class="Other">)</span><span class="Other">;</span> <span class="Identifier">dtype</span> <span class="Other">=</span> <span class="Identifier">F32</span><span class="Other">)</span><span class="Other">:</span> <a href="nn.html#Module"><span class="Identifier">Module</span></a> {.
-    <span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Identifier">Exception</span><span class="Other">,</span> <span class="Identifier">BuilderError</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Identifier">RootEffect</span><span class="Other">]</span></span>.}</pre></dt>
+<div id="initLinear,Client,string,int,int,InitFunc">
+<dt><pre><span class="Keyword">proc</span> <a href="#initLinear%2CClient%2Cstring%2Cint%2Cint%2CInitFunc"><span class="Identifier">initLinear</span></a><span class="Other">(</span><span class="Identifier">c</span><span class="Other">:</span> <a href="nimxla.html#Client"><span class="Identifier">Client</span></a><span class="Other">;</span> <span class="Identifier">id</span><span class="Other">:</span> <span class="Identifier">string</span><span class="Other">;</span> <span class="Identifier">nin</span><span class="Other">,</span> <span class="Identifier">nout</span><span class="Other">:</span> <span class="Identifier">int</span><span class="Other">;</span> <span class="Identifier">weights</span><span class="Other">:</span> <a href="nn.html#InitFunc"><span class="Identifier">InitFunc</span></a><span class="Other">;</span>
+                <span class="Identifier">biases</span> <span class="Other">=</span> <span class="Identifier">constantInit</span><span class="Other">(</span><span class="FloatNumber">0.0'f32</span><span class="Other">)</span><span class="Other">;</span> <span class="Identifier">dtype</span> <span class="Other">=</span> <span class="Identifier">F32</span><span class="Other">)</span><span class="Other">:</span> <a href="nn.html#Module"><span class="Identifier">Module</span></a> {.
+    <span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span>.}</pre></dt>
 <dd>
 
 Create a new fully connected linear layer with the given unique id and number of inputs and outputs. Weight parameters are initialised using the weights function. If biases is not nil then bias parameters are initialised using this function and added to the output.
 &nbsp;&nbsp;<a
-href="https://github.com/jnb666/nimxla/tree/main/src/nimxla/nn.nim#L100"
+href="https://github.com/jnb666/nimxla/tree/main/src/nimxla/nn.nim#L92"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/jnb666/nimxla/edit/devel/src/nimxla/nn.nim#L100" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/jnb666/nimxla/edit/devel/src/nimxla/nn.nim#L92" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -409,22 +402,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 Mean square error loss function.
 &nbsp;&nbsp;<a
-href="https://github.com/jnb666/nimxla/tree/main/src/nimxla/nn.nim#L78"
+href="https://github.com/jnb666/nimxla/tree/main/src/nimxla/nn.nim#L70"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/jnb666/nimxla/edit/devel/src/nimxla/nn.nim#L78" class="link-seesrc" target="_blank" >Edit</a>
-
-</dd>
-</div>
-<div id="newModule,Builder,proc(Node),varargs[Module]">
-<dt><pre><span class="Keyword">proc</span> <a href="#newModule%2CBuilder%2Cproc%28Node%29%2Cvarargs%5BModule%5D"><span class="Identifier">newModule</span></a><span class="Other">(</span><span class="Identifier">b</span><span class="Other">:</span> <a href="graph.html#Builder"><span class="Identifier">Builder</span></a><span class="Other">;</span> <span class="Identifier">forward</span><span class="Other">:</span> <span class="Keyword">proc</span> <span class="Other">(</span><span class="Identifier">x</span><span class="Other">:</span> <a href="graph.html#Node"><span class="Identifier">Node</span></a><span class="Other">)</span><span class="Other">:</span> <a href="graph.html#Node"><span class="Identifier">Node</span></a><span class="Other">;</span>
-               <span class="Identifier">submodules</span><span class="Other">:</span> <span class="Identifier">varargs</span><span class="Other">[</span><a href="nn.html#Module"><span class="Identifier">Module</span></a><span class="Other">]</span><span class="Other">)</span><span class="Other">:</span> <a href="nn.html#Module"><span class="Identifier">Module</span></a> {.<span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span>.}</pre></dt>
-<dd>
-
-Create a new module with given forward function containing variables from provided submodules.
-&nbsp;&nbsp;<a
-href="https://github.com/jnb666/nimxla/tree/main/src/nimxla/nn.nim#L26"
-class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/jnb666/nimxla/edit/devel/src/nimxla/nn.nim#L26" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/jnb666/nimxla/edit/devel/src/nimxla/nn.nim#L70" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -435,9 +415,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 Allocate a new variable with the given name and shape and initialise values.
 &nbsp;&nbsp;<a
-href="https://github.com/jnb666/nimxla/tree/main/src/nimxla/nn.nim#L51"
+href="https://github.com/jnb666/nimxla/tree/main/src/nimxla/nn.nim#L43"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/jnb666/nimxla/edit/devel/src/nimxla/nn.nim#L51" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/jnb666/nimxla/edit/devel/src/nimxla/nn.nim#L43" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -447,9 +427,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 Create a new buffer with random values chosen from a normal distrubution.
 &nbsp;&nbsp;<a
-href="https://github.com/jnb666/nimxla/tree/main/src/nimxla/nn.nim#L45"
+href="https://github.com/jnb666/nimxla/tree/main/src/nimxla/nn.nim#L37"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/jnb666/nimxla/edit/devel/src/nimxla/nn.nim#L45" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/jnb666/nimxla/edit/devel/src/nimxla/nn.nim#L37" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -461,9 +441,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 Builds and compiles an optimizer using the Adam algorithm. This returns a function which takes as input a table with all of the named weight and gradient parameters and returns the list of model weight variables.
 &nbsp;&nbsp;<a
-href="https://github.com/jnb666/nimxla/tree/main/src/nimxla/nn.nim#L229"
+href="https://github.com/jnb666/nimxla/tree/main/src/nimxla/nn.nim#L223"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/jnb666/nimxla/edit/devel/src/nimxla/nn.nim#L229" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/jnb666/nimxla/edit/devel/src/nimxla/nn.nim#L223" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -475,9 +455,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 Builds and compiles a stochastic gradient descent optimizer to optimize the variables for module m. This returns a function which takes as input a table with all of the named weight and gradient parameters and returns the list of model weight variables.
 &nbsp;&nbsp;<a
-href="https://github.com/jnb666/nimxla/tree/main/src/nimxla/nn.nim#L178"
+href="https://github.com/jnb666/nimxla/tree/main/src/nimxla/nn.nim#L172"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/jnb666/nimxla/edit/devel/src/nimxla/nn.nim#L178" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/jnb666/nimxla/edit/devel/src/nimxla/nn.nim#L172" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -488,9 +468,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 Create a new parameter node from this Variable
 &nbsp;&nbsp;<a
-href="https://github.com/jnb666/nimxla/tree/main/src/nimxla/nn.nim#L55"
+href="https://github.com/jnb666/nimxla/tree/main/src/nimxla/nn.nim#L47"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/jnb666/nimxla/edit/devel/src/nimxla/nn.nim#L55" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/jnb666/nimxla/edit/devel/src/nimxla/nn.nim#L47" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -500,9 +480,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 Add model variables to the params table
 &nbsp;&nbsp;<a
-href="https://github.com/jnb666/nimxla/tree/main/src/nimxla/nn.nim#L73"
+href="https://github.com/jnb666/nimxla/tree/main/src/nimxla/nn.nim#L65"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/jnb666/nimxla/edit/devel/src/nimxla/nn.nim#L73" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/jnb666/nimxla/edit/devel/src/nimxla/nn.nim#L65" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -513,9 +493,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 Softmax operation, shifted for numerical stability.
 &nbsp;&nbsp;<a
-href="https://github.com/jnb666/nimxla/tree/main/src/nimxla/nn.nim#L92"
+href="https://github.com/jnb666/nimxla/tree/main/src/nimxla/nn.nim#L84"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/jnb666/nimxla/edit/devel/src/nimxla/nn.nim#L92" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/jnb666/nimxla/edit/devel/src/nimxla/nn.nim#L84" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -525,9 +505,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 Create a new buffer with uniform random values from min to max.
 &nbsp;&nbsp;<a
-href="https://github.com/jnb666/nimxla/tree/main/src/nimxla/nn.nim#L39"
+href="https://github.com/jnb666/nimxla/tree/main/src/nimxla/nn.nim#L31"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/jnb666/nimxla/edit/devel/src/nimxla/nn.nim#L39" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/jnb666/nimxla/edit/devel/src/nimxla/nn.nim#L31" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -537,9 +517,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 List of all the variable names defined for this module.
 &nbsp;&nbsp;<a
-href="https://github.com/jnb666/nimxla/tree/main/src/nimxla/nn.nim#L65"
+href="https://github.com/jnb666/nimxla/tree/main/src/nimxla/nn.nim#L57"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/jnb666/nimxla/edit/devel/src/nimxla/nn.nim#L65" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/jnb666/nimxla/edit/devel/src/nimxla/nn.nim#L57" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -553,7 +533,7 @@ class="link-seesrc" target="_blank">Source</a>
       <div class="twelve-columns footer">
         <span class="nim-sprite"></span>
         <br/>
-        <small style="color: var(--hint);">Made with Nim. Generated: 2023-06-10 17:28:26 UTC</small>
+        <small style="color: var(--hint);">Made with Nim. Generated: 2023-06-10 19:29:39 UTC</small>
       </div>
     </div>
   </div>

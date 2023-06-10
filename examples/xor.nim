@@ -12,9 +12,13 @@ setPrintOpts(precision=4, minWidth=10, floatMode=ffDecimal)
 
 proc initModel(c: Client): (Module, Executable) =
   let b = newBuilder("xor")
-  let layer1 = c.initLinear(b, "1", nin=2, nout=2, weights = uniformInit(), biases = constantInit(0f32))
-  let layer2 = c.initLinear(b, "2", nin=2, nout=1, weights = uniformInit(), biases = constantInit(0f32))
-  var model = newModule(b, x => layer2.forward(layer1.forward(x).sigmoid), layer1, layer2)
+  let layer1 = c.initLinear("1", nin=2, nout=2, weights = uniformInit(), biases = constantInit(0f32))
+  let layer2 = c.initLinear("2", nin=2, nout=1, weights = uniformInit(), biases = constantInit(0f32))
+  var model: Module
+  model.add(layer1, layer2)
+  model.forward = proc(x: Node): Node =
+    let l1 = layer1.forward(x).sigmoid
+    layer2.forward(l1)
   let x = b.parameter(F32, data.dims, "x")
   let y = b.parameter(F32, target.dims, "y")
   let exec = c.compileTrain(model, x, yp => mseLoss(yp, y))

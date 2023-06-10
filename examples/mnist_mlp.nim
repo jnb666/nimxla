@@ -7,25 +7,31 @@ import cligen
 
 setPrintOpts(precision=4, minWidth=8, floatMode=ffDecimal, threshold=100, edgeItems=5)
 
-const nclasses = 10
+const
+  nclasses = 10
+  nhidden = 128
 
-proc newModel(c: Client, imgSize, batchSize: int): (Module, Executable) =
-  ## compile network either in test or train mode
-  let b = newBuilder("mnist_mlp")
-  let layer1 = c.initLinear(b, "1", nin=imgSize, nout=128, weights = normalInit(stddev=0.1), biases = constantInit(0f32))
-  let layer2 = c.initLinear(b, "2", nin=128, nout=nclasses, weights = normalInit(stddev=0.1), biases = constantInit(0f32))
-
-  var model = Module(builder: b)
+proc newModel(c: Client, imgSize, trainBatch, testBatch: int): (Module, Executable, Executable) =
+  ## compile network either in train and test mode
+  let layer1 = c.initLinear("1", nin=imgSize, nout=nhidden, weights = normalInit(stddev=0.1))
+  let layer2 = c.initLinear("2", nin=nhidden, nout=nclasses, weights = normalInit(stddev=0.1))
+  var model: Module
   model.add(layer1, layer2)
   model.forward = proc(x: Node): Node =
+    let b = x.builder
     let xf = x.convert(F32) / b^255f32
     let l1 = layer1.forward(xf).relu
-    result = layer2.forward(l1).softmax
-
-  let x = b.parameter(U8, [batchSize, imgSize], "x")
-  let y = b.parameter(I32, [batchSize], "y")
-  let exec = c.compileTrain(model, x, yp => crossEntropyLoss(yp, y))
-  return (model, exec)
+    layer2.forward(l1).softmax
+  let trainer = block:
+    let b = newBuilder("mnist_train")
+    let x = b.parameter(U8, [trainBatch, imgSize], "x")
+    let y = b.parameter(I32, [trainBatch], "y")
+    c.compileTrain(model, x, yp => crossEntropyLoss(yp, y))
+  let tester = block:
+    let b = newBuilder("mnist_test")
+    let x = b.parameter(U8, [testBatch, imgSize], "x")
+    c.compileTest(model, x)
+  return (model, trainer, tester)
 
 
 proc calcAccuracy(c: Client, batch, nout: int): Executable =
@@ -63,7 +69,7 @@ proc trainEpoch(c: Client, model: var Module, exec: Executable, loader: DataLoad
 
 
 proc getAccuracy(c: Client, model: var Module, exec: Executable, loader: Dataloader, accFn: Executable): float =
-  ## calculate accuracy from test dataset
+  ## calculate accuracy from given dataset
   var images = newTensor[uint8](loader.batchSize, prod(loader.dataset.shape))
   var labels = newTensor[int32](loader.batchSize)
   var accuracy = 0.0
@@ -80,7 +86,7 @@ proc getAccuracy(c: Client, model: var Module, exec: Executable, loader: Dataloa
   return accuracy
 
 
-proc main(epochs = 10, learnRate = 0.01, batchSize = 500, seed: int64 = 0, gpu = false, debug = false) =
+proc main(epochs = 10, learnRate = 0.01, trainBatch = 500, testBatch = 1000, seed: int64 = 0, gpu = false, debug = false) =
   var logger = newConsoleLogger(levelThreshold=if debug: lvlDebug else: lvlInfo)
   addHandler(logger)
   # init client
@@ -91,26 +97,26 @@ proc main(epochs = 10, learnRate = 0.01, batchSize = 500, seed: int64 = 0, gpu =
   else:
     randomize()
   # get data
-  let trainData = initLoader(mnistDataset(train = true), batchSize, shuffle = true)
-  info trainData
-  let testData = initLoader(mnistDataset(train = false), batchSize)
-  info testData
-  let imgSize = prod(trainData.dataset.shape)
+  let train = initLoader(mnistDataset(train = true), trainBatch, shuffle = true)
+  info train
+  let test = initLoader(mnistDataset(train = false), testBatch)
+  info test
+  let imgSize = prod(train.dataset.shape)
   # compile model executable
-  var (model, exec) = c.newModel(imgSize, batchSize)
+  var (model, trainer, tester) = c.newModel(imgSize, train.batchSize, test.batchSize)
   for p in model.variables:
     debug &"initial {p.name}: {p.data.f32}"
   # compile optimizer used to update the weights and function to calc the accuracy on the test set
   let optim = c.optimAdam(model, learnRate)
-  let accFn = c.calcAccuracy(batchSize, nclasses)
-
+  let aTrain = c.calcAccuracy(train.batchSize, nclasses)
+  let aTest = c.calcAccuracy(test.batchSize, nclasses)
   info "training with learning rate = ", learnRate
   for epoch in 1 .. epochs:
-    let (loss, trainAcc) = c.trainEpoch(model, exec, trainData, optim, accFn)
+    let (loss, trainAcc) = c.trainEpoch(model, trainer, train, optim, aTrain)
     if loss.isNan:
       error "loss returns Nan value - aborting"
       break
-    let testAcc = c.getAccuracy(model, exec, testData, accFn)
+    let testAcc = c.getAccuracy(model, tester, test, aTest)
     info &"epoch {epoch:3}:  loss: {loss:8.4f}  train accuracy: {trainAcc*100:.1f}%  test accuracy: {testAcc*100:.1f}%"
 
 dispatch main

@@ -18,17 +18,9 @@ type
   Module* = object
     ## A module holds the state for a set of variables together with a forward 
     ## computation which depends on an input value.
-    builder*:   Builder
     variables*: seq[Variable]
     forward*:   proc(x: Node): Node
 
-
-proc newModule*(b: Builder, forward: proc(x: Node): Node, submodules: varargs[Module]): Module =
-  ## Create a new module with given forward function containing variables from provided submodules.
-  result.builder = b
-  result.forward = forward
-  for sub in submodules:
-    result.variables.add sub.variables
 
 proc constantInit*(value: SomeFloat): InitFunc =
   ## Create a new buffer with a constant value.
@@ -97,29 +89,31 @@ proc softmax*(a: Node, axis = -1): Node =
   let sum_a = exp_a.sum([axis], keepDims=true)
   result = exp_a / sum_a
 
-proc initLinear*(c: Client, b: Builder, id: string, nin, nout: int, 
-                 weights: InitFunc, biases = constantInit(0f32), dtype = F32): Module =
+proc initLinear*(c: Client, id: string, nin, nout: int, weights: InitFunc, 
+                 biases = constantInit(0f32), dtype = F32): Module =
   ## Create a new fully connected linear layer with the given unique id and number of inputs and outputs.
   ## Weight parameters are initialised using the weights function. If biases is not nil then bias parameters 
   ## are initialised using this function and added to the output.
-  result.builder = b
   let weight = c.newVariable(id & ".w", [nin, nout], dtype, weights)
-  let W = b.param(weight)
   result.variables.add weight
   if biases == nil:
-    result.forward = proc(x: Node): Node = dot(x, W)
+    result.forward = proc(x: Node): Node = 
+      let W = x.builder.param(weight)
+      dot(x, W)
   else:
     let bias = c.newVariable(id & ".b", [1, nout], dtype, biases)
-    let B = b.param(bias)
     result.variables.add bias
-    result.forward = proc(x: Node): Node = dot(x, W) + B
+    result.forward = proc(x: Node): Node = 
+      let W = x.builder.param(weight)
+      let B = x.builder.param(bias)
+      dot(x, W) + B
 
 proc compileTest*(c: Client, m: Module, input: Node): Executable =
   ## Build the execution graph for the given module and compile it to an executable.
   ## The executable returns the output from `m.forward(input)`
   let pred = m.forward(input)
   debug "forward function: ", pred.toString
-  c.compile(m.builder.build(pred), ["pred"])
+  c.compile(input.builder.build(pred), ["pred"])
 
 proc compileTrain*(c: Client, m: Module, input: Node, lossFn: proc(y: Node): Node): Executable =
   ## Build the execution graph for the given module and compile it to an executable.
@@ -127,7 +121,7 @@ proc compileTrain*(c: Client, m: Module, input: Node, lossFn: proc(y: Node): Nod
   ## - pred: result of `m.forward(input)`
   ## - loss: result of `lossFn(pred)`
   ## - <v1.name>_grad, ...: gradients for each input variable with respect to the loss
-  let b = m.builder
+  let b = input.builder
   let pred = m.forward(input)
   debug "forward function: ", pred.toString
   let loss = lossFn(pred)
