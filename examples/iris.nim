@@ -53,11 +53,10 @@ proc model(c: Client, batch, nin, nout: int): Executable =
   let input = b.parameter(F32, [batch, nin], "x")
   let weights = b.parameter(F32, [nin, nout], "w")
   let labels = b.parameter(I64, [batch], "y")
-  let batchSize = b.constant(batch.float32)
   let output = dot(input, weights).softmax(axis=1)
   let loss = crossEntropyLoss(output, labels)
   debug "forward graph: ", loss.toString
-  let grad = b.gradient(loss, ["w"])[0] / batchSize
+  let grad = b.gradient(loss, ["w"])[0]
   debug "weight grad: ", grad.toString
   let comp = b.build b.makeTuple(output, loss, grad)
   c.compile(comp)
@@ -107,7 +106,7 @@ proc train(epochs = 100, logEvery = 10, learnRate = 0.05, seed: int64 = 0, gpu =
     # one step processing the data - both forward and backward pass
     var (pred, loss, grads) = exec.runAndUnpack([inputs, weights, labels]).tuple3
     debug "predict:", pred.f32
-    let lossValue = loss.f32[] / batch.float
+    let lossValue = loss.f32[]
     if lossValue.isNan:
       error "loss returns Nan value - aborting"
       break

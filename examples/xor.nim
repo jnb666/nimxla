@@ -14,12 +14,10 @@ proc initModel(c: Client): (Module, Executable) =
   let b = newBuilder("xor")
   let layer1 = c.initLinear(b, "1", nin=2, nout=2, weights = uniformInit(), biases = constantInit(0f32))
   let layer2 = c.initLinear(b, "2", nin=2, nout=1, weights = uniformInit(), biases = constantInit(0f32))
-  var model = Module(builder: b)
-  model.add(layer1, layer2)
-  model.forward = proc(x: Node): Node = layer2.forward(layer1.forward(x).sigmoid)
+  var model = newModule(b, x => layer2.forward(layer1.forward(x).sigmoid), layer1, layer2)
   let x = b.parameter(F32, data.dims, "x")
   let y = b.parameter(F32, target.dims, "y")
-  let exec = c.buildAndCompile(model, x, yp => mseLoss(yp, y))
+  let exec = c.compileTrain(model, x, yp => mseLoss(yp, y))
   return (model, exec)
 
 proc calcAccuracy(c: Client): Executable =
@@ -48,7 +46,7 @@ proc train(epochs = 1000, logEvery = 10, learnRate = 0.2, minLoss = 0.1, seed: i
   var params = initParams({"x": c.newBuffer(data), "y": c.newBuffer(target)})
   var (model, exec) = c.initModel()
   for p in model.variables:
-    info &"inital {p.name}: {p.data.f32}"
+    info &"initial {p.name}: {p.data.f32}"
   # compile optimizer used to update the weights and function to calc the accuracy
   let optim = c.optimSGD(model, learnRate, momentum = 0.9)
   let accFn = c.calcAccuracy()
@@ -58,6 +56,7 @@ proc train(epochs = 1000, logEvery = 10, learnRate = 0.2, minLoss = 0.1, seed: i
     # one step processing the data - both forward and backward pass
     model.setParams(params)
     exec.runWith(params)
+    debug params["pred"]
     let loss = params["loss"].f32[]
     if loss.isNan:
       error "loss returns Nan value - aborting"

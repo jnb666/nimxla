@@ -12,6 +12,9 @@ type
   InitFunc* = proc(c: Client, dims: openarray[int], dtype: DataType): Buffer
     ## InitFunc defines a function used to initialise a learnable parameter.
 
+  Optimizer* = proc(params: Params): seq[Variable]
+    ## Optimizer function to update the model weights.
+
   Module* = object
     ## A module holds the state for a set of variables together with a forward 
     ## computation which depends on an input value.
@@ -19,6 +22,13 @@ type
     variables*: seq[Variable]
     forward*:   proc(x: Node): Node
 
+
+proc newModule*(b: Builder, forward: proc(x: Node): Node, submodules: varargs[Module]): Module =
+  ## Create a new module with given forward function containing variables from provided submodules.
+  result.builder = b
+  result.forward = forward
+  for sub in submodules:
+    result.variables.add sub.variables
 
 proc constantInit*(value: SomeFloat): InitFunc =
   ## Create a new buffer with a constant value.
@@ -71,14 +81,15 @@ proc mseLoss*(pred, target: Node): Node =
   sum((pred - target) * (pred - target)) / n
 
 proc crossEntropyLoss*(pred, target: Node): Node =
-  ## Cross entropy loss function calculated from softmax output.
+  ## Mean cross entropy loss function calculated from softmax output.
   ## Pred should be predicted values with shape [n, classes] while target is a
   ## 1d vector of I64 labels each in range 0..classes.
   let shape = [target.dims[0], 1]
-  let indices = concat(pred.builder.iota(I64, shape, axis=0), [target.reshape(shape)], axis=1)
-  -sum(log(pred.gather(indices.reshape(-1, 1, 2))))
+  let indices = concat(pred.builder.iota(target.dtype, shape, axis=0), [target.reshape(shape)], axis=1)
+  let nitems = pred.builder.constant(target.dims[0], pred.dtype)
+  -sum(log(pred.gather(indices.reshape(-1, 1, 2)))) / nitems
 
-proc softmax*(a: Node, axis: int): Node =
+proc softmax*(a: Node, axis = -1): Node =
   ## Softmax operation, shifted for numerical stability.
   let maxval = a.max([axis], keepDims=true)
   maxval.noGrad = true
@@ -103,7 +114,14 @@ proc initLinear*(c: Client, b: Builder, id: string, nin, nout: int,
     result.variables.add bias
     result.forward = proc(x: Node): Node = dot(x, W) + B
 
-proc buildAndCompile*(c: Client, m: Module, input: Node, lossFn: proc(y: Node): Node): Executable =
+proc compileTest*(c: Client, m: Module, input: Node): Executable =
+  ## Build the execution graph for the given module and compile it to an executable.
+  ## The executable returns the output from `m.forward(input)`
+  let pred = m.forward(input)
+  debug "forward function: ", pred.toString
+  c.compile(m.builder.build(pred), ["pred"])
+
+proc compileTrain*(c: Client, m: Module, input: Node, lossFn: proc(y: Node): Node): Executable =
   ## Build the execution graph for the given module and compile it to an executable.
   ## The executable returns a tuple with the following outputs:
   ## - pred: result of `m.forward(input)`
@@ -137,7 +155,7 @@ proc buildSGD(m: Module, learnRate, weightDecay, momentum: float): (Computation,
     outputs.add x - lr*dx
   (b.build b.makeTuple(outputs), names)
 
-proc optimSGD*(c: Client, m: Module, learnRate: float, weightDecay = 0.0, momentum = 0.0): proc(params: Params): seq[Variable] =
+proc optimSGD*(c: Client, m: Module, learnRate: float, weightDecay = 0.0, momentum = 0.0): Optimizer =
   ## Builds and compiles a stochastic gradient descent optimizer to optimize the variables for module m.
   ## This returns a function which takes as input a table with all of the named weight and gradient parameters and
   ## returns the list of model weight variables.

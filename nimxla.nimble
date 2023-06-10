@@ -8,7 +8,7 @@ srcDir = "src"
 
 # Dependencies
 requires "nim >= 1.6.12"
-
+requires "zippy >= 0.10.10"
 
 task makedocs, "build the docs":
   exec "rm -fr htdocs"

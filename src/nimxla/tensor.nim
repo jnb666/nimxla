@@ -19,8 +19,6 @@ type
   TensorDataObj[T: ElemType] = object
     arr: ptr UncheckedArray[T]
 
-  ElemTypeOrInt* = ElemType or int
-
   TensorData[T: ElemType] = ref TensorDataObj[T]
 
   Tensor*[T: ElemType] = object
@@ -66,9 +64,9 @@ proc allocData[T: ElemType](size: int, zero = false): TensorData[T] =
       allocShared(size * sizeOf(T))
   )
 
-proc rawPtr*(t: Tensor): pointer =
+proc rawPtr*[T: ElemType](t: Tensor[T]): ptr T =
   ## Pointer to start of data buffer.
-  cast[pointer](t.data.arr)
+  cast [ptr T](t.data.arr)
 
 proc len*(t: Tensor): int =
   ## Number of elements in the tensor.
@@ -209,6 +207,15 @@ proc `==`*[T: ElemType](t1, t2: Tensor[T]): bool =
   for i in 0 ..< t1.len:
     if t1.data.arr[i] != t2.data.arr[i]: return false
   return true
+
+proc at*[T: ElemType](t: Tensor[T], ix: int): Tensor[T] =
+  ## Returns copy of tensor indexed by leading dimension
+  ## e.g. if shape of t is [2, 3, 4] then t.at(1) => [3, 4]
+  if t.dims.len < 1 or ix < 0 or ix >= t.dims[0]:
+    raise newException(IndexDefect, &"index {ix} out of range for at {t.dims}")
+  result = newTensor[T](t.dims[1 .. ^1])
+  let offset = ix * result.len
+  copyMem(result.data.arr, t.data.arr[offset].addr, result.len*sizeOf(T))
 
 proc toSeq*[T: ElemType](t: Tensor[T]): seq[T] =
   ## Copy the data associated with the tensor to a sequence of length t.len.

@@ -14,11 +14,9 @@
 ## Shapes and host literal types are defined in the literal module.
 ##
 
-import std/[sugar, sequtils, strformat, strutils, tables, math, macros]
+import std/[sugar, sequtils, strformat, strutils, tables, math, macros, logging]
 import tensor, literal, shape
 import private/[xla_wrapper, utils]
-when defined tracemem:
-  import std/logging
 
 export shape
 
@@ -244,6 +242,8 @@ proc build*(b: Builder, root: Node): Computation =
     n.op = nil
   result.nodes = b.nodes
   result.params = b.params
+  b.nodes = @[]
+  b.params = @[]
 
 proc last*(comp: Computation): Node =
   ## Last node defined in the graph
@@ -512,6 +512,7 @@ proc relu*(a: Node): Node =
   ## Rectified linear unit activation function: max(0, a)
   result = max(a.builder.zero(a.dtype), a)
   result.kind = tRelu
+  result.args = @[a]
 
 proc select*(a, onTrue, onFalse: Node): Node =
   ## Select values from onTrue where a is true else from onFalse.
@@ -792,10 +793,6 @@ proc localGrad(b: Builder, n: Node): seq[GradFn] =
     return @[ defn(v, v * b.constant(-0.5, n.dtype) * x) ]
   of tTanh:
     return @[ defn(v, v * (b.one(x.dtype) - n * n) ) ]
-  of tSin:
-    return @[ defn(v, cos(v)) ]
-  of tCos:
-    return @[ defn(v, -sin(v)) ]
   of tAbs:
     return @[ defn(v, v * sign(x)) ]
   of tSigmoid:
@@ -832,7 +829,8 @@ proc calcGrads(b: Builder, node, pathValue: Node, inputs: openarray[string],
       b.calcGrads(input, grad, inputs, grads, dict)
     elif input.kind == tParam:
       let n = inputs.find(input.name)
-      if n >= 0: grads[n] = dict[id]
+      if n >= 0:
+        grads[n] = dict[id]
 
 proc reshapeAs(n: Node, b: Builder, name: string): Node =
   ## Returns n reshaped to match the parameter with the given name.
@@ -866,7 +864,7 @@ proc gradient*(b: Builder, output: Node, inputs: openarray[string]): seq[Node] =
     # will dump out details of each node for debugging
     echo comp
 
-
+  debug &"get gradient at: {inputs}"
   let pathValue = b.one(output.dtype, output.dims)
   var dict = initTable[uint64, Node]()
   result = newSeq[Node](inputs.len)
