@@ -155,6 +155,17 @@ suite "graph":
     check res.dims == [4, 3]
     check res.toSeq == [1'i32, 5, 9, 2, 6, 10, 3, 7, 11, 4, 8, 12]
 
+  test "reverse":
+    let t1 = toTensor[int32](1..12).reshape(2, 2, 3)
+    debug t1
+    let b = newBuilder("test")
+    let comp = b.build reverse(b^t1, 2)
+    debug comp
+    let res = client.compile(comp).run.i32
+    debug res
+    check res.dims == [2, 2, 3]
+    check res.toSeq == [3'i32, 2, 1, 6, 5, 4, 9, 8, 7, 12, 11, 10]
+
   test "narrow":
     let t1 = toTensor[int32](1..12).reshape(3, 4).toLiteral
     debug t1
@@ -258,6 +269,89 @@ suite "graph":
     debug "dot(x, y) = ", res
     check res.dims == [2, 2]
     check res.toSeq == [58f32, 64, 139, 154]
+
+  test "conv2d":
+    proc test_conv(dims: openarray[int], axis: int, scale: float32,
+                   kernel, expect: Tensor[float32], padding = pad(0),
+                   strides = 1, dilations = 1, channelsFirst = false) =
+      let b = newBuilder("test")
+      debug &"strides={strides} padding={padding} dilations={dilations} channelsFirst={channelsFirst}"
+      let x = b.iota(F32, dims, axis)
+      let x2 = x.concat([x * b^scale], axis = if channelsFirst: 1 else: -1)
+      let comp = b.build conv2d(x2, b^kernel, strides, padding, dilations, channelsFirst=channelsFirst)
+      let res = client.compile(comp).run.f32
+      debug res
+      check res.approxEqual(expect)
+
+    test_conv(
+      [1, 3, 3, 1], 2, 0.1,
+      fill([1, 3, 3, 2], 1f32),
+      @@[[[[9.9f32]]]],
+    )
+    test_conv(
+      [1, 1, 3, 3], 2, 0.1,
+      fill([1, 2, 3, 3], 1f32),
+      @@[[[[9.9f32]]]],
+      channelsFirst=true
+    )
+    test_conv(
+      [1, 1, 3, 3], 2, 0.1,
+      fill([1, 2, 3, 3], 1f32),
+      @@[[[[2.2f32, 3.3, 2.2], [6.6, 9.9, 6.6], [6.6, 9.9, 6.6]]]],
+      padding=padSame, channelsFirst=true
+    )
+    test_conv(
+      [1, 3, 3, 1], 1, 0.1,
+      fill([1, 2, 2, 2], 1f32),
+      @@[[
+        [[2.2f32], [2.2], [1.1]],
+        [[6.6], [6.6], [3.3]],
+        [[4.4], [4.4], [2.2]]
+      ]],
+      padding=padSame,
+    )
+    test_conv(
+      [1, 3, 3, 1], 2, 0.1,
+      fill([1, 3, 3, 2], 1f32),
+      @@[[[[2.2f32], [6.6]], [[2.2], [6.6]]]],
+      padding=padSame, strides=2
+    )
+    test_conv(
+      [1, 5, 5, 1], 1, 0.01,
+      fill([1, 3, 3, 2], 1f32),
+      @@[[[[18.18f32]]]],
+      dilations=2
+    )
+
+  test "max_pool":
+    proc test_pool(dims: openarray[int], expect: Tensor[float32],
+                   window: int, strides = 0, padding = pad(0), channelsFirst = false) =
+      let b = newBuilder("test")
+      debug &"window={window} strides={strides} padding={padding} channelsFirst={channelsFirst}"
+      let x = b.iota(F32, dims, axis=2)
+      let x2 = x.concat([x * b^0.1f32], axis = if channelsFirst: 1 else: -1)
+      let comp = b.build maxPool2d(x2, window, strides, padding, channelsFirst=channelsFirst)
+      let res = client.compile(comp).run.f32
+      debug res
+      check res == expect
+
+    test_pool(
+      [1, 3, 3, 1],
+      @@[[[[2f32, 0.2]]]],
+      window=3
+    )
+    test_pool(
+      [1, 1, 3, 3],
+      @@[[[[2f32]], [[0.2]]]],
+      window=3, channelsFirst=true
+    )
+    test_pool(
+      [1, 1, 3, 3],
+      @@[[[[1f32,   1,   1], [  2,   2,   2], [  2,   2,   2]],
+          [[0.1 , 0.1, 0.1], [0.2, 0.2, 0.2], [0.2, 0.2, 0.2]]
+        ]],
+      window=3, strides=1, padding=padSame, channelsFirst=true
+    )
 
   test "error":
     let b = newBuilder("test")

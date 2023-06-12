@@ -34,12 +34,25 @@ type
     tLog1p, tSigmoid, tRelu, tSign, tCos, tSin, tTanh, tSqrt,   ## ..
     tRsqrt, tIsFinite, tCopy, tZerosLike, tTupleElement,        ## ..
     tReshape, tBroadcast, tBroadcastInDim, tCollapse,           ## ..
-    tTranspose, tNarrow, tConvert,                              ## ..
+    tTranspose, tNarrow, tConvert, tReverse, tMaxPool,          ## ..
     tReduceSum, tReduceMin, tReduceMax, tArgmin, tArgmax        ## ..
     tAdd, tSub, tMul, tDiv, tRem, tMax, tMin, tPow, tDot,       ## 2 arg ops
     tAnd, tOr, tEq, tNe, tGe, tGt, tLe, tLt, tRngUniform,       ## ..
-    tRngNormal, tReduce, tGather                                ## ..
+    tRngNormal, tReduce, tGather, tConv, tReduceWindow,         ## ..
+    tSelectAndScatter,                                          ##
     tSelect, tClamp, tTuple, tConcat, tScatter                  ## 3 or more arg ops
+
+  Padding* = object
+    lo, hi: int
+    same:   bool
+
+  Opt2d* = int or (int, int)
+
+  Pad2d* = Padding or (Padding, Padding)
+
+  Opt3d* = int or (int, int, int)
+
+  Pad3d* = Padding or (Padding, Padding, Padding)
 
   GradFn = proc(path: Node): Node
     ## Local gradient function for autodiff
@@ -75,10 +88,22 @@ type
     of tTupleElement, tConcat:
       index:    int
     of tReshape, tBroadcast, tCollapse, tTranspose, tNarrow, tRngUniform, tRngNormal, tReduce, tReduceSum, 
-       tReduceMin, tReduceMax, tArgmin, tArgmax:
+       tReduceMin, tReduceMax, tArgmin, tArgmax, tReverse:
       indices:  seq[int]
     of tBroadcastInDim:
       outSize, bcastDims: seq[int]
+    of tReduceWindow, tMaxPool:
+      wdims:    seq[int]
+      wstride:  seq[int]
+      wpad:     seq[Padding]
+    of tConv:
+      idims:    seq[int]
+      odims:    seq[int]
+      kdims:    seq[int]
+      strides:  seq[int]
+      padding:  seq[Padding]
+      dilation: seq[int]
+      groups:   int
     else:
       discard
     info:   string
@@ -121,7 +146,6 @@ proc `=destroy`(op: var Op) =
     xla_op_free(op.c)
     op.c = nil
 
-
 # error handling
 proc repr*(n: Node): string
 
@@ -143,6 +167,56 @@ proc checkBuilderError(status: status_t, at: Node = nil) =
     let message = $status_error_message(status)
     status_free(status)
     raiseError(message, at)
+
+# utils to parse convolution options
+proc seq2(opt: Opt2d): seq[int] =
+  when opt is int:
+    return @[opt, opt]
+  else:
+    return @[opt[0], opt[1]]
+
+proc seq2(opt: Pad2d): seq[Padding] =
+  when opt is Padding:
+    return @[opt, opt]
+  else:
+    return @[opt[0], opt[1]]
+
+proc seq3(opt: Opt3d): seq[int] =
+  when opt is int:
+    return @[opt, opt, opt]
+  else:
+    return @[opt[0], opt[1], opt[2]]
+
+proc seq3(opt: Pad3d): seq[Padding] =
+  when opt is Padding:
+    return @[opt, opt, opt]
+  else:
+    return @[opt[0], opt[1], opt[2]]
+
+proc i64seq(arr: openarray[int], length: int, def: int64 = 0, name = ""): seq[int64] =
+  if arr.len == 0:
+    result = repeat(def, length)
+  elif arr.len == length:
+    result = map(arr, x => x.int64)
+  else:
+    raiseError(&"convolution: number of {name} values should be {length} - got {arr.len}")
+
+const padSame*: Padding = Padding(same: true)
+  ## Padding such that output matches the input.
+
+proc pad*(val: int): Padding =
+  ## Padding with low and high values set to val.
+  Padding(lo:val, hi:val)
+
+proc pad*(lo, hi: int): Padding =
+  ## Padding with given low and high values.
+  Padding(lo:lo, hi:hi)
+
+proc `$`*(p: Padding): string =
+  if p.same:
+    "padSame"
+  else:
+    &"({p.lo}, {p.hi})"
 
 proc getShape(b: Builder, op: xla_op): (Shape, status_t) =
   ## Returns the shape of the output from the op.
@@ -290,6 +364,11 @@ proc makeTuple*(b: Builder, args: varargs[Node]): Node =
     ptrOffset(ops, i)[] = arg.op.c
   result = b.wrap(op_tuple(b.obj.c, ops, csize_t(args.len)), tTuple, args)
   dealloc(ops)
+
+proc iota*(b: Builder, dtype: DataType, length: int): Node =
+  ## One dimensional vector of length with values starting from zero.
+  let op = b.obj.c.op_iota1(cint(dtype), csize_t(length))
+  result = b.wrap(op, tIota, info = &"[{length}]")
 
 proc iota*(b: Builder, dtype: DataType, dims: openarray[int], axis: int): Node =
   ## Creates an array that has specified shape and holds values starting at zero and incrementing by one along 
@@ -463,16 +542,24 @@ proc reshape*(a: Node, dims: varargs[int]): Node =
    result = a.builder.wrap(op_reshape(a.op.c, csize_t(dims2.len), dptr), tReshape, [a], $dims2)
    result.indices = dims2
 
+proc reverse*(a: Node, axes: varargs[int]): Node =
+  ## Reverse the elements in the input along the given axes.
+  ## If one of the dimensions is -1 then this value is inferred from the total number of elements.
+  let axes2 = map(axes, x => normalize(x, a.rank))
+  withDims(dptr, axes2):
+   result = a.builder.wrap(op_reverse(a.op.c, csize_t(axes2.len), dptr), tReverse, [a], $axes2)
+   result.indices = axes2
+
 proc broadcast*(a: Node, dims: openarray[int]): Node =
   ## Add new leading dimensions to the input node per
-  ## [broadcast](https://www.tensorflow.org/xla/operation_semantics#broadcast)
+  ## [Broadcast](https://www.tensorflow.org/xla/operation_semantics#broadcast)
   withDims(dptr, dims):
     result = a.builder.wrap(op_broadcast(a.op.c, csize_t(dims.len), dptr), tBroadcast, [a], $dims)
     result.indices = @dims
 
 proc broadcastInDim*(a: Node, outSize, bcastDims: openarray[int]): Node =
   ## Expand dims at each index in bcastDimes from 1 to the corresponding value in outSize as 
-  ## per [broadcastInDim](https://www.tensorflow.org/xla/operation_semantics#broadcastindim)
+  ## per [BroadcastInDim](https://www.tensorflow.org/xla/operation_semantics#broadcastindim)
   withDims(dptr1, outSize):
     withDims(dptr2, bcastDims):
       let op = op_broadcast_in_dim(a.op.c, csize_t(outSize.len), dptr1, csize_t(bcastDims.len), dptr2)
@@ -483,7 +570,7 @@ proc broadcastInDim*(a: Node, outSize, bcastDims: openarray[int]): Node =
 # collapse given dimensions
 proc collapse*(a: Node, dims: openarray[int]): Node =
   ## Collapse the given dimensions into a single dimension as per 
-  ## [collapse](https://www.tensorflow.org/xla/operation_semantics#collapse).
+  ## [Collapse](https://www.tensorflow.org/xla/operation_semantics#collapse).
   ## dims should be an in-order consecutive subset of the input dims.
   withDims(dptr, dims):
     result = a.builder.wrap(op_collapse(a.op.c, csize_t(dims.len), dptr), tCollapse, [a], $dims)
@@ -503,7 +590,7 @@ proc transpose*(a: Node, axes: varargs[int]): Node =
 
 proc narrow*(a: Node, dim, start, stop: int, stride = 1): Node =
   ## Returns the data narrowed such that dimension dim ranges from start..stop-1 with step of stride.
-  ## As per [slice](https://www.tensorflow.org/xla/operation_semantics#slice)
+  ## As per [Slice](https://www.tensorflow.org/xla/operation_semantics#slice)
   let op = op_slice_in_dim(a.op.c, start, stop, stride, dim)
   result = a.builder.wrap(op, tNarrow, [a], &"(dim:{dim} start:{start} stop:{stop} stride:{stride})")
   result.indices = @[dim, start, stop]
@@ -540,10 +627,132 @@ proc rngNormal*(mean, stddev: Node, dims: openarray[int]): Node =
 
 proc concat*(a: Node, nodes: openarray[Node], axis: int): Node =
   ## Concatenate the given nodes with a along the given axis.
+  let axis = normalize(axis, a.rank)
   var args = map(nodes, x => x.op.c)
   let op = op_concat_in_dim(a.op.c, args[0].addr, csize_t(args.len), axis)
   result = a.builder.wrap(op, tConcat, nodes, &"axis={axis}")
   result.index = axis
+
+proc getPadding(padding: openarray[Padding], kernelSize: openarray[int]): (seq[int64], seq[int64]) =
+  var padLo, padHi: seq[int64]
+  for i, p in padding:
+    if p.same:
+      let w = kernelSize[i].int64
+      padLo.add (w - 1) div 2
+      padHi.add w div 2
+    else:
+      padLo.add p.lo.int64
+      padHi.add p.hi.int64
+  return (padLo, padHi)
+
+proc convolution*(a, kernel: Node, inputDims, outputDims, kernelDims: openarray[int],
+                  strides: openarray[int] = [], padding: openarray[Padding] = [],
+                  dilation, inputDilation: openarray[int] = [], groups, batchGroups = 1): Node =
+  ## General n dimensional convolution call. See conv1d, conv2d and conv3d for simplified version.
+  ##
+  ## inputDims, outputDims and kernelDims provide the layout for the dimensions of each tensor
+  ## - dims[0] = batch / kernel output dimension
+  ## - dims[1] = channel / kernel input dimension
+  ## - dims[2..] = spatial dimensions
+  ## If set then strides, padding and dilation should have same number of entries as spatial dimensions.
+  ##
+  ## See [ConvWithGeneralPadding](https://www.tensorflow.org/xla/operation_semantics#convwithgeneralpadding_convolution).
+  if inputDims.len != outputDims.len or inputDims.len != kernelDims.len:
+    raiseError("convolution: number input/output/kernel dimensions should be equal", a)
+  if inputDims.len < 3:
+    raiseError("convolution: number input/output/kernel dimensions should be at least 3", a)
+  let nd = inputDims.len - 2
+  var idims = map(inputDims, x => x.int64)
+  var odims = map(outputDims, x => x.int64)
+  var kdims = map(kernelDims, x => x.int64)
+  var stride = i64seq(strides, nd, 1, "stride")
+  var inDilation = i64seq(inputDilation, nd, 1, "input dilation")
+  var kDilation = i64seq(dilation, nd, 1, "dilation")
+  if padding.len != 0 and padding.len != nd:
+    raiseError(&"convolution: number of padding values should be {nd} - got {padding.len}")
+  let kernelSize = collect:
+    for i in 0 ..< padding.len:
+      int((kernel.dims[kdims[i+2]] - 1) * kDilation[i] + 1)
+  var (padLo, padHi) = getPadding(padding, kernelSize)
+  debug "conv: pading = ", $padLo, " ", $padHi
+  let op = op_conv(a.op.c, kernel.op.c, csize_t(nd), idims[0].addr, odims[0].addr, kdims[0].addr,
+                   stride[0].addr, inDilation[0].addr, kDilation[0].addr, csize_t(padding.len), 
+                   padLo[0].addr, padHi[0].addr, groups, batchGroups)
+  result = a.builder.wrap(op, tConv, [a, kernel], &"strides={strides},padding={padding}")
+  if dilation.len > 0:
+    result.info.add &",dilation={dilation}"
+  if groups != 1:
+    result.info.add &",groups={groups}"
+  result.idims = @inputDims
+  result.odims = @outputDims
+  result.kdims = @kernelDims
+  result.strides = @strides
+  result.padding = @padding
+  result.dilation = @dilation
+  result.groups = groups
+
+proc getDims*(ndims: int, channelsFirst: bool): seq[int] =
+  ## Get dimension index numbers for given layout.
+  if channelsFirst:
+    @[0, 1] & toSeq(2 .. ndims+1)
+  else:
+    @[0, ndims+1] & toSeq(1 .. ndims)
+
+proc conv1d*(a, kernel: Node, strides=1, padding=pad(0), dilation=1, groups=1, channelsFirst=false): Node =
+  ## One dimensional convolution with optional low and high padding and either strides or dilation.
+  ##
+  ## Default layout should be
+  ## - a:      [N, W, C]
+  ## - kernel: [K, W, C]
+  ##
+  ## If channelsFirst is set then
+  ## - a:      [N, C, W]
+  ## - kernel: [K, C, W]
+  ##
+  ## Where N = number of batches, C = input channels, K = output channels and W is the spatial dimension.
+  ## If groups is > 1 then performs a grouped convolution. In this case C and K should be divisible by groups.
+  if a.rank != 3 or kernel.rank != 3:
+    raiseError(&"conv1d: input and kernel rank should be 3 - have {a.rank},{kernel.rank}", a)
+  let dims = getDims(1, channelsFirst)
+  convolution(a, kernel, dims, dims, dims, [strides], [padding], [dilation], groups=groups)
+
+proc conv2d*(a, kernel: Node, strides: Opt2d = 1, padding: Pad2d = pad(0), dilation: Opt2d = 1, 
+             groups=1, channelsFirst=false): Node =
+  ## Two dimensional convolution with optional padding and either strides or dilation.
+  ##
+  ## Default layout should be
+  ## - a:      [N, H, W, C]
+  ## - kernel: [K, H, W, C]
+  ##
+  ## If channelsFirst is set then
+  ## - a:      [N, C, H, W]
+  ## - kernel: [K, C, H, W]
+  ##
+  ## Where N = number of batches, C = input channels, K = output channels and H, W are spatial dimensions.
+  ## If groups is > 1 then performs a grouped convolution. In this case C and K should be divisible by groups.
+  if a.rank != 4 or kernel.rank != 4:
+    raiseError(&"conv2d: input and kernel rank should be 4 - have {a.rank},{kernel.rank}", a)
+  let dims = getDims(2, channelsFirst)
+  convolution(a, kernel, dims, dims, dims, strides.seq2, padding.seq2, dilation.seq2, groups=groups)
+
+proc conv3d*(a, kernel: Node, strides: Opt3d = 1, padding: Pad3d = pad(0), dilation: Opt3d = 1, 
+             groups=1, channelsFirst=false): Node =
+  ## Three dimensional convolution with optional padding and either strides or dilation.
+  ##
+  ## Default layout should be
+  ## - a:      [N, D, H, W, C]
+  ## - kernel: [K, D, H, W, C]
+  ##
+  ## If channelsFirst is set then
+  ## - a:      [N, C, D, H, W]
+  ## - kernel: [K, C, D, H, W]
+  ##
+  ## Where N = number of batches, C = input channels, K = output channels and D, H, W are spatial dimensions.
+  ## If groups is > 1 then performs a grouped convolution. In this case C and K should be divisible by groups.
+  if a.rank != 5 or kernel.rank != 5:
+    raiseError(&"conv1d: input and kernel rank should be 5 - have {a.rank},{kernel.rank}", a)
+  let dims = getDims(3, channelsFirst)
+  convolution(a, kernel, dims, dims, dims, strides.seq3, padding.seq3, dilation.seq3, groups=groups)
 
 proc gather*(a, indices: Node): Node =
   ## Builds a new tensor by taking individual values from the original tensor at the given indices.
@@ -559,7 +768,7 @@ proc gather*(a, indices: Node): Node =
   ## a.gather(ix) = <f32 3>[4 2 3]
   ## ```
   ##
-  ## This is a simplified version of the [gather](https://www.tensorflow.org/xla/operation_semantics#gather) op.
+  ## This is a simplified version of the [Gather](https://www.tensorflow.org/xla/operation_semantics#gather) op.
   let sliceSizes = repeat(1, a.rank)
   let axes = toSeq(0 ..< a.rank)
   let ndims = csize_t(a.rank)
@@ -579,7 +788,7 @@ proc scatter*(a, indices, b: Node, comp: Computation): Node =
   ## to update and the columns indicate the location in the target vector (which can be repeated.)
   ##
   ## This is the opposite of gather. It is a simplified version of the
-  ## [scatter](https://www.tensorflow.org/xla/operation_semantics#scatter) for details.
+  ## [Scatter](https://www.tensorflow.org/xla/operation_semantics#scatter) for details.
   var ixdims = indices.dims
   if ixdims.len != 2 or ixdims[1] != a.rank:
     raiseError("Index dimensions for scatter should be [n, a.rank] - got " & $ixdims, a)
@@ -614,6 +823,7 @@ proc addAt*(a, indices, b: Node): Node =
   let b2 = newBuilder("addAt")
   let sum = b2.build(b2.parameter(a.dtype) + b2.parameter(a.dtype))
   a.scatter(indices, b, sum)
+
 
 proc reduce*(a, initValue: Node, comp: Computation, dims: openarray[int] = [], 
             nodeType = tReduce, keepDims = false): Node =
@@ -717,6 +927,111 @@ argMinMax(argMax, `>=`, minValue, tArgmax)
 argMinMax(argMin, `<=`, maxValue, tArgmin)
 
 
+proc poolDims(val: openarray[int], channelsFirst: bool): seq[int] =
+  if channelsFirst:
+    @[1, 1] & @val
+  else:
+    @[1] & @val & @[1]
+
+proc poolPadding(val: openarray[Padding], channelsFirst: bool): seq[Padding] =
+  for v in val:
+    if v != pad(0):
+      return if channelsFirst:
+        @[pad(0), pad(0)] & @val
+      else:
+        @[pad(0)] & @val & @[pad(0)]
+  return @[]
+
+proc reduceWindow*(a, initValue: Node, comp: Computation, windowDims, strides: openarray[int], padding: openarray[Padding] = [],
+                   nodeType = tReduceWindow): Node =
+  ## Apply reduction to all elements in each window of a sequence of N multi-dimensional arrays.
+  ## The mumber of entries in the windowDims and strides array should equal the rank of the input array
+  ## (i.e. entries should be 1 for non-spatial dimensions).
+  ## If set then number of entries in the padding array should also equal the input rank, where non-spatial
+  ## dimensions have padding of 0.
+  ##
+  ## This can be used to implement pooling layers.
+  ## See [ReduceWindow](https://www.tensorflow.org/xla/operation_semantics#reducewindow) for details.
+  let rank = a.rank
+  if windowDims.len != rank or strides.len != rank:
+    raiseError(&"reduceWindow: windowDims and strides length should equal input rank {rank} - have {windowDims}, {strides}", a)
+  if padding.len != 0 and padding.len != rank:
+    raiseError(&"reduceWindow: padding length should equal input rank {rank} - have {padding}", a)
+  var (padLo, padHi) = getPadding(padding, windowDims)
+  debug "reduceWindow: pading = ", $padLo, " ", $padHi
+  withDims(dptr1, windowDims):
+    withDims(dptr2, strides):
+      let (p1, p2) = if padding.len > 0: (padLo[0].addr, padHi[0].addr) else: (nil, nil)
+      let op = op_reduce_window(a.op.c, initValue.op.c, comp.obj.c, csize_t(rank), dptr1, dptr2,
+                                csize_t(padding.len), p1, p2)
+      result = a.builder.wrap(op, nodeType, [a, initValue], &"dims={windowDims},strides={strides},padding={padding}")
+      result.wdims = @windowDims
+      result.wstride = @strides
+      result.wpad = @padding
+
+proc maxPool1d*(a: Node, kernelSize: int, strides = 0, padding = pad(0), channelsFirst=false): Node =
+  ## Max pooling over 1 dimensional input array. Stride defaults to kernelSize if left as 0.
+  ## channelsFirst setting is as per conv1d.
+  if a.rank != 3: raiseError(&"maxPool1d: input rank should be 3 - have {a.rank}", a)
+  let strides = if strides == 0: kernelSize else: strides
+  let b = newBuilder("reduceWindow")
+  let sum = b.build(max(b.parameter(a.dtype), b.parameter(a.dtype)))
+  let windowDims = poolDims([kernelSize], channelsFirst)
+  let strideDims = poolDims([strides], channelsFirst)
+  let padDims = poolPadding([padding], channelsFirst)
+  reduceWindow(a, a.builder.minValue(a.dtype), sum, windowDims, strideDims, padDims, nodeType=tMaxPool)
+
+proc maxPool2d*(a: Node, kernelSize: Opt2d, strides: Opt2d = 0, padding: Pad2d = pad(0), channelsFirst=false): Node =
+  ## Max pooling over 2 dimensional input array. Stride defaults to kernelSize if left as 0.
+  ## channelsFirst setting is as per conv2d.
+  if a.rank != 4: raiseError(&"maxPool2d: input rank should be 4 - have {a.rank}", a)
+  let strides = if strides == 0: kernelSize else: strides
+  let b = newBuilder("reduceWindow")
+  let sum = b.build(max(b.parameter(a.dtype), b.parameter(a.dtype)))
+  let windowDims = poolDims(kernelSize.seq2, channelsFirst)
+  let strideDims = poolDims(strides.seq2, channelsFirst)
+  let padDims = poolPadding(padding.seq2, channelsFirst)
+  reduceWindow(a, a.builder.minValue(a.dtype), sum, windowDims, strideDims, padDims, nodeType=tMaxPool)
+
+proc maxPool3d*(a: Node, kernelSize: Opt3d, strides: Opt3d = 0, padding: Pad3d = pad(0), channelsFirst=false): Node =
+  ## Max pooling over 3 dimensional input array. Stride defaults to kernelSize if left as 0.
+  ## channelsFirst setting is as per conv3d.
+  if a.rank != 5: raiseError(&"maxPool2d: input rank should be 5 - have {a.rank}", a)
+  let strides = if strides == 0: kernelSize else: strides
+  let b = newBuilder("reduceWindow")
+  let sum = b.build(max(b.parameter(a.dtype), b.parameter(a.dtype)))
+  let windowDims = poolDims(kernelSize.seq3, channelsFirst)
+  let strideDims = poolDims(strides.seq3, channelsFirst)
+  let padDims = poolPadding(padding.seq3, channelsFirst)
+  reduceWindow(a, a.builder.minValue(a.dtype), sum, windowDims, strideDims, padDims, nodeType=tMaxPool)
+
+
+proc selectAndScatter*(a, source: Node, windowDims, strides: openarray[int], padding: openarray[Padding] = []): Node =
+  ## Composite operation that first computes ReduceWindow on the operand array to select an element from each
+  ## window, and then scatters the source array to the indices of the selected elements to construct an output
+  ## array with the same shape as the operand array.
+  ##
+  ## Used for gradient of the maxPool function.
+  ## See [SelectAndScatter](https://www.tensorflow.org/xla/operation_semantics#selectandscatter) for details.
+  let rank = a.rank
+  if windowDims.len != rank or strides.len != rank:
+    raiseError(&"selectAndScatter windowDims and strides length should equal input rank {rank} - have {windowDims}, {strides}", a)
+  if padding.len != 0 and padding.len != rank:
+    raiseError(&"selectAndScatter: padding length should equal input rank {rank} - have {padding}", a)
+  var (padLo, padHi) = getPadding(padding, windowDims)
+  let b1 = newBuilder("select")
+  let selectComp = b1.build(b1.parameter(a.dtype) >= b1.parameter(a.dtype))
+  let b2 = newBuilder("scatter")
+  let scatterComp = b2.build(b2.parameter(a.dtype) + b2.parameter(a.dtype))
+  let init = a.builder.zero(a.dtype)
+  withDims(dptr1, windowDims):
+    withDims(dptr2, strides):
+      let (p1, p2) = if padding.len > 0: (padLo[0].addr, padHi[0].addr) else: (nil, nil)
+      let op = op_select_and_scatter(a.op.c, selectComp.obj.c, csize_t(rank), dptr1, dptr2, 
+                         csize_t(padding.len), p1, p2, source.op.c, init.op.c, scatterComp.obj.c)
+      result = a.builder.wrap(op, tSelectAndScatter, [a, source])
+
+
 template defn(path, expression: untyped): untyped =
   GradFn(proc(path: Node): Node = expression)
 
@@ -750,6 +1065,56 @@ proc dotgrad(n, x, y: Node): seq[GradFn] =
   else:
     raiseError("dot gradient not implemented for > 2 dimensions", n)
 
+proc getConvAxis(n, x, kernel: Node, axis: int): (int, int, int, int, int, Padding) =
+  let isize = x.dims[n.idims[axis+2]]
+  let osize = n.dims[n.odims[axis+2]]
+  let ksize = kernel.dims[n.kdims[axis+2]]
+  let stride = if n.strides.len > 0: n.strides[axis] else: 1
+  let dilation = if n.dilation.len > 0: n.dilation[axis] else: 1
+  let pads = if n.padding.len > 0: n.padding[axis] else: pad(0)
+  (isize, osize, ksize, stride, dilation, pads)
+
+proc convInputGrad(n, x, kernel: Node): GradFn =
+  ## Gradient of convolution with respect to input
+  proc(v: Node): Node =
+    let revKernel = kernel.reverse(n.kdims[2 .. ^1])
+    let kernelDims = @[n.kdims[1], n.kdims[0]] & n.kdims[2 .. ^1]
+    var paddings: seq[Padding]
+    for axis in 0 ..< n.rank-2:
+      let (isize, osize, ksize, stride, dilation, pads) = getConvAxis(n, x, kernel, axis)
+      let ksize2 = (ksize-1) * dilation + 1
+      let inputStart = (ksize2 - 1) div 2 - pads.lo
+      let inputEnd = isize - ksize2 div 2 + pads.hi
+      assert inputEnd - inputStart + (stride-1) div stride == osize
+      let outputStart = -inputStart - ((ksize2 - 1) div 2)
+      assert outputStart <= 0
+      let outputEnd = isize - inputStart + ksize2 div 2 - (osize-1) * (stride - 1)
+      assert outputEnd >= osize
+      paddings.add pad(-outputStart, outputEnd - osize)
+    convolution(v, revKernel, n.idims, n.odims, kernelDims, padding=paddings,
+                dilation=n.dilation, inputDilation=n.strides)
+
+proc expectedOutputSize(isize, ksize, dilation, stride: int, pads: Padding): int =
+  let ksize = (ksize-1)*dilation + 1
+  let istart = (ksize-1) div 2 - pads.lo
+  let iend = isize - ksize div 2 + pads.hi
+  (iend - istart + stride - 1) div stride
+
+proc convKernelGrad(n, x, kernel: Node): GradFn =
+  ## Gradient of convolution with respect to kernel
+  proc(v: Node): Node =
+    let inputDims = @[n.idims[1], n.idims[0]] & n.idims[2 .. ^1]
+    let outputDims = @[n.kdims[1], n.kdims[0]] & n.kdims[2 .. ^1]
+    let kernelDims = @[n.odims[1], n.odims[0]] & n.odims[2 .. ^1]
+    var paddings = n.padding
+    for axis in 0 ..< n.rank-2:
+      let (isize, osize, ksize, stride, dilation, pads) = getConvAxis(n, x, kernel, axis)
+      assert osize == expectedOutputSize(isize, ksize, dilation, stride, pads)
+      let reverseSize = expectedOutputSize(isize, osize, stride, dilation, pads)
+      paddings[axis].hi += (ksize - reverseSize) * dilation
+    convolution(x, v, inputDims, outputDims, kernelDims, strides=n.dilation,
+                padding=paddings, dilation=n.strides)
+
 proc localGrad(b: Builder, n: Node): seq[GradFn] =
   ## Returns the gradients at each of the inputs to node as a function of the value accumulated so far.
   ## Will raise a BuilderError exception if the node type is not supported.
@@ -779,6 +1144,10 @@ proc localGrad(b: Builder, n: Node): seq[GradFn] =
     ]
   of tDot:
     return n.dotGrad(x, y)
+  of tConv:
+    return @[ n.convInputGrad(x, y), n.convKernelGrad(x, y) ]
+  of tMaxPool:
+    return @[ defn(v, selectAndScatter(x, v, n.wdims, n.wstride, n.wpad)) ]
   of tNeg:
     return @[ defn(v, -v) ]
   of tExp:

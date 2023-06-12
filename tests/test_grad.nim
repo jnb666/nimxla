@@ -1,10 +1,9 @@
 {.warning[BareExcept]:off.}
-import std/[unittest, logging, sequtils]
+import std/[unittest, logging, sequtils, math]
 import nimxla
 
 const debug {.booldefine.} = false
 const gpu {.booldefine.} = false
-
 
 suite "grad":
   var logger = newConsoleLogger(levelThreshold=if debug: lvlDebug else: lvlInfo)
@@ -122,7 +121,7 @@ suite "grad":
 
   test "matmul":
     proc test_matmul(x, y, gradX, gradY: Tensor[float64]) =
-      let b = newBuilder("broadcast")
+      let b = newBuilder("matmul")
       let xp = b.parameter(F64, x.dims, "x")
       let yp = b.parameter(F64, y.dims, "y")
       let grads = b.gradient(dot(xp, yp), ["x", "y"])
@@ -154,6 +153,83 @@ suite "grad":
       @@[5.0, 5, 5, 5]
     )
 
+  test "conv1d":
+    let x = toTensor[float64](1..5).reshape(1, 5, 1)
+    let w = toTensor[float64](1..3).reshape(1, 3, 1)
+    let b = newBuilder("conv1d")
+    let input = b.parameter(F64, x.dims, "input")
+    let kernel = b.parameter(F64, w.dims, "kernel")
+    let output = conv1d(input, kernel) * b^w
+    let grads = b.gradient(output, ["input", "kernel"])
+    let comp = b.build(b.makeTuple(grads))
+    debug comp
+    let exec = client.compile(comp)
+    let res = exec.runAndUnpack([x.toLiteral, w.toLiteral]).toLiterals
+    debug "grad(input):", res[0]
+    debug "grad(kernel):", res[1]
+    check res[0].f64 == @@[[[1.0], [4], [10], [12], [9]]]
+    check res[1].f64 == @@[[[14.0], [20], [26]]]
 
+  test "conv2d":
+    var t = newTensor[float64](1, 5, 5, 2)
+    for y in 0..4:
+      for x in 0..4:
+        t[0, y, x, 0] = float(y*5 + x)
+        t[0, y, x, 1] = t[0, y, x, 0] * 0.001
+    var w = newTensor[float64](1, 3, 3, 2)
+    for y in 0..2:
+      for x in 0..2:
+        w[0, y, x, 0] = float(y*3 + x)
+        w[0, y, x, 1] = w[0, y, x, 0]
+    let b = newBuilder("conv1d")
+    let input = b.parameter(F64, t.dims, "input")
+    let kernel = b.parameter(F64, w.dims, "kernel")
+    let grads = b.gradient(conv2d(input, kernel), ["input", "kernel"])
+    let comp = b.build(b.makeTuple(grads))
+    debug comp
+    let exec = client.compile(comp)
+    let res = exec.runAndUnpack([t.toLiteral, w.toLiteral]).toLiterals
+    debug "grad(input):", res[0]
+    debug "grad(kernel):", res[1]
+    check res[0].f64 == @@[[
+      [[0.0, 0], [ 1,  1], [3,   3], [ 3,  3], [ 2,  2]],
+      [[3, 3],   [ 8,  8], [15, 15], [12, 12], [ 7,  7]],
+      [[9, 9],   [21, 21], [36, 36], [27, 27], [15, 15]],
+      [[9, 9],   [20, 20], [33, 33], [24, 24], [13, 13]],
+      [[6, 6],   [13, 13], [21, 21], [15, 15], [ 8,  8]],
+    ]]
+    check res[1].f64.approxEqual(@@[[
+      [[54.0, 0.054], [ 63, 0.063], [72,  0.072]],
+      [[99  , 0.099], [108, 0.108], [117, 0.117]],
+      [[144,  0.144], [153, 0.153], [162, 0.162]],
+    ]])
 
+  test "pool1d":
+    let x = @@[[[0.0, 0], [1, 0.1], [2, 0.2], [3, 0.3], [4, 0.4]]]
+    let b = newBuilder("pool1d")
+    let input = b.parameter(F64, x.dims, "input")
+    let grads = b.gradient(maxPool1d(input, kernelSize=2, strides=1), ["input"])
+    let comp = b.build(grads[0])
+    debug comp
+    let exec = client.compile(comp)
+    let res = exec.run([x.toLiteral]).f64
+    debug "grad(input):", res
+    check res == @@[[[0.0, 0], [1, 1], [1, 1], [1, 1], [1, 1]]]
 
+  test "pool2d":
+    let x = toTensor[float64](0 .. 24).reshape(1, 5, 5, 1)
+    let b = newBuilder("pool2d")
+    let input = b.parameter(F64, x.dims, "input")
+    let grads = b.gradient(maxPool2d(input, kernelSize=2), ["input"])
+    let comp = b.build(grads[0])
+    debug comp
+    let exec = client.compile(comp)
+    let res = exec.run([x.toLiteral]).f64
+    debug "grad(input):", res
+    check res == @@[[
+      [[0.0], [0], [0], [0], [0]],
+      [[0],   [1], [0], [1], [0]],
+      [[0],   [0], [0], [0], [0]],
+      [[0],   [1], [0], [1], [0]],
+      [[0],   [0], [0], [0], [0]],
+    ]]

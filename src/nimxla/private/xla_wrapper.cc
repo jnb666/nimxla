@@ -378,6 +378,35 @@ xla_op op_dot_general(const xla_op lhs, const xla_op rhs, const int64_t *lhs_c,
   END_PROTECT_OP(lhs)
 }
 
+xla_op op_conv(const xla_op lhs, const xla_op rhs, size_t ndims, const int64_t *input_dims,
+               const int64_t *output_dims, const int64_t *kernel_dims, const int64_t *strides,
+               const int64_t *lhs_dilation, const int64_t *rhs_dilation, size_t npad, const int64_t *pad_low,
+               const int64_t *pad_high, int64_t feature_groups, int64_t batch_groups) {
+  BEGIN_PROTECT_OP
+  xla::ConvolutionDimensionNumbers dims;
+  dims.set_input_batch_dimension(input_dims[0]);
+  dims.set_input_feature_dimension(input_dims[1]);
+  dims.set_output_batch_dimension(output_dims[0]);
+  dims.set_output_feature_dimension(output_dims[1]);
+  dims.set_kernel_output_feature_dimension(kernel_dims[0]);
+  dims.set_kernel_input_feature_dimension(kernel_dims[1]);
+  for (size_t i = 0; i < ndims; ++i) {
+    dims.add_input_spatial_dimensions(input_dims[i+2]);
+    dims.add_output_spatial_dimensions(output_dims[i+2]);
+    dims.add_kernel_spatial_dimensions(kernel_dims[i+2]);
+  }
+  auto stride = absl::Span<const int64_t>(strides, ndims);
+  auto lhs_d = absl::Span<const int64_t>(lhs_dilation, ndims);
+  auto rhs_d = absl::Span<const int64_t>(rhs_dilation, ndims);
+  std::vector<std::pair<int64_t, int64_t>> padding;
+  for (size_t i = 0; i < npad; ++i) {
+    padding.push_back(std::pair<int64_t, int64_t>(pad_low[i], pad_high[i]));
+  }
+  return new XlaOp(ConvGeneralDilated(*lhs, *rhs, stride, padding, lhs_d, rhs_d,
+                                      dims, feature_groups, batch_groups));
+  END_PROTECT_OP(lhs)
+}
+
 xla_op op_eq(const xla_op lhs, const xla_op rhs) {
   BEGIN_PROTECT_OP
   return new XlaOp(Eq(*lhs, *rhs));
@@ -601,6 +630,12 @@ xla_op op_reshape(const xla_op arg, size_t dsize, const int64_t *ds) {
   END_PROTECT_OP(arg)
 }
 
+xla_op op_reverse(const xla_op arg, size_t dsize, const int64_t *ds) {
+  BEGIN_PROTECT_OP
+  return new XlaOp(Rev(*arg, absl::Span<const int64_t>(ds, dsize)));
+  END_PROTECT_OP(arg)
+}
+
 xla_op op_broadcast(const xla_op arg, size_t dsize, const int64_t *ds) {
   BEGIN_PROTECT_OP
   return new XlaOp(Broadcast(*arg, absl::Span<const int64_t>(ds, dsize)));
@@ -772,6 +807,40 @@ xla_op op_reduce2(const xla_builder b, const xla_op arg1, const xla_op init1,
   return new XlaOp(
       Reduce(b, args, init, *comp, absl::Span<const int64_t>(dims, ndims)));
   END_PROTECT_OP(arg1)
+}
+
+xla_op op_reduce_window(const xla_op arg, const xla_op init, const xla_computation comp,
+                        size_t rank, const int64_t *window_dims, const int64_t *window_strides,
+                        size_t npad, const int64_t *pad_low, const int64_t *pad_high) {
+  BEGIN_PROTECT_OP
+  auto dims = absl::Span<const int64_t>(window_dims, rank);
+  auto strides = absl::Span<const int64_t>(window_strides, rank);
+  auto empty = absl::Span<const int64_t>(nullptr, 0);
+  std::vector<std::pair<int64_t, int64_t>> padding;
+  for (size_t i = 0; i < npad; ++i) {
+    padding.push_back(std::pair<int64_t, int64_t>(pad_low[i], pad_high[i]));
+  }
+  return new XlaOp(
+      ReduceWindowWithGeneralPadding(*arg, *init, *comp, dims, strides, empty, empty, padding));
+  END_PROTECT_OP(arg)
+}
+
+xla_op op_select_and_scatter(const xla_op op, const xla_computation select, size_t rank,
+                             const int64_t *window_dims, int64_t *window_strides, size_t npad,
+                             const int64_t *pad_low, const int64_t *pad_high,
+                             const xla_op source, const xla_op init_value,
+                             const xla_computation scatter) {
+  BEGIN_PROTECT_OP
+  auto dims = absl::Span<const int64_t>(window_dims, rank);
+  auto strides = absl::Span<const int64_t>(window_strides, rank);
+  std::vector<std::pair<int64_t, int64_t>> padding;
+  for (size_t i = 0; i < npad; ++i) {
+    padding.push_back(std::pair<int64_t, int64_t>(pad_low[i], pad_high[i]));
+  }
+  return new XlaOp(
+    SelectAndScatterWithGeneralPadding(*op, *select, dims, strides, padding,
+                                       *source, *init_value, *scatter));
+  END_PROTECT_OP(op)
 }
 
 xla_op op_internal_error(const xla_builder b, const char *error) {

@@ -107,6 +107,9 @@ proc op_pow*(a1: xla_op; a2: xla_op): xla_op {.importc: "op_pow".}
 proc op_dot*(a1: xla_op; a2: xla_op): xla_op {.importc: "op_dot".}
 proc op_dot_general*(a1: xla_op; a2: xla_op; a3: ptr int64; a4: csize_t; a5: ptr int64; a6: csize_t; 
   a7: ptr int64; a8: csize_t;a9: ptr int64; a10: csize_t): xla_op {.importc: "op_dot_general".}
+proc op_conv*(a1: xla_op; a2: xla_op; a3: csize_t; a4: ptr int64; a5: ptr int64; a6: ptr int64;
+  a7: ptr int64; a8: ptr int64; a9: ptr int64; a10: csize_t; a11: ptr int64; a12: ptr int64,
+  a13: int64, a14: int64): xla_op {.importc: "op_conv".}
 proc op_eq*(a1: xla_op; a2: xla_op): xla_op {.importc: "op_eq".}
 proc op_ne*(a1: xla_op; a2: xla_op): xla_op {.importc: "op_ne".}
 proc op_ge*(a1: xla_op; a2: xla_op): xla_op {.importc: "op_ge".}
@@ -148,6 +151,7 @@ proc op_one*(a1: xla_builder; a2: cint): xla_op {.importc: "op_one".}
 proc op_min_value*(a1: xla_builder; a2: cint): xla_op {.importc: "op_min_value".}
 proc op_max_value*(a1: xla_builder; a2: cint): xla_op {.importc: "op_max_value".}
 proc op_reshape*(a1: xla_op; a2: csize_t; a3: ptr int64): xla_op {.importc: "op_reshape".}
+proc op_reverse*(a1: xla_op; a2: csize_t; a3: ptr int64): xla_op {.importc: "op_reverse".}
 proc op_broadcast*(a1: xla_op; a2: csize_t; a3: ptr int64): xla_op {.importc: "op_broadcast".}
 proc op_broadcast_in_dim*(a1: xla_op; a2: csize_t; a3: ptr int64; 
   a4: csize_t; a5: ptr int64): xla_op {.importc: "op_broadcast_in_dim".}
@@ -168,8 +172,12 @@ proc op_scatter*(a1: xla_op; a2: xla_op; a3: xla_op, a4: xla_computation, a5: in
 proc op_convert_element_type*(a1: xla_op; a2: cint): xla_op {.importc: "op_convert_element_type".}
 proc op_dimensions_size*(a1: xla_op; a2: int64): xla_op {.importc: "op_dimensions_size".}
 proc op_reduce*(a1: xla_op; a2: xla_op; a3: xla_computation; a4: ptr int64; a5: csize_t): xla_op {.importc: "op_reduce".}
-proc op_reduce2*(b: xla_builder, a1: xla_op; a2: xla_op; a3: xla_op; a4: xla_op; a5: xla_computation; 
+proc op_reduce2*(b: xla_builder; a1: xla_op; a2: xla_op; a3: xla_op; a4: xla_op; a5: xla_computation;
   a6: ptr int64; a7: csize_t): xla_op {.importc: "op_reduce2".}
+proc op_reduce_window*(a1: xla_op; a2: xla_op; a3: xla_computation; a4: csize_t; a5: ptr int64; a6: ptr int64;
+  a7: csize_t, a8: ptr int64; a9: ptr int64): xla_op {.importc: "op_reduce_window".}
+proc op_select_and_scatter*(a1: xla_op; a2: xla_computation; a3: csize_t; a4: ptr int64; a5: ptr int64; a6: csize_t;
+  a7: ptr int64; a8: ptr int64; a9: xla_op; a10: xla_op; a11: xla_computation): xla_op {.importc: "op_select_and_scatter".}
 proc op_internal_error*(a1: xla_builder; a2: cstring): xla_op {.importc: "op_internal_error".}
 proc op_unknown_error*(a1: xla_builder; a2: cstring): xla_op {.importc: "op_unknown_error".}
 proc op_invalid_argument_error*(a1: xla_builder; a2: cstring): xla_op {.importc: "op_invalid_argument_error".}

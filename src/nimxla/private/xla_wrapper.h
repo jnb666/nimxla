@@ -110,6 +110,9 @@ xla_op op_dot(const xla_op, const xla_op);
 xla_op op_dot_general(const xla_op, const xla_op, const int64_t *, size_t,
                       const int64_t *, size_t, const int64_t *, size_t,
                       const int64_t *, size_t);
+xla_op op_conv(const xla_op, const xla_op, size_t, const int64_t *, const int64_t *,
+               const int64_t *, const int64_t *, const int64_t *, const int64_t *,
+               size_t, const int64_t *, const int64_t *, int64_t, int64_t);
 xla_op op_eq(const xla_op, const xla_op);
 xla_op op_ne(const xla_op, const xla_op);
 xla_op op_ge(const xla_op, const xla_op);
@@ -151,6 +154,7 @@ xla_op op_one(const xla_builder, int);
 xla_op op_min_value(const xla_builder, int);
 xla_op op_max_value(const xla_builder, int);
 xla_op op_reshape(const xla_op, size_t, const int64_t *);
+xla_op op_reverse(const xla_op, size_t, const int64_t *);
 xla_op op_broadcast(const xla_op, size_t, const int64_t *);
 xla_op op_broadcast_in_dim(const xla_op, size_t, const int64_t *, size_t,
                            const int64_t *);
@@ -177,6 +181,11 @@ xla_op op_reduce(const xla_op, const xla_op, const xla_computation,
 xla_op op_reduce2(const xla_builder, const xla_op, const xla_op,
                  const xla_op, const xla_op, const xla_computation, 
                  const int64_t *, size_t);
+xla_op op_reduce_window(const xla_op, const xla_op, const xla_computation, size_t,
+                 const int64_t *, const int64_t *, size_t, const int64_t *, const int64_t *);
+xla_op op_select_and_scatter(const xla_op, const xla_computation, size_t,
+                 const int64_t *, int64_t *, size_t, const int64_t *, const int64_t *,
+                 const xla_op, const xla_op, const xla_computation);
 xla_op op_internal_error(const xla_builder, const char *);
 xla_op op_unknown_error(const xla_builder, const char *);
 xla_op op_invalid_argument_error(const xla_builder, const char *);

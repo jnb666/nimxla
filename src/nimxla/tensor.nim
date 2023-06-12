@@ -208,6 +208,14 @@ proc `==`*[T: ElemType](t1, t2: Tensor[T]): bool =
     if t1.data.arr[i] != t2.data.arr[i]: return false
   return true
 
+proc approxEqual*[T: ElemType](t1, t2: Tensor[T], eps = 1e-6): bool =
+  ## Checks have same shape and abs(diff) < eps for each element
+  if t1.dims != t2.dims:
+    return false
+  for i in 0 ..< t1.len:
+    if abs(t1.data.arr[i] - t2.data.arr[i]) > eps: return false
+  return true
+
 proc at*[T: ElemType](t: Tensor[T], ix: int): Tensor[T] =
   ## Returns copy of tensor indexed by leading dimension
   ## e.g. if shape of t is [2, 3, 4] then t.at(1) => [3, 4]
