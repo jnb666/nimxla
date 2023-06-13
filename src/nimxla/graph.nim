@@ -825,6 +825,13 @@ proc addAt*(a, indices, b: Node): Node =
   a.scatter(indices, b, sum)
 
 
+proc reduceDims(shape: seq[int], dims: openarray[int]): seq[int] =
+  ## Normalized dimensions for reduction op
+  if dims.len == 0:
+    toSeq(0 ..< shape.len)
+  else:
+    map(dims, x => normalize(x, shape.len))
+
 proc reduce*(a, initValue: Node, comp: Computation, dims: openarray[int] = [], 
             nodeType = tReduce, keepDims = false): Node =
   ## Apply reduction across one or more dimensions.  i.e. comp is applied repeatedly with a pair of elements
@@ -834,11 +841,7 @@ proc reduce*(a, initValue: Node, comp: Computation, dims: openarray[int] = [],
   ## If keepDims is set then the summed dimensions are kept with a size of 1, else they are removed
   ## and the numbe of dimensions in the result is reduced.
   var shape = a.dims
-  var dims2: seq[int]
-  if dims.len == 0:
-    dims2 = toSeq(0 ..< shape.len)
-  else:
-    dims2 = map(dims, x => normalize(x, shape.len))
+  var dims2 = reduceDims(shape, dims)
   withDims(dptr, dims2):
     let op = op_reduce(a.op.c, initValue.op.c, comp.obj.c, dptr, csize_t(dims2.len))
     var info = $dims2
@@ -860,6 +863,19 @@ proc sum*(a: Node, axis: int, keepDims = false): Node =
   ## Reduce to sum of elements across the given axis in the input.
   ## See `reduce<#reduce%2CNode%2CNode%2CComputation%2CopenArray%5Bint%5D>`_ for details
   sum(a, [axis], keepDims)
+
+proc mean*(a: Node, dims: openarray[int] = [], keepDims = false): Node =
+  ## Reduce to mean of elements across one or more dimensions in the input.
+  ## See `reduce<#reduce%2CNode%2CNode%2CComputation%2CopenArray%5Bint%5D>`_ for details
+  var scale = 1
+  for i in reduceDims(a.dims, dims):
+    scale *= a.dims[i]
+  a.sum(dims, keepDims) / a.builder.constant(scale, a.dtype)
+
+proc mean*(a: Node, axis: int, keepDims = false): Node =
+  ## Reduce to mean of elements across the given axis in the input.
+  ## See `reduce<#reduce%2CNode%2CNode%2CComputation%2CopenArray%5Bint%5D>`_ for details
+  mean(a, [axis], keepDims)
 
 proc min*(a: Node, dims: openarray[int] = [], keepDims = false): Node =
   ## Reduce to minimum value of elements across one or more dimensions in the input.

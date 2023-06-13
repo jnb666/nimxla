@@ -94,7 +94,7 @@ proc toTensor*[T: ElemType](lit: Literal): Tensor[T] =
   let s = lit.shape
   let ty = dtypeOf(T)
   if ty != s.dtype:
-    raise newException(XLAError, &"invalid tensor type: expected {s.dtype} - got {ty}")
+    raise newException(XLAError, &"invalid tensor type: expected {ty} - got {s.dtype}")
   result = newTensor[T](s.dims)
   literal_copy_to(lit.c, result.rawPtr, csize_t(result.len*sizeOf(T)))
 

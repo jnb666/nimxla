@@ -87,24 +87,24 @@ suite "graph":
     debug t1
     let b = newBuilder("reduce")
     let a = b.parameter(I32, [3, 4])
-    let comp = b.build(a.max(1))
+    let comp = b.build(a.max(axis=1))
     debug comp
     let res = client.compile(comp).run([t1]).i32
     debug res
     check res.dims == [3]
     check res.toSeq == [4'i32, 8, 12]
 
-  test "reduce_max2":
-    let t1 = toTensor[int32](1..12).reshape(3, 4).toLiteral
+  test "reduce_mean":
+    let t1 = toTensor[float32](1..12).reshape(3, 4).toLiteral
     debug t1
     let b = newBuilder("reduce")
-    let a = b.parameter(I32, [3, 4])
-    let comp = b.build(a.max(1, keepDims=true))
+    let a = b.parameter(F32, [3, 4])
+    let comp = b.build(a.mean(axis=1, keepDims=true))
     debug comp
-    let res = client.compile(comp).run([t1]).i32
+    let res = client.compile(comp).run([t1]).f32
     debug res
     check res.dims == [3, 1]
-    check res.toSeq == [4'i32, 8, 12]
+    check res.toSeq == [2.5f32, 6.5, 10.5]
 
   test "argmax":
     let t1 = @@[[7f32,  3,  9,   4 ],
