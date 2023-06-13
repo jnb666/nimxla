@@ -53,11 +53,19 @@ The submodules under nimxla are exported by the main package. Other internal fun
 ## Memory management
 Each object on the C++ side is wrapped in a Nim object with a corresponding destructor to free the resource. These are marked with `=copy(...) {.error.}` so that they cannot be duplicated. Where it's useful to move these around the wrapper object is private and a ref object linked to this is exported. It's recommended to use the ORC garbage collector as this will ensure they get destroyed as soon as the ref count goes to zero.
 
+## Debugging
+Do
+```XLA_FLAGS="--xla_dump_to=/tmp/generated" nim r myprog.nim```
+to generate a trace.
+
 ## Dependencies
 Core modules depend on XLA headers and shared library only. data module uses [zippy](https://github.com/guzba/zippy) for gzip uncompress. Examples use [cligen](https://github.com/c-blake/cligen) for command line argument parsing.
 
 ## TODO
+- avg pool, dropout and batchnorm layers
+- simple web based plotting and image viewer module
+- infer module input shape from previous output?
 - complete autograd for all of the defined ops
-- additonal op types: convolutions, control flow etc.
+- additonal op types: control flow etc.
 - additional module types, optimizers etc.
 

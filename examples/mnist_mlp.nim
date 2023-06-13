@@ -17,11 +17,11 @@ proc buildModel(c: Client, imgSize, nclasses: int): Module =
   result.info = "== mnist_mlp =="
   result.add(layer1, layer2)
 
-proc main(epochs = 10, learnRate = 0.01, trainBatch = 500, testBatch = 1000, seed: int64 = 0, gpu = false, debug = false, printWeights = false) =
+proc main(epochs = 10, learnRate = 0.01, trainBatch = 500, testBatch = 1000, seed: int64 = 0, gpu = true, debug = false, printWeights = false) =
   var logger = newConsoleLogger(levelThreshold=if debug: lvlDebug else: lvlInfo)
   addHandler(logger)
   # init client
-  let c = if gpu: newGPUClient() else: newCPUClient()
+  let c = newClient(useGPU = gpu)
   echo c
   if seed != 0: randomize(seed) else: randomize()
   # get data

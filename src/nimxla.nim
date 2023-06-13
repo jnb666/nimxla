@@ -147,6 +147,15 @@ proc newTPUClient*(maxInflightComputations: int, logLevel= Warning): Client =
   result.getDevices()
   debug result
 
+proc newClient*(useGPU = true): Client =
+  ## Create a new client with default options.
+  ## If useGPU is set then uses GPU if available, else CPU.
+  if useGPU:
+    try:
+      return newGPUClient()
+    except XLAError:
+      discard
+  newCPUClient()
 
 # on device buffer
 proc newBuffer(buf: pjrt_buffer): Buffer =

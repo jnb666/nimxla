@@ -15,6 +15,7 @@ platformVersion	nimxla.html#platformVersion,Client	nimxla: platformVersion(clien
 newCPUClient	nimxla.html#newCPUClient	nimxla: newCPUClient(logLevel = Warning): Client	
 newGPUClient	nimxla.html#newGPUClient,float	nimxla: newGPUClient(memoryFraction = 1.0; preallocate = false; logLevel = Warning): Client	
 newTPUClient	nimxla.html#newTPUClient,int	nimxla: newTPUClient(maxInflightComputations: int; logLevel = Warning): Client	
+newClient	nimxla.html#newClient	nimxla: newClient(useGPU = true): Client	
 newBuffer	nimxla.html#newBuffer,Client,Literal,int	nimxla: newBuffer(client: Client; lit: Literal; device = 0): Buffer	
 newBuffer	nimxla.html#newBuffer,Client,DataType,openArray[int]	nimxla: newBuffer(client: Client; dtype: DataType; dims: openArray[int]): Buffer	
 newBuffer	nimxla.html#newBuffer,Client,Tensor[T: ElemType],int	nimxla: newBuffer[T: ElemType](client: Client; t: Tensor[T]; device = 0): Buffer	
