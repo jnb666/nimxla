@@ -2,7 +2,7 @@
 
 import std/[strutils, strformat, sequtils, logging, random, math, os, parsecsv]
 import nimxla
-import nimxla/nn
+import nimxla/[nn, train]
 import cligen
 
 setPrintOpts(precision=4, minWidth=10, floatMode=ffDecimal, threshold=100, edgeItems=5)
@@ -68,19 +68,11 @@ proc sgd(c: Client, nin, nout: int, learnRate: float): Executable =
   let comp = b.build(weights - b.constant(learnRate.float32) * grads)
   c.compile(comp)
 
-proc calcAccuracy(c: Client, batch, nout: int): Executable =
-  let b = newBuilder("accuracy")
-  let predict = b.parameter(F32, [batch, nout], "predict")
-  let labels = b.parameter(I64, [batch], "labels")
-  let batchSize = b.constant(batch.float32)
-  let comp = b.build sum(convert(predict.argmax(axis=1) == labels, F32)) / batchSize
-  c.compile(comp)
-
 proc printStats(epoch, batch: int, loss: float, predict, labels: Buffer, accFn: Executable) =
   let accuracy = accFn.run([predict, labels]).f32[] * 100
-  info &"epoch {epoch:3}:  loss: {loss:8.4f}  accuracy: {accuracy:.1f}%"
+  echo &"epoch {epoch:3}:  loss: {loss:8.4f}  accuracy: {accuracy:.1f}%"
 
-proc train(epochs = 100, logEvery = 10, learnRate = 0.05, seed: int64 = 0, gpu = false, debug = false) =
+proc main(epochs = 100, logEvery = 10, learnRate = 0.05, seed: int64 = 0, gpu = false, debug = false) =
   var logger = newConsoleLogger(levelThreshold=if debug: lvlDebug else: lvlInfo)
   addHandler(logger)
   # init client
@@ -88,7 +80,7 @@ proc train(epochs = 100, logEvery = 10, learnRate = 0.05, seed: int64 = 0, gpu =
   echo c
   # get dataset
   let d = readIrisData()
-  info "Iris dataset: " & $d.data.shape & "  classes: " & (d.classes)[2 .. ^2]
+  echo "Iris dataset: ", d.data.shape, "  classes: ", d.classes
   let (batch, nin, nout) = (d.data.dims[0], d.data.dims[1], d.classes.len)
   let inputs = c.newBuffer(d.data)
   let labels = c.newBuffer(d.labels)
@@ -96,11 +88,11 @@ proc train(epochs = 100, logEvery = 10, learnRate = 0.05, seed: int64 = 0, gpu =
   # compile model executable and initialise weights
   let exec = c.model(batch, nin, nout) 
   var weights = c.initWeights(nin, nout, seed)
-  info "initial weights: ", weights.f32
+  echo "initial weights: ", weights.f32
   # compile optimizer used to update the weights and function to calc the accuracy
   let optim = c.sgd(nin, nout, learnRate)
-  let accFn = c.calcAccuracy(batch, nout)
-  info "training with learning rate = ", learnRate
+  let accFn = c.accuracyFunc(batch, nout, labelType=I64)
+  echo "training with learning rate = ", learnRate
 
   for epoch in 1 .. epochs:
     # one step processing the data - both forward and backward pass
@@ -118,8 +110,6 @@ proc train(epochs = 100, logEvery = 10, learnRate = 0.05, seed: int64 = 0, gpu =
     weights = optim.run([weights, grads])
 
   # run completed
-  info "final weights: ", weights.f32
+  echo "final weights: ", weights.f32
 
-
-dispatch train
-
+dispatch main

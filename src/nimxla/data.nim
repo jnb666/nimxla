@@ -1,6 +1,6 @@
 ## The data module provides functions for loading common datasets and iterating over batches of data.
 
-import std/[os, math, httpclient, strformat, sequtils, random, streams, endians, logging]
+import std/[os, math, httpclient, strformat, sequtils, sugar, random, streams, endians, logging]
 import zippy
 import ../nimxla
 import private/utils
@@ -9,11 +9,13 @@ type
   Dataset* = object
     ## Dataset represents a set of data samples from 0..length-1 where getItem(i) returns
     ## a tuple with the ith sample and it's classification label. Shape gives the size
-    ## of each item - e.g. [rows, cols] for a 2d image.
+    ## of each item - e.g. [rows, cols, 3] for a 2d RGB image.
+    ## classes returns the classification labels.
     name*: string
     getItem*: proc(i: int, data: pointer): int32 {.closure}
     shape*: seq[int]
     len*: int
+    classes*: seq[string]
 
   DataLoader* = object
     ## DataLoader provides an iterator to read batches of data from a dataset.
@@ -42,6 +44,10 @@ iterator getBatch*[T](d: DataLoader, data: var Tensor[T], labels: var Tensor[int
       let ix = indexes[batch*d.batchSize + i]
       labels[i] = d.dataset.getItem(ix, ptrOffset(data.rawPtr, i*size))
     yield batch
+
+proc shape*(d: DataLoader): seq[int] =
+  ## Shape of one batch of images returned from the dataset.
+  @[d.batchSize] & d.dataset.shape
 
 proc `$`*(d: Dataset): string =
   d.name
@@ -82,7 +88,7 @@ proc mnistImages(file: string): (seq[uint8], seq[int]) =
   assert n == bytes
   debug &"got {num} {rows}x{cols} mnist images"
   fs.close
-  (data, @[rows.int, cols.int])
+  (data, @[rows.int, cols.int, 1])
 
 proc mnistLabels(file: string): seq[uint8] =
   let fs = openFileStream(file, fmRead)
@@ -98,6 +104,7 @@ proc mnistLabels(file: string): seq[uint8] =
 proc mnistDataset*(train = false): DataSet =
   ## MNIST dataset of handwritten digits per http://yann.lecun.com/exdb/mnist/
   ## will download the data to and save a cached copy.
+  ## Returned shape of each image is [28, 28, 1]
   const baseURL = "http://yann.lecun.com/exdb/mnist/"
   setCurrentDir(cacheDir())
   let prefix = if train: "train" else: "t10k"
@@ -109,13 +116,15 @@ proc mnistDataset*(train = false): DataSet =
   let labels = mnistLabels(labelFile)
   let size = prod(shape)
   assert data.len == labels.len * size
+  let classes = map(toSeq(0..9), x => $x)
   Dataset(
     name: &"MNIST(train={train})",
     getItem: proc(i: int, dout: pointer): int32 = 
       copyMem(dout, addr data[i*size], size)
       return labels[i].int32,
     shape: shape,
-    len: labels.len
+    len: labels.len,
+    classes: classes
   )
 
 

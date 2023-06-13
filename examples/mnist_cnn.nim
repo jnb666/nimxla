@@ -1,4 +1,4 @@
-# 2 layer MNIST MLP model
+# simple MNIST convolutional net with 2 x conv + 2 x linear layers 
 import std/[strutils, strformat, math, logging, random, tables, monotimes]
 import nimxla
 import nimxla/[nn, data, train]
@@ -6,18 +6,22 @@ import cligen
 
 setPrintOpts(precision=4, minWidth=8, floatMode=ffDecimal, threshold=100, edgeItems=5)
 
-proc buildModel(c: Client, imgSize, nclasses: int): Module =
-  let layer1 = c.initLinear("1", imgSize, 128)
-  let layer2 = c.initLinear("2", 128, nclasses)
+proc buildModel(c: Client, nclasses: int): Module =
+  let conv1 = c.initConv2d("1", 1,  20, kernelSize=5, biases=nil)
+  let conv2 = c.initConv2d("2", 20, 40, kernelSize=5)
+  let linear1 = c.initLinear("3", 640, 100)
+  let linear2 = c.initLinear("4", 100, nclasses)
   result.forward = proc(x: Node): Node =
     let b = x.builder
     let xf = x.convert(F32) / b^255f32
-    let l1 = layer1.forward(xf.flatten(1)).relu
-    layer2.forward(l1).softmax
-  result.info = "== mnist_mlp =="
-  result.add(layer1, layer2)
+    let l1 = conv1.forward(xf).relu.maxPool2d(2)
+    let l2 = conv2.forward(l1).relu.maxPool2d(2)
+    let l3 = linear1.forward(l2.flatten(1)).relu
+    linear2.forward(l3).softmax
+  result.info = "== mnist_cnn =="
+  result.add(conv1, conv2, linear1, linear2)  
 
-proc main(epochs = 10, learnRate = 0.01, trainBatch = 500, testBatch = 1000, seed: int64 = 0, gpu = false, debug = false, printWeights = false) =
+proc main(epochs = 10, learnRate = 0.01, trainBatch = 500, testBatch = 1000, seed: int64 = 0, gpu = false, printWeights = false, debug = false) =
   var logger = newConsoleLogger(levelThreshold=if debug: lvlDebug else: lvlInfo)
   addHandler(logger)
   # init client
@@ -31,7 +35,7 @@ proc main(epochs = 10, learnRate = 0.01, trainBatch = 500, testBatch = 1000, see
   echo test
   let nclasses = train.dataset.classes.len
   # build model
-  var model = c.buildModel(prod(train.dataset.shape), nclasses)
+  var model = c.buildModel(nclasses)
   echo model
   if printWeights:
     for p in model.variables:

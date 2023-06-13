@@ -137,6 +137,11 @@ window.addEventListener('DOMContentLoaded', main);
     title="`[]=`[T: ElemType](t: var Tensor; ix: varargs[int]; value: T)">`[]=`[T: ElemType](t: var Tensor; ix: varargs[int]; value: T)</a></li>
 
   </ul>
+  <ul class="simple nested-toc-section">approxEqual
+      <li><a class="reference" href="#approxEqual%2CTensor%5BT%3A%20ElemType%5D%2CTensor%5BT%3A%20ElemType%5D%2Cfloat"
+    title="approxEqual[T: ElemType](t1, t2: Tensor[T]; eps = 0.000001): bool">approxEqual[T: ElemType](t1, t2: Tensor[T]; eps = 0.000001): bool</a></li>
+
+  </ul>
   <ul class="simple nested-toc-section">at
       <li><a class="reference" href="#at%2CTensor%5BT%3A%20ElemType%5D%2Cint"
     title="at[T: ElemType](t: Tensor[T]; ix: int): Tensor[T]">at[T: ElemType](t: Tensor[T]; ix: int): Tensor[T]</a></li>
@@ -284,9 +289,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 Pretty print tensor type, shape and summary of data.
 &nbsp;&nbsp;<a
-href="https://github.com/jnb666/nimxla/tree/main/src/nimxla/tensor.nim#L313"
+href="https://github.com/jnb666/nimxla/tree/main/src/nimxla/tensor.nim#L321"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/jnb666/nimxla/edit/devel/src/nimxla/tensor.nim#L313" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/jnb666/nimxla/edit/devel/src/nimxla/tensor.nim#L321" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -326,15 +331,27 @@ class="link-seesrc" target="_blank">Source</a>
 
 </dd>
 </div>
+<div id="approxEqual,Tensor[T: ElemType],Tensor[T: ElemType],float">
+<dt><pre><span class="Keyword">proc</span> <a href="#approxEqual%2CTensor%5BT%3A%20ElemType%5D%2CTensor%5BT%3A%20ElemType%5D%2Cfloat"><span class="Identifier">approxEqual</span></a><span class="Other">[</span><span class="Identifier">T</span><span class="Other">:</span> <a href="shape.html#ElemType"><span class="Identifier">ElemType</span></a><span class="Other">]</span><span class="Other">(</span><span class="Identifier">t1</span><span class="Other">,</span> <span class="Identifier">t2</span><span class="Other">:</span> <a href="tensor.html#Tensor"><span class="Identifier">Tensor</span></a><span class="Other">[</span><span class="Identifier">T</span><span class="Other">]</span><span class="Other">;</span> <span class="Identifier">eps</span> <span class="Other">=</span> <span class="FloatNumber">0.000001</span><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">bool</span></pre></dt>
+<dd>
+
+Checks have same shape and abs(diff) &lt; eps for each element
+&nbsp;&nbsp;<a
+href="https://github.com/jnb666/nimxla/tree/main/src/nimxla/tensor.nim#L211"
+class="link-seesrc" target="_blank">Source</a>
+&nbsp;&nbsp;<a href="https://github.com/jnb666/nimxla/edit/devel/src/nimxla/tensor.nim#L211" class="link-seesrc" target="_blank" >Edit</a>
+
+</dd>
+</div>
 <div id="at,Tensor[T: ElemType],int">
 <dt><pre><span class="Keyword">proc</span> <a href="#at%2CTensor%5BT%3A%20ElemType%5D%2Cint"><span class="Identifier">at</span></a><span class="Other">[</span><span class="Identifier">T</span><span class="Other">:</span> <a href="shape.html#ElemType"><span class="Identifier">ElemType</span></a><span class="Other">]</span><span class="Other">(</span><span class="Identifier">t</span><span class="Other">:</span> <a href="tensor.html#Tensor"><span class="Identifier">Tensor</span></a><span class="Other">[</span><span class="Identifier">T</span><span class="Other">]</span><span class="Other">;</span> <span class="Identifier">ix</span><span class="Other">:</span> <span class="Identifier">int</span><span class="Other">)</span><span class="Other">:</span> <a href="tensor.html#Tensor"><span class="Identifier">Tensor</span></a><span class="Other">[</span><span class="Identifier">T</span><span class="Other">]</span></pre></dt>
 <dd>
 
 Returns copy of tensor indexed by leading dimension e.g. if shape of t is [2, 3, 4] then t.at(1) =&gt; [3, 4]
 &nbsp;&nbsp;<a
-href="https://github.com/jnb666/nimxla/tree/main/src/nimxla/tensor.nim#L211"
+href="https://github.com/jnb666/nimxla/tree/main/src/nimxla/tensor.nim#L219"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/jnb666/nimxla/edit/devel/src/nimxla/tensor.nim#L211" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/jnb666/nimxla/edit/devel/src/nimxla/tensor.nim#L219" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -344,9 +361,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 Return a copy of the tensor
 &nbsp;&nbsp;<a
-href="https://github.com/jnb666/nimxla/tree/main/src/nimxla/tensor.nim#L225"
+href="https://github.com/jnb666/nimxla/tree/main/src/nimxla/tensor.nim#L233"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/jnb666/nimxla/edit/devel/src/nimxla/tensor.nim#L225" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/jnb666/nimxla/edit/devel/src/nimxla/tensor.nim#L233" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -356,9 +373,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 Makes a copy of the tensor with elements converted to typ.
 &nbsp;&nbsp;<a
-href="https://github.com/jnb666/nimxla/tree/main/src/nimxla/tensor.nim#L240"
+href="https://github.com/jnb666/nimxla/tree/main/src/nimxla/tensor.nim#L248"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/jnb666/nimxla/edit/devel/src/nimxla/tensor.nim#L240" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/jnb666/nimxla/edit/devel/src/nimxla/tensor.nim#L248" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -380,9 +397,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 Pretty print summary of tensor data.
 &nbsp;&nbsp;<a
-href="https://github.com/jnb666/nimxla/tree/main/src/nimxla/tensor.nim#L304"
+href="https://github.com/jnb666/nimxla/tree/main/src/nimxla/tensor.nim#L312"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/jnb666/nimxla/edit/devel/src/nimxla/tensor.nim#L304" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/jnb666/nimxla/edit/devel/src/nimxla/tensor.nim#L312" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -428,9 +445,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 Returns a view of the same tensor with the shape changed. Number of elements in the tensor must be unchanged or will raise an exception. If one of the dimensions is -1 then this value is inferred from the total number of elements.
 &nbsp;&nbsp;<a
-href="https://github.com/jnb666/nimxla/tree/main/src/nimxla/tensor.nim#L230"
+href="https://github.com/jnb666/nimxla/tree/main/src/nimxla/tensor.nim#L238"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/jnb666/nimxla/edit/devel/src/nimxla/tensor.nim#L230" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/jnb666/nimxla/edit/devel/src/nimxla/tensor.nim#L238" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -441,9 +458,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 Set the formatting options for printing the tensor data with the $ operator similar to numpy.set_printoptions. See the strutils package for details of the floatMode option.
 &nbsp;&nbsp;<a
-href="https://github.com/jnb666/nimxla/tree/main/src/nimxla/tensor.nim#L249"
+href="https://github.com/jnb666/nimxla/tree/main/src/nimxla/tensor.nim#L257"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/jnb666/nimxla/edit/devel/src/nimxla/tensor.nim#L249" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/jnb666/nimxla/edit/devel/src/nimxla/tensor.nim#L257" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -465,9 +482,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 Copy the data associated with the tensor to a sequence of length t.len.
 &nbsp;&nbsp;<a
-href="https://github.com/jnb666/nimxla/tree/main/src/nimxla/tensor.nim#L220"
+href="https://github.com/jnb666/nimxla/tree/main/src/nimxla/tensor.nim#L228"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/jnb666/nimxla/edit/devel/src/nimxla/tensor.nim#L220" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/jnb666/nimxla/edit/devel/src/nimxla/tensor.nim#L228" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -564,7 +581,7 @@ class="link-seesrc" target="_blank">Source</a>
       <div class="twelve-columns footer">
         <span class="nim-sprite"></span>
         <br/>
-        <small style="color: var(--hint);">Made with Nim. Generated: 2023-06-10 19:29:37 UTC</small>
+        <small style="color: var(--hint);">Made with Nim. Generated: 2023-06-13 15:07:44 UTC</small>
       </div>
     </div>
   </div>

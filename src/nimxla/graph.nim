@@ -42,18 +42,6 @@ type
     tSelectAndScatter,                                          ##
     tSelect, tClamp, tTuple, tConcat, tScatter                  ## 3 or more arg ops
 
-  Padding* = object
-    lo, hi: int
-    same:   bool
-
-  Opt2d* = int or (int, int)
-
-  Pad2d* = Padding or (Padding, Padding)
-
-  Opt3d* = int or (int, int, int)
-
-  Pad3d* = Padding or (Padding, Padding, Padding)
-
   GradFn = proc(path: Node): Node
     ## Local gradient function for autodiff
 
@@ -168,31 +156,6 @@ proc checkBuilderError(status: status_t, at: Node = nil) =
     status_free(status)
     raiseError(message, at)
 
-# utils to parse convolution options
-proc seq2(opt: Opt2d): seq[int] =
-  when opt is int:
-    return @[opt, opt]
-  else:
-    return @[opt[0], opt[1]]
-
-proc seq2(opt: Pad2d): seq[Padding] =
-  when opt is Padding:
-    return @[opt, opt]
-  else:
-    return @[opt[0], opt[1]]
-
-proc seq3(opt: Opt3d): seq[int] =
-  when opt is int:
-    return @[opt, opt, opt]
-  else:
-    return @[opt[0], opt[1], opt[2]]
-
-proc seq3(opt: Pad3d): seq[Padding] =
-  when opt is Padding:
-    return @[opt, opt, opt]
-  else:
-    return @[opt[0], opt[1], opt[2]]
-
 proc i64seq(arr: openarray[int], length: int, def: int64 = 0, name = ""): seq[int64] =
   if arr.len == 0:
     result = repeat(def, length)
@@ -200,23 +163,6 @@ proc i64seq(arr: openarray[int], length: int, def: int64 = 0, name = ""): seq[in
     result = map(arr, x => x.int64)
   else:
     raiseError(&"convolution: number of {name} values should be {length} - got {arr.len}")
-
-const padSame*: Padding = Padding(same: true)
-  ## Padding such that output matches the input.
-
-proc pad*(val: int): Padding =
-  ## Padding with low and high values set to val.
-  Padding(lo:val, hi:val)
-
-proc pad*(lo, hi: int): Padding =
-  ## Padding with given low and high values.
-  Padding(lo:lo, hi:hi)
-
-proc `$`*(p: Padding): string =
-  if p.same:
-    "padSame"
-  else:
-    &"({p.lo}, {p.hi})"
 
 proc getShape(b: Builder, op: xla_op): (Shape, status_t) =
   ## Returns the shape of the output from the op.
@@ -542,6 +488,21 @@ proc reshape*(a: Node, dims: varargs[int]): Node =
    result = a.builder.wrap(op_reshape(a.op.c, csize_t(dims2.len), dptr), tReshape, [a], $dims2)
    result.indices = dims2
 
+proc flatten*(a: Node, startDim = 0, endDim = -1): Node =
+  ## Reshapes input such that any dimensions between startDim and endDim are flattened. e.g. flatten(a, 1) 
+  ## returns a 2d array keeping the first dimension and collapsing all the remainder into the second.
+  let first = normalize(startDim, a.rank)
+  let last = normalize(endDim, a.rank)
+  let d = a.dims
+  var dims: seq[int]
+  if first > 0:
+    dims.add d[0 ..< first]
+  if last > first:
+    dims.add prod(d[first .. last])
+  if last < d.len-1:
+    dims.add d[last+1 .. ^1]
+  a.reshape(dims)
+
 proc reverse*(a: Node, axes: varargs[int]): Node =
   ## Reverse the elements in the input along the given axes.
   ## If one of the dimensions is -1 then this value is inferred from the total number of elements.
@@ -674,7 +635,6 @@ proc convolution*(a, kernel: Node, inputDims, outputDims, kernelDims: openarray[
     for i in 0 ..< padding.len:
       int((kernel.dims[kdims[i+2]] - 1) * kDilation[i] + 1)
   var (padLo, padHi) = getPadding(padding, kernelSize)
-  debug "conv: pading = ", $padLo, " ", $padHi
   let op = op_conv(a.op.c, kernel.op.c, csize_t(nd), idims[0].addr, odims[0].addr, kdims[0].addr,
                    stride[0].addr, inDilation[0].addr, kDilation[0].addr, csize_t(padding.len), 
                    padLo[0].addr, padHi[0].addr, groups, batchGroups)
@@ -974,7 +934,6 @@ proc reduceWindow*(a, initValue: Node, comp: Computation, windowDims, strides: o
   if padding.len != 0 and padding.len != rank:
     raiseError(&"reduceWindow: padding length should equal input rank {rank} - have {padding}", a)
   var (padLo, padHi) = getPadding(padding, windowDims)
-  debug "reduceWindow: pading = ", $padLo, " ", $padHi
   withDims(dptr1, windowDims):
     withDims(dptr2, strides):
       let (p1, p2) = if padding.len > 0: (padLo[0].addr, padHi[0].addr) else: (nil, nil)

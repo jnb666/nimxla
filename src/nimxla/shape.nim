@@ -1,6 +1,6 @@
 ## The shape module wraps the XLA Shape type which holds the information on the data layout for any host or device buffers.
 
-import std/[strutils, sequtils, sugar]
+import std/[strutils, sequtils, sugar, strformat]
 import private/[xla_wrapper, utils]
 
 
@@ -25,6 +25,61 @@ type
     of TupleKind:
       elems*: seq[Shape]
 
+  Padding* = object
+    lo*: int
+    hi*: int
+    same*: bool
+
+  Opt2d* = int or (int, int)
+
+  Pad2d* = Padding or (Padding, Padding)
+
+  Opt3d* = int or (int, int, int)
+
+  Pad3d* = Padding or (Padding, Padding, Padding)
+
+
+const padSame*: Padding = Padding(same: true)
+  ## Padding such that output matches the input.
+
+proc pad*(val: int): Padding =
+  ## Padding with low and high values set to val.
+  Padding(lo:val, hi:val)
+
+proc pad*(lo, hi: int): Padding =
+  ## Padding with given low and high values.
+  Padding(lo:lo, hi:hi)
+
+proc `$`*(p: Padding): string =
+  if p.same:
+    "padSame"
+  else:
+    &"({p.lo}, {p.hi})"
+
+# utils to parse convolution options
+proc seq2*(opt: Opt2d): seq[int] =
+  when opt is int:
+    return @[opt, opt]
+  else:
+    return @[opt[0], opt[1]]
+
+proc seq2*(opt: Pad2d): seq[Padding] =
+  when opt is Padding:
+    return @[opt, opt]
+  else:
+    return @[opt[0], opt[1]]
+
+proc seq3*(opt: Opt3d): seq[int] =
+  when opt is int:
+    return @[opt, opt, opt]
+  else:
+    return @[opt[0], opt[1], opt[2]]
+
+proc seq3*(opt: Pad3d): seq[Padding] =
+  when opt is Padding:
+    return @[opt, opt, opt]
+  else:
+    return @[opt[0], opt[1], opt[2]]
 
 proc arrayShape*(dtype: DataType, dims: varargs[int]): Shape =
   ## Create a shape for an nd array.

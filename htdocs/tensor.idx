@@ -13,6 +13,7 @@ toTensor	tensor.html#toTensor,HSlice[int,int]	tensor: toTensor[T: ElemType](slic
 `[]`	tensor.html#[],Tensor[T: ElemType],varargs[int]	tensor: `[]`[T: ElemType](t: Tensor[T]; ix: varargs[int]): T	
 `[]=`	tensor.html#[]=,Tensor,varargs[int],T	tensor: `[]=`[T: ElemType](t: var Tensor; ix: varargs[int]; value: T)	
 `==`	tensor.html#==,Tensor[T: ElemType],Tensor[T: ElemType]	tensor: `==`[T: ElemType](t1, t2: Tensor[T]): bool	
+approxEqual	tensor.html#approxEqual,Tensor[T: ElemType],Tensor[T: ElemType],float	tensor: approxEqual[T: ElemType](t1, t2: Tensor[T]; eps = 0.000001): bool	
 at	tensor.html#at,Tensor[T: ElemType],int	tensor: at[T: ElemType](t: Tensor[T]; ix: int): Tensor[T]	
 toSeq	tensor.html#toSeq,Tensor[T: ElemType]	tensor: toSeq[T: ElemType](t: Tensor[T]): seq[T]	
 clone	tensor.html#clone,Tensor[T: ElemType]	tensor: clone[T: ElemType](t: Tensor[T]): Tensor[T]	

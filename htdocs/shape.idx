@@ -23,6 +23,19 @@ ArrayKind	shape.html#ArrayKind	ShapeKind.ArrayKind
 TupleKind	shape.html#TupleKind	ShapeKind.TupleKind	
 ShapeKind	shape.html#ShapeKind	shape: ShapeKind	
 Shape	shape.html#Shape	shape: Shape	
+Padding	shape.html#Padding	shape: Padding	
+Opt2d	shape.html#Opt2d	shape: Opt2d	
+Pad2d	shape.html#Pad2d	shape: Pad2d	
+Opt3d	shape.html#Opt3d	shape: Opt3d	
+Pad3d	shape.html#Pad3d	shape: Pad3d	
+padSame	shape.html#padSame	shape: padSame	
+pad	shape.html#pad,int	shape: pad(val: int): Padding	
+pad	shape.html#pad,int,int	shape: pad(lo, hi: int): Padding	
+`$`	shape.html#$,Padding	shape: `$`(p: Padding): string	
+seq2	shape.html#seq2,Opt2d	shape: seq2(opt: Opt2d): seq[int]	
+seq2	shape.html#seq2,Pad2d	shape: seq2(opt: Pad2d): seq[Padding]	
+seq3	shape.html#seq3,Opt3d	shape: seq3(opt: Opt3d): seq[int]	
+seq3	shape.html#seq3,Pad3d	shape: seq3(opt: Pad3d): seq[Padding]	
 arrayShape	shape.html#arrayShape,DataType,varargs[int]	shape: arrayShape(dtype: DataType; dims: varargs[int]): Shape	
 dtypeOf	shape.html#dtypeOf,typedesc[ElemType]	shape: dtypeOf(T: typedesc[ElemType]): DataType	
 `==`	shape.html#==,Shape,Shape	shape: `==`(s1, s2: Shape): bool	

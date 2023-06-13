@@ -46,6 +46,8 @@ See [the documentation index](https://jnb666.github.io/nimxla/htdocs/theindex.ht
 
 - [nimxla/data](https://jnb666.github.io/nimxla/htdocs/data.html): Provides functions to load common datasets and iterate over batches of data.
 
+- [nimxla/train](https://jnb666.github.io/nimxla/htdocs/train.html): Contains functions for training batches of data and calculating the accuracy of the predictions.
+
 The submodules under nimxla are exported by the main package. Other internal functions and bindings to the XLA C++ library are under the nimxla/private directory. The C wrapper code here is based on the Rust bindings from [xla-rs](https://github.com/LaurentMazare/xla-rs).
 
 ## Memory management

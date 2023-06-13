@@ -19,8 +19,8 @@ type
     ## A module holds the state for a set of variables together with a forward 
     ## computation which depends on an input value.
     variables*: seq[Variable]
-    forward*:   proc(x: Node): Node
-
+    forward*: proc(x: Node): Node
+    info*: string
 
 proc constantInit*(value: SomeFloat): InitFunc =
   ## Create a new buffer with a constant value.
@@ -40,6 +40,44 @@ proc normalInit*(mean = 0.0, stddev = 1.0): InitFunc =
     let t = newSeqWith(prod(dims), gauss(mean, stddev)).toTensor.reshape(dims)
     c.newBuffer(t.toLiteral.convert(dtype))
 
+proc getFanInOut(dims: openarray[int]): (int, int) =
+  ## Get effective number of inputs and outputs.
+  assert dims.len >= 2
+  if dims.len == 2:
+    # linear layer
+    (dims[0], dims[1])
+  else:
+    # conv layer with channels last layout
+    let ksize = prod(dims[1..^2])
+    (dims[^1]*ksize, dims[0]*ksize)
+
+proc glorotInit*(gain = 1.0): InitFunc =
+  ## Initialisation function with values set in uniform range from
+  ## ```
+  ##  -gain*sqrt(6/(nin+nout)) to gain*sqrt(6/(nin+nout))
+  ## ```
+  ## where nin are effective number of inputs and outputs.
+  ## Also known as Xavier uniform init.
+  proc(c: Client, dims: openarray[int], dtype: DataType): Buffer =
+    let (nin, nout) = getFanInOut(dims)
+    let max = gain * sqrt(6.0 / (nin+nout).float)
+    uniformInit(-max, max)(c, dims, dtype)
+
+proc heInit*(mean = 0.0, gain = 2.0, fanOut = false): InitFunc =
+  ## Initialisation function with values from normal distrubution with std deviation as
+  ## ```
+  ##   sqrt(gain/nin) or sqrt(gain/nout) if fanOut is set
+  ## ```
+  ## where nin are effective number of inputs and outputs. Gain of 2 is suitable for Relu non-linearity.
+  ## Also known as Kaiming normal init.
+  proc(c: Client, dims: openarray[int], dtype: DataType): Buffer =
+    let (nin, nout) = getFanInOut(dims)
+    let stddev = if fanOut:
+      sqrt(gain / nout.float)
+    else:
+      sqrt(gain / nin.float)
+    normalInit(mean, stddev)(c, dims, dtype)
+
 proc newVariable*(c: Client, name: string, dims: openarray[int], dtype: DataType, init: InitFunc): Variable =
   ## Allocate a new variable with the given name and shape and initialise values.
   Variable(name: name, data: c.init(dims, dtype))
@@ -51,8 +89,17 @@ proc param*(b: Builder, p: Variable, suffix = ""): Node =
 
 proc add*(m: var Module, modules: varargs[Module]) =
   ## Add variables from modules to m.
+  var info: seq[string]
   for sub in modules:
     m.variables.add sub.variables
+    info.add sub.info
+  m.info = if m.info == "":
+    info.join("\n")
+  else:
+    m.info & "\n" & indent(info.join("\n"), 2)
+
+proc `$`*(m: Module): string =
+  m.info
 
 proc varNames*(m: Module): seq[string] =
   ## List of all the variable names defined for this module.
@@ -89,11 +136,12 @@ proc softmax*(a: Node, axis = -1): Node =
   let sum_a = exp_a.sum([axis], keepDims=true)
   result = exp_a / sum_a
 
-proc initLinear*(c: Client, id: string, nin, nout: int, weights: InitFunc, 
-                 biases = constantInit(0f32), dtype = F32): Module =
+proc initLinear*(c: Client, id: string, nin, nout: int, weights = heInit(), biases = constantInit(0.0),
+                 dtype = F32): Module =
   ## Create a new fully connected linear layer with the given unique id and number of inputs and outputs.
   ## Weight parameters are initialised using the weights function. If biases is not nil then bias parameters 
   ## are initialised using this function and added to the output.
+  result.info = &"{id}: linear(nin={nin}, nout={nout}, bias={biases != nil})"
   let weight = c.newVariable(id & ".w", [nin, nout], dtype, weights)
   result.variables.add weight
   if biases == nil:
@@ -107,6 +155,34 @@ proc initLinear*(c: Client, id: string, nin, nout: int, weights: InitFunc,
       let W = x.builder.param(weight)
       let B = x.builder.param(bias)
       dot(x, W) + B
+
+proc initConv2d*(c: Client, id: string, inChannels, outChannels: int, kernelSize: Opt2d, strides: Opt2d = 1,
+                 padding: Pad2d = pad(0), dilation: Opt2d = 1, groups = 1, weights = heInit(), biases = constantInit(0.0),
+                 dtype = F32): Module =
+  ## Create a new 2 dimensional convolution layer with parameters in channels last format.
+  ## Weight parameters are initialised using the weights function. If biases is not nil then bias parameters 
+  ## are initialised using this function and added to the output.
+  result.info = &"{id}: conv2d(inChannels={inChannels}, outChannels={outChannels}, kernelSize={kernelSize}"
+  if strides != 1: result.info.add &", strides={strides}"
+  if padding != pad(0): result.info.add &", padding={padding}"
+  if dilation != 1: result.info.add &", dilation={dilation}"
+  if groups != 1: result.info.add &", groups={groups}"
+  result.info.add &", bias={biases != nil})"
+
+  let wdims = @[outChannels] & kernelSize.seq2 & @[inChannels]
+  let weight = c.newVariable(id & ".w", wdims, dtype, weights)
+  result.variables.add weight
+  if biases == nil:
+    result.forward = proc(x: Node): Node =
+      let W = x.builder.param(weight)
+      conv2d(x, W, strides, padding, dilation, groups)
+  else:
+    let bias = c.newVariable(id & ".b", @[1, 1, 1, outChannels], dtype, biases)
+    result.variables.add bias
+    result.forward = proc(x: Node): Node =
+      let W = x.builder.param(weight)
+      let B = x.builder.param(bias)
+      conv2d(x, W, strides, padding, dilation, groups) + B
 
 proc compileTest*(c: Client, m: Module, input: Node): Executable =
   ## Build the execution graph for the given module and compile it to an executable.
@@ -237,11 +313,3 @@ proc optimAdam*(c: Client, m: Module, learnRate: float, weightDecay = 0.0,
       state[p.name & "_vt"] = c.newBuffer(s.dtype, s.dims)
     return state
   makeOptimizer(m, exec, init)
-
-
-
-
-
-
-
-

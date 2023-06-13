@@ -12,8 +12,8 @@ setPrintOpts(precision=4, minWidth=10, floatMode=ffDecimal)
 
 proc initModel(c: Client): (Module, Executable) =
   let b = newBuilder("xor")
-  let layer1 = c.initLinear("1", nin=2, nout=2, weights = uniformInit(), biases = constantInit(0f32))
-  let layer2 = c.initLinear("2", nin=2, nout=1, weights = uniformInit(), biases = constantInit(0f32))
+  let layer1 = c.initLinear("1", nin=2, nout=2, weights = uniformInit())
+  let layer2 = c.initLinear("2", nin=2, nout=1, weights = uniformInit())
   var model: Module
   model.add(layer1, layer2)
   model.forward = proc(x: Node): Node =
@@ -34,7 +34,7 @@ proc calcAccuracy(c: Client): Executable =
 
 proc printStats(epoch: int, loss: float, predict: Buffer, accFn: Executable) =
   let accuracy = accFn.run([predict]).f32[] * 100
-  info &"epoch {epoch:4}:  loss: {loss:8.4f}  accuracy: {accuracy:.1f}%"
+  echo &"epoch {epoch:4}:  loss: {loss:8.4f}  accuracy: {accuracy:.1f}%"
 
 proc train(epochs = 1000, logEvery = 10, learnRate = 0.2, minLoss = 0.1, seed: int64 = 0, gpu = false, debug = false) =
   var logger = newConsoleLogger(levelThreshold=if debug: lvlDebug else: lvlInfo)
@@ -50,12 +50,12 @@ proc train(epochs = 1000, logEvery = 10, learnRate = 0.2, minLoss = 0.1, seed: i
   var params = initParams({"x": c.newBuffer(data), "y": c.newBuffer(target)})
   var (model, exec) = c.initModel()
   for p in model.variables:
-    info &"initial {p.name}: {p.data.f32}"
+    echo &"initial {p.name}: {p.data.f32}"
   # compile optimizer used to update the weights and function to calc the accuracy
   let optim = c.optimSGD(model, learnRate, momentum = 0.9)
   let accFn = c.calcAccuracy()
 
-  info "training with learning rate = ", learnRate
+  echo "training with learning rate = ", learnRate
   for epoch in 1 .. epochs:
     # one step processing the data - both forward and backward pass
     model.setParams(params)
@@ -74,7 +74,7 @@ proc train(epochs = 1000, logEvery = 10, learnRate = 0.2, minLoss = 0.1, seed: i
     model.variables = optim(params)
  
   for p in model.variables:
-    info &"final {p.name}: {p.data.f32}"
+    echo &"final {p.name}: {p.data.f32}"
 
 
 dispatch train

@@ -1,5 +1,5 @@
 {.warning[BareExcept]:off.}
-import std/[unittest, logging]
+import std/[unittest, logging, strutils]
 import nimxla
 import nimxla/data
 
@@ -13,11 +13,13 @@ suite "data":
   test "mnist":
     setPrintOpts(minWidth = 4)
     let d = mnistDataset(train = false)
+    debug "classes = ", d.classes.join(", ")
     check d.len == 10000
-    check d.shape == [28, 28]
+    check d.shape == [28, 28, 1]
+    check d.classes.len == 10
     var img = newSeq[uint8](28*28)
     let label = d.getItem(0, img[0].addr)
-    let t = img.toTensor.reshape(d.shape)
+    let t = img.toTensor.reshape(d.shape[0..^2])
     debug t
     debug label
     check label == 7

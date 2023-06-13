@@ -32,6 +32,8 @@ tCollapse	graph.html#tCollapse	OpType.tCollapse
 tTranspose	graph.html#tTranspose	OpType.tTranspose	
 tNarrow	graph.html#tNarrow	OpType.tNarrow	
 tConvert	graph.html#tConvert	OpType.tConvert	
+tReverse	graph.html#tReverse	OpType.tReverse	
+tMaxPool	graph.html#tMaxPool	OpType.tMaxPool	
 tReduceSum	graph.html#tReduceSum	OpType.tReduceSum	
 tReduceMin	graph.html#tReduceMin	OpType.tReduceMin	
 tReduceMax	graph.html#tReduceMax	OpType.tReduceMax	
@@ -58,6 +60,9 @@ tRngUniform	graph.html#tRngUniform	OpType.tRngUniform
 tRngNormal	graph.html#tRngNormal	OpType.tRngNormal	
 tReduce	graph.html#tReduce	OpType.tReduce	
 tGather	graph.html#tGather	OpType.tGather	
+tConv	graph.html#tConv	OpType.tConv	
+tReduceWindow	graph.html#tReduceWindow	OpType.tReduceWindow	
+tSelectAndScatter	graph.html#tSelectAndScatter	OpType.tSelectAndScatter	
 tSelect	graph.html#tSelect	OpType.tSelect	
 tClamp	graph.html#tClamp	OpType.tClamp	
 tTuple	graph.html#tTuple	OpType.tTuple	
@@ -84,6 +89,7 @@ paramNames	graph.html#paramNames,Computation	graph: paramNames(comp: Computation
 `$`	graph.html#$,Computation	graph: `$`(comp: Computation): string	
 parameter	graph.html#parameter,Builder,DataType,openArray[int],string	graph: parameter(b: Builder; dtype: DataType; dims: openArray[int] = []; name = &quot;&quot;): Node	
 makeTuple	graph.html#makeTuple,Builder,varargs[Node]	graph: makeTuple(b: Builder; args: varargs[Node]): Node	
+iota	graph.html#iota,Builder,DataType,int	graph: iota(b: Builder; dtype: DataType; length: int): Node	
 iota	graph.html#iota,Builder,DataType,openArray[int],int	graph: iota(b: Builder; dtype: DataType; dims: openArray[int]; axis: int): Node	
 errorNode	graph.html#errorNode,Builder,string	graph: errorNode(b: Builder; message: string): Node	
 constant	graph.html#constant,Builder,Literal	graph: constant(b: Builder; lit: Literal): Node	
@@ -143,6 +149,8 @@ zerosLike	graph.html#zerosLike,Node	graph: zerosLike(a: Node): Node
 `[]`	graph.html#[],Node,int	graph: `[]`(a: Node; index: int): Node	
 convert	graph.html#convert,Node,DataType	graph: convert(a: Node; dtype: DataType): Node	
 reshape	graph.html#reshape,Node,varargs[int]	graph: reshape(a: Node; dims: varargs[int]): Node	
+flatten	graph.html#flatten,Node,int,int	graph: flatten(a: Node; startDim = 0; endDim = -1): Node	
+reverse	graph.html#reverse,Node,varargs[int]	graph: reverse(a: Node; axes: varargs[int]): Node	
 broadcast	graph.html#broadcast,Node,openArray[int]	graph: broadcast(a: Node; dims: openArray[int]): Node	
 broadcastInDim	graph.html#broadcastInDim,Node,openArray[int],openArray[int]	graph: broadcastInDim(a: Node; outSize, bcastDims: openArray[int]): Node	
 collapse	graph.html#collapse,Node,openArray[int]	graph: collapse(a: Node; dims: openArray[int]): Node	
@@ -154,16 +162,28 @@ clamp	graph.html#clamp,Node,Node,Node	graph: clamp(a, min, max: Node): Node
 rngUniform	graph.html#rngUniform,Node,Node,openArray[int]	graph: rngUniform(min, max: Node; dims: openArray[int]): Node	
 rngNormal	graph.html#rngNormal,Node,Node,openArray[int]	graph: rngNormal(mean, stddev: Node; dims: openArray[int]): Node	
 concat	graph.html#concat,Node,openArray[Node],int	graph: concat(a: Node; nodes: openArray[Node]; axis: int): Node	
+convolution	graph.html#convolution,Node,Node,openArray[int],openArray[int],openArray[int],openArray[int],openArray[Padding],openArray[int],openArray[int],int,int	graph: convolution(a, kernel: Node; inputDims, outputDims, kernelDims: openArray[int];\n            strides: openArray[int] = []; padding: openArray[Padding] = [];\n            dilation, inputDilation: openArray[int] = [];\n            groups, batchGroups = 1): Node	
+getDims	graph.html#getDims,int,bool	graph: getDims(ndims: int; channelsFirst: bool): seq[int]	
+conv1d	graph.html#conv1d,Node,Node,int,int,int	graph: conv1d(a, kernel: Node; strides = 1; padding = pad(0); dilation = 1; groups = 1;\n       channelsFirst = false): Node	
+conv2d	graph.html#conv2d,Node,Node,Opt2d,Pad2d,Opt2d,int	graph: conv2d(a, kernel: Node; strides: Opt2d = 1; padding: Pad2d = pad(0);\n       dilation: Opt2d = 1; groups = 1; channelsFirst = false): Node	
+conv3d	graph.html#conv3d,Node,Node,Opt3d,Pad3d,Opt3d,int	graph: conv3d(a, kernel: Node; strides: Opt3d = 1; padding: Pad3d = pad(0);\n       dilation: Opt3d = 1; groups = 1; channelsFirst = false): Node	
 gather	graph.html#gather,Node,Node	graph: gather(a, indices: Node): Node	
 scatter	graph.html#scatter,Node,Node,Node,Computation	graph: scatter(a, indices, b: Node; comp: Computation): Node	
 addAt	graph.html#addAt,Node,Node,Node	graph: addAt(a, indices, b: Node): Node	
 reduce	graph.html#reduce,Node,Node,Computation,openArray[int]	graph: reduce(a, initValue: Node; comp: Computation; dims: openArray[int] = [];\n       nodeType = tReduce; keepDims = false): Node	
 sum	graph.html#sum,Node,openArray[int]	graph: sum(a: Node; dims: openArray[int] = []; keepDims = false): Node	
 sum	graph.html#sum,Node,int	graph: sum(a: Node; axis: int; keepDims = false): Node	
+mean	graph.html#mean,Node,openArray[int]	graph: mean(a: Node; dims: openArray[int] = []; keepDims = false): Node	
+mean	graph.html#mean,Node,int	graph: mean(a: Node; axis: int; keepDims = false): Node	
 min	graph.html#min,Node,openArray[int]	graph: min(a: Node; dims: openArray[int] = []; keepDims = false): Node	
 min	graph.html#min,Node,int	graph: min(a: Node; axis: int; keepDims = false): Node	
 max	graph.html#max,Node,openArray[int]	graph: max(a: Node; dims: openArray[int] = []; keepDims = false): Node	
 max	graph.html#max,Node,int	graph: max(a: Node; axis: int; keepDims = false): Node	
 argMax	graph.html#argMax,Node,int,bool,enum	graph: argMax(a: Node; axis: int; keepDims = false; ixType = I64): Node	
 argMin	graph.html#argMin,Node,int,bool,enum	graph: argMin(a: Node; axis: int; keepDims = false; ixType = I64): Node	
+reduceWindow	graph.html#reduceWindow,Node,Node,Computation,openArray[int],openArray[int],openArray[Padding]	graph: reduceWindow(a, initValue: Node; comp: Computation;\n             windowDims, strides: openArray[int];\n             padding: openArray[Padding] = []; nodeType = tReduceWindow): Node	
+maxPool1d	graph.html#maxPool1d,Node,int,int	graph: maxPool1d(a: Node; kernelSize: int; strides = 0; padding = pad(0);\n          channelsFirst = false): Node	
+maxPool2d	graph.html#maxPool2d,Node,Opt2d,Opt2d,Pad2d	graph: maxPool2d(a: Node; kernelSize: Opt2d; strides: Opt2d = 0;\n          padding: Pad2d = pad(0); channelsFirst = false): Node	
+maxPool3d	graph.html#maxPool3d,Node,Opt3d,Opt3d,Pad3d	graph: maxPool3d(a: Node; kernelSize: Opt3d; strides: Opt3d = 0;\n          padding: Pad3d = pad(0); channelsFirst = false): Node	
+selectAndScatter	graph.html#selectAndScatter,Node,Node,openArray[int],openArray[int],openArray[Padding]	graph: selectAndScatter(a, source: Node; windowDims, strides: openArray[int];\n                 padding: openArray[Padding] = []): Node	
 gradient	graph.html#gradient,Builder,Node,openArray[string]	graph: gradient(b: Builder; output: Node; inputs: openArray[string]): seq[Node]	
