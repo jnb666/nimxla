@@ -1155,6 +1155,14 @@ proc localGrad(b: Builder, n: Node): seq[GradFn] =
   of tGather:
     let indices = y.reshape(-1, x.rank)
     return @[ defn(v, b.zero(x.dtype, x.dims).addAt(indices, v) ) ]
+  of tSelect:
+    return @[nil,
+      defn(v, select(x, v, b.zero(v.dtype, v.dims)) ),
+      defn(v, select(x, b.zero(v.dtype, v.dims), v) )
+    ]
+  of tBroadcast:
+    if x.rank == 0:
+      return @[ defn(v, v.sum() )  ]
   else:
     raiseError("Node type not supported for autograd", n)
 
@@ -1162,6 +1170,7 @@ proc calcGrads(b: Builder, node, pathValue: Node, inputs: openarray[string],
                 grads: var openarray[Node], dict: var Table[uint64, Node]) =
   ## Recursively accumulate gradients from node where pathValue is prior value to this point
   for i, fn in b.localGrad(node):
+    if fn == nil: continue
     let input = node.args[i]
     var grad = fn(pathValue)
     let id = input.uid

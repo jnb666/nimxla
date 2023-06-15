@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>nimxla</title>
+  <script src="/plotly.js"></script>
+</head>
+<body style="background-color:#222;">
+  <div id="plot_1"></div>  
+  <script>
+    doRelayout = function() {{
+      var margin = 50;
+      Plotly.relayout('plot_1', {{width: window.innerWidth-margin, height: window.innerHeight-margin}});
+    }};
+    window.onresize = doRelayout;
+    Plotly.newPlot('plot_1', [], {jsonLayout}).then(doRelayout);
+    var socket = new WebSocket("{wsUrl}")
+    socket.onmessage = function(e) {{
+      var p = JSON.parse(e.data);
+      Plotly.react("plot_1", p.data, p.layout);
+    }}
+  </script> 
+</body>
+</html>

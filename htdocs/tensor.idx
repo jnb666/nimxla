@@ -17,8 +17,13 @@ approxEqual	tensor.html#approxEqual,Tensor[T: ElemType],Tensor[T: ElemType],floa
 at	tensor.html#at,Tensor[T: ElemType],int	tensor: at[T: ElemType](t: Tensor[T]; ix: int): Tensor[T]	
 toSeq	tensor.html#toSeq,Tensor[T: ElemType]	tensor: toSeq[T: ElemType](t: Tensor[T]): seq[T]	
 clone	tensor.html#clone,Tensor[T: ElemType]	tensor: clone[T: ElemType](t: Tensor[T]): Tensor[T]	
+append	tensor.html#append,Tensor[T: ElemType],Tensor[T: ElemType]	tensor: append[T: ElemType](t, t2: Tensor[T]): Tensor[T]	
 reshape	tensor.html#reshape,Tensor[T: ElemType],varargs[int]	tensor: reshape[T: ElemType](t: Tensor[T]; dims: varargs[int]): Tensor[T]	
 convert	tensor.html#convert,Tensor[T: ElemType],typedesc[ElemType]	tensor: convert[T: ElemType](t: Tensor[T]; typ: typedesc[ElemType]): Tensor[typ]	
+readTensor	tensor.html#readTensor,Stream	tensor: readTensor[T: ElemType](s: Stream): Tensor[T]	
+readTensor	tensor.html#readTensor,string	tensor: readTensor[T: ElemType](filename: string): Tensor[T]	
+write	tensor.html#write,Tensor[T: ElemType],Stream	tensor: write[T: ElemType](t: Tensor[T]; s: Stream)	
+write	tensor.html#write,Tensor[T: ElemType],string	tensor: write[T: ElemType](t: Tensor[T]; filename: string)	
 setPrintOpts	tensor.html#setPrintOpts,int,int,int,int	tensor: setPrintOpts(minWidth = 8; precision = 6; floatMode = ffDefault;\n             threshold = 1000; edgeitems = 4)	
 format	tensor.html#format,Tensor[T: ElemType]	tensor: format[T: ElemType](t: Tensor[T]): string	
 `$`	tensor.html#$,Tensor[T: ElemType]	tensor: `$`[T: ElemType](t: Tensor[T]): string	

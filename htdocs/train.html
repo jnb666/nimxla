@@ -105,6 +105,22 @@ window.addEventListener('DOMContentLoaded', main);
   </ul>
 </li>
 <li>
+  <a class="reference reference-toplevel" href="#7" id="57">Types</a>
+  <ul class="simple simple-toc-section">
+      <li><a class="reference" href="#Trainer"
+    title="Trainer = object
+  client*: Client
+  optim*: Optimizer
+  trainer*: Executable
+  tester*: Executable
+  trainAcc*: Executable
+  testAcc*: Executable
+  stats*: Table[string, seq[float]]
+  predict*: Tensor[int32]">Trainer</a></li>
+
+  </ul>
+</li>
+<li>
   <a class="reference reference-toplevel" href="#12" id="62">Procs</a>
   <ul class="simple simple-toc-section">
       <ul class="simple nested-toc-section">accuracyFunc
@@ -113,10 +129,18 @@ window.addEventListener('DOMContentLoaded', main);
 
   </ul>
   <ul class="simple nested-toc-section">getAccuracy
-      <li><a class="reference" href="#getAccuracy%2CClient%2CModule%2CExecutable%2CDataLoader%2CExecutable"
-    title="getAccuracy[T: ElemType](c: Client; model: var Module; exec: Executable;
-                         loader: DataLoader; accFn: Executable): float">getAccuracy[T: ElemType](c: Client; model: var Module; exec: Executable;
-                         loader: DataLoader; accFn: Executable): float</a></li>
+      <li><a class="reference" href="#getAccuracy%2CTrainer%2CModule%2CDataLoader"
+    title="getAccuracy[T: ElemType](t: var Trainer; model: var Module; loader: DataLoader): float">getAccuracy[T: ElemType](t: var Trainer; model: var Module; loader: DataLoader): float</a></li>
+
+  </ul>
+  <ul class="simple nested-toc-section">getLayout
+      <li><a class="reference" href="#getLayout%2Cint"
+    title="getLayout(epochs: int): JsonNode">getLayout(epochs: int): JsonNode</a></li>
+
+  </ul>
+  <ul class="simple nested-toc-section">statsPlots
+      <li><a class="reference" href="#statsPlots%2CTrainer"
+    title="statsPlots(t: Trainer): JsonNode">statsPlots(t: Trainer): JsonNode</a></li>
 
   </ul>
   <ul class="simple nested-toc-section">testFunc
@@ -125,19 +149,24 @@ window.addEventListener('DOMContentLoaded', main);
 
   </ul>
   <ul class="simple nested-toc-section">trainEpoch
-      <li><a class="reference" href="#trainEpoch%2CClient%2CModule%2CExecutable%2CDataLoader%2COptimizer%2CExecutable"
-    title="trainEpoch[T: ElemType](c: Client; model: var Module; exec: Executable;
-                        loader: DataLoader; optim: Optimizer; accFn: Executable): (
-    float, float)">trainEpoch[T: ElemType](c: Client; model: var Module; exec: Executable;
-                        loader: DataLoader; optim: Optimizer; accFn: Executable): (
+      <li><a class="reference" href="#trainEpoch%2CTrainer%2CModule%2CDataLoader"
+    title="trainEpoch[T: ElemType](t: var Trainer; model: var Module; loader: DataLoader): (
+    float, float)">trainEpoch[T: ElemType](t: var Trainer; model: var Module; loader: DataLoader): (
     float, float)</a></li>
 
   </ul>
   <ul class="simple nested-toc-section">trainFunc
       <li><a class="reference" href="#trainFunc%2CClient%2CModule%2CDataType%2Cseq%5Bint%5D%2Cproc%28Node%2CNode%29"
     title="trainFunc(c: Client; model: Module; dtype: DataType; shape: seq[int];
-          lossFn: proc (pred, target: Node): Node): Executable">trainFunc(c: Client; model: Module; dtype: DataType; shape: seq[int];
-          lossFn: proc (pred, target: Node): Node): Executable</a></li>
+          lossFn: proc (yp, y: Node): Node): Executable">trainFunc(c: Client; model: Module; dtype: DataType; shape: seq[int];
+          lossFn: proc (yp, y: Node): Node): Executable</a></li>
+
+  </ul>
+  <ul class="simple nested-toc-section">trainNetwork
+      <li><a class="reference" href="#trainNetwork%2CTrainer%2CModule%2CDataLoader%2CDataLoader%2Cint"
+    title="trainNetwork[T: ElemType](t: var Trainer; model: var Module;
+                          train, test: DataLoader; epochs: int; plot = false)">trainNetwork[T: ElemType](t: var Trainer; model: var Module;
+                          train, test: DataLoader; epochs: int; plot = false)</a></li>
 
   </ul>
 
@@ -159,7 +188,33 @@ class="link-seesrc" target="_blank">Source</a>
   <div class="section" id="6">
 <h1><a class="toc-backref" href="#6">Imports</a></h1>
 <dl class="item">
-<a class="reference external" href="nimxla.html">nimxla</a>, <a class="reference external" href="nn.html">nn</a>, <a class="reference external" href="data.html">data</a>
+<a class="reference external" href="nimxla.html">nimxla</a>, <a class="reference external" href="nn.html">nn</a>, <a class="reference external" href="data.html">data</a>, <a class="reference external" href="plots.html">plots</a>
+</dl></div>
+<div class="section" id="7">
+<h1><a class="toc-backref" href="#7">Types</a></h1>
+<dl class="item">
+<div id="Trainer">
+<dt><pre><a href="train.html#Trainer"><span class="Identifier">Trainer</span></a> <span class="Other">=</span> <span class="Keyword">object</span>
+  <span class="Identifier">client</span><span class="Operator">*</span><span class="Other">:</span> <a href="nimxla.html#Client"><span class="Identifier">Client</span></a>
+  <span class="Identifier">optim</span><span class="Operator">*</span><span class="Other">:</span> <a href="nn.html#Optimizer"><span class="Identifier">Optimizer</span></a>
+  <span class="Identifier">trainer</span><span class="Operator">*</span><span class="Other">:</span> <a href="nimxla.html#Executable"><span class="Identifier">Executable</span></a>
+  <span class="Identifier">tester</span><span class="Operator">*</span><span class="Other">:</span> <a href="nimxla.html#Executable"><span class="Identifier">Executable</span></a>
+  <span class="Identifier">trainAcc</span><span class="Operator">*</span><span class="Other">:</span> <a href="nimxla.html#Executable"><span class="Identifier">Executable</span></a>
+  <span class="Identifier">testAcc</span><span class="Operator">*</span><span class="Other">:</span> <a href="nimxla.html#Executable"><span class="Identifier">Executable</span></a>
+  <span class="Identifier">stats</span><span class="Operator">*</span><span class="Other">:</span> <span class="Identifier">Table</span><span class="Other">[</span><span class="Identifier">string</span><span class="Other">,</span> <span class="Identifier">seq</span><span class="Other">[</span><span class="Identifier">float</span><span class="Other">]</span><span class="Other">]</span>
+  <span class="Identifier">predict</span><span class="Operator">*</span><span class="Other">:</span> <a href="tensor.html#Tensor"><span class="Identifier">Tensor</span></a><span class="Other">[</span><span class="Identifier">int32</span><span class="Other">]</span>
+</pre></dt>
+<dd>
+
+Trainer object holds the state for a training
+&nbsp;&nbsp;<a
+href="https://github.com/jnb666/nimxla/tree/main/src/nimxla/train.nim#L10"
+class="link-seesrc" target="_blank">Source</a>
+&nbsp;&nbsp;<a href="https://github.com/jnb666/nimxla/edit/devel/src/nimxla/train.nim#L10" class="link-seesrc" target="_blank" >Edit</a>
+
+</dd>
+</div>
+
 </dl></div>
 <div class="section" id="12">
 <h1><a class="toc-backref" href="#12">Procs</a></h1>
@@ -169,28 +224,55 @@ class="link-seesrc" target="_blank">Source</a>
     <span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Identifier">Exception</span><span class="Other">,</span> <span class="Identifier">ValueError</span><span class="Other">,</span> <span class="Identifier">BuilderError</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Identifier">RootEffect</span><span class="Other">]</span></span>.}</pre></dt>
 <dd>
 
-Helper function to calculate the accuracy from a set of predictions. Callable has two input parameters<ul class="simple"><li>array predictions of shape &lt;outType&gt;[batch, nout]</li>
-<li>array correct labels of shape &lt;labelType&gt;[batch]</li>
+Helper function to calculate the accuracy from a set of predictions. Callable has two input parameters<ul class="simple"><li>model output array of shape &lt;outType&gt;[batch, nout]</li>
+<li>target labels of shape &lt;labelType&gt;[batch]</li>
 </ul>
-<p>The maximum index in each row from the predictions is compared with the correspoding label and summed to return the accuracy as a float32 scalar between 0 and 1.</p>
+<p>And tuple with two outputs</p>
+<ul class="simple"><li>labels array of predicted class for each sample, and</li>
+<li>accuracy F32 scalar in range 0-1 from comparison with labels</li>
+</ul>
 
 &nbsp;&nbsp;<a
-href="https://github.com/jnb666/nimxla/tree/main/src/nimxla/train.nim#L24"
+href="https://github.com/jnb666/nimxla/tree/main/src/nimxla/train.nim#L41"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/jnb666/nimxla/edit/devel/src/nimxla/train.nim#L24" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/jnb666/nimxla/edit/devel/src/nimxla/train.nim#L41" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
-<div id="getAccuracy,Client,Module,Executable,DataLoader,Executable">
-<dt><pre><span class="Keyword">proc</span> <a href="#getAccuracy%2CClient%2CModule%2CExecutable%2CDataLoader%2CExecutable"><span class="Identifier">getAccuracy</span></a><span class="Other">[</span><span class="Identifier">T</span><span class="Other">:</span> <a href="shape.html#ElemType"><span class="Identifier">ElemType</span></a><span class="Other">]</span><span class="Other">(</span><span class="Identifier">c</span><span class="Other">:</span> <a href="nimxla.html#Client"><span class="Identifier">Client</span></a><span class="Other">;</span> <span class="Identifier">model</span><span class="Other">:</span> <span class="Keyword">var</span> <a href="nn.html#Module"><span class="Identifier">Module</span></a><span class="Other">;</span> <span class="Identifier">exec</span><span class="Other">:</span> <a href="nimxla.html#Executable"><span class="Identifier">Executable</span></a><span class="Other">;</span>
-                              <span class="Identifier">loader</span><span class="Other">:</span> <a href="data.html#DataLoader"><span class="Identifier">DataLoader</span></a><span class="Other">;</span> <span class="Identifier">accFn</span><span class="Other">:</span> <a href="nimxla.html#Executable"><span class="Identifier">Executable</span></a><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">float</span></pre></dt>
+<div id="getAccuracy,Trainer,Module,DataLoader">
+<dt><pre><span class="Keyword">proc</span> <a href="#getAccuracy%2CTrainer%2CModule%2CDataLoader"><span class="Identifier">getAccuracy</span></a><span class="Other">[</span><span class="Identifier">T</span><span class="Other">:</span> <a href="shape.html#ElemType"><span class="Identifier">ElemType</span></a><span class="Other">]</span><span class="Other">(</span><span class="Identifier">t</span><span class="Other">:</span> <span class="Keyword">var</span> <a href="train.html#Trainer"><span class="Identifier">Trainer</span></a><span class="Other">;</span> <span class="Identifier">model</span><span class="Other">:</span> <span class="Keyword">var</span> <a href="nn.html#Module"><span class="Identifier">Module</span></a><span class="Other">;</span>
+                              <span class="Identifier">loader</span><span class="Other">:</span> <a href="data.html#DataLoader"><span class="Identifier">DataLoader</span></a><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">float</span></pre></dt>
 <dd>
 
 Calculate the accuracy from the test data set. T should be the type of data returned from the loader.
 &nbsp;&nbsp;<a
-href="https://github.com/jnb666/nimxla/tree/main/src/nimxla/train.nim#L62"
+href="https://github.com/jnb666/nimxla/tree/main/src/nimxla/train.nim#L83"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/jnb666/nimxla/edit/devel/src/nimxla/train.nim#L62" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/jnb666/nimxla/edit/devel/src/nimxla/train.nim#L83" class="link-seesrc" target="_blank" >Edit</a>
+
+</dd>
+</div>
+<div id="getLayout,int">
+<dt><pre><span class="Keyword">proc</span> <a href="#getLayout%2Cint"><span class="Identifier">getLayout</span></a><span class="Other">(</span><span class="Identifier">epochs</span><span class="Other">:</span> <span class="Identifier">int</span><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">JsonNode</span> {.<span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Identifier">KeyError</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span>.}</pre></dt>
+<dd>
+
+
+&nbsp;&nbsp;<a
+href="https://github.com/jnb666/nimxla/tree/main/src/nimxla/train.nim#L120"
+class="link-seesrc" target="_blank">Source</a>
+&nbsp;&nbsp;<a href="https://github.com/jnb666/nimxla/edit/devel/src/nimxla/train.nim#L120" class="link-seesrc" target="_blank" >Edit</a>
+
+</dd>
+</div>
+<div id="statsPlots,Trainer">
+<dt><pre><span class="Keyword">proc</span> <a href="#statsPlots%2CTrainer"><span class="Identifier">statsPlots</span></a><span class="Other">(</span><span class="Identifier">t</span><span class="Other">:</span> <a href="train.html#Trainer"><span class="Identifier">Trainer</span></a><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">JsonNode</span> {.<span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Identifier">KeyError</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span>.}</pre></dt>
+<dd>
+
+Convert stats to format used by plots package
+&nbsp;&nbsp;<a
+href="https://github.com/jnb666/nimxla/tree/main/src/nimxla/train.nim#L112"
+class="link-seesrc" target="_blank">Source</a>
+&nbsp;&nbsp;<a href="https://github.com/jnb666/nimxla/edit/devel/src/nimxla/train.nim#L112" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -201,37 +283,50 @@ class="link-seesrc" target="_blank">Source</a>
 
 Compile test function with given input data shape.
 &nbsp;&nbsp;<a
-href="https://github.com/jnb666/nimxla/tree/main/src/nimxla/train.nim#L17"
+href="https://github.com/jnb666/nimxla/tree/main/src/nimxla/train.nim#L34"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/jnb666/nimxla/edit/devel/src/nimxla/train.nim#L17" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/jnb666/nimxla/edit/devel/src/nimxla/train.nim#L34" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
-<div id="trainEpoch,Client,Module,Executable,DataLoader,Optimizer,Executable">
-<dt><pre><span class="Keyword">proc</span> <a href="#trainEpoch%2CClient%2CModule%2CExecutable%2CDataLoader%2COptimizer%2CExecutable"><span class="Identifier">trainEpoch</span></a><span class="Other">[</span><span class="Identifier">T</span><span class="Other">:</span> <a href="shape.html#ElemType"><span class="Identifier">ElemType</span></a><span class="Other">]</span><span class="Other">(</span><span class="Identifier">c</span><span class="Other">:</span> <a href="nimxla.html#Client"><span class="Identifier">Client</span></a><span class="Other">;</span> <span class="Identifier">model</span><span class="Other">:</span> <span class="Keyword">var</span> <a href="nn.html#Module"><span class="Identifier">Module</span></a><span class="Other">;</span> <span class="Identifier">exec</span><span class="Other">:</span> <a href="nimxla.html#Executable"><span class="Identifier">Executable</span></a><span class="Other">;</span>
-                             <span class="Identifier">loader</span><span class="Other">:</span> <a href="data.html#DataLoader"><span class="Identifier">DataLoader</span></a><span class="Other">;</span> <span class="Identifier">optim</span><span class="Other">:</span> <a href="nn.html#Optimizer"><span class="Identifier">Optimizer</span></a><span class="Other">;</span>
-                             <span class="Identifier">accFn</span><span class="Other">:</span> <a href="nimxla.html#Executable"><span class="Identifier">Executable</span></a><span class="Other">)</span><span class="Other">:</span> <span class="Other">(</span><span class="Identifier">float</span><span class="Other">,</span> <span class="Identifier">float</span><span class="Other">)</span></pre></dt>
+<div id="trainEpoch,Trainer,Module,DataLoader">
+<dt><pre><span class="Keyword">proc</span> <a href="#trainEpoch%2CTrainer%2CModule%2CDataLoader"><span class="Identifier">trainEpoch</span></a><span class="Other">[</span><span class="Identifier">T</span><span class="Other">:</span> <a href="shape.html#ElemType"><span class="Identifier">ElemType</span></a><span class="Other">]</span><span class="Other">(</span><span class="Identifier">t</span><span class="Other">:</span> <span class="Keyword">var</span> <a href="train.html#Trainer"><span class="Identifier">Trainer</span></a><span class="Other">;</span> <span class="Identifier">model</span><span class="Other">:</span> <span class="Keyword">var</span> <a href="nn.html#Module"><span class="Identifier">Module</span></a><span class="Other">;</span>
+                             <span class="Identifier">loader</span><span class="Other">:</span> <a href="data.html#DataLoader"><span class="Identifier">DataLoader</span></a><span class="Other">)</span><span class="Other">:</span> <span class="Other">(</span><span class="Identifier">float</span><span class="Other">,</span> <span class="Identifier">float</span><span class="Other">)</span></pre></dt>
 <dd>
 
 Train on one epoch of batches of data from the training set, returns average loss and accuracy on training dara T should be the type of data returned from the loader. Output loss should be a float32 scalar.
 &nbsp;&nbsp;<a
-href="https://github.com/jnb666/nimxla/tree/main/src/nimxla/train.nim#L39"
+href="https://github.com/jnb666/nimxla/tree/main/src/nimxla/train.nim#L58"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/jnb666/nimxla/edit/devel/src/nimxla/train.nim#L39" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/jnb666/nimxla/edit/devel/src/nimxla/train.nim#L58" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
 <div id="trainFunc,Client,Module,DataType,seq[int],proc(Node,Node)">
 <dt><pre><span class="Keyword">proc</span> <a href="#trainFunc%2CClient%2CModule%2CDataType%2Cseq%5Bint%5D%2Cproc%28Node%2CNode%29"><span class="Identifier">trainFunc</span></a><span class="Other">(</span><span class="Identifier">c</span><span class="Other">:</span> <a href="nimxla.html#Client"><span class="Identifier">Client</span></a><span class="Other">;</span> <span class="Identifier">model</span><span class="Other">:</span> <a href="nn.html#Module"><span class="Identifier">Module</span></a><span class="Other">;</span> <span class="Identifier">dtype</span><span class="Other">:</span> <a href="shape.html#DataType"><span class="Identifier">DataType</span></a><span class="Other">;</span> <span class="Identifier">shape</span><span class="Other">:</span> <span class="Identifier">seq</span><span class="Other">[</span><span class="Identifier">int</span><span class="Other">]</span><span class="Other">;</span>
-               <span class="Identifier">lossFn</span><span class="Other">:</span> <span class="Keyword">proc</span> <span class="Other">(</span><span class="Identifier">pred</span><span class="Other">,</span> <span class="Identifier">target</span><span class="Other">:</span> <a href="graph.html#Node"><span class="Identifier">Node</span></a><span class="Other">)</span><span class="Other">:</span> <a href="graph.html#Node"><span class="Identifier">Node</span></a><span class="Other">)</span><span class="Other">:</span> <a href="nimxla.html#Executable"><span class="Identifier">Executable</span></a> {.
+               <span class="Identifier">lossFn</span><span class="Other">:</span> <span class="Keyword">proc</span> <span class="Other">(</span><span class="Identifier">yp</span><span class="Other">,</span> <span class="Identifier">y</span><span class="Other">:</span> <a href="graph.html#Node"><span class="Identifier">Node</span></a><span class="Other">)</span><span class="Other">:</span> <a href="graph.html#Node"><span class="Identifier">Node</span></a><span class="Other">)</span><span class="Other">:</span> <a href="nimxla.html#Executable"><span class="Identifier">Executable</span></a> {.
     <span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Identifier">Exception</span><span class="Other">,</span> <span class="Identifier">ValueError</span><span class="Other">,</span> <span class="Identifier">BuilderError</span><span class="Other">,</span> <span class="Identifier">KeyError</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Identifier">RootEffect</span><span class="Other">]</span></span>.}</pre></dt>
 <dd>
 
 Compile training function with given input data shape and loss function which is applied to the output.
 &nbsp;&nbsp;<a
-href="https://github.com/jnb666/nimxla/tree/main/src/nimxla/train.nim#L9"
+href="https://github.com/jnb666/nimxla/tree/main/src/nimxla/train.nim#L26"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/jnb666/nimxla/edit/devel/src/nimxla/train.nim#L9" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/jnb666/nimxla/edit/devel/src/nimxla/train.nim#L26" class="link-seesrc" target="_blank" >Edit</a>
+
+</dd>
+</div>
+<div id="trainNetwork,Trainer,Module,DataLoader,DataLoader,int">
+<dt><pre><span class="Keyword">proc</span> <a href="#trainNetwork%2CTrainer%2CModule%2CDataLoader%2CDataLoader%2Cint"><span class="Identifier">trainNetwork</span></a><span class="Other">[</span><span class="Identifier">T</span><span class="Other">:</span> <a href="shape.html#ElemType"><span class="Identifier">ElemType</span></a><span class="Other">]</span><span class="Other">(</span><span class="Identifier">t</span><span class="Other">:</span> <span class="Keyword">var</span> <a href="train.html#Trainer"><span class="Identifier">Trainer</span></a><span class="Other">;</span> <span class="Identifier">model</span><span class="Other">:</span> <span class="Keyword">var</span> <a href="nn.html#Module"><span class="Identifier">Module</span></a><span class="Other">;</span>
+                               <span class="Identifier">train</span><span class="Other">,</span> <span class="Identifier">test</span><span class="Other">:</span> <a href="data.html#DataLoader"><span class="Identifier">DataLoader</span></a><span class="Other">;</span> <span class="Identifier">epochs</span><span class="Other">:</span> <span class="Identifier">int</span><span class="Other">;</span>
+                               <span class="Identifier">plot</span> <span class="Other">=</span> <span class="Identifier">false</span><span class="Other">)</span></pre></dt>
+<dd>
+
+Training run for given number of epochs
+&nbsp;&nbsp;<a
+href="https://github.com/jnb666/nimxla/tree/main/src/nimxla/train.nim#L125"
+class="link-seesrc" target="_blank">Source</a>
+&nbsp;&nbsp;<a href="https://github.com/jnb666/nimxla/edit/devel/src/nimxla/train.nim#L125" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -245,7 +340,7 @@ class="link-seesrc" target="_blank">Source</a>
       <div class="twelve-columns footer">
         <span class="nim-sprite"></span>
         <br/>
-        <small style="color: var(--hint);">Made with Nim. Generated: 2023-06-13 16:51:11 UTC</small>
+        <small style="color: var(--hint);">Made with Nim. Generated: 2023-06-15 13:36:10 UTC</small>
       </div>
     </div>
   </div>

@@ -70,7 +70,7 @@ window.addEventListener('DOMContentLoaded', main);
 <div class="document" id="documentId">
   <div class="container">
     <h1 class="title">Index</h1>
-    Modules: <a href="data.html">data</a>, <a href="graph.html">graph</a>, <a href="literal.html">literal</a>, <a href="nimxla.html">nimxla</a>, <a href="nn.html">nn</a>, <a href="shape.html">shape</a>, <a href="tensor.html">tensor</a>, <a href="train.html">train</a>.<br/><p /><h2>API symbols</h2>
+    Modules: <a href="data.html">data</a>, <a href="graph.html">graph</a>, <a href="literal.html">literal</a>, <a href="nimxla.html">nimxla</a>, <a href="nn.html">nn</a>, <a href="plots.html">plots</a>, <a href="shape.html">shape</a>, <a href="tensor.html">tensor</a>, <a href="train.html">train</a>.<br/><p /><h2>API symbols</h2>
 <dl><dt><a name="%60%21%3D%60" href="#%60%21%3D%60"><span>`!=`:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
           data-doc-search-tag="graph: `!=`(a, b: Node): Node" href="graph.html#%21%3D%2CNode%2CNode">graph: `!=`(a, b: Node): Node</a></li>
@@ -182,6 +182,10 @@ window.addEventListener('DOMContentLoaded', main);
 <dt><a name="addrOf" href="#addrOf"><span>addrOf:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
           data-doc-search-tag="literal: addrOf(lit: Literal): ptr literal_t" href="literal.html#addrOf%2CLiteral">literal: addrOf(lit: Literal): ptr literal_t</a></li>
+          </ul></dd>
+<dt><a name="append" href="#append"><span>append:</span></a></dt><dd><ul class="simple">
+<li><a class="reference external"
+          data-doc-search-tag="tensor: append[T: ElemType](t, t2: Tensor[T]): Tensor[T]" href="tensor.html#append%2CTensor%5BT%3A%20ElemType%5D%2CTensor%5BT%3A%20ElemType%5D">tensor: append[T: ElemType](t, t2: Tensor[T]): Tensor[T]</a></li>
           </ul></dd>
 <dt><a name="approxEqual" href="#approxEqual"><span>approxEqual:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
@@ -401,6 +405,10 @@ window.addEventListener('DOMContentLoaded', main);
 <li><a class="reference external"
           data-doc-search-tag="graph: dot(a, b: Node): Node" href="graph.html#dot%2CNode%2CNode">graph: dot(a, b: Node): Node</a></li>
           </ul></dd>
+<dt><a name="dropout" href="#dropout"><span>dropout:</span></a></dt><dd><ul class="simple">
+<li><a class="reference external"
+          data-doc-search-tag="nn: dropout(a: Node; ratio: float; training: bool; normalize = true): Node" href="nn.html#dropout%2CNode%2Cfloat%2Cbool">nn: dropout(a: Node; ratio: float; training: bool; normalize = true): Node</a></li>
+          </ul></dd>
 <dt><a name="dtype" href="#dtype"><span>dtype:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
           data-doc-search-tag="graph: dtype(n: Node): DataType" href="graph.html#dtype%2CNode">graph: dtype(n: Node): DataType</a></li>
@@ -481,9 +489,7 @@ window.addEventListener('DOMContentLoaded', main);
           </ul></dd>
 <dt><a name="getAccuracy" href="#getAccuracy"><span>getAccuracy:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
-          data-doc-search-tag="train: getAccuracy[T: ElemType](c: Client; model: var Module; exec: Executable;
-                         loader: DataLoader; accFn: Executable): float" href="train.html#getAccuracy%2CClient%2CModule%2CExecutable%2CDataLoader%2CExecutable">train: getAccuracy[T: ElemType](c: Client; model: var Module; exec: Executable;
-                         loader: DataLoader; accFn: Executable): float</a></li>
+          data-doc-search-tag="train: getAccuracy[T: ElemType](t: var Trainer; model: var Module; loader: DataLoader): float" href="train.html#getAccuracy%2CTrainer%2CModule%2CDataLoader">train: getAccuracy[T: ElemType](t: var Trainer; model: var Module; loader: DataLoader): float</a></li>
           </ul></dd>
 <dt><a name="getBatch" href="#getBatch"><span>getBatch:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
@@ -492,6 +498,10 @@ window.addEventListener('DOMContentLoaded', main);
 <dt><a name="getDims" href="#getDims"><span>getDims:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
           data-doc-search-tag="graph: getDims(ndims: int; channelsFirst: bool): seq[int]" href="graph.html#getDims%2Cint%2Cbool">graph: getDims(ndims: int; channelsFirst: bool): seq[int]</a></li>
+          </ul></dd>
+<dt><a name="getLayout" href="#getLayout"><span>getLayout:</span></a></dt><dd><ul class="simple">
+<li><a class="reference external"
+          data-doc-search-tag="train: getLayout(epochs: int): JsonNode" href="train.html#getLayout%2Cint">train: getLayout(epochs: int): JsonNode</a></li>
           </ul></dd>
 <dt><a name="glorotInit" href="#glorotInit"><span>glorotInit:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
@@ -504,6 +514,10 @@ window.addEventListener('DOMContentLoaded', main);
 <dt><a name="gradNames" href="#gradNames"><span>gradNames:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
           data-doc-search-tag="nn: gradNames(m: Module): seq[string]" href="nn.html#gradNames%2CModule">nn: gradNames(m: Module): seq[string]</a></li>
+          </ul></dd>
+<dt><a name="gridLayout" href="#gridLayout"><span>gridLayout:</span></a></dt><dd><ul class="simple">
+<li><a class="reference external"
+          data-doc-search-tag="plots: gridLayout(rows = 1; cols = 1; ytitle, xtitle: openArray[string] = []): JsonNode" href="plots.html#gridLayout%2Cint%2Cint%2CopenArray%5Bstring%5D%2CopenArray%5Bstring%5D">plots: gridLayout(rows = 1; cols = 1; ytitle, xtitle: openArray[string] = []): JsonNode</a></li>
           </ul></dd>
 <dt><a name="heInit" href="#heInit"><span>heInit:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
@@ -763,6 +777,10 @@ window.addEventListener('DOMContentLoaded', main);
 <li><a class="reference external"
           data-doc-search-tag="DataType.OpaqueType" href="shape.html#OpaqueType">DataType.OpaqueType</a></li>
           </ul></dd>
+<dt><a name="openWebSocket" href="#openWebSocket"><span>openWebSocket:</span></a></dt><dd><ul class="simple">
+<li><a class="reference external"
+          data-doc-search-tag="plots: openWebSocket(): WebSocket" href="plots.html#openWebSocket">plots: openWebSocket(): WebSocket</a></li>
+          </ul></dd>
 <dt><a name="Opt2d" href="#Opt2d"><span>Opt2d:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
           data-doc-search-tag="shape: Opt2d" href="shape.html#Opt2d">shape: Opt2d</a></li>
@@ -837,6 +855,18 @@ window.addEventListener('DOMContentLoaded', main);
 <li><a class="reference external"
           data-doc-search-tag="nimxla: platformVersion(client: Client): string" href="nimxla.html#platformVersion%2CClient">nimxla: platformVersion(client: Client): string</a></li>
           </ul></dd>
+<dt><a name="plotImage" href="#plotImage"><span>plotImage:</span></a></dt><dd><ul class="simple">
+<li><a class="reference external"
+          data-doc-search-tag="plots: plotImage(t: Tensor[uint8]; row, col: int): JsonNode" href="plots.html#plotImage%2CTensor%5Buint8%5D%2Cint%2Cint">plots: plotImage(t: Tensor[uint8]; row, col: int): JsonNode</a></li>
+          </ul></dd>
+<dt><a name="plotImageGrid" href="#plotImageGrid"><span>plotImageGrid:</span></a></dt><dd><ul class="simple">
+<li><a class="reference external"
+          data-doc-search-tag="plots: plotImageGrid(title: string; rows, cols: int;
+              getData: proc (i: int): (Tensor[uint8], string)): (JsonNode,
+    JsonNode)" href="plots.html#plotImageGrid%2Cstring%2Cint%2Cint%2Cproc%28int%29">plots: plotImageGrid(title: string; rows, cols: int;
+              getData: proc (i: int): (Tensor[uint8], string)): (JsonNode,
+    JsonNode)</a></li>
+          </ul></dd>
 <dt><a name="pow" href="#pow"><span>pow:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
           data-doc-search-tag="graph: pow(a, b: Node): Node" href="graph.html#pow%2CNode%2CNode">graph: pow(a, b: Node): Node</a></li>
@@ -856,6 +886,12 @@ window.addEventListener('DOMContentLoaded', main);
           data-doc-search-tag="literal: rawPtr(lit: Literal): literal_t" href="literal.html#rawPtr%2CLiteral">literal: rawPtr(lit: Literal): literal_t</a></li>
           <li><a class="reference external"
           data-doc-search-tag="tensor: rawPtr[T: ElemType](t: Tensor[T]): ptr T" href="tensor.html#rawPtr%2CTensor%5BT%3A%20ElemType%5D">tensor: rawPtr[T: ElemType](t: Tensor[T]): ptr T</a></li>
+          </ul></dd>
+<dt><a name="readTensor" href="#readTensor"><span>readTensor:</span></a></dt><dd><ul class="simple">
+<li><a class="reference external"
+          data-doc-search-tag="tensor: readTensor[T: ElemType](s: Stream): Tensor[T]" href="tensor.html#readTensor%2CStream">tensor: readTensor[T: ElemType](s: Stream): Tensor[T]</a></li>
+          <li><a class="reference external"
+          data-doc-search-tag="tensor: readTensor[T: ElemType](filename: string): Tensor[T]" href="tensor.html#readTensor%2Cstring">tensor: readTensor[T: ElemType](filename: string): Tensor[T]</a></li>
           </ul></dd>
 <dt><a name="reduce" href="#reduce"><span>reduce:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
@@ -955,6 +991,10 @@ window.addEventListener('DOMContentLoaded', main);
           <li><a class="reference external"
           data-doc-search-tag="shape: seq3(opt: Pad3d): seq[Padding]" href="shape.html#seq3%2CPad3d">shape: seq3(opt: Pad3d): seq[Padding]</a></li>
           </ul></dd>
+<dt><a name="servePlots" href="#servePlots"><span>servePlots:</span></a></dt><dd><ul class="simple">
+<li><a class="reference external"
+          data-doc-search-tag="plots: servePlots(): owned(Future[void])" href="plots.html#servePlots">plots: servePlots(): owned(Future[void])</a></li>
+          </ul></dd>
 <dt><a name="setLogLevel" href="#setLogLevel"><span>setLogLevel:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
           data-doc-search-tag="nimxla: setLogLevel(level: LogLevel)" href="nimxla.html#setLogLevel%2CLogLevel">nimxla: setLogLevel(level: LogLevel)</a></li>
@@ -1008,6 +1048,10 @@ window.addEventListener('DOMContentLoaded', main);
 <dt><a name="sqrt" href="#sqrt"><span>sqrt:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
           data-doc-search-tag="graph: sqrt(a: Node): Node" href="graph.html#sqrt%2CNode">graph: sqrt(a: Node): Node</a></li>
+          </ul></dd>
+<dt><a name="statsPlots" href="#statsPlots"><span>statsPlots:</span></a></dt><dd><ul class="simple">
+<li><a class="reference external"
+          data-doc-search-tag="train: statsPlots(t: Trainer): JsonNode" href="train.html#statsPlots%2CTrainer">train: statsPlots(t: Trainer): JsonNode</a></li>
           </ul></dd>
 <dt><a name="sum" href="#sum"><span>sum:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
@@ -1241,17 +1285,25 @@ window.addEventListener('DOMContentLoaded', main);
           </ul></dd>
 <dt><a name="trainEpoch" href="#trainEpoch"><span>trainEpoch:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
-          data-doc-search-tag="train: trainEpoch[T: ElemType](c: Client; model: var Module; exec: Executable;
-                        loader: DataLoader; optim: Optimizer; accFn: Executable): (
-    float, float)" href="train.html#trainEpoch%2CClient%2CModule%2CExecutable%2CDataLoader%2COptimizer%2CExecutable">train: trainEpoch[T: ElemType](c: Client; model: var Module; exec: Executable;
-                        loader: DataLoader; optim: Optimizer; accFn: Executable): (
+          data-doc-search-tag="train: trainEpoch[T: ElemType](t: var Trainer; model: var Module; loader: DataLoader): (
+    float, float)" href="train.html#trainEpoch%2CTrainer%2CModule%2CDataLoader">train: trainEpoch[T: ElemType](t: var Trainer; model: var Module; loader: DataLoader): (
     float, float)</a></li>
+          </ul></dd>
+<dt><a name="Trainer" href="#Trainer"><span>Trainer:</span></a></dt><dd><ul class="simple">
+<li><a class="reference external"
+          data-doc-search-tag="train: Trainer" href="train.html#Trainer">train: Trainer</a></li>
           </ul></dd>
 <dt><a name="trainFunc" href="#trainFunc"><span>trainFunc:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
           data-doc-search-tag="train: trainFunc(c: Client; model: Module; dtype: DataType; shape: seq[int];
-          lossFn: proc (pred, target: Node): Node): Executable" href="train.html#trainFunc%2CClient%2CModule%2CDataType%2Cseq%5Bint%5D%2Cproc%28Node%2CNode%29">train: trainFunc(c: Client; model: Module; dtype: DataType; shape: seq[int];
-          lossFn: proc (pred, target: Node): Node): Executable</a></li>
+          lossFn: proc (yp, y: Node): Node): Executable" href="train.html#trainFunc%2CClient%2CModule%2CDataType%2Cseq%5Bint%5D%2Cproc%28Node%2CNode%29">train: trainFunc(c: Client; model: Module; dtype: DataType; shape: seq[int];
+          lossFn: proc (yp, y: Node): Node): Executable</a></li>
+          </ul></dd>
+<dt><a name="trainNetwork" href="#trainNetwork"><span>trainNetwork:</span></a></dt><dd><ul class="simple">
+<li><a class="reference external"
+          data-doc-search-tag="train: trainNetwork[T: ElemType](t: var Trainer; model: var Module;
+                          train, test: DataLoader; epochs: int; plot = false)" href="train.html#trainNetwork%2CTrainer%2CModule%2CDataLoader%2CDataLoader%2Cint">train: trainNetwork[T: ElemType](t: var Trainer; model: var Module;
+                          train, test: DataLoader; epochs: int; plot = false)</a></li>
           </ul></dd>
 <dt><a name="transpose" href="#transpose"><span>transpose:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
@@ -1405,6 +1457,10 @@ window.addEventListener('DOMContentLoaded', main);
 <li><a class="reference external"
           data-doc-search-tag="nn: uniformInit(min = 0.0; max = 1.0): InitFunc" href="nn.html#uniformInit%2Cfloat%2Cfloat">nn: uniformInit(min = 0.0; max = 1.0): InitFunc</a></li>
           </ul></dd>
+<dt><a name="updatePlot" href="#updatePlot"><span>updatePlot:</span></a></dt><dd><ul class="simple">
+<li><a class="reference external"
+          data-doc-search-tag="plots: updatePlot(ws: WebSocket; data: JsonNode; layout: JsonNode = nil)" href="plots.html#updatePlot%2CWebSocket%2CJsonNode%2CJsonNode">plots: updatePlot(ws: WebSocket; data: JsonNode; layout: JsonNode = nil)</a></li>
+          </ul></dd>
 <dt><a name="Variable" href="#Variable"><span>Variable:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
           data-doc-search-tag="nn: Variable" href="nn.html#Variable">nn: Variable</a></li>
@@ -1416,6 +1472,12 @@ window.addEventListener('DOMContentLoaded', main);
 <dt><a name="Warning" href="#Warning"><span>Warning:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
           data-doc-search-tag="LogLevel.Warning" href="nimxla.html#Warning">LogLevel.Warning</a></li>
+          </ul></dd>
+<dt><a name="write" href="#write"><span>write:</span></a></dt><dd><ul class="simple">
+<li><a class="reference external"
+          data-doc-search-tag="tensor: write[T: ElemType](t: Tensor[T]; s: Stream)" href="tensor.html#write%2CTensor%5BT%3A%20ElemType%5D%2CStream">tensor: write[T: ElemType](t: Tensor[T]; s: Stream)</a></li>
+          <li><a class="reference external"
+          data-doc-search-tag="tensor: write[T: ElemType](t: Tensor[T]; filename: string)" href="tensor.html#write%2CTensor%5BT%3A%20ElemType%5D%2Cstring">tensor: write[T: ElemType](t: Tensor[T]; filename: string)</a></li>
           </ul></dd>
 <dt><a name="zero" href="#zero"><span>zero:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
@@ -1434,7 +1496,7 @@ window.addEventListener('DOMContentLoaded', main);
       <div class="twelve-columns footer">
         <span class="nim-sprite"></span>
         <br/>
-        <small style="color: var(--hint);">Made with Nim. Generated: 2023-06-13 16:51:12 UTC</small>
+        <small style="color: var(--hint);">Made with Nim. Generated: 2023-06-15 13:36:11 UTC</small>
       </div>
     </div>
   </div>

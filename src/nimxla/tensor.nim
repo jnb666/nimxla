@@ -9,11 +9,9 @@ runnableExamples:
   echo t
 
 
-import std/[strutils, streams, strformat, sequtils, sugar, algorithm, math, macros]
+import std/[strutils, streams, strformat, sequtils, sugar, algorithm, math, endians, strscans, macros, logging]
 import private/utils
 import shape
-when defined tracemem:
-  import std/logging
 
 type
   TensorDataObj[T: ElemType] = object
@@ -235,6 +233,19 @@ proc clone*[T: ElemType](t: Tensor[T]): Tensor[T] =
   result = newTensor[T](t.dims)
   copyMem(result.data.arr, t.data.arr, t.len*sizeOf(T))
 
+proc append*[T: ELemType](t, t2: Tensor[T]): Tensor[T] =
+  ## Append the data from t2 to the end of t. This will allocate and return a new tensor.
+  ## New shape is [t.d0+t.d2.d0, ...] where any dimensions following the first must be the same.
+  if t.dims.len < 1 or t2.dims.len < 1 or t.dims.len != t2.dims.len or t.dims[1..^1] != t2.dims[1..^1]:
+    raise newException(ValueError, &"invalid dimensions for append {t.dims} {t2.dims}")
+  var dims = t.dims
+  dims[0] += t2.dims[0]
+  result = newTensor[T](dims)
+  if t.len > 0:
+    copyMem(result.data.arr, t.data.arr, t.len*sizeOf(T))
+  if t2.len > 0:
+    copyMem(addr result.data.arr[t.len], t2.data.arr, t2.len*sizeOf(T))
+
 proc reshape*[T: ElemType](t: Tensor[T], dims: varargs[int]): Tensor[T] =
   ## Returns a view of the same tensor with the shape changed.
   ## Number of elements in the tensor must be unchanged or will raise an exception.
@@ -250,6 +261,101 @@ proc convert*[T: ElemType](t: Tensor[T], typ: typedesc[ElemType]): Tensor[typ] =
   result = newTensor[typ](t.dims)
   for i in 0 ..< t.len:
     result.data.arr[i] = typ(t.data.arr[i])
+
+proc readUInt32LE(s: Stream): uint32 =
+  var bytes = s.readUInt32
+  littleEndian32(addr result, addr bytes)
+
+proc readUInt16LE(s: Stream): uint16 =
+  var bytes = s.readUInt16
+  littleEndian16(addr result, addr bytes)
+
+proc fromNumpy(typ: string): DataType =
+  let typ = typ.strip(chars = {'"', '\''})
+  if typ.len < 3 or typ[0] != '<':
+    return InvalidType
+  case typ[1 .. ^1]
+  of "f4": F32
+  of "f8": F64
+  of "i4": I32
+  of "i8": I64
+  of "u1": U8
+  of "b1": Bool
+  else: InvalidType
+
+proc readTensor*[T: ElemType](s: Stream): Tensor[T] =
+  ## Read tensor attributes and data from a stream. This will parse data written by write
+  ## and should also handle other data as long as it is in NPY v1 or v2 format and the data
+  ## type is supported. Will raise an IOError exception if the data cannot be read.
+  var magic: array[6, char]
+  discard s.readData(magic.addr, 6)
+  if magic != ['\x93','N','U','M','P','Y']:
+    raise newException(IOError, "read: invalid data format - not Numpy NPY")
+  let ver = s.readUInt8
+  let subver = s.readUInt8
+  if (ver != 1 and ver != 2) or subver != 0:
+    raise newException(IOError, &"read: invalid data version {ver}.{subver} - should be 1.0 or 2.0")
+  var headerLen = if ver == 1:
+    s.readUInt16LE.int
+  else:
+    s.readUInt32LE.int
+  var header = newString(headerLen)
+  discard s.readData(header[0].addr, headerLen)
+  header = header.replace(" ", "").strip()
+  var desc, order, shape: string
+  let ok = scanf(header, "{'descr':$+,'fortran_order':$+,'shape':($+)}", desc, order, shape)
+  if not ok:
+    raise newException(IOError, &"read: cannot parse header '{header}'")
+  let dtype = desc.fromNumpy
+  if dtype == InvalidType:
+    raise newException(IOError, &"read: unsupported data type in header '{desc}'")
+  let expType = dtypeOf(T)
+  if dtype != expType:
+    raise newException(IOError, &"read: got type from data as {dtype} - expecting {expType}")
+  shape = shape.strip(chars = {','})
+  let dims = try:
+    map(split(shape, ','), x => x.parseInt)
+  except ValueError:
+    raise newException(IOError, &"read: cannot parse shape from header '{shape}'")
+  result = newTensor[T](dims)
+  var bytes = 0
+  let length = result.len * sizeOf(T)
+  while bytes < length:
+    bytes += s.readData(result.rawPtr, length)
+
+proc readTensor*[T: ElemType](filename: string): Tensor[T] =
+  ## Read tensor attributes and data from a file as per using the stream read function.
+  let f = openFileStream(filename, mode = fmRead)
+  result = readTensor[T](f)
+  f.close
+  debug &"read {result.shape} from {filename}"
+
+proc write*[T: ElemType](t: Tensor[T], s: Stream) =
+  ## Write tensor attributes and data to stream in Numpy NPY v1 format
+  s.write "\x93NUMPY\x01\x00"
+  let endian = when system.cpuEndian == littleEndian: '<' else: '>'
+  let prefix = toLowerAscii(($typeOf(T))[0])
+  let descr = endian & prefix & $sizeOf(T)
+  # format as python tuple
+  var shape = "(" & map(t.dims, x => $x).join(",")
+  shape.add if t.dims.len == 1: ",)" else: ")"
+  var header = &"{{'descr':'{descr}', 'fortran_order':False, 'shape':{shape}}}"
+  let length = header.len + 11
+  let padding = (16 - (length and 15)) and 15
+  header.add spaces(padding) & '\n'
+  var padLen = header.len.uint16
+  var padLenLE: uint16
+  littleEndian16(padLenLE.addr, padLen.addr)
+  s.write padLenLE
+  s.write header
+  s.writeData(t.rawPtr, t.len*sizeOf(T))
+
+proc write*[T: ElemType](t: Tensor[T], filename: string) =
+  ## Write tensor attributes and data to a file in Numpy NPY v1 format.
+  debug &"writing {t.shape} to {filename}"
+  let f = openFileStream(filename, mode = fmWrite)
+  t.write(f)
+  f.close
 
 # formatting utils
 var printOpts = FormatOpts(minWidth:8, precision:6, threshold:1000, edgeitems:4)

@@ -17,6 +17,7 @@ setParams	nn.html#setParams,Module,Params	nn: setParams(m: Module; params: var P
 mseLoss	nn.html#mseLoss,Node,Node	nn: mseLoss(pred, target: Node): Node	
 crossEntropyLoss	nn.html#crossEntropyLoss,Node,Node	nn: crossEntropyLoss(pred, target: Node): Node	
 softmax	nn.html#softmax,Node,int	nn: softmax(a: Node; axis = -1): Node	
+dropout	nn.html#dropout,Node,float,bool	nn: dropout(a: Node; ratio: float; training: bool; normalize = true): Node	
 initLinear	nn.html#initLinear,Client,string,int,int	nn: initLinear(c: Client; id: string; nin, nout: int; weights = heInit();\n           biases = constantInit(0.0); dtype = F32): Module	
 initConv2d	nn.html#initConv2d,Client,string,int,int,Opt2d,Opt2d,Pad2d,Opt2d,int	nn: initConv2d(c: Client; id: string; inChannels, outChannels: int;\n           kernelSize: Opt2d; strides: Opt2d = 1; padding: Pad2d = pad(0);\n           dilation: Opt2d = 1; groups = 1; weights = heInit();\n           biases = constantInit(0.0); dtype = F32): Module	
 compileTest	nn.html#compileTest,Client,Module,Node	nn: compileTest(c: Client; m: Module; input: Node): Executable	

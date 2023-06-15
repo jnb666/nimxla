@@ -2,7 +2,7 @@
 
 import std/[strutils, strformat, sequtils, logging, random, math, os, parsecsv]
 import nimxla
-import nimxla/[nn, train]
+import nimxla/nn
 import cligen
 
 setPrintOpts(precision=4, minWidth=10, floatMode=ffDecimal, threshold=100, edgeItems=5)
@@ -68,6 +68,14 @@ proc sgd(c: Client, nin, nout: int, learnRate: float): Executable =
   let comp = b.build(weights - b.constant(learnRate.float32) * grads)
   c.compile(comp)
 
+proc accuracyFunc*(c: Client, batch, nout: int): Executable =
+  let b = newBuilder("accuracy")
+  let predict = b.parameter(F32, [batch, nout], "predict")
+  let labels = b.parameter(I64, [batch], "labels")
+  let avg = mean(convert(predict.argmax(axis=1) == labels, F32))
+  let comp = b.build(avg)
+  c.compile(comp)
+
 proc printStats(epoch, batch: int, loss: float, predict, labels: Buffer, accFn: Executable) =
   let accuracy = accFn.run([predict, labels]).f32[] * 100
   echo &"epoch {epoch:3}:  loss: {loss:8.4f}  accuracy: {accuracy:.1f}%"
@@ -91,7 +99,7 @@ proc main(epochs = 100, logEvery = 10, learnRate = 0.05, seed: int64 = 0, gpu = 
   echo "initial weights: ", weights.f32
   # compile optimizer used to update the weights and function to calc the accuracy
   let optim = c.sgd(nin, nout, learnRate)
-  let accFn = c.accuracyFunc(batch, nout, labelType=I64)
+  let accFn = c.accuracyFunc(batch, nout)
   echo "training with learning rate = ", learnRate
 
   for epoch in 1 .. epochs:

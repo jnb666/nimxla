@@ -17,9 +17,10 @@ type
 
   Module* = object
     ## A module holds the state for a set of variables together with a forward 
-    ## computation which depends on an input value.
+    ## computation which depends on an input value. The training flag is set
+    ## to true when in training mode.
     variables*: seq[Variable]
-    forward*: proc(x: Node): Node
+    forward*: proc(x: Node, training = false): Node
     info*: string
 
 proc constantInit*(value: SomeFloat): InitFunc =
@@ -136,6 +137,19 @@ proc softmax*(a: Node, axis = -1): Node =
   let sum_a = exp_a.sum([axis], keepDims=true)
   result = exp_a / sum_a
 
+proc dropout*(a: Node, ratio: float, training: bool, normalize = true): Node =
+  ## Dropout randomly replaces ratio fraction of input values with zeros when training is true
+  ## else if a no-op in test mode. If normalize is set then the output is scaled by `1 / (1-ratio)`
+  if not training or ratio <= 0:
+    return a
+  let b = a.builder
+  let ty = a.dtype
+  let r = b.constant(ratio, ty)
+  let rnd = rngUniform(b.zero(ty), b.one(ty), a.dims)
+  result = select(rnd < r, b.zero(ty, a.dims),  a)
+  if normalize:
+    result = result / (b.one(ty) - r)
+
 proc initLinear*(c: Client, id: string, nin, nout: int, weights = heInit(), biases = constantInit(0.0),
                  dtype = F32): Module =
   ## Create a new fully connected linear layer with the given unique id and number of inputs and outputs.
@@ -145,13 +159,13 @@ proc initLinear*(c: Client, id: string, nin, nout: int, weights = heInit(), bias
   let weight = c.newVariable(id & ".w", [nin, nout], dtype, weights)
   result.variables.add weight
   if biases == nil:
-    result.forward = proc(x: Node): Node = 
+    result.forward = proc(x: Node, training = false): Node =
       let W = x.builder.param(weight)
       dot(x, W)
   else:
     let bias = c.newVariable(id & ".b", [1, nout], dtype, biases)
     result.variables.add bias
-    result.forward = proc(x: Node): Node = 
+    result.forward = proc(x: Node, training = false): Node =
       let W = x.builder.param(weight)
       let B = x.builder.param(bias)
       dot(x, W) + B
@@ -173,13 +187,13 @@ proc initConv2d*(c: Client, id: string, inChannels, outChannels: int, kernelSize
   let weight = c.newVariable(id & ".w", wdims, dtype, weights)
   result.variables.add weight
   if biases == nil:
-    result.forward = proc(x: Node): Node =
+    result.forward = proc(x: Node, training = false): Node =
       let W = x.builder.param(weight)
       conv2d(x, W, strides, padding, dilation, groups)
   else:
     let bias = c.newVariable(id & ".b", @[1, 1, 1, outChannels], dtype, biases)
     result.variables.add bias
-    result.forward = proc(x: Node): Node =
+    result.forward = proc(x: Node, training: bool): Node =
       let W = x.builder.param(weight)
       let B = x.builder.param(bias)
       conv2d(x, W, strides, padding, dilation, groups) + B
@@ -187,9 +201,9 @@ proc initConv2d*(c: Client, id: string, inChannels, outChannels: int, kernelSize
 proc compileTest*(c: Client, m: Module, input: Node): Executable =
   ## Build the execution graph for the given module and compile it to an executable.
   ## The executable returns the output from `m.forward(input)`
-  let pred = m.forward(input)
-  debug "forward function: ", pred.toString
-  c.compile(input.builder.build(pred), ["pred"])
+  let pred = m.forward(input, training=false)
+  let comp = input.builder.build(pred)
+  c.compile(comp, ["pred"])
 
 proc compileTrain*(c: Client, m: Module, input: Node, lossFn: proc(y: Node): Node): Executable =
   ## Build the execution graph for the given module and compile it to an executable.
@@ -198,7 +212,7 @@ proc compileTrain*(c: Client, m: Module, input: Node, lossFn: proc(y: Node): Nod
   ## - loss: result of `lossFn(pred)`
   ## - <v1.name>_grad, ...: gradients for each input variable with respect to the loss
   let b = input.builder
-  let pred = m.forward(input)
+  let pred = m.forward(input, training=true)
   debug "forward function: ", pred.toString
   let loss = lossFn(pred)
   let grads = b.gradient(loss, m.varNames)

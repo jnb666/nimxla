@@ -1,21 +1,23 @@
 ## The data module provides functions for loading common datasets and iterating over batches of data.
 
-import std/[os, math, httpclient, strformat, sequtils, sugar, random, streams, endians, logging]
+import std/[os, math, httpclient, strformat, strutils, sequtils, sugar, random, streams, endians, logging]
 import zippy
 import ../nimxla
 import private/utils
 
 type
   Dataset* = object
-    ## Dataset represents a set of data samples from 0..length-1 where getItem(i) returns
+    ## Dataset represents a set of data samples from 0..len-1 where getItem(i) returns
     ## a tuple with the ith sample and it's classification label. Shape gives the size
     ## of each item - e.g. [rows, cols, 3] for a 2d RGB image.
     ## classes returns the classification labels.
+    ## normalize returns the mean and standard deviation for each channel.
     name*: string
     getItem*: proc(i: int, data: pointer): int32 {.closure}
     shape*: seq[int]
     len*: int
     classes*: seq[string]
+    normalize*: (seq[float32], seq[float32])
 
   DataLoader* = object
     ## DataLoader provides an iterator to read batches of data from a dataset.
@@ -50,7 +52,7 @@ proc shape*(d: DataLoader): seq[int] =
   @[d.batchSize] & d.dataset.shape
 
 proc `$`*(d: Dataset): string =
-  d.name
+  d.name & "[" & map(@[d.len] & d.shape, x => $x).join(" ") & "]"
 
 proc cacheDir(): string =
   ## Return location of cache directory - creates it if it does not exist
@@ -106,7 +108,9 @@ proc mnistDataset*(train = false): DataSet =
   ## will download the data to and save a cached copy.
   ## Returned shape of each image is [28, 28, 1]
   const baseURL = "http://yann.lecun.com/exdb/mnist/"
+  let origDir = getCurrentDir()
   setCurrentDir(cacheDir())
+  defer: setCurrentDir(origDir)
   let prefix = if train: "train" else: "t10k"
   let imageFile = prefix & "-images-idx3-ubyte"
   let labelFile = prefix & "-labels-idx1-ubyte"
@@ -117,6 +121,7 @@ proc mnistDataset*(train = false): DataSet =
   let size = prod(shape)
   assert data.len == labels.len * size
   let classes = map(toSeq(0..9), x => $x)
+  let normalization = (@[0.1307f32], @[0.3081f32])
   Dataset(
     name: &"MNIST(train={train})",
     getItem: proc(i: int, dout: pointer): int32 = 
@@ -124,7 +129,8 @@ proc mnistDataset*(train = false): DataSet =
       return labels[i].int32,
     shape: shape,
     len: labels.len,
-    classes: classes
+    classes: classes,
+    normalize: normalization
   )
 
 

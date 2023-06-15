@@ -1,5 +1,5 @@
 {.warning[BareExcept]:off.}
-import std/[unittest, logging, strutils, sequtils, random]
+import std/[unittest, logging, strutils, sequtils, random, os]
 import nimxla
 
 const debug {.booldefine.} = false
@@ -84,4 +84,18 @@ suite "tensor":
     let str = $t
     debug str
     check str.split("\n").len == 10
+
+  test "serialize":
+    let file = joinPath(getTempDir(), "tensor_test.npy")
+    let t1 = toTensor[float32](1..100)
+    t1.write(file)
+    let t2 = readTensor[float32](file)
+    debug t2
+    check t1 == t2
+    let file2 = joinPath(getTempDir(), "bool_tensor_test.npy")
+    let b1 = @@[[true, false], [false, true]]
+    b1.write(file2)
+    let b2 = readTensor[bool](file2)
+    debug b2
+    check b1 == b2
 

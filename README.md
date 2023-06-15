@@ -48,6 +48,8 @@ See [the documentation index](https://jnb666.github.io/nimxla/htdocs/theindex.ht
 
 - [nimxla/train](https://jnb666.github.io/nimxla/htdocs/train.html): Contains functions for training batches of data and calculating the accuracy of the predictions.
 
+- [nimxla/plots](https://jnb666.github.io/nimxla/htdocs/plots.html): Provides a web server to serve plots using plotly. The `nimxla_plot` binary calls this to run a server in the background.
+
 The submodules under nimxla are exported by the main package. Other internal functions and bindings to the XLA C++ library are under the nimxla/private directory. The C wrapper code here is based on the Rust bindings from [xla-rs](https://github.com/LaurentMazare/xla-rs).
 
 ## Memory management
@@ -59,13 +61,17 @@ Do
 to generate a trace.
 
 ## Dependencies
-Core modules depend on XLA headers and shared library only. data module uses [zippy](https://github.com/guzba/zippy) for gzip uncompress. Examples use [cligen](https://github.com/c-blake/cligen) for command line argument parsing.
+- Core modules depend on XLA headers and shared library only.
+- The data module uses [zippy](https://github.com/guzba/zippy) for gzip uncompress.
+- The plots module bundles https://plotly.com/javascript  and depends on the [ws websockets](https://github.com/treeform/ws]) library.
+- Examples use [cligen](https://github.com/c-blake/cligen) for command line argument parsing.
 
 ## TODO
-- avg pool, dropout and batchnorm layers
-- simple web based plotting and image viewer module
-- infer module input shape from previous output?
+- basic image augmentation: affine, flip, translate, crop transforms
+- CIFAR10 dataset + examples
+- checkpoint files with current state
+- avg pool and batchnorm layers
+- RNN example
 - complete autograd for all of the defined ops
 - additonal op types: control flow etc.
 - additional module types, optimizers etc.
-

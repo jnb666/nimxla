@@ -118,7 +118,8 @@ window.addEventListener('DOMContentLoaded', main);
   getItem*: proc (i: int; data: pointer): int32 {.closure.}
   shape*: seq[int]
   len*: int
-  classes*: seq[string]">Dataset</a></li>
+  classes*: seq[string]
+  normalize*: (seq[float32], seq[float32])">Dataset</a></li>
 
   </ul>
 </li>
@@ -190,9 +191,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 DataLoader provides an iterator to read batches of data from a dataset.
 &nbsp;&nbsp;<a
-href="https://github.com/jnb666/nimxla/tree/main/src/nimxla/data.nim#L20"
+href="https://github.com/jnb666/nimxla/tree/main/src/nimxla/data.nim#L22"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/jnb666/nimxla/edit/devel/src/nimxla/data.nim#L20" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/jnb666/nimxla/edit/devel/src/nimxla/data.nim#L22" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -203,10 +204,11 @@ class="link-seesrc" target="_blank">Source</a>
   <span class="Identifier">shape</span><span class="Operator">*</span><span class="Other">:</span> <span class="Identifier">seq</span><span class="Other">[</span><span class="Identifier">int</span><span class="Other">]</span>
   <span class="Identifier">len</span><span class="Operator">*</span><span class="Other">:</span> <span class="Identifier">int</span>
   <span class="Identifier">classes</span><span class="Operator">*</span><span class="Other">:</span> <span class="Identifier">seq</span><span class="Other">[</span><span class="Identifier">string</span><span class="Other">]</span>
+  <span class="Identifier">normalize</span><span class="Operator">*</span><span class="Other">:</span> <span class="Other">(</span><span class="Identifier">seq</span><span class="Other">[</span><span class="Identifier">float32</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">seq</span><span class="Other">[</span><span class="Identifier">float32</span><span class="Other">]</span><span class="Other">)</span>
 </pre></dt>
 <dd>
 
-Dataset represents a set of data samples from 0..length-1 where getItem(i) returns a tuple with the ith sample and it's classification label. Shape gives the size of each item - e.g. [rows, cols, 3] for a 2d RGB image. classes returns the classification labels.
+Dataset represents a set of data samples from 0..len-1 where getItem(i) returns a tuple with the ith sample and it's classification label. Shape gives the size of each item - e.g. [rows, cols, 3] for a 2d RGB image. classes returns the classification labels. normalize returns the mean and standard deviation for each channel.
 &nbsp;&nbsp;<a
 href="https://github.com/jnb666/nimxla/tree/main/src/nimxla/data.nim#L9"
 class="link-seesrc" target="_blank">Source</a>
@@ -225,9 +227,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/jnb666/nimxla/tree/main/src/nimxla/data.nim#L52"
+href="https://github.com/jnb666/nimxla/tree/main/src/nimxla/data.nim#L54"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/jnb666/nimxla/edit/devel/src/nimxla/data.nim#L52" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/jnb666/nimxla/edit/devel/src/nimxla/data.nim#L54" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -238,9 +240,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 Create a new loader for the given dataset. If batch size is 0 then the batch size defaults to the dataset length.
 &nbsp;&nbsp;<a
-href="https://github.com/jnb666/nimxla/tree/main/src/nimxla/data.nim#L27"
+href="https://github.com/jnb666/nimxla/tree/main/src/nimxla/data.nim#L29"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/jnb666/nimxla/edit/devel/src/nimxla/data.nim#L27" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/jnb666/nimxla/edit/devel/src/nimxla/data.nim#L29" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -254,9 +256,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 MNIST dataset of handwritten digits per <a class="reference external" href="http://yann.lecun.com/exdb/mnist/">http://yann.lecun.com/exdb/mnist/</a> will download the data to and save a cached copy. Returned shape of each image is [28, 28, 1]
 &nbsp;&nbsp;<a
-href="https://github.com/jnb666/nimxla/tree/main/src/nimxla/data.nim#L104"
+href="https://github.com/jnb666/nimxla/tree/main/src/nimxla/data.nim#L106"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/jnb666/nimxla/edit/devel/src/nimxla/data.nim#L104" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/jnb666/nimxla/edit/devel/src/nimxla/data.nim#L106" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -266,9 +268,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 Shape of one batch of images returned from the dataset.
 &nbsp;&nbsp;<a
-href="https://github.com/jnb666/nimxla/tree/main/src/nimxla/data.nim#L48"
+href="https://github.com/jnb666/nimxla/tree/main/src/nimxla/data.nim#L50"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/jnb666/nimxla/edit/devel/src/nimxla/data.nim#L48" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/jnb666/nimxla/edit/devel/src/nimxla/data.nim#L50" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -284,9 +286,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 Returns batches of data from the dataset associated with the loader. Output data and labels should be preallocated with size of one batch of data.
 &nbsp;&nbsp;<a
-href="https://github.com/jnb666/nimxla/tree/main/src/nimxla/data.nim#L34"
+href="https://github.com/jnb666/nimxla/tree/main/src/nimxla/data.nim#L36"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/jnb666/nimxla/edit/devel/src/nimxla/data.nim#L34" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/jnb666/nimxla/edit/devel/src/nimxla/data.nim#L36" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -300,7 +302,7 @@ class="link-seesrc" target="_blank">Source</a>
       <div class="twelve-columns footer">
         <span class="nim-sprite"></span>
         <br/>
-        <small style="color: var(--hint);">Made with Nim. Generated: 2023-06-13 16:51:11 UTC</small>
+        <small style="color: var(--hint);">Made with Nim. Generated: 2023-06-15 13:36:10 UTC</small>
       </div>
     </div>
   </div>

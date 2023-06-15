@@ -16,7 +16,7 @@ proc initModel(c: Client): (Module, Executable) =
   let layer2 = c.initLinear("2", nin=2, nout=1, weights = uniformInit())
   var model: Module
   model.add(layer1, layer2)
-  model.forward = proc(x: Node): Node =
+  model.forward = proc(x: Node, training: bool): Node =
     let l1 = layer1.forward(x).sigmoid
     layer2.forward(l1)
   let x = b.parameter(F32, data.dims, "x")
