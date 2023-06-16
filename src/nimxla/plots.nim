@@ -57,7 +57,8 @@ proc gridLayout*(rows = 1, cols = 1, ytitle, xtitle: openarray[string] = []): Js
       result[xaxis(i)]["title"] = %xtitle[i-1]
 
 proc annotation(row, col: int, title: string): JsonNode =
-  %*{"text": title, "showarrow": false, "xref": "x" & $col, "yref": "y" & $row}
+  %*{"text": title, "showarrow": false, "xref": "x" & $col, "yref": "y" & $row,
+     "x": 0, "y": 0, "xanchor": "left", "yanchor": "top", "bgcolor": "#222", "opacity": 0.8}
 
 proc plotImage*(t: Tensor[uint8], row, col: int): JsonNode =
   ## Convert data from a uint8 tensor in [H, W, C] layout to a plotly image.
@@ -92,19 +93,23 @@ proc plotImageGrid*(title: string, rows, cols: int, getData: proc(i: int): (Tens
     "grid": {"rows": rows, "columns": cols},
     "annotations": [],
   }
-  for i in 1 .. rows:
-    layout[yaxis(i)] = %*{"visible": false}
-  for i in 1 .. cols:
-    layout[xaxis(i)] = %*{"visible": false}
+  var width, height: int
   var images = %[]
   var i = 0
   for row in 1 .. rows:
     for col in 1 .. cols:
       let (t, label) = getData(i)
+      (width, height) = (t.dims[1], t.dims[0])
       images.add t.plotImage(row, col)
       if label != "":
         layout["annotations"].add annotation(row, col, label)
       i += 1
+
+  for i in 1 .. rows:
+    layout[yaxis(i)] = %*{"visible": false, "range": [height, 0]}
+  for i in 1 .. cols:
+    layout[xaxis(i)] = %*{"visible": false, "range": [0, width]}
+
   return (images, layout)
 
 proc openWebSocket*(): WebSocket =

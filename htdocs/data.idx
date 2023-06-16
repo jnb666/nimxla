@@ -5,3 +5,4 @@ getBatch	data.html#getBatch.i,DataLoader,Tensor[T],Tensor[int32]	data: getBatch[
 shape	data.html#shape,DataLoader	data: shape(d: DataLoader): seq[int]	
 `$`	data.html#$,Dataset	data: `$`(d: Dataset): string	
 mnistDataset	data.html#mnistDataset	data: mnistDataset(train = false): Dataset	
+cifar10Dataset	data.html#cifar10Dataset	data: cifar10Dataset(train = false): Dataset	

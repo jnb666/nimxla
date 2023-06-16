@@ -43,3 +43,9 @@ suite "data":
     check count == 60000 div batch
     setPrintOpts()
 
+  test "cifar10":
+    let d = cifar10Dataset(train = true)
+    debug "classes = ", d.classes.join(", ")
+    check d.len == 50000
+    check d.shape == [32, 32, 3]
+    check d.classes.len == 10

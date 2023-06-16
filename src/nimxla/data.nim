@@ -2,6 +2,7 @@
 
 import std/[os, math, httpclient, strformat, strutils, sequtils, sugar, random, streams, endians, logging]
 import zippy
+import zippy/tarballs
 import ../nimxla
 import private/utils
 
@@ -54,24 +55,28 @@ proc shape*(d: DataLoader): seq[int] =
 proc `$`*(d: Dataset): string =
   d.name & "[" & map(@[d.len] & d.shape, x => $x).join(" ") & "]"
 
-proc cacheDir(): string =
-  ## Return location of cache directory - creates it if it does not exist
-  let dir = os.getCacheDir("nimxla")
+proc cacheDir(subdir: string): string =
+  ## Return location of cache directory + provided path - creates it if it does not exist
+  let dir = joinPath(getCacheDir("nimxla"), subdir)
+  debug &"cache dir is {dir}"
   if not dirExists(dir):
     createDir(dir)
-  debug &"cache dir is {dir}"
   return dir  
 
-proc download(baseurl: string, filenames: varargs[string]) =
-  ## Download and uncompress given files.
+proc download(baseurl: string, filenames: openarray[string], unzip = false) =
+  ## Download given files from URL starting with baseurl and optionally unzip them.
   let client = newHttpClient()
   client.headers = newHttpHeaders({"Accept-Encoding": "gzip"})
   for file in filenames:
-    info &"downloading {baseurl}{file}"
-    let resp = client.request(baseUrl & file & ".gz")
-    let f = open(file, fmWrite)
-    f.write(uncompress(resp.body))
-    f.close
+    if unzip:
+      info &"downloading and unzipping {baseurl}{file}.gz"
+      let resp = client.request(baseUrl & file & ".gz")
+      let f = open(file, fmWrite)
+      f.write(uncompress(resp.body))
+      f.close
+    else:
+      info &"downloading {baseurl}{file}"
+      client.downloadFile(baseUrl & file, file)
 
 proc readInt32BE(stream: Stream): int32 =
   var bytes = stream.readInt32
@@ -109,13 +114,13 @@ proc mnistDataset*(train = false): DataSet =
   ## Returned shape of each image is [28, 28, 1]
   const baseURL = "http://yann.lecun.com/exdb/mnist/"
   let origDir = getCurrentDir()
-  setCurrentDir(cacheDir())
+  setCurrentDir(cacheDir("mnist"))
   defer: setCurrentDir(origDir)
   let prefix = if train: "train" else: "t10k"
   let imageFile = prefix & "-images-idx3-ubyte"
   let labelFile = prefix & "-labels-idx1-ubyte"
   if not fileExists(imageFile) or not fileExists(labelFile):
-    download(baseURL, imageFile, labelFile)
+    download(baseURL, [imageFile, labelFile], unzip=true)
   var (data, shape) = mnistImages(imageFile)
   let labels = mnistLabels(labelFile)
   let size = prod(shape)
@@ -133,4 +138,52 @@ proc mnistDataset*(train = false): DataSet =
     normalize: normalization
   )
 
+proc getCifar10Batch(file: string, channels, chanSize: int, imgs, labels: var seq[uint8]) =
+  debug &"read data from {file} imgSize={channels}*{chanSize}"
+  let fs = openFileStream(file, fmRead)
+  const batchSize = 10000
+  var buf = newSeq[uint8](channels * chanSize)
+  for i in 1 .. batchSize:
+    labels.add fs.readUint8()
+    let n = fs.readData(buf[0].addr, buf.len)
+    assert n == buf.len
+    # convert each image from C,H,W to H,W,C layout
+    for j in 0 ..< chanSize:
+      imgs.add buf[j]
+      imgs.add buf[j+chanSize]
+      imgs.add buf[j+2*chanSize]
+  fs.close
 
+proc cifar10Dataset*(train = false): Dataset =
+  ## CIFAR10 dataset of 32x32 color images in 10 classes per http://www.cs.toronto.edu/~kriz/cifar.html
+  const baseURL = "http://www.cs.toronto.edu/~kriz/"
+  const tarFile = "cifar-10-binary.tar.gz"
+  let shape   = @[32, 32, 3]
+  let classes = @["plane", "car", "bird", "cat", "deer", "dog", "frog", "horse", "ship", "truck"]
+  let origDir = getCurrentDir()
+  setCurrentDir(cacheDir("cifar10"))
+  defer: setCurrentDir(origDir)
+  if not fileExists(tarFile):
+    download(baseURL, [tarFile])
+  if walkFiles("data/cifar-10-batches-bin/*.bin").toSeq.len < 6:
+    debug "untar archive"
+    removeDir("data")
+    extractAll(tarFile, "data")
+  let normalization = (@[0.4914f32, 0.4822, 0.4465], @[0.2023f32, 0.1994, 0.2010])
+  let size = prod(shape)
+  var data, labels: seq[uint8]
+  if train:
+    for i in 1..5:
+      getCifar10Batch(&"data/cifar-10-batches-bin/data_batch_{i}.bin", 3, size div 3, data, labels)
+  else:
+    getCifar10Batch("data/cifar-10-batches-bin/test_batch.bin", 3, size div 3, data, labels)
+  Dataset(
+    name: &"CIFAR10(train={train})",
+    getItem: proc(i: int, dout: pointer): int32 =
+      copyMem(dout, addr data[i*size], size)
+      return labels[i].int32,
+    shape: shape,
+    len: labels.len,
+    classes: classes,
+    normalize: normalization
+  )
