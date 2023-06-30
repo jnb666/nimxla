@@ -1,6 +1,6 @@
 ## The plots module contains some utilities for plotting graphs and images.
 {.warning[BareExcept]:off.}
-import std/[asynchttpserver, asyncdispatch, json, strformat, browsers, logging]
+import std/[asynchttpserver, asyncdispatch, json, strformat, browsers, logging, os, osproc]
 import ws
 import tensor
 
@@ -16,7 +16,7 @@ const
 let defaultLayout = %*{
   "paper_bgcolor": "#222",
   "plot_bgcolor" : "#111",
-  "colorway"     : ["#ff7f0e", "#2ca02c", "#d62728", "#9467bd", "#8c564b", 
+  "colorway"     : ["#d62728", "#ff7f0e", "#2ca02c", "#9467bd", "#8c564b", 
                     "#e377c2", "#7f7f7f", "#bcbd22", "#17becf", "#1f77b4"],
   "font"         : {"color": "#f2f5fa"},
   "margin"       : {"t": 30, "l": 60, "r": 8, "b": 30},
@@ -83,38 +83,61 @@ proc plotImage*(t: Tensor[uint8], row, col: int): JsonNode =
     "colormodel": "rgb",
   }
 
-proc plotImageGrid*(title: string, rows, cols: int, getData: proc(i: int): (Tensor[uint8], string)): (JsonNode, JsonNode) =
+proc plotImageGrid*(title: string, rows, cols: int, getData: proc(): (Tensor[uint8], seq[string])): (JsonNode, JsonNode) =
   ## Plot grid of images and returns data and loyout Json objects for input to plotly.
-  ## getData callBack function recieves the index of the plot on the page and returns the
-  ## image data and an optional text label.
+  ## getData callBack function recieves should return a [N,H,W,C] 4d tensor with the images for this page -
+  ## i.e. `t.at(row*cols + col)` returns a [H,W,C] grayscale (C=0) or RGB (C=0,1,2) image.
+  ## and an optional sequence of labels for each image indexed in the same way.
   var layout = %*{
     "title": {"text": title},
     "margin": {"t": 30, "l": 30, "r": 0, "b": 0},
     "grid": {"rows": rows, "columns": cols},
     "annotations": [],
   }
-  var width, height: int
   var images = %[]
-  var i = 0
+  let (t, labels) = getData()
+  if t.dims.len != 4:
+    raise newException(ValueError, &"plotImageGrid: expecting 4d tensor with images from getData() - got {t.dims}")
+  let (width, height) = (t.dims[2], t.dims[1])
+  let blank = zeros[uint8](t.dims[1 .. ^1])
+  var ix = 0
   for row in 1 .. rows:
     for col in 1 .. cols:
-      let (t, label) = getData(i)
-      (width, height) = (t.dims[1], t.dims[0])
-      images.add t.plotImage(row, col)
-      if label != "":
-        layout["annotations"].add annotation(row, col, label)
-      i += 1
-
+      let img = if ix < t.dims[0]: t.at(ix) else: blank
+      images.add plotImage(img, row, col)
+      if labels.len > ix:
+        layout["annotations"].add annotation(row, col, labels[ix])
+      ix += 1
   for i in 1 .. rows:
     layout[yaxis(i)] = %*{"visible": false, "range": [height, 0]}
   for i in 1 .. cols:
     layout[xaxis(i)] = %*{"visible": false, "range": [0, width]}
-
   return (images, layout)
 
 proc openWebSocket*(): WebSocket =
-  ## Blocking open to get client websocket
-  waitFor newWebSocket(wsUrl)
+  ## Blocking open to get client websocket.
+  ## Will start nimxla_plot server in the background if not already running.
+  let ps = execProcess("""ps x | grep " nimxla_plot" | grep -v grep""")
+  if ps == "":
+    echo "nimxla_plot not running - starting it on http://localhost:{httpPort}/"
+    let loggers = getHandlers()
+    let debugFlag = if loggers.len > 0 and loggers[0].levelThreshold <= lvlDebug: "--debug" else: ""
+    let origDir = getCurrentDir()
+    try:
+      setCurrentDir(getTempDir())
+      discard execCmd(&"nohup nimxla_plot {debugFlag} &")
+      sleep 1000
+      waitFor newWebSocket(wsUrl)
+    except OSError:
+      quit "ERROR: cannot launch nimxla_plot server - check it is installed in your $PATH - nimble install should do this"
+    finally:
+      setCurrentDir(origDir)
+  else:
+    echo &"nimxla_plot already listening on http://localhost:{httpPort}/"
+    try:
+      waitFor newWebSocket(wsUrl)
+    except OSError:
+      quit "ERROR: cannot connect to {wsUrl} - check nimxla_plot is running and you can connect that address"
 
 proc updatePlot*(ws: WebSocket, data: JsonNode, layout: JsonNode = nil) =
   ## Send message to websocket server to update the plot.
@@ -138,7 +161,7 @@ proc servePlots*() {.async.} =
         var ws = await newWebSocket(req)
         let id = connections.len
         connections.add ws
-        info &"registered websocket client {id}"
+        debug &"registered websocket client {id}"
         while ws.readyState == Open:
           let packet = await ws.receiveStrPacket()
           for i, other in connections:
@@ -146,7 +169,7 @@ proc servePlots*() {.async.} =
               debug &"send msg from {id} => {i}"
               asyncCheck other.send(packet)
       except WebSocketClosedError:
-        info "websocket closed"
+        debug "websocket closed"
         var toDel: seq[int]
         for i, conn in connections:
           if conn.readyState == Closed: toDel.add i
@@ -166,7 +189,7 @@ proc servePlots*() {.async.} =
 
   var server = newAsyncHttpServer()
   let url = &"http://localhost:{httpPort}/"
-  echo "listening on ", url
+  info "listening on ", url
   openDefaultBrowser(url)
   waitFor server.serve(Port(httpPort), cb)
 

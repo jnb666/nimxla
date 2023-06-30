@@ -1,7 +1,7 @@
 {.warning[BareExcept]:off.}
-import std/[unittest, logging, strutils]
+import std/[unittest, logging, strutils, strformat, random]
 import nimxla
-import nimxla/data
+import nimxla/[data, image]
 
 const debug {.booldefine.} = false
 
@@ -9,6 +9,7 @@ const debug {.booldefine.} = false
 suite "data":
   var logger = newConsoleLogger(levelThreshold=if debug: lvlDebug else: lvlInfo)
   addHandler(logger)
+  var rng = initRand(0)
 
   test "mnist":
     setPrintOpts(minWidth = 4)
@@ -24,12 +25,19 @@ suite "data":
     debug label
     check label == 7
     setPrintOpts()
+
+  test "cifar10":
+    let d = cifar10Dataset(train = true)
+    debug "classes = ", d.classes.join(", ")
+    check d.len == 50000
+    check d.shape == [32, 32, 3]
+    check d.classes.len == 10
     
   test "loader":
     setPrintOpts(minWidth = 4)
     let batch = 20
-    let dataset = mnistDataset(train = true)
-    let loader = initLoader(dataset, batchSize = batch)
+    var loader = newLoader(rng, batch)
+    loader.start(mnistDataset(train = true), channels = 1)
     debug loader
     var data = newTensor[uint8](batch, 28, 28)
     var labels = newTensor[int32](batch)
@@ -43,9 +51,15 @@ suite "data":
     check count == 60000 div batch
     setPrintOpts()
 
-  test "cifar10":
-    let d = cifar10Dataset(train = true)
-    debug "classes = ", d.classes.join(", ")
-    check d.len == 50000
-    check d.shape == [32, 32, 3]
-    check d.classes.len == 10
+  test "transform":
+    var loader = newLoader(rng, batchSize=100)
+    loader.start(cifar10Dataset(train = false), channels = 3, randomFlip(Horizontal), randomWrap(4, 4))
+    debug loader
+    var data = newTensor[uint8](100, 32, 32, 3)
+    var labels = newTensor[int32](100)
+    var count = 0
+    for i in getBatch(loader, data, labels):
+      count += 1
+    debug &"loaded {count} batches"
+    check count == 100
+    loader.shutdown()

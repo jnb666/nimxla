@@ -22,8 +22,9 @@ type
   Tensor*[T: ElemType] = object
     ## A Tensor is a fixed size array where the data is laid out contiguously.
     ## Copying a tensor is a shallow copy - i.e. it is a view on the same data.
-    dims*:    seq[int]
-    data:     TensorData[T]
+    dims*:  seq[int]
+    data:   TensorData[T]
+    offset: int
 
   FormatOpts = object
     minWidth:  int
@@ -55,16 +56,17 @@ proc `=destroy`[T](data: var TensorDataObj[T]) =
 proc allocData[T: ElemType](size: int, zero = false): TensorData[T] =
   trace "new Tensor"
   result = new TensorData[T]
-  result.arr = cast[ptr UncheckedArray[T]](
-    if zero:
-      allocShared0(size * sizeOf(T))
-    else:
-      allocShared(size * sizeOf(T))
-  )
+  if size > 0:
+    result.arr = cast[ptr UncheckedArray[T]](
+      if zero:
+        allocShared0(size * sizeOf(T))
+      else:
+        allocShared(size * sizeOf(T))
+    )
 
 proc rawPtr*[T: ElemType](t: Tensor[T]): ptr T =
   ## Pointer to start of data buffer.
-  cast [ptr T](t.data.arr)
+  cast [ptr T](addr t.data.arr[t.offset])
 
 proc len*(t: Tensor): int =
   ## Number of elements in the tensor.
@@ -190,20 +192,20 @@ proc `[]`*[T: ElemType](t: Tensor[T], ix: varargs[int]): T =
   ## Will raise an exception if index is out of range.
   let pos = index(t.dims, ix)
   assert pos < t.len
-  t.data.arr[pos]
+  t.data.arr[t.offset+pos]
 
 proc `[]=`*[T: ElemType](t: var Tensor, ix: varargs[int], value: T) =
   ## Update the element at the position given by the array of indices similar to [].
   let pos = index(t.dims, ix)
   assert pos < t.len
-  t.data.arr[pos] = value
+  t.data.arr[t.offset+pos] = value
 
 proc `==`*[T: ElemType](t1, t2: Tensor[T]): bool =
   ## Checks have same shape and values are equal
   if t1.dims != t2.dims:
     return false
   for i in 0 ..< t1.len:
-    if t1.data.arr[i] != t2.data.arr[i]: return false
+    if t1.data.arr[t1.offset+i] != t2.data.arr[t2.offset+i]: return false
   return true
 
 proc approxEqual*[T: ElemType](t1, t2: Tensor[T], eps = 1e-6): bool =
@@ -211,27 +213,27 @@ proc approxEqual*[T: ElemType](t1, t2: Tensor[T], eps = 1e-6): bool =
   if t1.dims != t2.dims:
     return false
   for i in 0 ..< t1.len:
-    if abs(t1.data.arr[i] - t2.data.arr[i]) > eps: return false
+    if abs(t1.data.arr[t1.offset+i] - t2.data.arr[t2.offset+i]) > eps: return false
   return true
 
-proc at*[T: ElemType](t: Tensor[T], ix: int): Tensor[T] =
-  ## Returns copy of tensor indexed by leading dimension
-  ## e.g. if shape of t is [2, 3, 4] then t.at(1) => [3, 4]
-  if t.dims.len < 1 or ix < 0 or ix >= t.dims[0]:
+proc at*[T: ElemType](t: Tensor[T], ix: Natural): Tensor[T] =
+  ## Get tensor indexed by leading dimension -  e.g. if shape of t is [2, 3, 4] then t.at(1) => [3, 4].
+  ## Note that this returns a view of the data from tensor t. Use clone on the result if you need a copy.
+  if t.dims.len < 1 or ix >= t.dims[0]:
     raise newException(IndexDefect, &"index {ix} out of range for at {t.dims}")
-  result = newTensor[T](t.dims[1 .. ^1])
-  let offset = ix * result.len
-  copyMem(result.data.arr, t.data.arr[offset].addr, result.len*sizeOf(T))
+  result.dims = t.dims[1 .. ^1]
+  result.offset = t.offset + ix*result.len
+  result.data = t.data
 
 proc toSeq*[T: ElemType](t: Tensor[T]): seq[T] =
   ## Copy the data associated with the tensor to a sequence of length t.len.
   result = newSeq[T](t.len)
-  copyMem(result[0].addr, t.data.arr, t.len*sizeOf(T))
+  copyMem(result[t.offset].addr, t.data.arr, t.len*sizeOf(T))
 
 proc clone*[T: ElemType](t: Tensor[T]): Tensor[T] =
   ## Return a copy of the tensor
   result = newTensor[T](t.dims)
-  copyMem(result.data.arr, t.data.arr, t.len*sizeOf(T))
+  copyMem(result.data.arr, addr t.data.arr[t.offset], t.len*sizeOf(T))
 
 proc append*[T: ELemType](t, t2: Tensor[T]): Tensor[T] =
   ## Append the data from t2 to the end of t. This will allocate and return a new tensor.

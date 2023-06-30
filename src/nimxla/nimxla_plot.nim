@@ -3,18 +3,24 @@
 # see apps in the examples directory where messages are sent from the client
 # to update the plot data
 
-import std/[asyncdispatch, logging]
+import std/[asyncdispatch, logging, parseopt, os]
 import plots
-
-const logLevel = lvlInfo
 
 proc ctrlc() {.noconv.} =
   echo ":quit"
   quit()
 
-var logger = newConsoleLogger(levelThreshold=logLevel)
-addHandler(logger)
+proc main() =
+  var p = initOptParser(shortNoVal = {'d'}, longNoVal = @["debug"])
+  var logLevel = lvlInfo
+  for kind, key, val in p.getopt():
+    if (kind == cmdLongOption and key == "debug") or (kind == cmdShortOption and key == "d"):
+      logLevel = lvlDebug
+  let logFile = joinPath(getCurrentDir(), "nimxla_plot.log")
+  echo "writing log to ", logFile
+  var logger = newFileLogger(logFile, levelThreshold=logLevel, fmtStr="[$datetime] $levelname: ")
+  addHandler(logger)
+  setControlCHook(ctrlc)
+  waitFor servePlots()
 
-setControlCHook(ctrlc)
-
-waitFor servePlots()
+main()

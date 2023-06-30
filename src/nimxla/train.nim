@@ -55,7 +55,7 @@ proc accuracyFunc*(c: Client, batch, nout: int, outType=F32, labelType=I32): Exe
   let comp = b.build(b.makeTuple(labels, accuracy))
   c.compile(comp, @["labels", "accuracy"])
 
-proc trainEpoch*[T: ElemType](t: var Trainer, model: var Module, loader: DataLoader): (float, float) =
+proc trainEpoch*[T: ElemType](t: var Trainer, model: var Module, loader: var DataLoader): (float, float) =
   ## Train on one epoch of batches of data from the training set, returns average loss and accuracy on training dara
   ## T should be the type of data returned from the loader. Output loss should be a float32 scalar.
   var data = newTensor[T](loader.shape)
@@ -80,7 +80,7 @@ proc trainEpoch*[T: ElemType](t: var Trainer, model: var Module, loader: DataLoa
     model.variables = t.optim(params)
   return (avgLoss, accuracy)
 
-proc getAccuracy*[T: ElemType](t: var Trainer, model: var Module, loader: Dataloader): float =
+proc getAccuracy*[T: ElemType](t: var Trainer, model: var Module, loader: var Dataloader): float =
   ## Calculate the accuracy from the test data set.
   ## T should be the type of data returned from the loader.
   var data = newTensor[T](loader.shape)
@@ -122,8 +122,13 @@ proc getLayout*(epochs: int): JsonNode =
   result["legend"] = %*{"x": 0.99, "xanchor": "right", "y": 0.99}
   result["xaxis"]["range"] = %*[1.0, epochs.float]
 
-proc trainNetwork*[T: ElemType](t: var Trainer, model: var Module, train, test: DataLoader, epochs: int, plot = false) =
-  ## Training run for given number of epochs
+proc ctrlc() {.noconv.} =
+  echo ":quit"
+  quit()
+
+proc trainNetwork*[T: ElemType](t: var Trainer, model: var Module, train, test: var DataLoader, epochs: int, plot = false) =
+  ## Training run for given number of epochs. If transform is set it will be applied to each batch of training data.
+  setControlCHook(ctrlc)
   t.stats = initTable[string, seq[float]]()
   var ws: WebSocket
   if plot:

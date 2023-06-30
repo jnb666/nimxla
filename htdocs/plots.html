@@ -123,11 +123,11 @@ window.addEventListener('DOMContentLoaded', main);
 
   </ul>
   <ul class="simple nested-toc-section">plotImageGrid
-      <li><a class="reference" href="#plotImageGrid%2Cstring%2Cint%2Cint%2Cproc%28int%29"
+      <li><a class="reference" href="#plotImageGrid%2Cstring%2Cint%2Cint%2Cproc%29"
     title="plotImageGrid(title: string; rows, cols: int;
-              getData: proc (i: int): (Tensor[uint8], string)): (JsonNode,
+              getData: proc (): (Tensor[uint8], seq[string])): (JsonNode,
     JsonNode)">plotImageGrid(title: string; rows, cols: int;
-              getData: proc (i: int): (Tensor[uint8], string)): (JsonNode,
+              getData: proc (): (Tensor[uint8], seq[string])): (JsonNode,
     JsonNode)</a></li>
 
   </ul>
@@ -179,15 +179,16 @@ class="link-seesrc" target="_blank">Source</a>
 </dd>
 </div>
 <div id="openWebSocket">
-<dt><pre><span class="Keyword">proc</span> <a href="#openWebSocket"><span class="Identifier">openWebSocket</span></a><span class="Other">(</span><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">WebSocket</span> {.<span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Identifier">Exception</span><span class="Other">,</span> <span class="Identifier">ValueError</span><span class="Other">,</span> <span class="Identifier">OSError</span><span class="Other">]</span><span class="Other">,</span>
-                                  <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Identifier">RootEffect</span><span class="Other">,</span> <span class="Identifier">TimeEffect</span><span class="Other">,</span> <span class="Identifier">ReadIOEffect</span><span class="Other">]</span></span>.}</pre></dt>
+<dt><pre><span class="Keyword">proc</span> <a href="#openWebSocket"><span class="Identifier">openWebSocket</span></a><span class="Other">(</span><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">WebSocket</span> {.<span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Identifier">Exception</span><span class="Other">,</span> <span class="Identifier">IOError</span><span class="Other">,</span> <span class="Identifier">OSError</span><span class="Other">,</span>
+    <span class="Identifier">Exception</span><span class="Other">,</span> <span class="Identifier">ValueError</span><span class="Other">,</span> <span class="Identifier">OSError</span><span class="Other">,</span> <span class="Identifier">Exception</span><span class="Other">,</span> <span class="Identifier">ValueError</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Identifier">ExecIOEffect</span><span class="Other">,</span>
+    <span class="Identifier">ReadIOEffect</span><span class="Other">,</span> <span class="Identifier">RootEffect</span><span class="Other">,</span> <span class="Identifier">ReadEnvEffect</span><span class="Other">,</span> <span class="Identifier">TimeEffect</span><span class="Other">]</span></span>.}</pre></dt>
 <dd>
 
-Blocking open to get client websocket
+Blocking open to get client websocket. Will start nimxla_plot server in the background if not already running.
 &nbsp;&nbsp;<a
-href="https://github.com/jnb666/nimxla/tree/main/src/nimxla/plots.nim#L115"
+href="https://github.com/jnb666/nimxla/tree/main/src/nimxla/plots.nim#L117"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/jnb666/nimxla/edit/devel/src/nimxla/plots.nim#L115" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/jnb666/nimxla/edit/devel/src/nimxla/plots.nim#L117" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -204,13 +205,13 @@ class="link-seesrc" target="_blank">Source</a>
 
 </dd>
 </div>
-<div id="plotImageGrid,string,int,int,proc(int)">
-<dt><pre><span class="Keyword">proc</span> <a href="#plotImageGrid%2Cstring%2Cint%2Cint%2Cproc%28int%29"><span class="Identifier">plotImageGrid</span></a><span class="Other">(</span><span class="Identifier">title</span><span class="Other">:</span> <span class="Identifier">string</span><span class="Other">;</span> <span class="Identifier">rows</span><span class="Other">,</span> <span class="Identifier">cols</span><span class="Other">:</span> <span class="Identifier">int</span><span class="Other">;</span>
-                   <span class="Identifier">getData</span><span class="Other">:</span> <span class="Keyword">proc</span> <span class="Other">(</span><span class="Identifier">i</span><span class="Other">:</span> <span class="Identifier">int</span><span class="Other">)</span><span class="Other">:</span> <span class="Other">(</span><a href="tensor.html#Tensor"><span class="Identifier">Tensor</span></a><span class="Other">[</span><span class="Identifier">uint8</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">string</span><span class="Other">)</span><span class="Other">)</span><span class="Other">:</span> <span class="Other">(</span><span class="Identifier">JsonNode</span><span class="Other">,</span>
+<div id="plotImageGrid,string,int,int,proc)">
+<dt><pre><span class="Keyword">proc</span> <a href="#plotImageGrid%2Cstring%2Cint%2Cint%2Cproc%29"><span class="Identifier">plotImageGrid</span></a><span class="Other">(</span><span class="Identifier">title</span><span class="Other">:</span> <span class="Identifier">string</span><span class="Other">;</span> <span class="Identifier">rows</span><span class="Other">,</span> <span class="Identifier">cols</span><span class="Other">:</span> <span class="Identifier">int</span><span class="Other">;</span>
+                   <span class="Identifier">getData</span><span class="Other">:</span> <span class="Keyword">proc</span> <span class="Other">(</span><span class="Other">)</span><span class="Other">:</span> <span class="Other">(</span><a href="tensor.html#Tensor"><span class="Identifier">Tensor</span></a><span class="Other">[</span><span class="Identifier">uint8</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">seq</span><span class="Other">[</span><span class="Identifier">string</span><span class="Other">]</span><span class="Other">)</span><span class="Other">)</span><span class="Other">:</span> <span class="Other">(</span><span class="Identifier">JsonNode</span><span class="Other">,</span>
     <span class="Identifier">JsonNode</span><span class="Other">)</span> {.<span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Identifier">ValueError</span><span class="Other">,</span> <span class="Identifier">KeyError</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span>.}</pre></dt>
 <dd>
 
-Plot grid of images and returns data and loyout Json objects for input to plotly. getData callBack function recieves the index of the plot on the page and returns the image data and an optional text label.
+Plot grid of images and returns data and loyout Json objects for input to plotly. getData callBack function recieves should return a [N,H,W,C] 4d tensor with the images for this page - i.e. <tt class="docutils literal"><span class="pre"><span class="Identifier">t</span><span class="Operator">.</span><span class="Identifier">at</span><span class="Punctuation">(</span><span class="Identifier">row</span><span class="Operator">*</span><span class="Identifier">cols</span> <span class="Operator">+</span> <span class="Identifier">col</span><span class="Punctuation">)</span></span></tt> returns a [H,W,C] grayscale (C=0) or RGB (C=0,1,2) image. and an optional sequence of labels for each image indexed in the same way.
 &nbsp;&nbsp;<a
 href="https://github.com/jnb666/nimxla/tree/main/src/nimxla/plots.nim#L86"
 class="link-seesrc" target="_blank">Source</a>
@@ -219,16 +220,15 @@ class="link-seesrc" target="_blank">Source</a>
 </dd>
 </div>
 <div id="servePlots">
-<dt><pre><span class="Keyword">proc</span> <a href="#servePlots"><span class="Identifier">servePlots</span></a><span class="Other">(</span><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">owned</span><span class="Other">(</span><span class="Identifier">Future</span><span class="Other">[</span><span class="Identifier">void</span><span class="Other">]</span><span class="Other">)</span> {.<span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Identifier">Exception</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span>
-    <span class="Identifier">ExecIOEffect</span><span class="Other">,</span> <span class="Identifier">ReadEnvEffect</span><span class="Other">,</span> <span class="Identifier">RootEffect</span><span class="Other">,</span> <span class="Identifier">TimeEffect</span><span class="Other">,</span> <span class="Identifier">WriteIOEffect</span><span class="Other">,</span>
-    <span class="Identifier">ReadIOEffect</span><span class="Other">]</span></span>.}</pre></dt>
+<dt><pre><span class="Keyword">proc</span> <a href="#servePlots"><span class="Identifier">servePlots</span></a><span class="Other">(</span><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">owned</span><span class="Other">(</span><span class="Identifier">Future</span><span class="Other">[</span><span class="Identifier">void</span><span class="Other">]</span><span class="Other">)</span> {.<span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Identifier">Exception</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Identifier">RootEffect</span><span class="Other">,</span>
+    <span class="Identifier">ExecIOEffect</span><span class="Other">,</span> <span class="Identifier">ReadEnvEffect</span><span class="Other">,</span> <span class="Identifier">TimeEffect</span><span class="Other">,</span> <span class="Identifier">WriteIOEffect</span><span class="Other">,</span> <span class="Identifier">ReadIOEffect</span><span class="Other">]</span></span>.}</pre></dt>
 <dd>
 
 Start async http server, serve plot using plotly on localhost and open the default browser on this page.
 &nbsp;&nbsp;<a
-href="https://github.com/jnb666/nimxla/tree/main/src/nimxla/plots.nim#L127"
+href="https://github.com/jnb666/nimxla/tree/main/src/nimxla/plots.nim#L150"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/jnb666/nimxla/edit/devel/src/nimxla/plots.nim#L127" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/jnb666/nimxla/edit/devel/src/nimxla/plots.nim#L150" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -240,9 +240,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 Send message to websocket server to update the plot.
 &nbsp;&nbsp;<a
-href="https://github.com/jnb666/nimxla/tree/main/src/nimxla/plots.nim#L119"
+href="https://github.com/jnb666/nimxla/tree/main/src/nimxla/plots.nim#L142"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/jnb666/nimxla/edit/devel/src/nimxla/plots.nim#L119" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/jnb666/nimxla/edit/devel/src/nimxla/plots.nim#L142" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -256,7 +256,7 @@ class="link-seesrc" target="_blank">Source</a>
       <div class="twelve-columns footer">
         <span class="nim-sprite"></span>
         <br/>
-        <small style="color: var(--hint);">Made with Nim. Generated: 2023-06-16 09:13:03 UTC</small>
+        <small style="color: var(--hint);">Made with Nim. Generated: 2023-06-30 14:51:02 UTC</small>
       </div>
     </div>
   </div>

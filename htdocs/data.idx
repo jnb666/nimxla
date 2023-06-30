@@ -1,8 +1,21 @@
 Dataset	data.html#Dataset	data: Dataset	
+MNISTDataset	data.html#MNISTDataset	data: MNISTDataset	
+CIFAR10Dataset	data.html#CIFAR10Dataset	data: CIFAR10Dataset	
 DataLoader	data.html#DataLoader	data: DataLoader	
-initLoader	data.html#initLoader,Dataset,int	data: initLoader(d: Dataset; batchSize = 0; shuffle = false): DataLoader	
-getBatch	data.html#getBatch.i,DataLoader,Tensor[T],Tensor[int32]	data: getBatch[T](d: DataLoader; data: var Tensor[T]; labels: var Tensor[int32]): int	
-shape	data.html#shape,DataLoader	data: shape(d: DataLoader): seq[int]	
+getItem	data.html#getItem.e,Dataset,int,pointer	data: getItem(d: Dataset; i: int; data: pointer): int32	
+len	data.html#len,Dataset	data: len(d: Dataset): int	
+shape	data.html#shape,Dataset	data: shape(d: Dataset): seq[int]	
+classes	data.html#classes,Dataset	data: classes(d: Dataset): seq[string]	
+normalization	data.html#normalization,Dataset	data: normalization(d: Dataset): (seq[float32], seq[float32])	
 `$`	data.html#$,Dataset	data: `$`(d: Dataset): string	
-mnistDataset	data.html#mnistDataset	data: mnistDataset(train = false): Dataset	
-cifar10Dataset	data.html#cifar10Dataset	data: cifar10Dataset(train = false): Dataset	
+mnistDataset	data.html#mnistDataset_2	data: mnistDataset(train = false): MNISTDataset	
+getItem	data.html#getItem.e,MNISTDataset,int,pointer	data: getItem(d: MNISTDataset; i: int; dout: pointer): int32	
+cifar10Dataset	data.html#cifar10Dataset_2	data: cifar10Dataset(train = false): CIFAR10Dataset	
+getItem	data.html#getItem.e,CIFAR10Dataset,int,pointer	data: getItem(d: CIFAR10Dataset; i: int; dout: pointer): int32	
+newLoader	data.html#newLoader,Rand,int	data: newLoader(rng: var Rand; batchSize = 0; shuffle = false): DataLoader	
+shape	data.html#shape,DataLoader	data: shape(d: DataLoader): seq[int]	
+getBatch	data.html#getBatch.i,DataLoader,Tensor[T],Tensor[int32]	data: getBatch[T](d: var DataLoader; data: var Tensor[T]; labels: var Tensor[int32]): int	
+`$`	data.html#$,DataLoader	data: `$`(d: DataLoader): string	
+initLoader	data.html#initLoader,staticint,DataLoader,Dataset,openArray[ImageOp]	data: initLoader(channels: static int; d: var DataLoader; dset: Dataset;\n           ops: openArray[ImageOp])	
+start	data.html#start.t,DataLoader,untyped,staticint,varargs[ImageOp]	data: start(d: var DataLoader; dset: untyped; channels: static int;\n      transforms: varargs[ImageOp])	
+shutdown	data.html#shutdown,DataLoader	data: shutdown(d: var DataLoader)	

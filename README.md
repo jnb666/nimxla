@@ -44,7 +44,9 @@ See [the documentation index](https://jnb666.github.io/nimxla/htdocs/theindex.ht
 
 - [nimxla/nn](https://jnb666.github.io/nimxla/htdocs/nn.html): Provides additional higher level functions for constructing and optimizing neural network models.
 
-- [nimxla/data](https://jnb666.github.io/nimxla/htdocs/data.html): Provides functions to load common datasets and iterate over batches of data.
+- [nimxla/data](https://jnb666.github.io/nimxla/htdocs/data.html): Provides functions to load common datasets and iterate over batches of data. The image loader uses the image module to launch image transforms via a worker thread.
+
+- [nimxla/image](https://jnb666.github.io/nimxla/htdocs/image.html): Provides some basic image transforms for data augmentation. This will spawn a pool of threads to perform the calculations using all of the available CPU cores.
 
 - [nimxla/train](https://jnb666.github.io/nimxla/htdocs/train.html): Contains functions for training batches of data and calculating the accuracy of the predictions.
 
@@ -67,8 +69,8 @@ to generate a trace.
 - Examples use [cligen](https://github.com/c-blake/cligen) for command line argument parsing.
 
 ## TODO
-- basic image augmentation: affine, flip, translate, crop transforms
-- CIFAR10 dataset + examples
+- heatmap of predicted vs actual labels
+- use github actions to auto generate docs
 - checkpoint files with current state
 - avg pool and batchnorm layers
 - RNN example

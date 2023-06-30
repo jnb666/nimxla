@@ -1,6 +1,6 @@
 ## The nn module provides higher level functions for building neural network models using the nimxla graph API.
 
-import std/[math, random, strutils, strformat, sequtils, sugar, tables, logging]
+import std/[math, random, times, strutils, strformat, sequtils, sugar, tables, logging]
 import ../nimxla
 
 type
@@ -9,7 +9,7 @@ type
     name*: string
     data*: Buffer
 
-  InitFunc* = proc(c: Client, dims: openarray[int], dtype: DataType): Buffer
+  InitFunc* = proc(c: Client, dims: openarray[int], dtype: DataType, rng: var Rand): Buffer
     ## InitFunc defines a function used to initialise a learnable parameter.
 
   Optimizer* = proc(params: Params): seq[Variable]
@@ -23,22 +23,32 @@ type
     forward*: proc(x: Node, training = false): Node
     info*: string
 
+
+proc initRandom*(seed: int64 = 0): Rand =
+  ## Initialize random generator. Picks a random seed from current time if seed == 0.
+  let seed = if seed == 0:
+    getTime().toUnix * 1_000_000_000 + getTime().nanosecond
+  else:
+    seed
+  echo &"initRandom: seed={seed}"
+  result = initRand(seed)
+
 proc constantInit*(value: SomeFloat): InitFunc =
   ## Create a new buffer with a constant value.
-  proc(c: Client, dims: openarray[int], dtype: DataType): Buffer =
+  proc(c: Client, dims: openarray[int], dtype: DataType, rng: var Rand): Buffer =
     let t = fill(dims, value)
     c.newBuffer(t.toLiteral.convert(dtype))
 
 proc uniformInit*(min = 0.0, max = 1.0): InitFunc =
   ## Create a new buffer with uniform random values from min to max.
-  proc(c: Client, dims: openarray[int], dtype: DataType): Buffer =
-    let t = newSeqWith(prod(dims), rand(min..max)).toTensor.reshape(dims)
+  proc(c: Client, dims: openarray[int], dtype: DataType, rng: var Rand): Buffer =
+    let t = newSeqWith(prod(dims), rng.rand(min..max)).toTensor.reshape(dims)
     c.newBuffer(t.toLiteral.convert(dtype))
 
 proc normalInit*(mean = 0.0, stddev = 1.0): InitFunc =
   ## Create a new buffer with random values chosen from a normal distrubution.
-  proc(c: Client, dims: openarray[int], dtype: DataType): Buffer =
-    let t = newSeqWith(prod(dims), gauss(mean, stddev)).toTensor.reshape(dims)
+  proc(c: Client, dims: openarray[int], dtype: DataType, rng: var Rand): Buffer =
+    let t = newSeqWith(prod(dims), rng.gauss(mean, stddev)).toTensor.reshape(dims)
     c.newBuffer(t.toLiteral.convert(dtype))
 
 proc getFanInOut(dims: openarray[int]): (int, int) =
@@ -59,10 +69,10 @@ proc glorotInit*(gain = 1.0): InitFunc =
   ## ```
   ## where nin are effective number of inputs and outputs.
   ## Also known as Xavier uniform init.
-  proc(c: Client, dims: openarray[int], dtype: DataType): Buffer =
+  proc(c: Client, dims: openarray[int], dtype: DataType, rng: var Rand): Buffer =
     let (nin, nout) = getFanInOut(dims)
     let max = gain * sqrt(6.0 / (nin+nout).float)
-    uniformInit(-max, max)(c, dims, dtype)
+    uniformInit(-max, max)(c, dims, dtype, rng)
 
 proc heInit*(mean = 0.0, gain = 2.0, fanOut = false): InitFunc =
   ## Initialisation function with values from normal distrubution with std deviation as
@@ -71,17 +81,17 @@ proc heInit*(mean = 0.0, gain = 2.0, fanOut = false): InitFunc =
   ## ```
   ## where nin are effective number of inputs and outputs. Gain of 2 is suitable for Relu non-linearity.
   ## Also known as Kaiming normal init.
-  proc(c: Client, dims: openarray[int], dtype: DataType): Buffer =
+  proc(c: Client, dims: openarray[int], dtype: DataType, rng: var Rand): Buffer =
     let (nin, nout) = getFanInOut(dims)
     let stddev = if fanOut:
       sqrt(gain / nout.float)
     else:
       sqrt(gain / nin.float)
-    normalInit(mean, stddev)(c, dims, dtype)
+    normalInit(mean, stddev)(c, dims, dtype, rng)
 
-proc newVariable*(c: Client, name: string, dims: openarray[int], dtype: DataType, init: InitFunc): Variable =
+proc newVariable*(c: Client, name: string, dims: openarray[int], dtype: DataType, init: InitFunc, rng: var Rand): Variable =
   ## Allocate a new variable with the given name and shape and initialise values.
-  Variable(name: name, data: c.init(dims, dtype))
+  Variable(name: name, data: c.init(dims, dtype, rng))
 
 proc param*(b: Builder, p: Variable, suffix = ""): Node =
   ## Create a new parameter node from this Variable
@@ -150,29 +160,29 @@ proc dropout*(a: Node, ratio: float, training: bool, normalize = true): Node =
   if normalize:
     result = result / (b.one(ty) - r)
 
-proc initLinear*(c: Client, id: string, nin, nout: int, weights = heInit(), biases = constantInit(0.0),
-                 dtype = F32): Module =
+proc initLinear*(c: Client, rng: var Rand, id: string, nin, nout: int,
+                 weights = heInit(), biases = constantInit(0.0), dtype = F32): Module =
   ## Create a new fully connected linear layer with the given unique id and number of inputs and outputs.
   ## Weight parameters are initialised using the weights function. If biases is not nil then bias parameters 
   ## are initialised using this function and added to the output.
   result.info = &"{id}: linear(nin={nin}, nout={nout}, bias={biases != nil})"
-  let weight = c.newVariable(id & ".w", [nin, nout], dtype, weights)
+  let weight = c.newVariable(id & ".w", [nin, nout], dtype, weights, rng)
   result.variables.add weight
   if biases == nil:
     result.forward = proc(x: Node, training = false): Node =
       let W = x.builder.param(weight)
       dot(x, W)
   else:
-    let bias = c.newVariable(id & ".b", [1, nout], dtype, biases)
+    let bias = c.newVariable(id & ".b", [1, nout], dtype, biases, rng)
     result.variables.add bias
     result.forward = proc(x: Node, training = false): Node =
       let W = x.builder.param(weight)
       let B = x.builder.param(bias)
       dot(x, W) + B
 
-proc initConv2d*(c: Client, id: string, inChannels, outChannels: int, kernelSize: Opt2d, strides: Opt2d = 1,
-                 padding: Pad2d = pad(0), dilation: Opt2d = 1, groups = 1, weights = heInit(), biases = constantInit(0.0),
-                 dtype = F32): Module =
+proc initConv2d*(c: Client, rng: var Rand, id: string, inChannels, outChannels: int, kernelSize: Opt2d, 
+                 strides: Opt2d = 1, padding: Pad2d = pad(0), dilation: Opt2d = 1, groups = 1, 
+                 weights = heInit(), biases = constantInit(0.0), dtype = F32): Module =
   ## Create a new 2 dimensional convolution layer with parameters in channels last format.
   ## Weight parameters are initialised using the weights function. If biases is not nil then bias parameters 
   ## are initialised using this function and added to the output.
@@ -184,14 +194,14 @@ proc initConv2d*(c: Client, id: string, inChannels, outChannels: int, kernelSize
   result.info.add &", bias={biases != nil})"
 
   let wdims = @[outChannels] & kernelSize.seq2 & @[inChannels]
-  let weight = c.newVariable(id & ".w", wdims, dtype, weights)
+  let weight = c.newVariable(id & ".w", wdims, dtype, weights, rng)
   result.variables.add weight
   if biases == nil:
     result.forward = proc(x: Node, training = false): Node =
       let W = x.builder.param(weight)
       conv2d(x, W, strides, padding, dilation, groups)
   else:
-    let bias = c.newVariable(id & ".b", @[1, 1, 1, outChannels], dtype, biases)
+    let bias = c.newVariable(id & ".b", @[1, 1, 1, outChannels], dtype, biases, rng)
     result.variables.add bias
     result.forward = proc(x: Node, training: bool): Node =
       let W = x.builder.param(weight)

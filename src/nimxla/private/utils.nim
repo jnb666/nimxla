@@ -19,6 +19,10 @@ proc checkError*(status: status_t) =
 proc ptrOffset*[T](p: ptr T, off: int): ptr T {.inline.} =
   cast[ptr T](cast[int](p) + off*sizeOf(T))
 
+proc newChannel*[T](maxItems = 0): ptr Channel[T] =
+  result = cast[ptr Channel[T]](allocShared0(sizeof(Channel[T])))
+  open(result[], maxItems)
+
 template trace*(msg: string): untyped =
   when tracemem:
     debug msg

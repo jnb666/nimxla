@@ -130,7 +130,9 @@ window.addEventListener('DOMContentLoaded', main);
   </ul>
   <ul class="simple nested-toc-section">getAccuracy
       <li><a class="reference" href="#getAccuracy%2CTrainer%2CModule%2CDataLoader"
-    title="getAccuracy[T: ElemType](t: var Trainer; model: var Module; loader: DataLoader): float">getAccuracy[T: ElemType](t: var Trainer; model: var Module; loader: DataLoader): float</a></li>
+    title="getAccuracy[T: ElemType](t: var Trainer; model: var Module;
+                         loader: var DataLoader): float">getAccuracy[T: ElemType](t: var Trainer; model: var Module;
+                         loader: var DataLoader): float</a></li>
 
   </ul>
   <ul class="simple nested-toc-section">getLayout
@@ -150,9 +152,9 @@ window.addEventListener('DOMContentLoaded', main);
   </ul>
   <ul class="simple nested-toc-section">trainEpoch
       <li><a class="reference" href="#trainEpoch%2CTrainer%2CModule%2CDataLoader"
-    title="trainEpoch[T: ElemType](t: var Trainer; model: var Module; loader: DataLoader): (
-    float, float)">trainEpoch[T: ElemType](t: var Trainer; model: var Module; loader: DataLoader): (
-    float, float)</a></li>
+    title="trainEpoch[T: ElemType](t: var Trainer; model: var Module;
+                        loader: var DataLoader): (float, float)">trainEpoch[T: ElemType](t: var Trainer; model: var Module;
+                        loader: var DataLoader): (float, float)</a></li>
 
   </ul>
   <ul class="simple nested-toc-section">trainFunc
@@ -165,8 +167,8 @@ window.addEventListener('DOMContentLoaded', main);
   <ul class="simple nested-toc-section">trainNetwork
       <li><a class="reference" href="#trainNetwork%2CTrainer%2CModule%2CDataLoader%2CDataLoader%2Cint"
     title="trainNetwork[T: ElemType](t: var Trainer; model: var Module;
-                          train, test: DataLoader; epochs: int; plot = false)">trainNetwork[T: ElemType](t: var Trainer; model: var Module;
-                          train, test: DataLoader; epochs: int; plot = false)</a></li>
+                          train, test: var DataLoader; epochs: int; plot = false)">trainNetwork[T: ElemType](t: var Trainer; model: var Module;
+                          train, test: var DataLoader; epochs: int; plot = false)</a></li>
 
   </ul>
 
@@ -241,7 +243,7 @@ class="link-seesrc" target="_blank">Source</a>
 </div>
 <div id="getAccuracy,Trainer,Module,DataLoader">
 <dt><pre><span class="Keyword">proc</span> <a href="#getAccuracy%2CTrainer%2CModule%2CDataLoader"><span class="Identifier">getAccuracy</span></a><span class="Other">[</span><span class="Identifier">T</span><span class="Other">:</span> <a href="shape.html#ElemType"><span class="Identifier">ElemType</span></a><span class="Other">]</span><span class="Other">(</span><span class="Identifier">t</span><span class="Other">:</span> <span class="Keyword">var</span> <a href="train.html#Trainer"><span class="Identifier">Trainer</span></a><span class="Other">;</span> <span class="Identifier">model</span><span class="Other">:</span> <span class="Keyword">var</span> <a href="nn.html#Module"><span class="Identifier">Module</span></a><span class="Other">;</span>
-                              <span class="Identifier">loader</span><span class="Other">:</span> <a href="data.html#DataLoader"><span class="Identifier">DataLoader</span></a><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">float</span></pre></dt>
+                              <span class="Identifier">loader</span><span class="Other">:</span> <span class="Keyword">var</span> <a href="data.html#DataLoader"><span class="Identifier">DataLoader</span></a><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">float</span></pre></dt>
 <dd>
 
 Calculate the accuracy from the test data set. T should be the type of data returned from the loader.
@@ -291,7 +293,7 @@ class="link-seesrc" target="_blank">Source</a>
 </div>
 <div id="trainEpoch,Trainer,Module,DataLoader">
 <dt><pre><span class="Keyword">proc</span> <a href="#trainEpoch%2CTrainer%2CModule%2CDataLoader"><span class="Identifier">trainEpoch</span></a><span class="Other">[</span><span class="Identifier">T</span><span class="Other">:</span> <a href="shape.html#ElemType"><span class="Identifier">ElemType</span></a><span class="Other">]</span><span class="Other">(</span><span class="Identifier">t</span><span class="Other">:</span> <span class="Keyword">var</span> <a href="train.html#Trainer"><span class="Identifier">Trainer</span></a><span class="Other">;</span> <span class="Identifier">model</span><span class="Other">:</span> <span class="Keyword">var</span> <a href="nn.html#Module"><span class="Identifier">Module</span></a><span class="Other">;</span>
-                             <span class="Identifier">loader</span><span class="Other">:</span> <a href="data.html#DataLoader"><span class="Identifier">DataLoader</span></a><span class="Other">)</span><span class="Other">:</span> <span class="Other">(</span><span class="Identifier">float</span><span class="Other">,</span> <span class="Identifier">float</span><span class="Other">)</span></pre></dt>
+                             <span class="Identifier">loader</span><span class="Other">:</span> <span class="Keyword">var</span> <a href="data.html#DataLoader"><span class="Identifier">DataLoader</span></a><span class="Other">)</span><span class="Other">:</span> <span class="Other">(</span><span class="Identifier">float</span><span class="Other">,</span> <span class="Identifier">float</span><span class="Other">)</span></pre></dt>
 <dd>
 
 Train on one epoch of batches of data from the training set, returns average loss and accuracy on training dara T should be the type of data returned from the loader. Output loss should be a float32 scalar.
@@ -318,15 +320,15 @@ class="link-seesrc" target="_blank">Source</a>
 </div>
 <div id="trainNetwork,Trainer,Module,DataLoader,DataLoader,int">
 <dt><pre><span class="Keyword">proc</span> <a href="#trainNetwork%2CTrainer%2CModule%2CDataLoader%2CDataLoader%2Cint"><span class="Identifier">trainNetwork</span></a><span class="Other">[</span><span class="Identifier">T</span><span class="Other">:</span> <a href="shape.html#ElemType"><span class="Identifier">ElemType</span></a><span class="Other">]</span><span class="Other">(</span><span class="Identifier">t</span><span class="Other">:</span> <span class="Keyword">var</span> <a href="train.html#Trainer"><span class="Identifier">Trainer</span></a><span class="Other">;</span> <span class="Identifier">model</span><span class="Other">:</span> <span class="Keyword">var</span> <a href="nn.html#Module"><span class="Identifier">Module</span></a><span class="Other">;</span>
-                               <span class="Identifier">train</span><span class="Other">,</span> <span class="Identifier">test</span><span class="Other">:</span> <a href="data.html#DataLoader"><span class="Identifier">DataLoader</span></a><span class="Other">;</span> <span class="Identifier">epochs</span><span class="Other">:</span> <span class="Identifier">int</span><span class="Other">;</span>
+                               <span class="Identifier">train</span><span class="Other">,</span> <span class="Identifier">test</span><span class="Other">:</span> <span class="Keyword">var</span> <a href="data.html#DataLoader"><span class="Identifier">DataLoader</span></a><span class="Other">;</span> <span class="Identifier">epochs</span><span class="Other">:</span> <span class="Identifier">int</span><span class="Other">;</span>
                                <span class="Identifier">plot</span> <span class="Other">=</span> <span class="Identifier">false</span><span class="Other">)</span></pre></dt>
 <dd>
 
-Training run for given number of epochs
+Training run for given number of epochs. If transform is set it will be applied to each batch of training data.
 &nbsp;&nbsp;<a
-href="https://github.com/jnb666/nimxla/tree/main/src/nimxla/train.nim#L125"
+href="https://github.com/jnb666/nimxla/tree/main/src/nimxla/train.nim#L129"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/jnb666/nimxla/edit/devel/src/nimxla/train.nim#L125" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/jnb666/nimxla/edit/devel/src/nimxla/train.nim#L129" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -340,7 +342,7 @@ class="link-seesrc" target="_blank">Source</a>
       <div class="twelve-columns footer">
         <span class="nim-sprite"></span>
         <br/>
-        <small style="color: var(--hint);">Made with Nim. Generated: 2023-06-15 13:36:10 UTC</small>
+        <small style="color: var(--hint);">Made with Nim. Generated: 2023-06-30 14:51:01 UTC</small>
       </div>
     </div>
   </div>
