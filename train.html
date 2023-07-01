@@ -116,7 +116,8 @@ window.addEventListener('DOMContentLoaded', main);
   trainAcc*: Executable
   testAcc*: Executable
   stats*: Table[string, seq[float]]
-  predict*: Tensor[int32]">Trainer</a></li>
+  predict*: Tensor[int32]
+  heatmap*: Tensor[int32]">Trainer</a></li>
 
   </ul>
 </li>
@@ -141,8 +142,8 @@ window.addEventListener('DOMContentLoaded', main);
 
   </ul>
   <ul class="simple nested-toc-section">statsPlots
-      <li><a class="reference" href="#statsPlots%2CTrainer"
-    title="statsPlots(t: Trainer): JsonNode">statsPlots(t: Trainer): JsonNode</a></li>
+      <li><a class="reference" href="#statsPlots%2CTrainer%2Cseq%5Bstring%5D"
+    title="statsPlots(t: Trainer; classes: seq[string]): JsonNode">statsPlots(t: Trainer; classes: seq[string]): JsonNode</a></li>
 
   </ul>
   <ul class="simple nested-toc-section">testFunc
@@ -205,6 +206,7 @@ class="link-seesrc" target="_blank">Source</a>
   <span class="Identifier">testAcc</span><span class="Operator">*</span><span class="Other">:</span> <a href="nimxla.html#Executable"><span class="Identifier">Executable</span></a>
   <span class="Identifier">stats</span><span class="Operator">*</span><span class="Other">:</span> <span class="Identifier">Table</span><span class="Other">[</span><span class="Identifier">string</span><span class="Other">,</span> <span class="Identifier">seq</span><span class="Other">[</span><span class="Identifier">float</span><span class="Other">]</span><span class="Other">]</span>
   <span class="Identifier">predict</span><span class="Operator">*</span><span class="Other">:</span> <a href="tensor.html#Tensor"><span class="Identifier">Tensor</span></a><span class="Other">[</span><span class="Identifier">int32</span><span class="Other">]</span>
+  <span class="Identifier">heatmap</span><span class="Operator">*</span><span class="Other">:</span> <a href="tensor.html#Tensor"><span class="Identifier">Tensor</span></a><span class="Other">[</span><span class="Identifier">int32</span><span class="Other">]</span>
 </pre></dt>
 <dd>
 
@@ -235,9 +237,9 @@ Helper function to calculate the accuracy from a set of predictions. Callable ha
 </ul>
 
 &nbsp;&nbsp;<a
-href="https://github.com/jnb666/nimxla/tree/main/src/nimxla/train.nim#L41"
+href="https://github.com/jnb666/nimxla/tree/main/src/nimxla/train.nim#L40"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/jnb666/nimxla/edit/devel/src/nimxla/train.nim#L41" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/jnb666/nimxla/edit/devel/src/nimxla/train.nim#L40" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -248,33 +250,34 @@ class="link-seesrc" target="_blank">Source</a>
 
 Calculate the accuracy from the test data set. T should be the type of data returned from the loader.
 &nbsp;&nbsp;<a
-href="https://github.com/jnb666/nimxla/tree/main/src/nimxla/train.nim#L83"
+href="https://github.com/jnb666/nimxla/tree/main/src/nimxla/train.nim#L82"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/jnb666/nimxla/edit/devel/src/nimxla/train.nim#L83" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/jnb666/nimxla/edit/devel/src/nimxla/train.nim#L82" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
 <div id="getLayout,int">
-<dt><pre><span class="Keyword">proc</span> <a href="#getLayout%2Cint"><span class="Identifier">getLayout</span></a><span class="Other">(</span><span class="Identifier">epochs</span><span class="Other">:</span> <span class="Identifier">int</span><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">JsonNode</span> {.<span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Identifier">KeyError</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span>.}</pre></dt>
+<dt><pre><span class="Keyword">proc</span> <a href="#getLayout%2Cint"><span class="Identifier">getLayout</span></a><span class="Other">(</span><span class="Identifier">epochs</span><span class="Other">:</span> <span class="Identifier">int</span><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">JsonNode</span> {.<span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span>.}</pre></dt>
 <dd>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/jnb666/nimxla/tree/main/src/nimxla/train.nim#L120"
+href="https://github.com/jnb666/nimxla/tree/main/src/nimxla/train.nim#L135"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/jnb666/nimxla/edit/devel/src/nimxla/train.nim#L120" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/jnb666/nimxla/edit/devel/src/nimxla/train.nim#L135" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
-<div id="statsPlots,Trainer">
-<dt><pre><span class="Keyword">proc</span> <a href="#statsPlots%2CTrainer"><span class="Identifier">statsPlots</span></a><span class="Other">(</span><span class="Identifier">t</span><span class="Other">:</span> <a href="train.html#Trainer"><span class="Identifier">Trainer</span></a><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">JsonNode</span> {.<span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Identifier">KeyError</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span>.}</pre></dt>
+<div id="statsPlots,Trainer,seq[string]">
+<dt><pre><span class="Keyword">proc</span> <a href="#statsPlots%2CTrainer%2Cseq%5Bstring%5D"><span class="Identifier">statsPlots</span></a><span class="Other">(</span><span class="Identifier">t</span><span class="Other">:</span> <a href="train.html#Trainer"><span class="Identifier">Trainer</span></a><span class="Other">;</span> <span class="Identifier">classes</span><span class="Other">:</span> <span class="Identifier">seq</span><span class="Other">[</span><span class="Identifier">string</span><span class="Other">]</span><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">JsonNode</span> {.
+    <span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Identifier">KeyError</span><span class="Other">,</span> <span class="Identifier">ValueError</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span>.}</pre></dt>
 <dd>
 
 Convert stats to format used by plots package
 &nbsp;&nbsp;<a
-href="https://github.com/jnb666/nimxla/tree/main/src/nimxla/train.nim#L112"
+href="https://github.com/jnb666/nimxla/tree/main/src/nimxla/train.nim#L117"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/jnb666/nimxla/edit/devel/src/nimxla/train.nim#L112" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/jnb666/nimxla/edit/devel/src/nimxla/train.nim#L117" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -285,9 +288,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 Compile test function with given input data shape.
 &nbsp;&nbsp;<a
-href="https://github.com/jnb666/nimxla/tree/main/src/nimxla/train.nim#L34"
+href="https://github.com/jnb666/nimxla/tree/main/src/nimxla/train.nim#L33"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/jnb666/nimxla/edit/devel/src/nimxla/train.nim#L34" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/jnb666/nimxla/edit/devel/src/nimxla/train.nim#L33" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -298,9 +301,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 Train on one epoch of batches of data from the training set, returns average loss and accuracy on training dara T should be the type of data returned from the loader. Output loss should be a float32 scalar.
 &nbsp;&nbsp;<a
-href="https://github.com/jnb666/nimxla/tree/main/src/nimxla/train.nim#L58"
+href="https://github.com/jnb666/nimxla/tree/main/src/nimxla/train.nim#L57"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/jnb666/nimxla/edit/devel/src/nimxla/train.nim#L58" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/jnb666/nimxla/edit/devel/src/nimxla/train.nim#L57" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -312,9 +315,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 Compile training function with given input data shape and loss function which is applied to the output.
 &nbsp;&nbsp;<a
-href="https://github.com/jnb666/nimxla/tree/main/src/nimxla/train.nim#L26"
+href="https://github.com/jnb666/nimxla/tree/main/src/nimxla/train.nim#L25"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/jnb666/nimxla/edit/devel/src/nimxla/train.nim#L26" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/jnb666/nimxla/edit/devel/src/nimxla/train.nim#L25" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -326,9 +329,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 Training run for given number of epochs. If transform is set it will be applied to each batch of training data.
 &nbsp;&nbsp;<a
-href="https://github.com/jnb666/nimxla/tree/main/src/nimxla/train.nim#L129"
+href="https://github.com/jnb666/nimxla/tree/main/src/nimxla/train.nim#L150"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/jnb666/nimxla/edit/devel/src/nimxla/train.nim#L129" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/jnb666/nimxla/edit/devel/src/nimxla/train.nim#L150" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -342,7 +345,7 @@ class="link-seesrc" target="_blank">Source</a>
       <div class="twelve-columns footer">
         <span class="nim-sprite"></span>
         <br/>
-        <small style="color: var(--hint);">Made with Nim. Generated: 2023-07-01 12:31:08 UTC</small>
+        <small style="color: var(--hint);">Made with Nim. Generated: 2023-07-01 16:09:45 UTC</small>
       </div>
     </div>
   </div>
