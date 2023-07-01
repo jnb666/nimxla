@@ -20,10 +20,11 @@ jobs:
 
       - name: Install XLA
         run: |
-          wget ${{ env.xla-library-base }}${{ env.xla-library-name }}
-          sudo tar zxf {{ env.xla-library-name }} -C /usr/local
+          wget -q ${{ env.xla-library-base }}${{ env.xla-library-name }}
+          sudo tar zxf ${{ env.xla-library-name }} -C /usr/local
           sudo ln -s /usr/local/xla_extension/lib/libxla_extension.so /usr/local/lib/libxla_extension.so
           sudo ldconfig
+          rm -f ${{ env.xla-library-name }}
 
       - name: Install package
         run: nimble install -Y
