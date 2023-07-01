@@ -70,12 +70,24 @@ window.addEventListener('DOMContentLoaded', main);
 <div class="document" id="documentId">
   <div class="container">
     <h1 class="title">Index</h1>
-    Modules: <a href="data.html">data</a>, <a href="image.html">image</a>, <a href="literal.html">literal</a>, <a href="nn.html">nn</a>, <a href="plots.html">plots</a>, <a href="shape.html">shape</a>, <a href="train.html">train</a>.<br/><p /><h2>API symbols</h2>
-<dl><dt><a name="%60%24%60" href="#%60%24%60"><span>`$`:</span></a></dt><dd><ul class="simple">
+    Modules: <a href="data.html">data</a>, <a href="graph.html">graph</a>, <a href="image.html">image</a>, <a href="literal.html">literal</a>, <a href="nimxla.html">nimxla</a>, <a href="nn.html">nn</a>, <a href="plots.html">plots</a>, <a href="shape.html">shape</a>, <a href="tensor.html">tensor</a>, <a href="train.html">train</a>.<br/><p /><h2>API symbols</h2>
+<dl><dt><a name="%60%21%3D%60" href="#%60%21%3D%60"><span>`!=`:</span></a></dt><dd><ul class="simple">
+<li><a class="reference external"
+          data-doc-search-tag="graph: `!=`(a, b: Node): Node" href="graph.html#%21%3D%2CNode%2CNode">graph: `!=`(a, b: Node): Node</a></li>
+          </ul></dd>
+<dt><a name="%60%21%60" href="#%60%21%60"><span>`!`:</span></a></dt><dd><ul class="simple">
+<li><a class="reference external"
+          data-doc-search-tag="graph: `!`(a: Node): Node" href="graph.html#%21%2CNode">graph: `!`(a: Node): Node</a></li>
+          </ul></dd>
+<dt><a name="%60%24%60" href="#%60%24%60"><span>`$`:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
           data-doc-search-tag="data: `$`(d: DataLoader): string" href="data.html#%24%2CDataLoader">data: `$`(d: DataLoader): string</a></li>
           <li><a class="reference external"
           data-doc-search-tag="data: `$`(d: Dataset): string" href="data.html#%24%2CDataset">data: `$`(d: Dataset): string</a></li>
+          <li><a class="reference external"
+          data-doc-search-tag="graph: `$`(comp: Computation): string" href="graph.html#%24%2CComputation">graph: `$`(comp: Computation): string</a></li>
+          <li><a class="reference external"
+          data-doc-search-tag="graph: `$`(n: Node): string" href="graph.html#%24%2CNode">graph: `$`(n: Node): string</a></li>
           <li><a class="reference external"
           data-doc-search-tag="image: `$`(op: ImageOp): string" href="image.html#%24%2CImageOp">image: `$`(op: ImageOp): string</a></li>
           <li><a class="reference external"
@@ -83,15 +95,83 @@ window.addEventListener('DOMContentLoaded', main);
           <li><a class="reference external"
           data-doc-search-tag="literal: `$`(lit: Literal): string" href="literal.html#%24%2CLiteral">literal: `$`(lit: Literal): string</a></li>
           <li><a class="reference external"
+          data-doc-search-tag="nimxla: `$`(buf: Buffer): string" href="nimxla.html#%24%2CBuffer">nimxla: `$`(buf: Buffer): string</a></li>
+          <li><a class="reference external"
+          data-doc-search-tag="nimxla: `$`(client: Client): string" href="nimxla.html#%24%2CClient">nimxla: `$`(client: Client): string</a></li>
+          <li><a class="reference external"
+          data-doc-search-tag="nimxla: `$`(exec: Executable): string" href="nimxla.html#%24%2CExecutable">nimxla: `$`(exec: Executable): string</a></li>
+          <li><a class="reference external"
           data-doc-search-tag="nn: `$`(m: Module): string" href="nn.html#%24%2CModule">nn: `$`(m: Module): string</a></li>
           <li><a class="reference external"
           data-doc-search-tag="shape: `$`(p: Padding): string" href="shape.html#%24%2CPadding">shape: `$`(p: Padding): string</a></li>
           <li><a class="reference external"
           data-doc-search-tag="shape: `$`(s: Shape): string" href="shape.html#%24%2CShape">shape: `$`(s: Shape): string</a></li>
+          <li><a class="reference external"
+          data-doc-search-tag="tensor: `$`[T: ElemType](t: Tensor[T]): string" href="tensor.html#%24%2CTensor%5BT%3A%20ElemType%5D">tensor: `$`[T: ElemType](t: Tensor[T]): string</a></li>
+          </ul></dd>
+<dt><a name="%60%26gt%3B%3D%60" href="#%60%26gt%3B%3D%60"><span>`&gt;=`:</span></a></dt><dd><ul class="simple">
+<li><a class="reference external"
+          data-doc-search-tag="graph: `&gt;=`(a, b: Node): Node" href="graph.html#%3E%3D%2CNode%2CNode">graph: `&gt;=`(a, b: Node): Node</a></li>
+          </ul></dd>
+<dt><a name="%60%26gt%3B%60" href="#%60%26gt%3B%60"><span>`&gt;`:</span></a></dt><dd><ul class="simple">
+<li><a class="reference external"
+          data-doc-search-tag="graph: `&gt;`(a, b: Node): Node" href="graph.html#%3E%2CNode%2CNode">graph: `&gt;`(a, b: Node): Node</a></li>
+          </ul></dd>
+<dt><a name="%60%26lt%3B%3D%60" href="#%60%26lt%3B%3D%60"><span>`&lt;=`:</span></a></dt><dd><ul class="simple">
+<li><a class="reference external"
+          data-doc-search-tag="graph: `&lt;=`(a, b: Node): Node" href="graph.html#%3C%3D%2CNode%2CNode">graph: `&lt;=`(a, b: Node): Node</a></li>
+          </ul></dd>
+<dt><a name="%60%26lt%3B%60" href="#%60%26lt%3B%60"><span>`&lt;`:</span></a></dt><dd><ul class="simple">
+<li><a class="reference external"
+          data-doc-search-tag="graph: `&lt;`(a, b: Node): Node" href="graph.html#%3C%2CNode%2CNode">graph: `&lt;`(a, b: Node): Node</a></li>
+          </ul></dd>
+<dt><a name="%60%2A%60" href="#%60%2A%60"><span>`*`:</span></a></dt><dd><ul class="simple">
+<li><a class="reference external"
+          data-doc-search-tag="graph: `*`(a, b: Node): Node" href="graph.html#%2A%2CNode%2CNode">graph: `*`(a, b: Node): Node</a></li>
+          </ul></dd>
+<dt><a name="%60%2B%60" href="#%60%2B%60"><span>`+`:</span></a></dt><dd><ul class="simple">
+<li><a class="reference external"
+          data-doc-search-tag="graph: `+`(a, b: Node): Node" href="graph.html#%2B%2CNode%2CNode">graph: `+`(a, b: Node): Node</a></li>
+          </ul></dd>
+<dt><a name="%60-%60" href="#%60-%60"><span>`-`:</span></a></dt><dd><ul class="simple">
+<li><a class="reference external"
+          data-doc-search-tag="graph: `-`(a: Node): Node" href="graph.html#-%2CNode">graph: `-`(a: Node): Node</a></li>
+          <li><a class="reference external"
+          data-doc-search-tag="graph: `-`(a, b: Node): Node" href="graph.html#-%2CNode%2CNode">graph: `-`(a, b: Node): Node</a></li>
+          </ul></dd>
+<dt><a name="%60/%60" href="#%60/%60"><span>`/`:</span></a></dt><dd><ul class="simple">
+<li><a class="reference external"
+          data-doc-search-tag="graph: `/`(a, b: Node): Node" href="graph.html#/%2CNode%2CNode">graph: `/`(a, b: Node): Node</a></li>
           </ul></dd>
 <dt><a name="%60%3D%3D%60" href="#%60%3D%3D%60"><span>`==`:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
+          data-doc-search-tag="graph: `==`(a, b: Node): Node" href="graph.html#%3D%3D%2CNode%2CNode">graph: `==`(a, b: Node): Node</a></li>
+          <li><a class="reference external"
           data-doc-search-tag="shape: `==`(s1, s2: Shape): bool" href="shape.html#%3D%3D%2CShape%2CShape">shape: `==`(s1, s2: Shape): bool</a></li>
+          <li><a class="reference external"
+          data-doc-search-tag="tensor: `==`[T: ElemType](t1, t2: Tensor[T]): bool" href="tensor.html#%3D%3D%2CTensor%5BT%3A%20ElemType%5D%2CTensor%5BT%3A%20ElemType%5D">tensor: `==`[T: ElemType](t1, t2: Tensor[T]): bool</a></li>
+          </ul></dd>
+<dt><a name="%60%40%40%60" href="#%60%40%40%60"><span>`@@`:</span></a></dt><dd><ul class="simple">
+<li><a class="reference external"
+          data-doc-search-tag="tensor: `@@`(value: untyped): untyped" href="tensor.html#%40%40.m%2Cuntyped">tensor: `@@`(value: untyped): untyped</a></li>
+          </ul></dd>
+<dt><a name="%60%5B%5D%3D%60" href="#%60%5B%5D%3D%60"><span>`[]=`:</span></a></dt><dd><ul class="simple">
+<li><a class="reference external"
+          data-doc-search-tag="tensor: `[]=`[T: ElemType](t: var Tensor; ix: varargs[int]; value: T)" href="tensor.html#%5B%5D%3D%2CTensor%2Cvarargs%5Bint%5D%2CT">tensor: `[]=`[T: ElemType](t: var Tensor; ix: varargs[int]; value: T)</a></li>
+          </ul></dd>
+<dt><a name="%60%5B%5D%60" href="#%60%5B%5D%60"><span>`[]`:</span></a></dt><dd><ul class="simple">
+<li><a class="reference external"
+          data-doc-search-tag="graph: `[]`(a: Node; index: int): Node" href="graph.html#%5B%5D%2CNode%2Cint">graph: `[]`(a: Node; index: int): Node</a></li>
+          <li><a class="reference external"
+          data-doc-search-tag="tensor: `[]`[T: ElemType](t: Tensor[T]; ix: varargs[int]): T" href="tensor.html#%5B%5D%2CTensor%5BT%3A%20ElemType%5D%2Cvarargs%5Bint%5D">tensor: `[]`[T: ElemType](t: Tensor[T]; ix: varargs[int]): T</a></li>
+          </ul></dd>
+<dt><a name="%60%5E%60" href="#%60%5E%60"><span>`^`:</span></a></dt><dd><ul class="simple">
+<li><a class="reference external"
+          data-doc-search-tag="graph: `^`(b: Builder; value: untyped): Node" href="graph.html#%5E.t%2CBuilder%2Cuntyped">graph: `^`(b: Builder; value: untyped): Node</a></li>
+          </ul></dd>
+<dt><a name="abs" href="#abs"><span>abs:</span></a></dt><dd><ul class="simple">
+<li><a class="reference external"
+          data-doc-search-tag="graph: abs(a: Node): Node" href="graph.html#abs%2CNode">graph: abs(a: Node): Node</a></li>
           </ul></dd>
 <dt><a name="accuracyFunc" href="#accuracyFunc"><span>accuracyFunc:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
@@ -101,6 +181,10 @@ window.addEventListener('DOMContentLoaded', main);
 <li><a class="reference external"
           data-doc-search-tag="nn: add(m: var Module; modules: varargs[Module])" href="nn.html#add%2CModule%2Cvarargs%5BModule%5D">nn: add(m: var Module; modules: varargs[Module])</a></li>
           </ul></dd>
+<dt><a name="addAt" href="#addAt"><span>addAt:</span></a></dt><dd><ul class="simple">
+<li><a class="reference external"
+          data-doc-search-tag="graph: addAt(a, indices, b: Node): Node" href="graph.html#addAt%2CNode%2CNode%2CNode">graph: addAt(a, indices, b: Node): Node</a></li>
+          </ul></dd>
 <dt><a name="addrOf" href="#addrOf"><span>addrOf:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
           data-doc-search-tag="literal: addrOf(lit: Literal): ptr literal_t" href="literal.html#addrOf%2CLiteral">literal: addrOf(lit: Literal): ptr literal_t</a></li>
@@ -108,6 +192,22 @@ window.addEventListener('DOMContentLoaded', main);
 <dt><a name="Affine" href="#Affine"><span>Affine:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
           data-doc-search-tag="ImageOpKind.Affine" href="image.html#Affine">ImageOpKind.Affine</a></li>
+          </ul></dd>
+<dt><a name="append" href="#append"><span>append:</span></a></dt><dd><ul class="simple">
+<li><a class="reference external"
+          data-doc-search-tag="tensor: append[T: ElemType](t, t2: Tensor[T]): Tensor[T]" href="tensor.html#append%2CTensor%5BT%3A%20ElemType%5D%2CTensor%5BT%3A%20ElemType%5D">tensor: append[T: ElemType](t, t2: Tensor[T]): Tensor[T]</a></li>
+          </ul></dd>
+<dt><a name="approxEqual" href="#approxEqual"><span>approxEqual:</span></a></dt><dd><ul class="simple">
+<li><a class="reference external"
+          data-doc-search-tag="tensor: approxEqual[T: ElemType](t1, t2: Tensor[T]; eps = 0.000001): bool" href="tensor.html#approxEqual%2CTensor%5BT%3A%20ElemType%5D%2CTensor%5BT%3A%20ElemType%5D%2Cfloat">tensor: approxEqual[T: ElemType](t1, t2: Tensor[T]; eps = 0.000001): bool</a></li>
+          </ul></dd>
+<dt><a name="argMax" href="#argMax"><span>argMax:</span></a></dt><dd><ul class="simple">
+<li><a class="reference external"
+          data-doc-search-tag="graph: argMax(a: Node; axis: int; keepDims = false; ixType = I64): Node" href="graph.html#argMax%2CNode%2Cint%2Cbool%2Cenum">graph: argMax(a: Node; axis: int; keepDims = false; ixType = I64): Node</a></li>
+          </ul></dd>
+<dt><a name="argMin" href="#argMin"><span>argMin:</span></a></dt><dd><ul class="simple">
+<li><a class="reference external"
+          data-doc-search-tag="graph: argMin(a: Node; axis: int; keepDims = false; ixType = I64): Node" href="graph.html#argMin%2CNode%2Cint%2Cbool%2Cenum">graph: argMin(a: Node; axis: int; keepDims = false; ixType = I64): Node</a></li>
           </ul></dd>
 <dt><a name="ArrayKind" href="#ArrayKind"><span>ArrayKind:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
@@ -117,6 +217,10 @@ window.addEventListener('DOMContentLoaded', main);
 <li><a class="reference external"
           data-doc-search-tag="shape: arrayShape(dtype: DataType; dims: varargs[int]): Shape" href="shape.html#arrayShape%2CDataType%2Cvarargs%5Bint%5D">shape: arrayShape(dtype: DataType; dims: varargs[int]): Shape</a></li>
           </ul></dd>
+<dt><a name="at" href="#at"><span>at:</span></a></dt><dd><ul class="simple">
+<li><a class="reference external"
+          data-doc-search-tag="tensor: at[T: ElemType](t: Tensor[T]; ix: Natural): Tensor[T]" href="tensor.html#at%2CTensor%5BT%3A%20ElemType%5D%2CNatural">tensor: at[T: ElemType](t: Tensor[T]; ix: Natural): Tensor[T]</a></li>
+          </ul></dd>
 <dt><a name="BF16" href="#BF16"><span>BF16:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
           data-doc-search-tag="DataType.BF16" href="shape.html#BF16">DataType.BF16</a></li>
@@ -124,6 +228,34 @@ window.addEventListener('DOMContentLoaded', main);
 <dt><a name="Bool" href="#Bool"><span>Bool:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
           data-doc-search-tag="DataType.Bool" href="shape.html#Bool">DataType.Bool</a></li>
+          </ul></dd>
+<dt><a name="boolean" href="#boolean"><span>boolean:</span></a></dt><dd><ul class="simple">
+<li><a class="reference external"
+          data-doc-search-tag="nimxla: boolean(buf: Buffer): Tensor[bool]" href="nimxla.html#boolean%2CBuffer">nimxla: boolean(buf: Buffer): Tensor[bool]</a></li>
+          </ul></dd>
+<dt><a name="broadcast" href="#broadcast"><span>broadcast:</span></a></dt><dd><ul class="simple">
+<li><a class="reference external"
+          data-doc-search-tag="graph: broadcast(a: Node; dims: openArray[int]): Node" href="graph.html#broadcast%2CNode%2CopenArray%5Bint%5D">graph: broadcast(a: Node; dims: openArray[int]): Node</a></li>
+          </ul></dd>
+<dt><a name="broadcastInDim" href="#broadcastInDim"><span>broadcastInDim:</span></a></dt><dd><ul class="simple">
+<li><a class="reference external"
+          data-doc-search-tag="graph: broadcastInDim(a: Node; outSize, bcastDims: openArray[int]): Node" href="graph.html#broadcastInDim%2CNode%2CopenArray%5Bint%5D%2CopenArray%5Bint%5D">graph: broadcastInDim(a: Node; outSize, bcastDims: openArray[int]): Node</a></li>
+          </ul></dd>
+<dt><a name="Buffer" href="#Buffer"><span>Buffer:</span></a></dt><dd><ul class="simple">
+<li><a class="reference external"
+          data-doc-search-tag="nimxla: Buffer" href="nimxla.html#Buffer">nimxla: Buffer</a></li>
+          </ul></dd>
+<dt><a name="build" href="#build"><span>build:</span></a></dt><dd><ul class="simple">
+<li><a class="reference external"
+          data-doc-search-tag="graph: build(b: Builder; root: Node): Computation" href="graph.html#build%2CBuilder%2CNode">graph: build(b: Builder; root: Node): Computation</a></li>
+          </ul></dd>
+<dt><a name="Builder" href="#Builder"><span>Builder:</span></a></dt><dd><ul class="simple">
+<li><a class="reference external"
+          data-doc-search-tag="graph: Builder" href="graph.html#Builder">graph: Builder</a></li>
+          </ul></dd>
+<dt><a name="BuilderError" href="#BuilderError"><span>BuilderError:</span></a></dt><dd><ul class="simple">
+<li><a class="reference external"
+          data-doc-search-tag="graph: BuilderError" href="graph.html#BuilderError">graph: BuilderError</a></li>
           </ul></dd>
 <dt><a name="C128" href="#C128"><span>C128:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
@@ -133,6 +265,10 @@ window.addEventListener('DOMContentLoaded', main);
 <li><a class="reference external"
           data-doc-search-tag="DataType.C64" href="shape.html#C64">DataType.C64</a></li>
           </ul></dd>
+<dt><a name="ceil" href="#ceil"><span>ceil:</span></a></dt><dd><ul class="simple">
+<li><a class="reference external"
+          data-doc-search-tag="graph: ceil(a: Node): Node" href="graph.html#ceil%2CNode">graph: ceil(a: Node): Node</a></li>
+          </ul></dd>
 <dt><a name="CIFAR10Dataset" href="#CIFAR10Dataset"><span>CIFAR10Dataset:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
           data-doc-search-tag="data: CIFAR10Dataset" href="data.html#CIFAR10Dataset">data: CIFAR10Dataset</a></li>
@@ -141,13 +277,31 @@ window.addEventListener('DOMContentLoaded', main);
 <li><a class="reference external"
           data-doc-search-tag="data: cifar10Dataset(train = false): CIFAR10Dataset" href="data.html#cifar10Dataset_2">data: cifar10Dataset(train = false): CIFAR10Dataset</a></li>
           </ul></dd>
+<dt><a name="clamp" href="#clamp"><span>clamp:</span></a></dt><dd><ul class="simple">
+<li><a class="reference external"
+          data-doc-search-tag="graph: clamp(a, min, max: Node): Node" href="graph.html#clamp%2CNode%2CNode%2CNode">graph: clamp(a, min, max: Node): Node</a></li>
+          </ul></dd>
 <dt><a name="classes" href="#classes"><span>classes:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
           data-doc-search-tag="data: classes(d: Dataset): seq[string]" href="data.html#classes%2CDataset">data: classes(d: Dataset): seq[string]</a></li>
           </ul></dd>
+<dt><a name="Client" href="#Client"><span>Client:</span></a></dt><dd><ul class="simple">
+<li><a class="reference external"
+          data-doc-search-tag="nimxla: Client" href="nimxla.html#Client">nimxla: Client</a></li>
+          </ul></dd>
 <dt><a name="clone" href="#clone"><span>clone:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
           data-doc-search-tag="literal: clone(lit: Literal): Literal" href="literal.html#clone%2CLiteral">literal: clone(lit: Literal): Literal</a></li>
+          <li><a class="reference external"
+          data-doc-search-tag="tensor: clone[T: ElemType](t: Tensor[T]): Tensor[T]" href="tensor.html#clone%2CTensor%5BT%3A%20ElemType%5D">tensor: clone[T: ElemType](t: Tensor[T]): Tensor[T]</a></li>
+          </ul></dd>
+<dt><a name="collapse" href="#collapse"><span>collapse:</span></a></dt><dd><ul class="simple">
+<li><a class="reference external"
+          data-doc-search-tag="graph: collapse(a: Node; dims: openArray[int]): Node" href="graph.html#collapse%2CNode%2CopenArray%5Bint%5D">graph: collapse(a: Node; dims: openArray[int]): Node</a></li>
+          </ul></dd>
+<dt><a name="compile" href="#compile"><span>compile:</span></a></dt><dd><ul class="simple">
+<li><a class="reference external"
+          data-doc-search-tag="nimxla: compile(client: Client; comp: Computation; outputs: openArray[string] = []): Executable" href="nimxla.html#compile%2CClient%2CComputation%2CopenArray%5Bstring%5D">nimxla: compile(client: Client; comp: Computation; outputs: openArray[string] = []): Executable</a></li>
           </ul></dd>
 <dt><a name="compileTest" href="#compileTest"><span>compileTest:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
@@ -157,13 +311,89 @@ window.addEventListener('DOMContentLoaded', main);
 <li><a class="reference external"
           data-doc-search-tag="nn: compileTrain(c: Client; m: Module; input: Node; lossFn: proc (y: Node): Node): Executable" href="nn.html#compileTrain%2CClient%2CModule%2CNode%2Cproc%28Node%29">nn: compileTrain(c: Client; m: Module; input: Node; lossFn: proc (y: Node): Node): Executable</a></li>
           </ul></dd>
+<dt><a name="Computation" href="#Computation"><span>Computation:</span></a></dt><dd><ul class="simple">
+<li><a class="reference external"
+          data-doc-search-tag="graph: Computation" href="graph.html#Computation">graph: Computation</a></li>
+          </ul></dd>
+<dt><a name="concat" href="#concat"><span>concat:</span></a></dt><dd><ul class="simple">
+<li><a class="reference external"
+          data-doc-search-tag="graph: concat(a: Node; nodes: openArray[Node]; axis: int): Node" href="graph.html#concat%2CNode%2CopenArray%5BNode%5D%2Cint">graph: concat(a: Node; nodes: openArray[Node]; axis: int): Node</a></li>
+          </ul></dd>
+<dt><a name="constant" href="#constant"><span>constant:</span></a></dt><dd><ul class="simple">
+<li><a class="reference external"
+          data-doc-search-tag="graph: constant(b: Builder; value: openArray[int32]): Node" href="graph.html#constant%2CBuilder%2C">graph: constant(b: Builder; value: openArray[int32]): Node</a></li>
+          <li><a class="reference external"
+          data-doc-search-tag="graph: constant(b: Builder; value: openArray[int64]): Node" href="graph.html#constant%2CBuilder%2C_2">graph: constant(b: Builder; value: openArray[int64]): Node</a></li>
+          <li><a class="reference external"
+          data-doc-search-tag="graph: constant(b: Builder; value: openArray[float32]): Node" href="graph.html#constant%2CBuilder%2C_3">graph: constant(b: Builder; value: openArray[float32]): Node</a></li>
+          <li><a class="reference external"
+          data-doc-search-tag="graph: constant(b: Builder; value: openArray[float64]): Node" href="graph.html#constant%2CBuilder%2C_4">graph: constant(b: Builder; value: openArray[float64]): Node</a></li>
+          <li><a class="reference external"
+          data-doc-search-tag="graph: constant(b: Builder; value: float32): Node" href="graph.html#constant%2CBuilder%2Cfloat32">graph: constant(b: Builder; value: float32): Node</a></li>
+          <li><a class="reference external"
+          data-doc-search-tag="graph: constant(b: Builder; value: float64): Node" href="graph.html#constant%2CBuilder%2Cfloat64">graph: constant(b: Builder; value: float64): Node</a></li>
+          <li><a class="reference external"
+          data-doc-search-tag="graph: constant(b: Builder; value: int): Node" href="graph.html#constant%2CBuilder%2Cint">graph: constant(b: Builder; value: int): Node</a></li>
+          <li><a class="reference external"
+          data-doc-search-tag="graph: constant(b: Builder; value: int32): Node" href="graph.html#constant%2CBuilder%2Cint32">graph: constant(b: Builder; value: int32): Node</a></li>
+          <li><a class="reference external"
+          data-doc-search-tag="graph: constant(b: Builder; value: int64): Node" href="graph.html#constant%2CBuilder%2Cint64">graph: constant(b: Builder; value: int64): Node</a></li>
+          <li><a class="reference external"
+          data-doc-search-tag="graph: constant(b: Builder; lit: Literal): Node" href="graph.html#constant%2CBuilder%2CLiteral">graph: constant(b: Builder; lit: Literal): Node</a></li>
+          <li><a class="reference external"
+          data-doc-search-tag="graph: constant(b: Builder; value: openArray[int]): Node" href="graph.html#constant%2CBuilder%2CopenArray%5Bint%5D">graph: constant(b: Builder; value: openArray[int]): Node</a></li>
+          <li><a class="reference external"
+          data-doc-search-tag="graph: constant[T: float | int](b: Builder; value: T; dtype: DataType): Node" href="graph.html#constant%2CBuilder%2CT%2CDataType">graph: constant[T: float | int](b: Builder; value: T; dtype: DataType): Node</a></li>
+          <li><a class="reference external"
+          data-doc-search-tag="graph: constant[T: ElemType](b: Builder; t: Tensor[T]): Node" href="graph.html#constant%2CBuilder%2CTensor%5BT%3A%20ElemType%5D">graph: constant[T: ElemType](b: Builder; t: Tensor[T]): Node</a></li>
+          </ul></dd>
 <dt><a name="constantInit" href="#constantInit"><span>constantInit:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
           data-doc-search-tag="nn: constantInit(value: SomeFloat): InitFunc" href="nn.html#constantInit%2CSomeFloat">nn: constantInit(value: SomeFloat): InitFunc</a></li>
           </ul></dd>
+<dt><a name="conv1d" href="#conv1d"><span>conv1d:</span></a></dt><dd><ul class="simple">
+<li><a class="reference external"
+          data-doc-search-tag="graph: conv1d(a, kernel: Node; strides = 1; padding = pad(0); dilation = 1; groups = 1;
+       channelsFirst = false): Node" href="graph.html#conv1d%2CNode%2CNode%2Cint%2Cint%2Cint">graph: conv1d(a, kernel: Node; strides = 1; padding = pad(0); dilation = 1; groups = 1;
+       channelsFirst = false): Node</a></li>
+          </ul></dd>
+<dt><a name="conv2d" href="#conv2d"><span>conv2d:</span></a></dt><dd><ul class="simple">
+<li><a class="reference external"
+          data-doc-search-tag="graph: conv2d(a, kernel: Node; strides: Opt2d = 1; padding: Pad2d = pad(0);
+       dilation: Opt2d = 1; groups = 1; channelsFirst = false): Node" href="graph.html#conv2d%2CNode%2CNode%2COpt2d%2CPad2d%2COpt2d%2Cint">graph: conv2d(a, kernel: Node; strides: Opt2d = 1; padding: Pad2d = pad(0);
+       dilation: Opt2d = 1; groups = 1; channelsFirst = false): Node</a></li>
+          </ul></dd>
+<dt><a name="conv3d" href="#conv3d"><span>conv3d:</span></a></dt><dd><ul class="simple">
+<li><a class="reference external"
+          data-doc-search-tag="graph: conv3d(a, kernel: Node; strides: Opt3d = 1; padding: Pad3d = pad(0);
+       dilation: Opt3d = 1; groups = 1; channelsFirst = false): Node" href="graph.html#conv3d%2CNode%2CNode%2COpt3d%2CPad3d%2COpt3d%2Cint">graph: conv3d(a, kernel: Node; strides: Opt3d = 1; padding: Pad3d = pad(0);
+       dilation: Opt3d = 1; groups = 1; channelsFirst = false): Node</a></li>
+          </ul></dd>
 <dt><a name="convert" href="#convert"><span>convert:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
+          data-doc-search-tag="graph: convert(a: Node; dtype: DataType): Node" href="graph.html#convert%2CNode%2CDataType">graph: convert(a: Node; dtype: DataType): Node</a></li>
+          <li><a class="reference external"
           data-doc-search-tag="literal: convert(lit: Literal; dtype: DataType): Literal" href="literal.html#convert%2CLiteral%2CDataType">literal: convert(lit: Literal; dtype: DataType): Literal</a></li>
+          <li><a class="reference external"
+          data-doc-search-tag="tensor: convert[T: ElemType](t: Tensor[T]; typ: typedesc[ElemType]): Tensor[typ]" href="tensor.html#convert%2CTensor%5BT%3A%20ElemType%5D%2Ctypedesc%5BElemType%5D">tensor: convert[T: ElemType](t: Tensor[T]; typ: typedesc[ElemType]): Tensor[typ]</a></li>
+          </ul></dd>
+<dt><a name="convolution" href="#convolution"><span>convolution:</span></a></dt><dd><ul class="simple">
+<li><a class="reference external"
+          data-doc-search-tag="graph: convolution(a, kernel: Node; inputDims, outputDims, kernelDims: openArray[int];
+            strides: openArray[int] = []; padding: openArray[Padding] = [];
+            dilation, inputDilation: openArray[int] = [];
+            groups, batchGroups = 1): Node" href="graph.html#convolution%2CNode%2CNode%2CopenArray%5Bint%5D%2CopenArray%5Bint%5D%2CopenArray%5Bint%5D%2CopenArray%5Bint%5D%2CopenArray%5BPadding%5D%2CopenArray%5Bint%5D%2CopenArray%5Bint%5D%2Cint%2Cint">graph: convolution(a, kernel: Node; inputDims, outputDims, kernelDims: openArray[int];
+            strides: openArray[int] = []; padding: openArray[Padding] = [];
+            dilation, inputDilation: openArray[int] = [];
+            groups, batchGroups = 1): Node</a></li>
+          </ul></dd>
+<dt><a name="copy" href="#copy"><span>copy:</span></a></dt><dd><ul class="simple">
+<li><a class="reference external"
+          data-doc-search-tag="graph: copy(a: Node): Node" href="graph.html#copy%2CNode">graph: copy(a: Node): Node</a></li>
+          </ul></dd>
+<dt><a name="cos" href="#cos"><span>cos:</span></a></dt><dd><ul class="simple">
+<li><a class="reference external"
+          data-doc-search-tag="graph: cos(a: Node): Node" href="graph.html#cos%2CNode">graph: cos(a: Node): Node</a></li>
           </ul></dd>
 <dt><a name="crossEntropyLoss" href="#crossEntropyLoss"><span>crossEntropyLoss:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
@@ -185,9 +415,21 @@ window.addEventListener('DOMContentLoaded', main);
 <li><a class="reference external"
           data-doc-search-tag="literal: decomposeTuple(lit: Literal): seq[Literal]" href="literal.html#decomposeTuple%2CLiteral">literal: decomposeTuple(lit: Literal): seq[Literal]</a></li>
           </ul></dd>
+<dt><a name="deviceCount" href="#deviceCount"><span>deviceCount:</span></a></dt><dd><ul class="simple">
+<li><a class="reference external"
+          data-doc-search-tag="nimxla: deviceCount(client: Client): int" href="nimxla.html#deviceCount%2CClient">nimxla: deviceCount(client: Client): int</a></li>
+          </ul></dd>
+<dt><a name="dims" href="#dims"><span>dims:</span></a></dt><dd><ul class="simple">
+<li><a class="reference external"
+          data-doc-search-tag="graph: dims(n: Node): seq[int]" href="graph.html#dims%2CNode">graph: dims(n: Node): seq[int]</a></li>
+          </ul></dd>
 <dt><a name="Direction" href="#Direction"><span>Direction:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
           data-doc-search-tag="image: Direction" href="image.html#Direction">image: Direction</a></li>
+          </ul></dd>
+<dt><a name="dot" href="#dot"><span>dot:</span></a></dt><dd><ul class="simple">
+<li><a class="reference external"
+          data-doc-search-tag="graph: dot(a, b: Node): Node" href="graph.html#dot%2CNode%2CNode">graph: dot(a, b: Node): Node</a></li>
           </ul></dd>
 <dt><a name="dropout" href="#dropout"><span>dropout:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
@@ -195,6 +437,8 @@ window.addEventListener('DOMContentLoaded', main);
           </ul></dd>
 <dt><a name="dtype" href="#dtype"><span>dtype:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
+          data-doc-search-tag="graph: dtype(n: Node): DataType" href="graph.html#dtype%2CNode">graph: dtype(n: Node): DataType</a></li>
+          <li><a class="reference external"
           data-doc-search-tag="literal: dtype(lit: Literal): DataType" href="literal.html#dtype%2CLiteral">literal: dtype(lit: Literal): DataType</a></li>
           </ul></dd>
 <dt><a name="dtypeOf" href="#dtypeOf"><span>dtypeOf:</span></a></dt><dd><ul class="simple">
@@ -209,6 +453,22 @@ window.addEventListener('DOMContentLoaded', main);
 <li><a class="reference external"
           data-doc-search-tag="shape: ElemType" href="shape.html#ElemType">shape: ElemType</a></li>
           </ul></dd>
+<dt><a name="Error" href="#Error"><span>Error:</span></a></dt><dd><ul class="simple">
+<li><a class="reference external"
+          data-doc-search-tag="LogLevel.Error" href="nimxla.html#Error">LogLevel.Error</a></li>
+          </ul></dd>
+<dt><a name="errorNode" href="#errorNode"><span>errorNode:</span></a></dt><dd><ul class="simple">
+<li><a class="reference external"
+          data-doc-search-tag="graph: errorNode(b: Builder; message: string): Node" href="graph.html#errorNode%2CBuilder%2Cstring">graph: errorNode(b: Builder; message: string): Node</a></li>
+          </ul></dd>
+<dt><a name="Executable" href="#Executable"><span>Executable:</span></a></dt><dd><ul class="simple">
+<li><a class="reference external"
+          data-doc-search-tag="nimxla: Executable" href="nimxla.html#Executable">nimxla: Executable</a></li>
+          </ul></dd>
+<dt><a name="exp" href="#exp"><span>exp:</span></a></dt><dd><ul class="simple">
+<li><a class="reference external"
+          data-doc-search-tag="graph: exp(a: Node): Node" href="graph.html#exp%2CNode">graph: exp(a: Node): Node</a></li>
+          </ul></dd>
 <dt><a name="F16" href="#F16"><span>F16:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
           data-doc-search-tag="DataType.F16" href="shape.html#F16">DataType.F16</a></li>
@@ -216,6 +476,8 @@ window.addEventListener('DOMContentLoaded', main);
 <dt><a name="f32" href="#f32"><span>f32:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
           data-doc-search-tag="literal: f32(lit: Literal): Tensor[float32]" href="literal.html#f32%2CLiteral">literal: f32(lit: Literal): Tensor[float32]</a></li>
+          <li><a class="reference external"
+          data-doc-search-tag="nimxla: f32(buf: Buffer): Tensor[float32]" href="nimxla.html#f32%2CBuffer">nimxla: f32(buf: Buffer): Tensor[float32]</a></li>
           </ul></dd>
 <dt><a name="F32" href="#F32"><span>F32:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
@@ -224,14 +486,40 @@ window.addEventListener('DOMContentLoaded', main);
 <dt><a name="f64" href="#f64"><span>f64:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
           data-doc-search-tag="literal: f64(lit: Literal): Tensor[float64]" href="literal.html#f64%2CLiteral">literal: f64(lit: Literal): Tensor[float64]</a></li>
+          <li><a class="reference external"
+          data-doc-search-tag="nimxla: f64(buf: Buffer): Tensor[float64]" href="nimxla.html#f64%2CBuffer">nimxla: f64(buf: Buffer): Tensor[float64]</a></li>
           </ul></dd>
 <dt><a name="F64" href="#F64"><span>F64:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
           data-doc-search-tag="DataType.F64" href="shape.html#F64">DataType.F64</a></li>
           </ul></dd>
+<dt><a name="Fatal" href="#Fatal"><span>Fatal:</span></a></dt><dd><ul class="simple">
+<li><a class="reference external"
+          data-doc-search-tag="LogLevel.Fatal" href="nimxla.html#Fatal">LogLevel.Fatal</a></li>
+          </ul></dd>
+<dt><a name="fill" href="#fill"><span>fill:</span></a></dt><dd><ul class="simple">
+<li><a class="reference external"
+          data-doc-search-tag="tensor: fill[T: ElemType](dims: openArray[int]; value: T): Tensor[T]" href="tensor.html#fill%2CopenArray%5Bint%5D%2CT">tensor: fill[T: ElemType](dims: openArray[int]; value: T): Tensor[T]</a></li>
+          </ul></dd>
+<dt><a name="flatten" href="#flatten"><span>flatten:</span></a></dt><dd><ul class="simple">
+<li><a class="reference external"
+          data-doc-search-tag="graph: flatten(a: Node; startDim = 0; endDim = -1): Node" href="graph.html#flatten%2CNode%2Cint%2Cint">graph: flatten(a: Node; startDim = 0; endDim = -1): Node</a></li>
+          </ul></dd>
 <dt><a name="Flip" href="#Flip"><span>Flip:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
           data-doc-search-tag="ImageOpKind.Flip" href="image.html#Flip">ImageOpKind.Flip</a></li>
+          </ul></dd>
+<dt><a name="floor" href="#floor"><span>floor:</span></a></dt><dd><ul class="simple">
+<li><a class="reference external"
+          data-doc-search-tag="graph: floor(a: Node): Node" href="graph.html#floor%2CNode">graph: floor(a: Node): Node</a></li>
+          </ul></dd>
+<dt><a name="format" href="#format"><span>format:</span></a></dt><dd><ul class="simple">
+<li><a class="reference external"
+          data-doc-search-tag="tensor: format[T: ElemType](t: Tensor[T]): string" href="tensor.html#format%2CTensor%5BT%3A%20ElemType%5D">tensor: format[T: ElemType](t: Tensor[T]): string</a></li>
+          </ul></dd>
+<dt><a name="gather" href="#gather"><span>gather:</span></a></dt><dd><ul class="simple">
+<li><a class="reference external"
+          data-doc-search-tag="graph: gather(a, indices: Node): Node" href="graph.html#gather%2CNode%2CNode">graph: gather(a, indices: Node): Node</a></li>
           </ul></dd>
 <dt><a name="getAccuracy" href="#getAccuracy"><span>getAccuracy:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
@@ -242,6 +530,10 @@ window.addEventListener('DOMContentLoaded', main);
 <dt><a name="getBatch" href="#getBatch"><span>getBatch:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
           data-doc-search-tag="data: getBatch[T](d: var DataLoader; data: var Tensor[T]; labels: var Tensor[int32]): int" href="data.html#getBatch.i%2CDataLoader%2CTensor%5BT%5D%2CTensor%5Bint32%5D">data: getBatch[T](d: var DataLoader; data: var Tensor[T]; labels: var Tensor[int32]): int</a></li>
+          </ul></dd>
+<dt><a name="getDims" href="#getDims"><span>getDims:</span></a></dt><dd><ul class="simple">
+<li><a class="reference external"
+          data-doc-search-tag="graph: getDims(ndims: int; channelsFirst: bool): seq[int]" href="graph.html#getDims%2Cint%2Cbool">graph: getDims(ndims: int; channelsFirst: bool): seq[int]</a></li>
           </ul></dd>
 <dt><a name="getItem" href="#getItem"><span>getItem:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
@@ -258,6 +550,10 @@ window.addEventListener('DOMContentLoaded', main);
 <dt><a name="glorotInit" href="#glorotInit"><span>glorotInit:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
           data-doc-search-tag="nn: glorotInit(gain = 1.0): InitFunc" href="nn.html#glorotInit%2Cfloat">nn: glorotInit(gain = 1.0): InitFunc</a></li>
+          </ul></dd>
+<dt><a name="gradient" href="#gradient"><span>gradient:</span></a></dt><dd><ul class="simple">
+<li><a class="reference external"
+          data-doc-search-tag="graph: gradient(b: Builder; output: Node; inputs: openArray[string]): seq[Node]" href="graph.html#gradient%2CBuilder%2CNode%2CopenArray%5Bstring%5D">graph: gradient(b: Builder; output: Node; inputs: openArray[string]): seq[Node]</a></li>
           </ul></dd>
 <dt><a name="gradNames" href="#gradNames"><span>gradNames:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
@@ -282,6 +578,8 @@ window.addEventListener('DOMContentLoaded', main);
 <dt><a name="i32" href="#i32"><span>i32:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
           data-doc-search-tag="literal: i32(lit: Literal): Tensor[int32]" href="literal.html#i32%2CLiteral">literal: i32(lit: Literal): Tensor[int32]</a></li>
+          <li><a class="reference external"
+          data-doc-search-tag="nimxla: i32(buf: Buffer): Tensor[int32]" href="nimxla.html#i32%2CBuffer">nimxla: i32(buf: Buffer): Tensor[int32]</a></li>
           </ul></dd>
 <dt><a name="I32" href="#I32"><span>I32:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
@@ -290,6 +588,8 @@ window.addEventListener('DOMContentLoaded', main);
 <dt><a name="i64" href="#i64"><span>i64:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
           data-doc-search-tag="literal: i64(lit: Literal): Tensor[int64]" href="literal.html#i64%2CLiteral">literal: i64(lit: Literal): Tensor[int64]</a></li>
+          <li><a class="reference external"
+          data-doc-search-tag="nimxla: i64(buf: Buffer): Tensor[int64]" href="nimxla.html#i64%2CBuffer">nimxla: i64(buf: Buffer): Tensor[int64]</a></li>
           </ul></dd>
 <dt><a name="I64" href="#I64"><span>I64:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
@@ -310,6 +610,10 @@ window.addEventListener('DOMContentLoaded', main);
 <dt><a name="ImageRequest" href="#ImageRequest"><span>ImageRequest:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
           data-doc-search-tag="image: ImageRequest" href="image.html#ImageRequest">image: ImageRequest</a></li>
+          </ul></dd>
+<dt><a name="Info" href="#Info"><span>Info:</span></a></dt><dd><ul class="simple">
+<li><a class="reference external"
+          data-doc-search-tag="LogLevel.Info" href="nimxla.html#Info">LogLevel.Info</a></li>
           </ul></dd>
 <dt><a name="initConv2d" href="#initConv2d"><span>initConv2d:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
@@ -337,6 +641,10 @@ window.addEventListener('DOMContentLoaded', main);
            ops: openArray[ImageOp])" href="data.html#initLoader%2Cstaticint%2CDataLoader%2CDataset%2CopenArray%5BImageOp%5D">data: initLoader(channels: static int; d: var DataLoader; dset: Dataset;
            ops: openArray[ImageOp])</a></li>
           </ul></dd>
+<dt><a name="initParams" href="#initParams"><span>initParams:</span></a></dt><dd><ul class="simple">
+<li><a class="reference external"
+          data-doc-search-tag="nimxla: initParams(pairs: openArray[(string, Buffer)]): Params" href="nimxla.html#initParams%2CopenArray%5B%5D">nimxla: initParams(pairs: openArray[(string, Buffer)]): Params</a></li>
+          </ul></dd>
 <dt><a name="initRandom" href="#initRandom"><span>initRandom:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
           data-doc-search-tag="nn: initRandom(seed: int64 = 0): Rand" href="nn.html#initRandom%2Cint64">nn: initRandom(seed: int64 = 0): Rand</a></li>
@@ -351,11 +659,29 @@ window.addEventListener('DOMContentLoaded', main);
 <li><a class="reference external"
           data-doc-search-tag="DataType.InvalidType" href="shape.html#InvalidType">DataType.InvalidType</a></li>
           </ul></dd>
+<dt><a name="iota" href="#iota"><span>iota:</span></a></dt><dd><ul class="simple">
+<li><a class="reference external"
+          data-doc-search-tag="graph: iota(b: Builder; dtype: DataType; length: int): Node" href="graph.html#iota%2CBuilder%2CDataType%2Cint">graph: iota(b: Builder; dtype: DataType; length: int): Node</a></li>
+          <li><a class="reference external"
+          data-doc-search-tag="graph: iota(b: Builder; dtype: DataType; dims: openArray[int]; axis: int): Node" href="graph.html#iota%2CBuilder%2CDataType%2CopenArray%5Bint%5D%2Cint">graph: iota(b: Builder; dtype: DataType; dims: openArray[int]; axis: int): Node</a></li>
+          </ul></dd>
+<dt><a name="isFinite" href="#isFinite"><span>isFinite:</span></a></dt><dd><ul class="simple">
+<li><a class="reference external"
+          data-doc-search-tag="graph: isFinite(a: Node): Node" href="graph.html#isFinite%2CNode">graph: isFinite(a: Node): Node</a></li>
+          </ul></dd>
+<dt><a name="last" href="#last"><span>last:</span></a></dt><dd><ul class="simple">
+<li><a class="reference external"
+          data-doc-search-tag="graph: last(comp: Computation): Node" href="graph.html#last%2CComputation">graph: last(comp: Computation): Node</a></li>
+          </ul></dd>
 <dt><a name="len" href="#len"><span>len:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
           data-doc-search-tag="data: len(d: Dataset): int" href="data.html#len%2CDataset">data: len(d: Dataset): int</a></li>
           <li><a class="reference external"
+          data-doc-search-tag="graph: len(n: Node): int" href="graph.html#len%2CNode">graph: len(n: Node): int</a></li>
+          <li><a class="reference external"
           data-doc-search-tag="literal: len(lit: Literal): int" href="literal.html#len%2CLiteral">literal: len(lit: Literal): int</a></li>
+          <li><a class="reference external"
+          data-doc-search-tag="tensor: len(t: Tensor): int" href="tensor.html#len%2CTensor">tensor: len(t: Tensor): int</a></li>
           </ul></dd>
 <dt><a name="lit" href="#lit"><span>lit:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
@@ -370,6 +696,78 @@ window.addEventListener('DOMContentLoaded', main);
 <dt><a name="Literal" href="#Literal"><span>Literal:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
           data-doc-search-tag="literal: Literal" href="literal.html#Literal">literal: Literal</a></li>
+          </ul></dd>
+<dt><a name="log" href="#log"><span>log:</span></a></dt><dd><ul class="simple">
+<li><a class="reference external"
+          data-doc-search-tag="graph: log(a: Node): Node" href="graph.html#log%2CNode">graph: log(a: Node): Node</a></li>
+          </ul></dd>
+<dt><a name="log1p" href="#log1p"><span>log1p:</span></a></dt><dd><ul class="simple">
+<li><a class="reference external"
+          data-doc-search-tag="graph: log1p(a: Node): Node" href="graph.html#log1p%2CNode">graph: log1p(a: Node): Node</a></li>
+          </ul></dd>
+<dt><a name="logicalAnd" href="#logicalAnd"><span>logicalAnd:</span></a></dt><dd><ul class="simple">
+<li><a class="reference external"
+          data-doc-search-tag="graph: logicalAnd(a, b: Node): Node" href="graph.html#logicalAnd%2CNode%2CNode">graph: logicalAnd(a, b: Node): Node</a></li>
+          </ul></dd>
+<dt><a name="logicalOr" href="#logicalOr"><span>logicalOr:</span></a></dt><dd><ul class="simple">
+<li><a class="reference external"
+          data-doc-search-tag="graph: logicalOr(a, b: Node): Node" href="graph.html#logicalOr%2CNode%2CNode">graph: logicalOr(a, b: Node): Node</a></li>
+          </ul></dd>
+<dt><a name="LogLevel" href="#LogLevel"><span>LogLevel:</span></a></dt><dd><ul class="simple">
+<li><a class="reference external"
+          data-doc-search-tag="nimxla: LogLevel" href="nimxla.html#LogLevel">nimxla: LogLevel</a></li>
+          </ul></dd>
+<dt><a name="makeTuple" href="#makeTuple"><span>makeTuple:</span></a></dt><dd><ul class="simple">
+<li><a class="reference external"
+          data-doc-search-tag="graph: makeTuple(b: Builder; args: varargs[Node]): Node" href="graph.html#makeTuple%2CBuilder%2Cvarargs%5BNode%5D">graph: makeTuple(b: Builder; args: varargs[Node]): Node</a></li>
+          </ul></dd>
+<dt><a name="max" href="#max"><span>max:</span></a></dt><dd><ul class="simple">
+<li><a class="reference external"
+          data-doc-search-tag="graph: max(a: Node; axis: int; keepDims = false): Node" href="graph.html#max%2CNode%2Cint">graph: max(a: Node; axis: int; keepDims = false): Node</a></li>
+          <li><a class="reference external"
+          data-doc-search-tag="graph: max(a, b: Node): Node" href="graph.html#max%2CNode%2CNode">graph: max(a, b: Node): Node</a></li>
+          <li><a class="reference external"
+          data-doc-search-tag="graph: max(a: Node; dims: openArray[int] = []; keepDims = false): Node" href="graph.html#max%2CNode%2CopenArray%5Bint%5D">graph: max(a: Node; dims: openArray[int] = []; keepDims = false): Node</a></li>
+          </ul></dd>
+<dt><a name="maxPool1d" href="#maxPool1d"><span>maxPool1d:</span></a></dt><dd><ul class="simple">
+<li><a class="reference external"
+          data-doc-search-tag="graph: maxPool1d(a: Node; kernelSize: int; strides = 0; padding = pad(0);
+          channelsFirst = false): Node" href="graph.html#maxPool1d%2CNode%2Cint%2Cint">graph: maxPool1d(a: Node; kernelSize: int; strides = 0; padding = pad(0);
+          channelsFirst = false): Node</a></li>
+          </ul></dd>
+<dt><a name="maxPool2d" href="#maxPool2d"><span>maxPool2d:</span></a></dt><dd><ul class="simple">
+<li><a class="reference external"
+          data-doc-search-tag="graph: maxPool2d(a: Node; kernelSize: Opt2d; strides: Opt2d = 0;
+          padding: Pad2d = pad(0); channelsFirst = false): Node" href="graph.html#maxPool2d%2CNode%2COpt2d%2COpt2d%2CPad2d">graph: maxPool2d(a: Node; kernelSize: Opt2d; strides: Opt2d = 0;
+          padding: Pad2d = pad(0); channelsFirst = false): Node</a></li>
+          </ul></dd>
+<dt><a name="maxPool3d" href="#maxPool3d"><span>maxPool3d:</span></a></dt><dd><ul class="simple">
+<li><a class="reference external"
+          data-doc-search-tag="graph: maxPool3d(a: Node; kernelSize: Opt3d; strides: Opt3d = 0;
+          padding: Pad3d = pad(0); channelsFirst = false): Node" href="graph.html#maxPool3d%2CNode%2COpt3d%2COpt3d%2CPad3d">graph: maxPool3d(a: Node; kernelSize: Opt3d; strides: Opt3d = 0;
+          padding: Pad3d = pad(0); channelsFirst = false): Node</a></li>
+          </ul></dd>
+<dt><a name="maxValue" href="#maxValue"><span>maxValue:</span></a></dt><dd><ul class="simple">
+<li><a class="reference external"
+          data-doc-search-tag="graph: maxValue(b: Builder; dtype = F32; dims: openArray[int] = []): Node" href="graph.html#maxValue%2CBuilder%2Cenum">graph: maxValue(b: Builder; dtype = F32; dims: openArray[int] = []): Node</a></li>
+          </ul></dd>
+<dt><a name="mean" href="#mean"><span>mean:</span></a></dt><dd><ul class="simple">
+<li><a class="reference external"
+          data-doc-search-tag="graph: mean(a: Node; axis: int; keepDims = false): Node" href="graph.html#mean%2CNode%2Cint">graph: mean(a: Node; axis: int; keepDims = false): Node</a></li>
+          <li><a class="reference external"
+          data-doc-search-tag="graph: mean(a: Node; dims: openArray[int] = []; keepDims = false): Node" href="graph.html#mean%2CNode%2CopenArray%5Bint%5D">graph: mean(a: Node; dims: openArray[int] = []; keepDims = false): Node</a></li>
+          </ul></dd>
+<dt><a name="min" href="#min"><span>min:</span></a></dt><dd><ul class="simple">
+<li><a class="reference external"
+          data-doc-search-tag="graph: min(a: Node; axis: int; keepDims = false): Node" href="graph.html#min%2CNode%2Cint">graph: min(a: Node; axis: int; keepDims = false): Node</a></li>
+          <li><a class="reference external"
+          data-doc-search-tag="graph: min(a, b: Node): Node" href="graph.html#min%2CNode%2CNode">graph: min(a, b: Node): Node</a></li>
+          <li><a class="reference external"
+          data-doc-search-tag="graph: min(a: Node; dims: openArray[int] = []; keepDims = false): Node" href="graph.html#min%2CNode%2CopenArray%5Bint%5D">graph: min(a: Node; dims: openArray[int] = []; keepDims = false): Node</a></li>
+          </ul></dd>
+<dt><a name="minValue" href="#minValue"><span>minValue:</span></a></dt><dd><ul class="simple">
+<li><a class="reference external"
+          data-doc-search-tag="graph: minValue(b: Builder; dtype = F32; dims: openArray[int] = []): Node" href="graph.html#minValue%2CBuilder%2Cenum">graph: minValue(b: Builder; dtype = F32; dims: openArray[int] = []): Node</a></li>
           </ul></dd>
 <dt><a name="MNISTDataset" href="#MNISTDataset"><span>MNISTDataset:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
@@ -387,6 +785,38 @@ window.addEventListener('DOMContentLoaded', main);
 <li><a class="reference external"
           data-doc-search-tag="nn: mseLoss(pred, target: Node): Node" href="nn.html#mseLoss%2CNode%2CNode">nn: mseLoss(pred, target: Node): Node</a></li>
           </ul></dd>
+<dt><a name="name" href="#name"><span>name:</span></a></dt><dd><ul class="simple">
+<li><a class="reference external"
+          data-doc-search-tag="graph: name(comp: Computation): string" href="graph.html#name%2CComputation">graph: name(comp: Computation): string</a></li>
+          </ul></dd>
+<dt><a name="narrow" href="#narrow"><span>narrow:</span></a></dt><dd><ul class="simple">
+<li><a class="reference external"
+          data-doc-search-tag="graph: narrow(a: Node; dim, start, stop: int; stride = 1): Node" href="graph.html#narrow%2CNode%2Cint%2Cint%2Cint%2Cint">graph: narrow(a: Node; dim, start, stop: int; stride = 1): Node</a></li>
+          </ul></dd>
+<dt><a name="newBuffer" href="#newBuffer"><span>newBuffer:</span></a></dt><dd><ul class="simple">
+<li><a class="reference external"
+          data-doc-search-tag="nimxla: newBuffer(client: Client; dtype: DataType; dims: openArray[int]): Buffer" href="nimxla.html#newBuffer%2CClient%2CDataType%2CopenArray%5Bint%5D">nimxla: newBuffer(client: Client; dtype: DataType; dims: openArray[int]): Buffer</a></li>
+          <li><a class="reference external"
+          data-doc-search-tag="nimxla: newBuffer(client: Client; lit: Literal; device = 0): Buffer" href="nimxla.html#newBuffer%2CClient%2CLiteral%2Cint">nimxla: newBuffer(client: Client; lit: Literal; device = 0): Buffer</a></li>
+          <li><a class="reference external"
+          data-doc-search-tag="nimxla: newBuffer[T: ElemType](client: Client; t: Tensor[T]; device = 0): Buffer" href="nimxla.html#newBuffer%2CClient%2CTensor%5BT%3A%20ElemType%5D%2Cint">nimxla: newBuffer[T: ElemType](client: Client; t: Tensor[T]; device = 0): Buffer</a></li>
+          </ul></dd>
+<dt><a name="newBuilder" href="#newBuilder"><span>newBuilder:</span></a></dt><dd><ul class="simple">
+<li><a class="reference external"
+          data-doc-search-tag="graph: newBuilder(name: string): Builder" href="graph.html#newBuilder%2Cstring">graph: newBuilder(name: string): Builder</a></li>
+          </ul></dd>
+<dt><a name="newClient" href="#newClient"><span>newClient:</span></a></dt><dd><ul class="simple">
+<li><a class="reference external"
+          data-doc-search-tag="nimxla: newClient(useGPU = true): Client" href="nimxla.html#newClient">nimxla: newClient(useGPU = true): Client</a></li>
+          </ul></dd>
+<dt><a name="newCPUClient" href="#newCPUClient"><span>newCPUClient:</span></a></dt><dd><ul class="simple">
+<li><a class="reference external"
+          data-doc-search-tag="nimxla: newCPUClient(logLevel = Warning): Client" href="nimxla.html#newCPUClient">nimxla: newCPUClient(logLevel = Warning): Client</a></li>
+          </ul></dd>
+<dt><a name="newGPUClient" href="#newGPUClient"><span>newGPUClient:</span></a></dt><dd><ul class="simple">
+<li><a class="reference external"
+          data-doc-search-tag="nimxla: newGPUClient(memoryFraction = 1.0; preallocate = false; logLevel = Warning): Client" href="nimxla.html#newGPUClient%2Cfloat">nimxla: newGPUClient(memoryFraction = 1.0; preallocate = false; logLevel = Warning): Client</a></li>
+          </ul></dd>
 <dt><a name="newLiteral" href="#newLiteral"><span>newLiteral:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
           data-doc-search-tag="literal: newLiteral(dtype: DataType; dims: openArray[int]): Literal" href="literal.html#newLiteral%2CDataType%2CopenArray%5Bint%5D">literal: newLiteral(dtype: DataType; dims: openArray[int]): Literal</a></li>
@@ -395,11 +825,23 @@ window.addEventListener('DOMContentLoaded', main);
 <li><a class="reference external"
           data-doc-search-tag="data: newLoader(rng: var Rand; batchSize = 0; shuffle = false): DataLoader" href="data.html#newLoader%2CRand%2Cint">data: newLoader(rng: var Rand; batchSize = 0; shuffle = false): DataLoader</a></li>
           </ul></dd>
+<dt><a name="newTensor" href="#newTensor"><span>newTensor:</span></a></dt><dd><ul class="simple">
+<li><a class="reference external"
+          data-doc-search-tag="tensor: newTensor[T: ElemType](dims: varargs[int]): Tensor[T]" href="tensor.html#newTensor%2Cvarargs%5Bint%5D">tensor: newTensor[T: ElemType](dims: varargs[int]): Tensor[T]</a></li>
+          </ul></dd>
+<dt><a name="newTPUClient" href="#newTPUClient"><span>newTPUClient:</span></a></dt><dd><ul class="simple">
+<li><a class="reference external"
+          data-doc-search-tag="nimxla: newTPUClient(maxInflightComputations: int; logLevel = Warning): Client" href="nimxla.html#newTPUClient%2Cint">nimxla: newTPUClient(maxInflightComputations: int; logLevel = Warning): Client</a></li>
+          </ul></dd>
 <dt><a name="newVariable" href="#newVariable"><span>newVariable:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
           data-doc-search-tag="nn: newVariable(c: Client; name: string; dims: openArray[int]; dtype: DataType;
             init: InitFunc; rng: var Rand): Variable" href="nn.html#newVariable%2CClient%2Cstring%2CopenArray%5Bint%5D%2CDataType%2CInitFunc%2CRand">nn: newVariable(c: Client; name: string; dims: openArray[int]; dtype: DataType;
             init: InitFunc; rng: var Rand): Variable</a></li>
+          </ul></dd>
+<dt><a name="Node" href="#Node"><span>Node:</span></a></dt><dd><ul class="simple">
+<li><a class="reference external"
+          data-doc-search-tag="graph: Node" href="graph.html#Node">graph: Node</a></li>
           </ul></dd>
 <dt><a name="normalInit" href="#normalInit"><span>normalInit:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
@@ -408,6 +850,14 @@ window.addEventListener('DOMContentLoaded', main);
 <dt><a name="normalization" href="#normalization"><span>normalization:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
           data-doc-search-tag="data: normalization(d: Dataset): (seq[float32], seq[float32])" href="data.html#normalization%2CDataset">data: normalization(d: Dataset): (seq[float32], seq[float32])</a></li>
+          </ul></dd>
+<dt><a name="noutputs" href="#noutputs"><span>noutputs:</span></a></dt><dd><ul class="simple">
+<li><a class="reference external"
+          data-doc-search-tag="nimxla: noutputs(exec: Executable): int" href="nimxla.html#noutputs%2CExecutable">nimxla: noutputs(exec: Executable): int</a></li>
+          </ul></dd>
+<dt><a name="one" href="#one"><span>one:</span></a></dt><dd><ul class="simple">
+<li><a class="reference external"
+          data-doc-search-tag="graph: one(b: Builder; dtype = F32; dims: openArray[int] = []): Node" href="graph.html#one%2CBuilder%2Cenum">graph: one(b: Builder; dtype = F32; dims: openArray[int] = []): Node</a></li>
           </ul></dd>
 <dt><a name="OpaqueType" href="#OpaqueType"><span>OpaqueType:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
@@ -441,6 +891,10 @@ window.addEventListener('DOMContentLoaded', main);
          momentum = 0.0; nesterov = false): Optimizer" href="nn.html#optimSGD%2CClient%2CModule%2Cfloat%2Cfloat%2Cfloat">nn: optimSGD(c: Client; m: Module; learnRate: float; weightDecay = 0.0;
          momentum = 0.0; nesterov = false): Optimizer</a></li>
           </ul></dd>
+<dt><a name="OpType" href="#OpType"><span>OpType:</span></a></dt><dd><ul class="simple">
+<li><a class="reference external"
+          data-doc-search-tag="graph: OpType" href="graph.html#OpType">graph: OpType</a></li>
+          </ul></dd>
 <dt><a name="pad" href="#pad"><span>pad:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
           data-doc-search-tag="shape: pad(val: int): Padding" href="shape.html#pad%2Cint">shape: pad(val: int): Padding</a></li>
@@ -467,6 +921,26 @@ window.addEventListener('DOMContentLoaded', main);
 <li><a class="reference external"
           data-doc-search-tag="nn: param(b: Builder; p: Variable; suffix = &quot;&quot;): Node" href="nn.html#param%2CBuilder%2CVariable%2Cstring">nn: param(b: Builder; p: Variable; suffix = &quot;&quot;): Node</a></li>
           </ul></dd>
+<dt><a name="parameter" href="#parameter"><span>parameter:</span></a></dt><dd><ul class="simple">
+<li><a class="reference external"
+          data-doc-search-tag="graph: parameter(b: Builder; dtype: DataType; dims: openArray[int] = []; name = &quot;&quot;): Node" href="graph.html#parameter%2CBuilder%2CDataType%2CopenArray%5Bint%5D%2Cstring">graph: parameter(b: Builder; dtype: DataType; dims: openArray[int] = []; name = &quot;&quot;): Node</a></li>
+          </ul></dd>
+<dt><a name="paramNames" href="#paramNames"><span>paramNames:</span></a></dt><dd><ul class="simple">
+<li><a class="reference external"
+          data-doc-search-tag="graph: paramNames(comp: Computation): seq[string]" href="graph.html#paramNames%2CComputation">graph: paramNames(comp: Computation): seq[string]</a></li>
+          </ul></dd>
+<dt><a name="Params" href="#Params"><span>Params:</span></a></dt><dd><ul class="simple">
+<li><a class="reference external"
+          data-doc-search-tag="nimxla: Params" href="nimxla.html#Params">nimxla: Params</a></li>
+          </ul></dd>
+<dt><a name="platformName" href="#platformName"><span>platformName:</span></a></dt><dd><ul class="simple">
+<li><a class="reference external"
+          data-doc-search-tag="nimxla: platformName(client: Client): string" href="nimxla.html#platformName%2CClient">nimxla: platformName(client: Client): string</a></li>
+          </ul></dd>
+<dt><a name="platformVersion" href="#platformVersion"><span>platformVersion:</span></a></dt><dd><ul class="simple">
+<li><a class="reference external"
+          data-doc-search-tag="nimxla: platformVersion(client: Client): string" href="nimxla.html#platformVersion%2CClient">nimxla: platformVersion(client: Client): string</a></li>
+          </ul></dd>
 <dt><a name="plotImage" href="#plotImage"><span>plotImage:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
           data-doc-search-tag="plots: plotImage(t: Tensor[uint8]; row, col: int): JsonNode" href="plots.html#plotImage%2CTensor%5Buint8%5D%2Cint%2Cint">plots: plotImage(t: Tensor[uint8]; row, col: int): JsonNode</a></li>
@@ -478,6 +952,14 @@ window.addEventListener('DOMContentLoaded', main);
     JsonNode)" href="plots.html#plotImageGrid%2Cstring%2Cint%2Cint%2Cproc%29">plots: plotImageGrid(title: string; rows, cols: int;
               getData: proc (): (Tensor[uint8], seq[string])): (JsonNode,
     JsonNode)</a></li>
+          </ul></dd>
+<dt><a name="pow" href="#pow"><span>pow:</span></a></dt><dd><ul class="simple">
+<li><a class="reference external"
+          data-doc-search-tag="graph: pow(a, b: Node): Node" href="graph.html#pow%2CNode%2CNode">graph: pow(a, b: Node): Node</a></li>
+          </ul></dd>
+<dt><a name="raiseError" href="#raiseError"><span>raiseError:</span></a></dt><dd><ul class="simple">
+<li><a class="reference external"
+          data-doc-search-tag="graph: raiseError(message: string; node: Node = nil)" href="graph.html#raiseError%2Cstring%2CNode">graph: raiseError(message: string; node: Node = nil)</a></li>
           </ul></dd>
 <dt><a name="randomAffine" href="#randomAffine"><span>randomAffine:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
@@ -497,13 +979,109 @@ window.addEventListener('DOMContentLoaded', main);
 <li><a class="reference external"
           data-doc-search-tag="image: randomWrap(max_x, max_y: int; p = 0.5): ImageOp" href="image.html#randomWrap%2Cint%2Cint%2Cfloat">image: randomWrap(max_x, max_y: int; p = 0.5): ImageOp</a></li>
           </ul></dd>
+<dt><a name="rank" href="#rank"><span>rank:</span></a></dt><dd><ul class="simple">
+<li><a class="reference external"
+          data-doc-search-tag="graph: rank(n: Node): int" href="graph.html#rank%2CNode">graph: rank(n: Node): int</a></li>
+          </ul></dd>
 <dt><a name="rawPtr" href="#rawPtr"><span>rawPtr:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
+          data-doc-search-tag="graph: rawPtr(comp: Computation): xla_computation" href="graph.html#rawPtr%2CComputation">graph: rawPtr(comp: Computation): xla_computation</a></li>
+          <li><a class="reference external"
           data-doc-search-tag="literal: rawPtr(lit: Literal): literal_t" href="literal.html#rawPtr%2CLiteral">literal: rawPtr(lit: Literal): literal_t</a></li>
+          <li><a class="reference external"
+          data-doc-search-tag="tensor: rawPtr[T: ElemType](t: Tensor[T]): ptr T" href="tensor.html#rawPtr%2CTensor%5BT%3A%20ElemType%5D">tensor: rawPtr[T: ElemType](t: Tensor[T]): ptr T</a></li>
+          </ul></dd>
+<dt><a name="readTensor" href="#readTensor"><span>readTensor:</span></a></dt><dd><ul class="simple">
+<li><a class="reference external"
+          data-doc-search-tag="tensor: readTensor[T: ElemType](s: Stream): Tensor[T]" href="tensor.html#readTensor%2CStream">tensor: readTensor[T: ElemType](s: Stream): Tensor[T]</a></li>
+          <li><a class="reference external"
+          data-doc-search-tag="tensor: readTensor[T: ElemType](filename: string): Tensor[T]" href="tensor.html#readTensor%2Cstring">tensor: readTensor[T: ElemType](filename: string): Tensor[T]</a></li>
+          </ul></dd>
+<dt><a name="reduce" href="#reduce"><span>reduce:</span></a></dt><dd><ul class="simple">
+<li><a class="reference external"
+          data-doc-search-tag="graph: reduce(a, initValue: Node; comp: Computation; dims: openArray[int] = [];
+       nodeType = tReduce; keepDims = false): Node" href="graph.html#reduce%2CNode%2CNode%2CComputation%2CopenArray%5Bint%5D">graph: reduce(a, initValue: Node; comp: Computation; dims: openArray[int] = [];
+       nodeType = tReduce; keepDims = false): Node</a></li>
+          </ul></dd>
+<dt><a name="reduceWindow" href="#reduceWindow"><span>reduceWindow:</span></a></dt><dd><ul class="simple">
+<li><a class="reference external"
+          data-doc-search-tag="graph: reduceWindow(a, initValue: Node; comp: Computation;
+             windowDims, strides: openArray[int];
+             padding: openArray[Padding] = []; nodeType = tReduceWindow): Node" href="graph.html#reduceWindow%2CNode%2CNode%2CComputation%2CopenArray%5Bint%5D%2CopenArray%5Bint%5D%2CopenArray%5BPadding%5D">graph: reduceWindow(a, initValue: Node; comp: Computation;
+             windowDims, strides: openArray[int];
+             padding: openArray[Padding] = []; nodeType = tReduceWindow): Node</a></li>
+          </ul></dd>
+<dt><a name="relu" href="#relu"><span>relu:</span></a></dt><dd><ul class="simple">
+<li><a class="reference external"
+          data-doc-search-tag="graph: relu(a: Node): Node" href="graph.html#relu%2CNode">graph: relu(a: Node): Node</a></li>
+          </ul></dd>
+<dt><a name="rem" href="#rem"><span>rem:</span></a></dt><dd><ul class="simple">
+<li><a class="reference external"
+          data-doc-search-tag="graph: rem(a, b: Node): Node" href="graph.html#rem%2CNode%2CNode">graph: rem(a, b: Node): Node</a></li>
+          </ul></dd>
+<dt><a name="repr" href="#repr"><span>repr:</span></a></dt><dd><ul class="simple">
+<li><a class="reference external"
+          data-doc-search-tag="graph: repr(n: Node): string" href="graph.html#repr%2CNode">graph: repr(n: Node): string</a></li>
           </ul></dd>
 <dt><a name="reshape" href="#reshape"><span>reshape:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
+          data-doc-search-tag="graph: reshape(a: Node; dims: varargs[int]): Node" href="graph.html#reshape%2CNode%2Cvarargs%5Bint%5D">graph: reshape(a: Node; dims: varargs[int]): Node</a></li>
+          <li><a class="reference external"
           data-doc-search-tag="literal: reshape(lit: Literal; dims: varargs[int]): Literal" href="literal.html#reshape%2CLiteral%2Cvarargs%5Bint%5D">literal: reshape(lit: Literal; dims: varargs[int]): Literal</a></li>
+          <li><a class="reference external"
+          data-doc-search-tag="tensor: reshape[T: ElemType](t: Tensor[T]; dims: varargs[int]): Tensor[T]" href="tensor.html#reshape%2CTensor%5BT%3A%20ElemType%5D%2Cvarargs%5Bint%5D">tensor: reshape[T: ElemType](t: Tensor[T]; dims: varargs[int]): Tensor[T]</a></li>
+          </ul></dd>
+<dt><a name="reverse" href="#reverse"><span>reverse:</span></a></dt><dd><ul class="simple">
+<li><a class="reference external"
+          data-doc-search-tag="graph: reverse(a: Node; axes: varargs[int]): Node" href="graph.html#reverse%2CNode%2Cvarargs%5Bint%5D">graph: reverse(a: Node; axes: varargs[int]): Node</a></li>
+          </ul></dd>
+<dt><a name="rngNormal" href="#rngNormal"><span>rngNormal:</span></a></dt><dd><ul class="simple">
+<li><a class="reference external"
+          data-doc-search-tag="graph: rngNormal(mean, stddev: Node; dims: openArray[int]): Node" href="graph.html#rngNormal%2CNode%2CNode%2CopenArray%5Bint%5D">graph: rngNormal(mean, stddev: Node; dims: openArray[int]): Node</a></li>
+          </ul></dd>
+<dt><a name="rngUniform" href="#rngUniform"><span>rngUniform:</span></a></dt><dd><ul class="simple">
+<li><a class="reference external"
+          data-doc-search-tag="graph: rngUniform(min, max: Node; dims: openArray[int]): Node" href="graph.html#rngUniform%2CNode%2CNode%2CopenArray%5Bint%5D">graph: rngUniform(min, max: Node; dims: openArray[int]): Node</a></li>
+          </ul></dd>
+<dt><a name="round" href="#round"><span>round:</span></a></dt><dd><ul class="simple">
+<li><a class="reference external"
+          data-doc-search-tag="graph: round(a: Node): Node" href="graph.html#round%2CNode">graph: round(a: Node): Node</a></li>
+          </ul></dd>
+<dt><a name="rsqrt" href="#rsqrt"><span>rsqrt:</span></a></dt><dd><ul class="simple">
+<li><a class="reference external"
+          data-doc-search-tag="graph: rsqrt(a: Node): Node" href="graph.html#rsqrt%2CNode">graph: rsqrt(a: Node): Node</a></li>
+          </ul></dd>
+<dt><a name="run" href="#run"><span>run:</span></a></dt><dd><ul class="simple">
+<li><a class="reference external"
+          data-doc-search-tag="nimxla: run(exec: Executable; checkShape = true): Buffer" href="nimxla.html#run%2CExecutable">nimxla: run(exec: Executable; checkShape = true): Buffer</a></li>
+          <li><a class="reference external"
+          data-doc-search-tag="nimxla: run[T: Buffer | Literal](exec: Executable; args: openArray[T]; checkShape = true): Buffer" href="nimxla.html#run%2CExecutable%2CopenArray%5BT%5D">nimxla: run[T: Buffer | Literal](exec: Executable; args: openArray[T]; checkShape = true): Buffer</a></li>
+          </ul></dd>
+<dt><a name="runAndUnpack" href="#runAndUnpack"><span>runAndUnpack:</span></a></dt><dd><ul class="simple">
+<li><a class="reference external"
+          data-doc-search-tag="nimxla: runAndUnpack(exec: Executable; checkShape = true): seq[Buffer]" href="nimxla.html#runAndUnpack%2CExecutable">nimxla: runAndUnpack(exec: Executable; checkShape = true): seq[Buffer]</a></li>
+          <li><a class="reference external"
+          data-doc-search-tag="nimxla: runAndUnpack[T: Buffer | Literal](exec: Executable; args: openArray[T];
+                                  checkShape = true): seq[Buffer]" href="nimxla.html#runAndUnpack%2CExecutable%2CopenArray%5BT%5D">nimxla: runAndUnpack[T: Buffer | Literal](exec: Executable; args: openArray[T];
+                                  checkShape = true): seq[Buffer]</a></li>
+          </ul></dd>
+<dt><a name="runWith" href="#runWith"><span>runWith:</span></a></dt><dd><ul class="simple">
+<li><a class="reference external"
+          data-doc-search-tag="nimxla: runWith(exec: Executable; params: var Params; checkShape = true)" href="nimxla.html#runWith%2CExecutable%2CParams">nimxla: runWith(exec: Executable; params: var Params; checkShape = true)</a></li>
+          </ul></dd>
+<dt><a name="scatter" href="#scatter"><span>scatter:</span></a></dt><dd><ul class="simple">
+<li><a class="reference external"
+          data-doc-search-tag="graph: scatter(a, indices, b: Node; comp: Computation): Node" href="graph.html#scatter%2CNode%2CNode%2CNode%2CComputation">graph: scatter(a, indices, b: Node; comp: Computation): Node</a></li>
+          </ul></dd>
+<dt><a name="select" href="#select"><span>select:</span></a></dt><dd><ul class="simple">
+<li><a class="reference external"
+          data-doc-search-tag="graph: select(a, onTrue, onFalse: Node): Node" href="graph.html#select%2CNode%2CNode%2CNode">graph: select(a, onTrue, onFalse: Node): Node</a></li>
+          </ul></dd>
+<dt><a name="selectAndScatter" href="#selectAndScatter"><span>selectAndScatter:</span></a></dt><dd><ul class="simple">
+<li><a class="reference external"
+          data-doc-search-tag="graph: selectAndScatter(a, source: Node; windowDims, strides: openArray[int];
+                 padding: openArray[Padding] = []): Node" href="graph.html#selectAndScatter%2CNode%2CNode%2CopenArray%5Bint%5D%2CopenArray%5Bint%5D%2CopenArray%5BPadding%5D">graph: selectAndScatter(a, source: Node; windowDims, strides: openArray[int];
+                 padding: openArray[Padding] = []): Node</a></li>
           </ul></dd>
 <dt><a name="seq2" href="#seq2"><span>seq2:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
@@ -521,9 +1099,19 @@ window.addEventListener('DOMContentLoaded', main);
 <li><a class="reference external"
           data-doc-search-tag="plots: servePlots(): owned(Future[void])" href="plots.html#servePlots">plots: servePlots(): owned(Future[void])</a></li>
           </ul></dd>
+<dt><a name="setLogLevel" href="#setLogLevel"><span>setLogLevel:</span></a></dt><dd><ul class="simple">
+<li><a class="reference external"
+          data-doc-search-tag="nimxla: setLogLevel(level: LogLevel)" href="nimxla.html#setLogLevel%2CLogLevel">nimxla: setLogLevel(level: LogLevel)</a></li>
+          </ul></dd>
 <dt><a name="setParams" href="#setParams"><span>setParams:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
           data-doc-search-tag="nn: setParams(m: Module; params: var Params)" href="nn.html#setParams%2CModule%2CParams">nn: setParams(m: Module; params: var Params)</a></li>
+          </ul></dd>
+<dt><a name="setPrintOpts" href="#setPrintOpts"><span>setPrintOpts:</span></a></dt><dd><ul class="simple">
+<li><a class="reference external"
+          data-doc-search-tag="tensor: setPrintOpts(minWidth = 8; precision = 6; floatMode = ffDefault;
+             threshold = 1000; edgeitems = 4)" href="tensor.html#setPrintOpts%2Cint%2Cint%2Cint%2Cint">tensor: setPrintOpts(minWidth = 8; precision = 6; floatMode = ffDefault;
+             threshold = 1000; edgeitems = 4)</a></li>
           </ul></dd>
 <dt><a name="shape" href="#shape"><span>shape:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
@@ -532,10 +1120,16 @@ window.addEventListener('DOMContentLoaded', main);
           data-doc-search-tag="data: shape(d: Dataset): seq[int]" href="data.html#shape%2CDataset">data: shape(d: Dataset): seq[int]</a></li>
           <li><a class="reference external"
           data-doc-search-tag="literal: shape(lit: Literal): Shape" href="literal.html#shape%2CLiteral">literal: shape(lit: Literal): Shape</a></li>
+          <li><a class="reference external"
+          data-doc-search-tag="nimxla: shape(buf: Buffer): Shape" href="nimxla.html#shape%2CBuffer">nimxla: shape(buf: Buffer): Shape</a></li>
           </ul></dd>
 <dt><a name="Shape" href="#Shape"><span>Shape:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
           data-doc-search-tag="shape: Shape" href="shape.html#Shape">shape: Shape</a></li>
+          </ul></dd>
+<dt><a name="shape" href="#shape"><span>shape:</span></a></dt><dd><ul class="simple">
+<li><a class="reference external"
+          data-doc-search-tag="tensor: shape[T: ElemType](t: Tensor[T]): Shape" href="tensor.html#shape%2CTensor%5BT%3A%20ElemType%5D">tensor: shape[T: ElemType](t: Tensor[T]): Shape</a></li>
           </ul></dd>
 <dt><a name="ShapeKind" href="#ShapeKind"><span>ShapeKind:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
@@ -547,9 +1141,25 @@ window.addEventListener('DOMContentLoaded', main);
           <li><a class="reference external"
           data-doc-search-tag="image: shutdown(t: var Transformer)" href="image.html#shutdown%2CTransformer">image: shutdown(t: var Transformer)</a></li>
           </ul></dd>
+<dt><a name="sigmoid" href="#sigmoid"><span>sigmoid:</span></a></dt><dd><ul class="simple">
+<li><a class="reference external"
+          data-doc-search-tag="graph: sigmoid(a: Node): Node" href="graph.html#sigmoid%2CNode">graph: sigmoid(a: Node): Node</a></li>
+          </ul></dd>
+<dt><a name="sign" href="#sign"><span>sign:</span></a></dt><dd><ul class="simple">
+<li><a class="reference external"
+          data-doc-search-tag="graph: sign(a: Node): Node" href="graph.html#sign%2CNode">graph: sign(a: Node): Node</a></li>
+          </ul></dd>
+<dt><a name="sin" href="#sin"><span>sin:</span></a></dt><dd><ul class="simple">
+<li><a class="reference external"
+          data-doc-search-tag="graph: sin(a: Node): Node" href="graph.html#sin%2CNode">graph: sin(a: Node): Node</a></li>
+          </ul></dd>
 <dt><a name="softmax" href="#softmax"><span>softmax:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
           data-doc-search-tag="nn: softmax(a: Node; axis = -1): Node" href="nn.html#softmax%2CNode%2Cint">nn: softmax(a: Node; axis = -1): Node</a></li>
+          </ul></dd>
+<dt><a name="sqrt" href="#sqrt"><span>sqrt:</span></a></dt><dd><ul class="simple">
+<li><a class="reference external"
+          data-doc-search-tag="graph: sqrt(a: Node): Node" href="graph.html#sqrt%2CNode">graph: sqrt(a: Node): Node</a></li>
           </ul></dd>
 <dt><a name="start" href="#start"><span>start:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
@@ -561,9 +1171,183 @@ window.addEventListener('DOMContentLoaded', main);
 <li><a class="reference external"
           data-doc-search-tag="train: statsPlots(t: Trainer): JsonNode" href="train.html#statsPlots%2CTrainer">train: statsPlots(t: Trainer): JsonNode</a></li>
           </ul></dd>
+<dt><a name="sum" href="#sum"><span>sum:</span></a></dt><dd><ul class="simple">
+<li><a class="reference external"
+          data-doc-search-tag="graph: sum(a: Node; axis: int; keepDims = false): Node" href="graph.html#sum%2CNode%2Cint">graph: sum(a: Node; axis: int; keepDims = false): Node</a></li>
+          <li><a class="reference external"
+          data-doc-search-tag="graph: sum(a: Node; dims: openArray[int] = []; keepDims = false): Node" href="graph.html#sum%2CNode%2CopenArray%5Bint%5D">graph: sum(a: Node; dims: openArray[int] = []; keepDims = false): Node</a></li>
+          </ul></dd>
+<dt><a name="tAbs" href="#tAbs"><span>tAbs:</span></a></dt><dd><ul class="simple">
+<li><a class="reference external"
+          data-doc-search-tag="OpType.tAbs" href="graph.html#tAbs">OpType.tAbs</a></li>
+          </ul></dd>
+<dt><a name="tAdd" href="#tAdd"><span>tAdd:</span></a></dt><dd><ul class="simple">
+<li><a class="reference external"
+          data-doc-search-tag="OpType.tAdd" href="graph.html#tAdd">OpType.tAdd</a></li>
+          </ul></dd>
+<dt><a name="tAnd" href="#tAnd"><span>tAnd:</span></a></dt><dd><ul class="simple">
+<li><a class="reference external"
+          data-doc-search-tag="OpType.tAnd" href="graph.html#tAnd">OpType.tAnd</a></li>
+          </ul></dd>
+<dt><a name="tanh" href="#tanh"><span>tanh:</span></a></dt><dd><ul class="simple">
+<li><a class="reference external"
+          data-doc-search-tag="graph: tanh(a: Node): Node" href="graph.html#tanh%2CNode">graph: tanh(a: Node): Node</a></li>
+          </ul></dd>
+<dt><a name="tArgmax" href="#tArgmax"><span>tArgmax:</span></a></dt><dd><ul class="simple">
+<li><a class="reference external"
+          data-doc-search-tag="OpType.tArgmax" href="graph.html#tArgmax">OpType.tArgmax</a></li>
+          </ul></dd>
+<dt><a name="tArgmin" href="#tArgmin"><span>tArgmin:</span></a></dt><dd><ul class="simple">
+<li><a class="reference external"
+          data-doc-search-tag="OpType.tArgmin" href="graph.html#tArgmin">OpType.tArgmin</a></li>
+          </ul></dd>
+<dt><a name="tBroadcast" href="#tBroadcast"><span>tBroadcast:</span></a></dt><dd><ul class="simple">
+<li><a class="reference external"
+          data-doc-search-tag="OpType.tBroadcast" href="graph.html#tBroadcast">OpType.tBroadcast</a></li>
+          </ul></dd>
+<dt><a name="tBroadcastInDim" href="#tBroadcastInDim"><span>tBroadcastInDim:</span></a></dt><dd><ul class="simple">
+<li><a class="reference external"
+          data-doc-search-tag="OpType.tBroadcastInDim" href="graph.html#tBroadcastInDim">OpType.tBroadcastInDim</a></li>
+          </ul></dd>
+<dt><a name="tCeil" href="#tCeil"><span>tCeil:</span></a></dt><dd><ul class="simple">
+<li><a class="reference external"
+          data-doc-search-tag="OpType.tCeil" href="graph.html#tCeil">OpType.tCeil</a></li>
+          </ul></dd>
+<dt><a name="tClamp" href="#tClamp"><span>tClamp:</span></a></dt><dd><ul class="simple">
+<li><a class="reference external"
+          data-doc-search-tag="OpType.tClamp" href="graph.html#tClamp">OpType.tClamp</a></li>
+          </ul></dd>
+<dt><a name="tCollapse" href="#tCollapse"><span>tCollapse:</span></a></dt><dd><ul class="simple">
+<li><a class="reference external"
+          data-doc-search-tag="OpType.tCollapse" href="graph.html#tCollapse">OpType.tCollapse</a></li>
+          </ul></dd>
+<dt><a name="tConcat" href="#tConcat"><span>tConcat:</span></a></dt><dd><ul class="simple">
+<li><a class="reference external"
+          data-doc-search-tag="OpType.tConcat" href="graph.html#tConcat">OpType.tConcat</a></li>
+          </ul></dd>
+<dt><a name="tConst" href="#tConst"><span>tConst:</span></a></dt><dd><ul class="simple">
+<li><a class="reference external"
+          data-doc-search-tag="OpType.tConst" href="graph.html#tConst">OpType.tConst</a></li>
+          </ul></dd>
+<dt><a name="tConv" href="#tConv"><span>tConv:</span></a></dt><dd><ul class="simple">
+<li><a class="reference external"
+          data-doc-search-tag="OpType.tConv" href="graph.html#tConv">OpType.tConv</a></li>
+          </ul></dd>
+<dt><a name="tConvert" href="#tConvert"><span>tConvert:</span></a></dt><dd><ul class="simple">
+<li><a class="reference external"
+          data-doc-search-tag="OpType.tConvert" href="graph.html#tConvert">OpType.tConvert</a></li>
+          </ul></dd>
+<dt><a name="tCopy" href="#tCopy"><span>tCopy:</span></a></dt><dd><ul class="simple">
+<li><a class="reference external"
+          data-doc-search-tag="OpType.tCopy" href="graph.html#tCopy">OpType.tCopy</a></li>
+          </ul></dd>
+<dt><a name="tCos" href="#tCos"><span>tCos:</span></a></dt><dd><ul class="simple">
+<li><a class="reference external"
+          data-doc-search-tag="OpType.tCos" href="graph.html#tCos">OpType.tCos</a></li>
+          </ul></dd>
+<dt><a name="tDiv" href="#tDiv"><span>tDiv:</span></a></dt><dd><ul class="simple">
+<li><a class="reference external"
+          data-doc-search-tag="OpType.tDiv" href="graph.html#tDiv">OpType.tDiv</a></li>
+          </ul></dd>
+<dt><a name="tDot" href="#tDot"><span>tDot:</span></a></dt><dd><ul class="simple">
+<li><a class="reference external"
+          data-doc-search-tag="OpType.tDot" href="graph.html#tDot">OpType.tDot</a></li>
+          </ul></dd>
+<dt><a name="Tensor" href="#Tensor"><span>Tensor:</span></a></dt><dd><ul class="simple">
+<li><a class="reference external"
+          data-doc-search-tag="tensor: Tensor" href="tensor.html#Tensor">tensor: Tensor</a></li>
+          </ul></dd>
+<dt><a name="tEq" href="#tEq"><span>tEq:</span></a></dt><dd><ul class="simple">
+<li><a class="reference external"
+          data-doc-search-tag="OpType.tEq" href="graph.html#tEq">OpType.tEq</a></li>
+          </ul></dd>
+<dt><a name="tError" href="#tError"><span>tError:</span></a></dt><dd><ul class="simple">
+<li><a class="reference external"
+          data-doc-search-tag="OpType.tError" href="graph.html#tError">OpType.tError</a></li>
+          </ul></dd>
 <dt><a name="testFunc" href="#testFunc"><span>testFunc:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
           data-doc-search-tag="train: testFunc(c: Client; model: Module; dtype: DataType; shape: seq[int]): Executable" href="train.html#testFunc%2CClient%2CModule%2CDataType%2Cseq%5Bint%5D">train: testFunc(c: Client; model: Module; dtype: DataType; shape: seq[int]): Executable</a></li>
+          </ul></dd>
+<dt><a name="tExp" href="#tExp"><span>tExp:</span></a></dt><dd><ul class="simple">
+<li><a class="reference external"
+          data-doc-search-tag="OpType.tExp" href="graph.html#tExp">OpType.tExp</a></li>
+          </ul></dd>
+<dt><a name="tFloor" href="#tFloor"><span>tFloor:</span></a></dt><dd><ul class="simple">
+<li><a class="reference external"
+          data-doc-search-tag="OpType.tFloor" href="graph.html#tFloor">OpType.tFloor</a></li>
+          </ul></dd>
+<dt><a name="tGather" href="#tGather"><span>tGather:</span></a></dt><dd><ul class="simple">
+<li><a class="reference external"
+          data-doc-search-tag="OpType.tGather" href="graph.html#tGather">OpType.tGather</a></li>
+          </ul></dd>
+<dt><a name="tGe" href="#tGe"><span>tGe:</span></a></dt><dd><ul class="simple">
+<li><a class="reference external"
+          data-doc-search-tag="OpType.tGe" href="graph.html#tGe">OpType.tGe</a></li>
+          </ul></dd>
+<dt><a name="tGt" href="#tGt"><span>tGt:</span></a></dt><dd><ul class="simple">
+<li><a class="reference external"
+          data-doc-search-tag="OpType.tGt" href="graph.html#tGt">OpType.tGt</a></li>
+          </ul></dd>
+<dt><a name="tIota" href="#tIota"><span>tIota:</span></a></dt><dd><ul class="simple">
+<li><a class="reference external"
+          data-doc-search-tag="OpType.tIota" href="graph.html#tIota">OpType.tIota</a></li>
+          </ul></dd>
+<dt><a name="tIsFinite" href="#tIsFinite"><span>tIsFinite:</span></a></dt><dd><ul class="simple">
+<li><a class="reference external"
+          data-doc-search-tag="OpType.tIsFinite" href="graph.html#tIsFinite">OpType.tIsFinite</a></li>
+          </ul></dd>
+<dt><a name="tLe" href="#tLe"><span>tLe:</span></a></dt><dd><ul class="simple">
+<li><a class="reference external"
+          data-doc-search-tag="OpType.tLe" href="graph.html#tLe">OpType.tLe</a></li>
+          </ul></dd>
+<dt><a name="tLiteral" href="#tLiteral"><span>tLiteral:</span></a></dt><dd><ul class="simple">
+<li><a class="reference external"
+          data-doc-search-tag="OpType.tLiteral" href="graph.html#tLiteral">OpType.tLiteral</a></li>
+          </ul></dd>
+<dt><a name="tLog" href="#tLog"><span>tLog:</span></a></dt><dd><ul class="simple">
+<li><a class="reference external"
+          data-doc-search-tag="OpType.tLog" href="graph.html#tLog">OpType.tLog</a></li>
+          </ul></dd>
+<dt><a name="tLog1p" href="#tLog1p"><span>tLog1p:</span></a></dt><dd><ul class="simple">
+<li><a class="reference external"
+          data-doc-search-tag="OpType.tLog1p" href="graph.html#tLog1p">OpType.tLog1p</a></li>
+          </ul></dd>
+<dt><a name="tLt" href="#tLt"><span>tLt:</span></a></dt><dd><ul class="simple">
+<li><a class="reference external"
+          data-doc-search-tag="OpType.tLt" href="graph.html#tLt">OpType.tLt</a></li>
+          </ul></dd>
+<dt><a name="tMax" href="#tMax"><span>tMax:</span></a></dt><dd><ul class="simple">
+<li><a class="reference external"
+          data-doc-search-tag="OpType.tMax" href="graph.html#tMax">OpType.tMax</a></li>
+          </ul></dd>
+<dt><a name="tMaxPool" href="#tMaxPool"><span>tMaxPool:</span></a></dt><dd><ul class="simple">
+<li><a class="reference external"
+          data-doc-search-tag="OpType.tMaxPool" href="graph.html#tMaxPool">OpType.tMaxPool</a></li>
+          </ul></dd>
+<dt><a name="tMin" href="#tMin"><span>tMin:</span></a></dt><dd><ul class="simple">
+<li><a class="reference external"
+          data-doc-search-tag="OpType.tMin" href="graph.html#tMin">OpType.tMin</a></li>
+          </ul></dd>
+<dt><a name="tMul" href="#tMul"><span>tMul:</span></a></dt><dd><ul class="simple">
+<li><a class="reference external"
+          data-doc-search-tag="OpType.tMul" href="graph.html#tMul">OpType.tMul</a></li>
+          </ul></dd>
+<dt><a name="tNarrow" href="#tNarrow"><span>tNarrow:</span></a></dt><dd><ul class="simple">
+<li><a class="reference external"
+          data-doc-search-tag="OpType.tNarrow" href="graph.html#tNarrow">OpType.tNarrow</a></li>
+          </ul></dd>
+<dt><a name="tNe" href="#tNe"><span>tNe:</span></a></dt><dd><ul class="simple">
+<li><a class="reference external"
+          data-doc-search-tag="OpType.tNe" href="graph.html#tNe">OpType.tNe</a></li>
+          </ul></dd>
+<dt><a name="tNeg" href="#tNeg"><span>tNeg:</span></a></dt><dd><ul class="simple">
+<li><a class="reference external"
+          data-doc-search-tag="OpType.tNeg" href="graph.html#tNeg">OpType.tNeg</a></li>
+          </ul></dd>
+<dt><a name="tNot" href="#tNot"><span>tNot:</span></a></dt><dd><ul class="simple">
+<li><a class="reference external"
+          data-doc-search-tag="OpType.tNot" href="graph.html#tNot">OpType.tNot</a></li>
           </ul></dd>
 <dt><a name="Token" href="#Token"><span>Token:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
@@ -572,14 +1356,50 @@ window.addEventListener('DOMContentLoaded', main);
 <dt><a name="toLiteral" href="#toLiteral"><span>toLiteral:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
           data-doc-search-tag="literal: toLiteral[T: ElemType](t: Tensor[T]): Literal" href="literal.html#toLiteral%2CTensor%5BT%3A%20ElemType%5D">literal: toLiteral[T: ElemType](t: Tensor[T]): Literal</a></li>
+          <li><a class="reference external"
+          data-doc-search-tag="nimxla: toLiteral(buf: Buffer): Literal" href="nimxla.html#toLiteral%2CBuffer">nimxla: toLiteral(buf: Buffer): Literal</a></li>
+          </ul></dd>
+<dt><a name="toLiterals" href="#toLiterals"><span>toLiterals:</span></a></dt><dd><ul class="simple">
+<li><a class="reference external"
+          data-doc-search-tag="nimxla: toLiterals(buffers: openArray[Buffer]): seq[Literal]" href="nimxla.html#toLiterals%2CopenArray%5BBuffer%5D">nimxla: toLiterals(buffers: openArray[Buffer]): seq[Literal]</a></li>
+          </ul></dd>
+<dt><a name="tOr" href="#tOr"><span>tOr:</span></a></dt><dd><ul class="simple">
+<li><a class="reference external"
+          data-doc-search-tag="OpType.tOr" href="graph.html#tOr">OpType.tOr</a></li>
+          </ul></dd>
+<dt><a name="toSeq" href="#toSeq"><span>toSeq:</span></a></dt><dd><ul class="simple">
+<li><a class="reference external"
+          data-doc-search-tag="tensor: toSeq[T: ElemType](t: Tensor[T]): seq[T]" href="tensor.html#toSeq%2CTensor%5BT%3A%20ElemType%5D">tensor: toSeq[T: ElemType](t: Tensor[T]): seq[T]</a></li>
           </ul></dd>
 <dt><a name="toShape" href="#toShape"><span>toShape:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
           data-doc-search-tag="shape: toShape(s: shape_t; topLevel = true): Shape" href="shape.html#toShape%2Cshape_t">shape: toShape(s: shape_t; topLevel = true): Shape</a></li>
           </ul></dd>
+<dt><a name="toString" href="#toString"><span>toString:</span></a></dt><dd><ul class="simple">
+<li><a class="reference external"
+          data-doc-search-tag="graph: toString(n: Node): string" href="graph.html#toString%2CNode">graph: toString(n: Node): string</a></li>
+          </ul></dd>
 <dt><a name="toTensor" href="#toTensor"><span>toTensor:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
           data-doc-search-tag="literal: toTensor[T: ElemType](lit: Literal): Tensor[T]" href="literal.html#toTensor%2CLiteral">literal: toTensor[T: ElemType](lit: Literal): Tensor[T]</a></li>
+          <li><a class="reference external"
+          data-doc-search-tag="nimxla: toTensor[T: ElemType](buf: Buffer): Tensor[T]" href="nimxla.html#toTensor%2CBuffer">nimxla: toTensor[T: ElemType](buf: Buffer): Tensor[T]</a></li>
+          <li><a class="reference external"
+          data-doc-search-tag="tensor: toTensor[T: ElemType](slice: HSlice[int, int]): Tensor[T]" href="tensor.html#toTensor%2CHSlice%5Bint%2Cint%5D">tensor: toTensor[T: ElemType](slice: HSlice[int, int]): Tensor[T]</a></li>
+          <li><a class="reference external"
+          data-doc-search-tag="tensor: toTensor(values: openArray[int]): Tensor[int64]" href="tensor.html#toTensor%2CopenArray%5Bint%5D">tensor: toTensor(values: openArray[int]): Tensor[int64]</a></li>
+          <li><a class="reference external"
+          data-doc-search-tag="tensor: toTensor[T: ElemType](values: openArray[T]): Tensor[T]" href="tensor.html#toTensor%2CopenArray%5BT%5D">tensor: toTensor[T: ElemType](values: openArray[T]): Tensor[T]</a></li>
+          <li><a class="reference external"
+          data-doc-search-tag="tensor: toTensor[T: ElemType](value: T): Tensor[T]" href="tensor.html#toTensor%2CT">tensor: toTensor[T: ElemType](value: T): Tensor[T]</a></li>
+          </ul></dd>
+<dt><a name="tParam" href="#tParam"><span>tParam:</span></a></dt><dd><ul class="simple">
+<li><a class="reference external"
+          data-doc-search-tag="OpType.tParam" href="graph.html#tParam">OpType.tParam</a></li>
+          </ul></dd>
+<dt><a name="tPow" href="#tPow"><span>tPow:</span></a></dt><dd><ul class="simple">
+<li><a class="reference external"
+          data-doc-search-tag="OpType.tPow" href="graph.html#tPow">OpType.tPow</a></li>
           </ul></dd>
 <dt><a name="trainEpoch" href="#trainEpoch"><span>trainEpoch:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
@@ -615,13 +1435,137 @@ window.addEventListener('DOMContentLoaded', main);
 <li><a class="reference external"
           data-doc-search-tag="image: Transformer" href="image.html#Transformer">image: Transformer</a></li>
           </ul></dd>
+<dt><a name="transpose" href="#transpose"><span>transpose:</span></a></dt><dd><ul class="simple">
+<li><a class="reference external"
+          data-doc-search-tag="graph: transpose(a: Node; axes: varargs[int]): Node" href="graph.html#transpose%2CNode%2Cvarargs%5Bint%5D">graph: transpose(a: Node; axes: varargs[int]): Node</a></li>
+          </ul></dd>
+<dt><a name="tReduce" href="#tReduce"><span>tReduce:</span></a></dt><dd><ul class="simple">
+<li><a class="reference external"
+          data-doc-search-tag="OpType.tReduce" href="graph.html#tReduce">OpType.tReduce</a></li>
+          </ul></dd>
+<dt><a name="tReduceMax" href="#tReduceMax"><span>tReduceMax:</span></a></dt><dd><ul class="simple">
+<li><a class="reference external"
+          data-doc-search-tag="OpType.tReduceMax" href="graph.html#tReduceMax">OpType.tReduceMax</a></li>
+          </ul></dd>
+<dt><a name="tReduceMin" href="#tReduceMin"><span>tReduceMin:</span></a></dt><dd><ul class="simple">
+<li><a class="reference external"
+          data-doc-search-tag="OpType.tReduceMin" href="graph.html#tReduceMin">OpType.tReduceMin</a></li>
+          </ul></dd>
+<dt><a name="tReduceSum" href="#tReduceSum"><span>tReduceSum:</span></a></dt><dd><ul class="simple">
+<li><a class="reference external"
+          data-doc-search-tag="OpType.tReduceSum" href="graph.html#tReduceSum">OpType.tReduceSum</a></li>
+          </ul></dd>
+<dt><a name="tReduceWindow" href="#tReduceWindow"><span>tReduceWindow:</span></a></dt><dd><ul class="simple">
+<li><a class="reference external"
+          data-doc-search-tag="OpType.tReduceWindow" href="graph.html#tReduceWindow">OpType.tReduceWindow</a></li>
+          </ul></dd>
+<dt><a name="tRelu" href="#tRelu"><span>tRelu:</span></a></dt><dd><ul class="simple">
+<li><a class="reference external"
+          data-doc-search-tag="OpType.tRelu" href="graph.html#tRelu">OpType.tRelu</a></li>
+          </ul></dd>
+<dt><a name="tRem" href="#tRem"><span>tRem:</span></a></dt><dd><ul class="simple">
+<li><a class="reference external"
+          data-doc-search-tag="OpType.tRem" href="graph.html#tRem">OpType.tRem</a></li>
+          </ul></dd>
+<dt><a name="tReshape" href="#tReshape"><span>tReshape:</span></a></dt><dd><ul class="simple">
+<li><a class="reference external"
+          data-doc-search-tag="OpType.tReshape" href="graph.html#tReshape">OpType.tReshape</a></li>
+          </ul></dd>
+<dt><a name="tReverse" href="#tReverse"><span>tReverse:</span></a></dt><dd><ul class="simple">
+<li><a class="reference external"
+          data-doc-search-tag="OpType.tReverse" href="graph.html#tReverse">OpType.tReverse</a></li>
+          </ul></dd>
+<dt><a name="tRngNormal" href="#tRngNormal"><span>tRngNormal:</span></a></dt><dd><ul class="simple">
+<li><a class="reference external"
+          data-doc-search-tag="OpType.tRngNormal" href="graph.html#tRngNormal">OpType.tRngNormal</a></li>
+          </ul></dd>
+<dt><a name="tRngUniform" href="#tRngUniform"><span>tRngUniform:</span></a></dt><dd><ul class="simple">
+<li><a class="reference external"
+          data-doc-search-tag="OpType.tRngUniform" href="graph.html#tRngUniform">OpType.tRngUniform</a></li>
+          </ul></dd>
+<dt><a name="tRound" href="#tRound"><span>tRound:</span></a></dt><dd><ul class="simple">
+<li><a class="reference external"
+          data-doc-search-tag="OpType.tRound" href="graph.html#tRound">OpType.tRound</a></li>
+          </ul></dd>
+<dt><a name="tRsqrt" href="#tRsqrt"><span>tRsqrt:</span></a></dt><dd><ul class="simple">
+<li><a class="reference external"
+          data-doc-search-tag="OpType.tRsqrt" href="graph.html#tRsqrt">OpType.tRsqrt</a></li>
+          </ul></dd>
+<dt><a name="tScatter" href="#tScatter"><span>tScatter:</span></a></dt><dd><ul class="simple">
+<li><a class="reference external"
+          data-doc-search-tag="OpType.tScatter" href="graph.html#tScatter">OpType.tScatter</a></li>
+          </ul></dd>
+<dt><a name="tSelect" href="#tSelect"><span>tSelect:</span></a></dt><dd><ul class="simple">
+<li><a class="reference external"
+          data-doc-search-tag="OpType.tSelect" href="graph.html#tSelect">OpType.tSelect</a></li>
+          </ul></dd>
+<dt><a name="tSelectAndScatter" href="#tSelectAndScatter"><span>tSelectAndScatter:</span></a></dt><dd><ul class="simple">
+<li><a class="reference external"
+          data-doc-search-tag="OpType.tSelectAndScatter" href="graph.html#tSelectAndScatter">OpType.tSelectAndScatter</a></li>
+          </ul></dd>
+<dt><a name="tSigmoid" href="#tSigmoid"><span>tSigmoid:</span></a></dt><dd><ul class="simple">
+<li><a class="reference external"
+          data-doc-search-tag="OpType.tSigmoid" href="graph.html#tSigmoid">OpType.tSigmoid</a></li>
+          </ul></dd>
+<dt><a name="tSign" href="#tSign"><span>tSign:</span></a></dt><dd><ul class="simple">
+<li><a class="reference external"
+          data-doc-search-tag="OpType.tSign" href="graph.html#tSign">OpType.tSign</a></li>
+          </ul></dd>
+<dt><a name="tSin" href="#tSin"><span>tSin:</span></a></dt><dd><ul class="simple">
+<li><a class="reference external"
+          data-doc-search-tag="OpType.tSin" href="graph.html#tSin">OpType.tSin</a></li>
+          </ul></dd>
+<dt><a name="tSqrt" href="#tSqrt"><span>tSqrt:</span></a></dt><dd><ul class="simple">
+<li><a class="reference external"
+          data-doc-search-tag="OpType.tSqrt" href="graph.html#tSqrt">OpType.tSqrt</a></li>
+          </ul></dd>
+<dt><a name="tSub" href="#tSub"><span>tSub:</span></a></dt><dd><ul class="simple">
+<li><a class="reference external"
+          data-doc-search-tag="OpType.tSub" href="graph.html#tSub">OpType.tSub</a></li>
+          </ul></dd>
+<dt><a name="tTanh" href="#tTanh"><span>tTanh:</span></a></dt><dd><ul class="simple">
+<li><a class="reference external"
+          data-doc-search-tag="OpType.tTanh" href="graph.html#tTanh">OpType.tTanh</a></li>
+          </ul></dd>
+<dt><a name="tTranspose" href="#tTranspose"><span>tTranspose:</span></a></dt><dd><ul class="simple">
+<li><a class="reference external"
+          data-doc-search-tag="OpType.tTranspose" href="graph.html#tTranspose">OpType.tTranspose</a></li>
+          </ul></dd>
+<dt><a name="tTuple" href="#tTuple"><span>tTuple:</span></a></dt><dd><ul class="simple">
+<li><a class="reference external"
+          data-doc-search-tag="OpType.tTuple" href="graph.html#tTuple">OpType.tTuple</a></li>
+          </ul></dd>
+<dt><a name="tTupleElement" href="#tTupleElement"><span>tTupleElement:</span></a></dt><dd><ul class="simple">
+<li><a class="reference external"
+          data-doc-search-tag="OpType.tTupleElement" href="graph.html#tTupleElement">OpType.tTupleElement</a></li>
+          </ul></dd>
 <dt><a name="Tuple" href="#Tuple"><span>Tuple:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
           data-doc-search-tag="DataType.Tuple" href="shape.html#Tuple">DataType.Tuple</a></li>
           </ul></dd>
+<dt><a name="tuple2" href="#tuple2"><span>tuple2:</span></a></dt><dd><ul class="simple">
+<li><a class="reference external"
+          data-doc-search-tag="nimxla: tuple2(res: openArray[Buffer]): (Buffer, Buffer)" href="nimxla.html#tuple2%2CopenArray%5BBuffer%5D">nimxla: tuple2(res: openArray[Buffer]): (Buffer, Buffer)</a></li>
+          </ul></dd>
+<dt><a name="tuple3" href="#tuple3"><span>tuple3:</span></a></dt><dd><ul class="simple">
+<li><a class="reference external"
+          data-doc-search-tag="nimxla: tuple3(res: openArray[Buffer]): (Buffer, Buffer, Buffer)" href="nimxla.html#tuple3%2CopenArray%5BBuffer%5D">nimxla: tuple3(res: openArray[Buffer]): (Buffer, Buffer, Buffer)</a></li>
+          </ul></dd>
+<dt><a name="tuple4" href="#tuple4"><span>tuple4:</span></a></dt><dd><ul class="simple">
+<li><a class="reference external"
+          data-doc-search-tag="nimxla: tuple4(res: openArray[Buffer]): (Buffer, Buffer, Buffer, Buffer)" href="nimxla.html#tuple4%2CopenArray%5BBuffer%5D">nimxla: tuple4(res: openArray[Buffer]): (Buffer, Buffer, Buffer, Buffer)</a></li>
+          </ul></dd>
+<dt><a name="tuple5" href="#tuple5"><span>tuple5:</span></a></dt><dd><ul class="simple">
+<li><a class="reference external"
+          data-doc-search-tag="nimxla: tuple5(res: openArray[Buffer]): (Buffer, Buffer, Buffer, Buffer, Buffer)" href="nimxla.html#tuple5%2CopenArray%5BBuffer%5D">nimxla: tuple5(res: openArray[Buffer]): (Buffer, Buffer, Buffer, Buffer, Buffer)</a></li>
+          </ul></dd>
 <dt><a name="TupleKind" href="#TupleKind"><span>TupleKind:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
           data-doc-search-tag="ShapeKind.TupleKind" href="shape.html#TupleKind">ShapeKind.TupleKind</a></li>
+          </ul></dd>
+<dt><a name="tZerosLike" href="#tZerosLike"><span>tZerosLike:</span></a></dt><dd><ul class="simple">
+<li><a class="reference external"
+          data-doc-search-tag="OpType.tZerosLike" href="graph.html#tZerosLike">OpType.tZerosLike</a></li>
           </ul></dd>
 <dt><a name="U16" href="#U16"><span>U16:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
@@ -659,16 +1603,38 @@ window.addEventListener('DOMContentLoaded', main);
 <li><a class="reference external"
           data-doc-search-tag="Direction.Vertical" href="image.html#Vertical">Direction.Vertical</a></li>
           </ul></dd>
+<dt><a name="Warning" href="#Warning"><span>Warning:</span></a></dt><dd><ul class="simple">
+<li><a class="reference external"
+          data-doc-search-tag="LogLevel.Warning" href="nimxla.html#Warning">LogLevel.Warning</a></li>
+          </ul></dd>
 <dt><a name="Wrap" href="#Wrap"><span>Wrap:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
           data-doc-search-tag="ImageOpKind.Wrap" href="image.html#Wrap">ImageOpKind.Wrap</a></li>
+          </ul></dd>
+<dt><a name="write" href="#write"><span>write:</span></a></dt><dd><ul class="simple">
+<li><a class="reference external"
+          data-doc-search-tag="tensor: write[T: ElemType](t: Tensor[T]; s: Stream)" href="tensor.html#write%2CTensor%5BT%3A%20ElemType%5D%2CStream">tensor: write[T: ElemType](t: Tensor[T]; s: Stream)</a></li>
+          <li><a class="reference external"
+          data-doc-search-tag="tensor: write[T: ElemType](t: Tensor[T]; filename: string)" href="tensor.html#write%2CTensor%5BT%3A%20ElemType%5D%2Cstring">tensor: write[T: ElemType](t: Tensor[T]; filename: string)</a></li>
+          </ul></dd>
+<dt><a name="zero" href="#zero"><span>zero:</span></a></dt><dd><ul class="simple">
+<li><a class="reference external"
+          data-doc-search-tag="graph: zero(b: Builder; dtype = F32; dims: openArray[int] = []): Node" href="graph.html#zero%2CBuilder%2Cenum">graph: zero(b: Builder; dtype = F32; dims: openArray[int] = []): Node</a></li>
+          </ul></dd>
+<dt><a name="zeros" href="#zeros"><span>zeros:</span></a></dt><dd><ul class="simple">
+<li><a class="reference external"
+          data-doc-search-tag="tensor: zeros[T: ElemType](dims: varargs[int]): Tensor[T]" href="tensor.html#zeros%2Cvarargs%5Bint%5D">tensor: zeros[T: ElemType](dims: varargs[int]): Tensor[T]</a></li>
+          </ul></dd>
+<dt><a name="zerosLike" href="#zerosLike"><span>zerosLike:</span></a></dt><dd><ul class="simple">
+<li><a class="reference external"
+          data-doc-search-tag="graph: zerosLike(a: Node): Node" href="graph.html#zerosLike%2CNode">graph: zerosLike(a: Node): Node</a></li>
           </ul></dd>
 </dl>
     <div class="row">
       <div class="twelve-columns footer">
         <span class="nim-sprite"></span>
         <br/>
-        <small style="color: var(--hint);">Made with Nim. Generated: 2023-07-01 12:27:42 UTC</small>
+        <small style="color: var(--hint);">Made with Nim. Generated: 2023-07-01 12:32:03 UTC</small>
       </div>
     </div>
   </div>
