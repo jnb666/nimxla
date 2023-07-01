@@ -69,8 +69,6 @@ to generate a trace.
 - Examples use [cligen](https://github.com/c-blake/cligen) for command line argument parsing.
 
 ## TODO
-- heatmap of predicted vs actual labels
-- use github actions to auto generate docs
 - checkpoint files with current state
 - avg pool and batchnorm layers
 - RNN example

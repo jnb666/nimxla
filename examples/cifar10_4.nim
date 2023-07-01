@@ -30,7 +30,7 @@ proc buildModel(c: Client, rng: var Rand, nclasses: int, mean, std: seq[float32]
   result.info = "== cifar10_4 =="
   result.add(conv1, conv2, conv3, conv4, linear1, linear2)  
 
-proc main(epochs = 100, learnRate = 0.001, trainBatch = 200, testBatch = 500, seed: int64 = 0,
+proc main(epochs = 50, learnRate = 0.001, trainBatch = 200, testBatch = 500, seed: int64 = 0,
           augment = true, output = "", gpu = true, plot = false, debug = false) =
   var logger = newConsoleLogger(levelThreshold=if debug: lvlDebug else: lvlInfo)
   addHandler(logger)

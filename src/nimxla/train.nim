@@ -17,11 +17,10 @@ type
     testAcc*:  Executable
     stats*:    Table[string, seq[float]]
     predict*:  Tensor[int32]
+    heatmap*:  Tensor[int32]
 
 let
   plotNames = @[@["loss"], @["train", "test"]]
-  plotLayout = gridLayout(2, 1, ["loss", "accuracy"], ["epoch"])
-
 
 proc trainFunc*(c: Client, model: Module, dtype: DataType, shape: seq[int], lossFn: proc(yp, y: Node): Node): Executable =
   ## Compile training function with given input data shape and loss function which is applied to the output.
@@ -87,6 +86,8 @@ proc getAccuracy*[T: ElemType](t: var Trainer, model: var Module, loader: var Da
   var targets = newTensor[int32](loader.batchSize)
   var accuracy = 0.0
   t.predict = newTensor[int32](0)
+  let nclasses = loader.dataset.classes.len
+  t.heatmap = zeros[int32](nclasses, nclasses)
   for batch in getBatch(loader, data, targets):
     var params = initParams({"x": t.client.newBuffer(data), "y": t.client.newBuffer(targets)})
     model.setParams(params)
@@ -98,7 +99,11 @@ proc getAccuracy*[T: ElemType](t: var Trainer, model: var Module, loader: var Da
       debug "  tgt: ", targets
       debug "  pred:", params["labels"].i32
     accuracy += (accVal - accuracy) / float(batch+1)
-    t.predict = t.predict.append(params["labels"].i32)
+    let labels = params["labels"].i32
+    t.predict = t.predict.append(labels)
+    for i in 0 ..< targets.len:
+      let (x, y) = (targets[i].int, labels[i].int)
+      t.heatmap[y, x] = t.heatmap[y, x] + 1
   return accuracy
 
 proc updateStats(t: var Trainer, entries: openarray[(string, float)]) =
@@ -109,18 +114,34 @@ proc updateStats(t: var Trainer, entries: openarray[(string, float)]) =
     else:
       t.stats[name] = @[val]
 
-proc statsPlots*(t: Trainer): JsonNode =
+proc statsPlots*(t: Trainer, classes: seq[string]): JsonNode =
   ## Convert stats to format used by plots package
   result = %[]
   for i, plot in plotNames:
-    let yaxis = if i == 0: "y" else: "y" & $(i+1)
     for trace in plot:
-      result.add %*{"x": t.stats["epoch"], "y": t.stats[trace], "mode": "lines", "name": trace, "yaxis": yaxis}
+      result.add %*{"x": t.stats["epoch"], "y": t.stats[trace], "mode": "lines", "name": trace, "yaxis": "y" & $(i+1)}
+  # heatmap plot
+  let nclasses = classes.len
+  var heatmap: seq[seq[float]]
+  let scale = nclasses / t.predict.len
+  for y in 0 ..< nclasses:
+    var row: seq[float]
+    for x in 0 ..< nclasses:
+      row.add t.heatmap[y, x].float * scale
+    heatmap.add row
+    result.add %*{"z": heatmap, "x": classes, "y": classes, "type": "heatmap", "xaxis": "x3", "yaxis": "y3", 
+                  "colorscale": "Blackbody", "showscale": false}
 
 proc getLayout*(epochs: int): JsonNode =
-  result = plotLayout
-  result["legend"] = %*{"x": 0.99, "xanchor": "right", "y": 0.99}
-  result["xaxis"]["range"] = %*[1.0, epochs.float]
+  %*{
+    "xaxis":  {"domain": [0.0, 0.49], "anchor": "y2", "title": "epoch", "range": [1.0, epochs.float]},
+    "yaxis":  {"domain": [0.505, 1.0], "anchor": "x1", "title": "loss"},
+    "yaxis2": {"domain": [0.0, 0.495], "anchor": "x2", "title": "accuracy"},
+    "xaxis3": {"domain": [0.525, 1.0], "anchor": "y3"},
+    "yaxis3": {"domain": [0.35, 1.0], "anchor": "x3"},
+    "legend": {"x": 0.48, "xanchor": "right", "y": 0.99},
+    "margin": {"t": 30, "l": 60, "r": 0, "b": 30},
+  }
 
 proc ctrlc() {.noconv.} =
   echo ":quit"
@@ -143,7 +164,7 @@ proc trainNetwork*[T: ElemType](t: var Trainer, model: var Module, train, test: 
     echo &"epoch {epoch:3}:  loss: {loss:8.4f}  train accuracy: {trainAcc*100:.1f}%  test accuracy: {testAcc*100:.1f}%"
     t.updateStats({"epoch": epoch.float, "loss": loss, "train": trainAcc, "test": testAcc})
     if plot:
-      updatePlot(ws, t.statsPlots, getLayout(epochs))
+      updatePlot(ws, t.statsPlots(test.dataset.classes), getLayout(epochs))
   let elapsed = float(getMonoTime().ticks - start) / 1e9
   echo &"elapsed time = {elapsed:.3f}s"
   if plot:
