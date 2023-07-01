@@ -119,7 +119,7 @@ proc openWebSocket*(): WebSocket =
   ## Will start nimxla_plot server in the background if not already running.
   let ps = execProcess("""ps x | grep " nimxla_plot" | grep -v grep""")
   if ps == "":
-    echo "nimxla_plot not running - starting it on http://localhost:{httpPort}/"
+    echo &"nimxla_plot not running - starting it on http://localhost:{httpPort}/"
     let loggers = getHandlers()
     let debugFlag = if loggers.len > 0 and loggers[0].levelThreshold <= lvlDebug: "--debug" else: ""
     let origDir = getCurrentDir()

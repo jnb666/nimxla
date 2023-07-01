@@ -64,16 +64,16 @@ proc newImage[C: static int](width, height: int): Image[C] =
   ## Allocate a new blank image
   Image[C](width: width, height: height, pixels: newSeq[uint8](C*width*height))
 
-proc len[C: static int](m: Image[C]): int =
+proc len[C: static int](m: Image[C]): int {.inline.} =
   C * m.width * m.height
 
-proc `[]`[C: static int](m: Image[C], x, y: int): array[C, uint8] =
+proc `[]`[C: static int](m: Image[C], x, y: int): array[C, uint8] {.inline.} =
   ## Get pixel from image at position (x, y). Will return zeros if x or y are out of range.
   if x >= 0 and x < m.width and y >= 0 and y < m.height:
     let pos = C * (y*m.width + x)
     copyMem(result.addr, unsafeAddr m.pixels[pos], C)
 
-proc `[]=`[C: static int](m: var Image[C], x, y: int, pix: array[C, uint8]) =
+proc `[]=`[C: static int](m: var Image[C], x, y: int, pix: array[C, uint8]) {.inline.} =
   ## Set pixel at position (x, y) to val. No-op if x or y are out of range.
   if x >= 0 and x < m.width and y >= 0 and y < m.height:
     let pos = C * (y*m.width + x)
@@ -163,7 +163,7 @@ proc wrap[C: static int](m: Image[C], dx, dy: int): Image[C] =
     for y in y1 ..< y2:
        copyMem(addr result.pixels[y*wc+sx], unsafeAddr m.pixels[y*wc], -C*dx)
 
-proc interpolate[C: static int](m: Image[C], x, y: float32): array[C, uint8] {.inline.} =
+proc interpolate[C: static int](m: Image[C], x, y: float32): array[C, uint8] =
   ## bilinear interpolation
   let (ix, iy) = (x.int, y.int)
   let p1 = m[ix, iy]
