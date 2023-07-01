@@ -1,6 +1,0 @@
-gridLayout	plots.html#gridLayout,int,int,openArray[string],openArray[string]	plots: gridLayout(rows = 1; cols = 1; ytitle, xtitle: openArray[string] = []): JsonNode	
-plotImage	plots.html#plotImage,Tensor[uint8],int,int	plots: plotImage(t: Tensor[uint8]; row, col: int): JsonNode	
-plotImageGrid	plots.html#plotImageGrid,string,int,int,proc)	plots: plotImageGrid(title: string; rows, cols: int;\n              getData: proc (): (Tensor[uint8], seq[string])): (JsonNode,\n    JsonNode)	
-openWebSocket	plots.html#openWebSocket	plots: openWebSocket(): WebSocket	
-updatePlot	plots.html#updatePlot,WebSocket,JsonNode,JsonNode	plots: updatePlot(ws: WebSocket; data: JsonNode; layout: JsonNode = nil)	
-servePlots	plots.html#servePlots	plots: servePlots(): owned(Future[void])	

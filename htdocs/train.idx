@@ -1,9 +1,0 @@
-Trainer	train.html#Trainer	train: Trainer	
-trainFunc	train.html#trainFunc,Client,Module,DataType,seq[int],proc(Node,Node)	train: trainFunc(c: Client; model: Module; dtype: DataType; shape: seq[int];\n          lossFn: proc (yp, y: Node): Node): Executable	
-testFunc	train.html#testFunc,Client,Module,DataType,seq[int]	train: testFunc(c: Client; model: Module; dtype: DataType; shape: seq[int]): Executable	
-accuracyFunc	train.html#accuracyFunc,Client,int,int	train: accuracyFunc(c: Client; batch, nout: int; outType = F32; labelType = I32): Executable	
-trainEpoch	train.html#trainEpoch,Trainer,Module,DataLoader	train: trainEpoch[T: ElemType](t: var Trainer; model: var Module;\n                        loader: var DataLoader): (float, float)	
-getAccuracy	train.html#getAccuracy,Trainer,Module,DataLoader	train: getAccuracy[T: ElemType](t: var Trainer; model: var Module;\n                         loader: var DataLoader): float	
-statsPlots	train.html#statsPlots,Trainer	train: statsPlots(t: Trainer): JsonNode	
-getLayout	train.html#getLayout,int	train: getLayout(epochs: int): JsonNode	
-trainNetwork	train.html#trainNetwork,Trainer,Module,DataLoader,DataLoader,int	train: trainNetwork[T: ElemType](t: var Trainer; model: var Module;\n                          train, test: var DataLoader; epochs: int; plot = false)	
