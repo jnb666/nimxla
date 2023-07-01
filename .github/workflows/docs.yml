@@ -31,6 +31,8 @@ jobs:
 
       - name: Build docs
         run: |
+          mkdir -p ~/.config/nim
+          echo "threads = on" ~/.config/nim/nim.cfg
           find src -maxdepth 2 -name '*.nim' -exec nim doc --outdir:${{ env.deploy-dir }} --path:./src --index:on --git.url:https://github.com/jnb666/nimxla --git.commit:main {} \;
           nim buildIndex -o:${{ env.deploy-dir }}/theindex.html ${{ env.deploy-dir }}
           cp ${{ env.deploy-dir }}/theindex.html ${{ env.deploy-dir }}/index.html

@@ -29,28 +29,28 @@ A simple example to build and executing a graph which squares the elements from 
 See the [examples directory](https://github.com/jnb666/nimxla/tree/main/examples) for some more examples.
 
 ## Documentation
-See [the documentation index](https://jnb666.github.io/nimxla/htdocs/theindex.html).
+See [the documentation index](https://jnb666.github.io/nimxla).
 
 ## Module structure
-- [nimxla](https://jnb666.github.io/nimxla/htdocs/nimxla.html): Contains the Client type for interfacing with the CPU or GPU device, procs to copy data between host memory and device buffers and procs for compiling and executing a Computation which has been defined using the graph module. It also exports the symbols from the tensor, literal, shape and graph submodules.
+- [nimxla](https://jnb666.github.io/nimxla/nimxla.html): Contains the Client type for interfacing with the CPU or GPU device, procs to copy data between host memory and device buffers and procs for compiling and executing a Computation which has been defined using the graph module. It also exports the symbols from the tensor, literal, shape and graph submodules.
 
-- [nimxla/tensor](https://jnb666.github.io/nimxla/htdocs/tensor.html): Defines a generic host resident n dimensional array Tensor type which can be accessed from Nim.
+- [nimxla/tensor](https://jnb666.github.io/nimxla/tensor.html): Defines a generic host resident n dimensional array Tensor type which can be accessed from Nim.
 
-- [nimxla/literal](https://jnb666.github.io/nimxla/htdocs/literal.html): Defines the Literal type which is a host resident tensor or tuple of tensors in a format compatible with XLA.
+- [nimxla/literal](https://jnb666.github.io/nimxla/literal.html): Defines the Literal type which is a host resident tensor or tuple of tensors in a format compatible with XLA.
 
-- [nimxla/shape](https://jnb666.github.io/nimxla/htdocs/shape.html): Defines the Shape type which describes the memory layout, i.e. element data type and array dimensions, for all the above datatypes.
+- [nimxla/shape](https://jnb666.github.io/nimxla/shape.html): Defines the Shape type which describes the memory layout, i.e. element data type and array dimensions, for all the above datatypes.
 
-- [nimxla/graph](https://jnb666.github.io/nimxla/htdocs/graph.html): Wraps the XLA Builder and Op classes and is used to construct a tree of Nodes which can then be finalised using the build function to generate a Computation. Regular arithmetic ops and math functions are overloaded so they can be used with nodes. Extra metadata is stored so that graphs can be inspected easily. The gradient function can be used to generate a graph to perform reverse mode automatic differentiation. The autodiff implementation is inspired by the python [smallpebble](https://github.com/sradc/smallpebble) project.
+- [nimxla/graph](https://jnb666.github.io/nimxla/graph.html): Wraps the XLA Builder and Op classes and is used to construct a tree of Nodes which can then be finalised using the build function to generate a Computation. Regular arithmetic ops and math functions are overloaded so they can be used with nodes. Extra metadata is stored so that graphs can be inspected easily. The gradient function can be used to generate a graph to perform reverse mode automatic differentiation. The autodiff implementation is inspired by the python [smallpebble](https://github.com/sradc/smallpebble) project.
 
-- [nimxla/nn](https://jnb666.github.io/nimxla/htdocs/nn.html): Provides additional higher level functions for constructing and optimizing neural network models.
+- [nimxla/nn](https://jnb666.github.io/nimxla/nn.html): Provides additional higher level functions for constructing and optimizing neural network models.
 
-- [nimxla/data](https://jnb666.github.io/nimxla/htdocs/data.html): Provides functions to load common datasets and iterate over batches of data. The image loader uses the image module to launch image transforms via a worker thread.
+- [nimxla/data](https://jnb666.github.io/nimxla/data.html): Provides functions to load common datasets and iterate over batches of data. The image loader uses the image module to launch image transforms via a worker thread.
 
-- [nimxla/image](https://jnb666.github.io/nimxla/htdocs/image.html): Provides some basic image transforms for data augmentation. This will spawn a pool of threads to perform the calculations using all of the available CPU cores.
+- [nimxla/image](https://jnb666.github.io/nimxla/image.html): Provides some basic image transforms for data augmentation. This will spawn a pool of threads to perform the calculations using all of the available CPU cores.
 
-- [nimxla/train](https://jnb666.github.io/nimxla/htdocs/train.html): Contains functions for training batches of data and calculating the accuracy of the predictions.
+- [nimxla/train](https://jnb666.github.io/nimxla/train.html): Contains functions for training batches of data and calculating the accuracy of the predictions.
 
-- [nimxla/plots](https://jnb666.github.io/nimxla/htdocs/plots.html): Provides a web server to serve plots using plotly. The `nimxla_plot` binary calls this to run a server in the background.
+- [nimxla/plots](https://jnb666.github.io/nimxla/plots.html): Provides a web server to serve plots using plotly. The `nimxla_plot` binary calls this to run a server in the background.
 
 The submodules under nimxla are exported by the main package. Other internal functions and bindings to the XLA C++ library are under the nimxla/private directory. The C wrapper code here is based on the Rust bindings from [xla-rs](https://github.com/LaurentMazare/xla-rs).
 
