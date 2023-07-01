@@ -1,0 +1,21 @@
+Horizontal	image.html#Horizontal	Direction.Horizontal	
+Vertical	image.html#Vertical	Direction.Vertical	
+Direction	image.html#Direction	image: Direction	
+Affine	image.html#Affine	ImageOpKind.Affine	
+Flip	image.html#Flip	ImageOpKind.Flip	
+Wrap	image.html#Wrap	ImageOpKind.Wrap	
+Elastic	image.html#Elastic	ImageOpKind.Elastic	
+ImageOpKind	image.html#ImageOpKind	image: ImageOpKind	
+ImageOp	image.html#ImageOp	image: ImageOp	
+ImageRequest	image.html#ImageRequest	image: ImageRequest	
+TransContext	image.html#TransContext	image: TransContext	
+Transformer	image.html#Transformer	image: Transformer	
+randomFlip	image.html#randomFlip,Direction,float	image: randomFlip(direction: Direction; p = 0.5): ImageOp	
+randomWrap	image.html#randomWrap,int,int,float	image: randomWrap(max_x, max_y: int; p = 0.5): ImageOp	
+randomAffine	image.html#randomAffine,float,(float64, float64),float,float,float	image: randomAffine(rotate = 0.0; scale = (1.0, 1.0); transx = 0.0; transy = 0.0;\n             p = 0.5): ImageOp	
+randomElastic	image.html#randomElastic,int,float,float,float	image: randomElastic(kernelSize = 9; stddev = 4.0; scale = 0.5; p = 0.5): ImageOp	
+`$`	image.html#$,ImageOp	image: `$`(op: ImageOp): string	
+`$`	image.html#$,Transformer	image: `$`(t: Transformer): string	
+initTransformer	image.html#initTransformer,staticint,Rand,openArray[ImageOp],int	image: initTransformer(channels: static int; rng: var Rand; ops: openArray[ImageOp];\n                threads = 0): Transformer	
+transform	image.html#transform,Transformer,Tensor[uint8]	image: transform(t: Transformer; arr: var Tensor[uint8])	
+shutdown	image.html#shutdown,Transformer	image: shutdown(t: var Transformer)	
