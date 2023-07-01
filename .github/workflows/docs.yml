@@ -11,13 +11,12 @@ jobs:
   docs:
     runs-on: ubuntu-latest
     steps:
-      - name: Create docs
-        uses: actions/checkout@v3
-        uses: jiro4989/setup-nim-action@v1
+      - uses: actions/checkout@v3
+      - uses: jiro4989/setup-nim-action@v1
         with:
           nim-version: 'stable'
-        run: |
-          nimble install -Y
+      - run: nimble install -Y
+      - run: |
           find src -maxdepth 2 -name '*.nim' -exec nim doc --outdir:${{ env.deploy-dir }} --path:./src --index:on --git.url:https://github.com/jnb666/nimxla --git.commit:main {} \\;
           nim buildIndex -o:${{ env.deploy-dir }}/theindex.html ${{ env.deploy-dir }}
           cp ${{ env.deploy-dir }}/theindex.html ${{ env.deploy-dir }}/index.html
