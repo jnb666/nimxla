@@ -6,6 +6,8 @@ on:
 
 env:
   deploy-dir: .gh-pages
+  xla-library-base: https://github.com/elixir-nx/xla/releases/download/v0.4.4/
+  xla-library-name: xla_extension-x86_64-linux-gnu-cpu.tar.gz
 
 jobs:
   docs:
@@ -16,14 +18,10 @@ jobs:
         with:
           nim-version: 'stable'
 
-      - name: Download XLA
-        uses: wei/wget@v1
-        with:
-          args: -O /tmp/xla_extension-x86_64-linux-gnu-cpu.tar.gz https://github.com/elixir-nx/xla/releases/download/v0.4.4/xla_extension-x86_64-linux-gnu-cpu.tar.gz
-
       - name: Install XLA
         run: |
-          sudo tar zxf /tmp/xla_extension-x86_64-linux-gnu-cpu.tar.gz -C /usr/local
+          wget ${{ env.xla-library-base }}${{ env.xla-library-name }}
+          sudo tar zxf {{ env.xla-library-name }} -C /usr/local
           sudo ln -s /usr/local/xla_extension/lib/libxla_extension.so /usr/local/lib/libxla_extension.so
           sudo ldconfig
 
