@@ -11,26 +11,27 @@ jobs:
   docs:
     runs-on: ubuntu-latest
     steps:
-      - name: Setup nim
       - uses: actions/checkout@v3
       - uses: jiro4989/setup-nim-action@v1
         with:
           nim-version: 'stable'
 
-      - name: Install XLA library
-      - uses: wei/wget@v1
+      - name: Download XLA
+        uses: wei/wget@v1
         with:
           args: -O /tmp/xla_extension-x86_64-linux-gnu-cpu.tar.gz https://github.com/elixir-nx/xla/releases/download/v0.4.4/xla_extension-x86_64-linux-gnu-cpu.tar.gz
-      - run: |
+
+      - name: Install XLA
+        run: |
           sudo tar zxf /tmp/xla_extension-x86_64-linux-gnu-cpu.tar.gz -C /usr/local
           sudo ln -s /usr/local/xla_extension/lib/libxla_extension.so /usr/local/lib/libxla_extension.so
           sudo ldconfig
 
       - name: Install package
-      - run: nimble install -Y
+        run: nimble install -Y
 
       - name: Build docs
-      - run: |
+        run: |
           find src -maxdepth 2 -name '*.nim' -exec nim doc --outdir:${{ env.deploy-dir }} --path:./src --index:on --git.url:https://github.com/jnb666/nimxla --git.commit:main {} \\;
           nim buildIndex -o:${{ env.deploy-dir }}/theindex.html ${{ env.deploy-dir }}
           cp ${{ env.deploy-dir }}/theindex.html ${{ env.deploy-dir }}/index.html
