@@ -221,6 +221,22 @@ window.addEventListener('DOMContentLoaded', main);
 <li><a class="reference external"
           data-doc-search-tag="tensor: at[T: ElemType](t: Tensor[T]; ix: Natural): Tensor[T]" href="tensor.html#at%2CTensor%5BT%3A%20ElemType%5D%2CNatural">tensor: at[T: ElemType](t: Tensor[T]; ix: Natural): Tensor[T]</a></li>
           </ul></dd>
+<dt><a name="batchNormGrad" href="#batchNormGrad"><span>batchNormGrad:</span></a></dt><dd><ul class="simple">
+<li><a class="reference external"
+          data-doc-search-tag="graph: batchNormGrad(a, scale, mean, variance, gradOutput: Node; epsilon: float;
+              axis: int): Node" href="graph.html#batchNormGrad%2CNode%2CNode%2CNode%2CNode%2CNode%2Cfloat%2Cint">graph: batchNormGrad(a, scale, mean, variance, gradOutput: Node; epsilon: float;
+              axis: int): Node</a></li>
+          </ul></dd>
+<dt><a name="batchNormInference" href="#batchNormInference"><span>batchNormInference:</span></a></dt><dd><ul class="simple">
+<li><a class="reference external"
+          data-doc-search-tag="graph: batchNormInference(a, scale, offset, mean, variance: Node; epsilon: float;
+                   axis: int): Node" href="graph.html#batchNormInference%2CNode%2CNode%2CNode%2CNode%2CNode%2Cfloat%2Cint">graph: batchNormInference(a, scale, offset, mean, variance: Node; epsilon: float;
+                   axis: int): Node</a></li>
+          </ul></dd>
+<dt><a name="batchNormTraining" href="#batchNormTraining"><span>batchNormTraining:</span></a></dt><dd><ul class="simple">
+<li><a class="reference external"
+          data-doc-search-tag="graph: batchNormTraining(a, scale, offset: Node; epsilon: float; axis: int): Node" href="graph.html#batchNormTraining%2CNode%2CNode%2CNode%2Cfloat%2Cint">graph: batchNormTraining(a, scale, offset: Node; epsilon: float; axis: int): Node</a></li>
+          </ul></dd>
 <dt><a name="BF16" href="#BF16"><span>BF16:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
           data-doc-search-tag="DataType.BF16" href="shape.html#BF16">DataType.BF16</a></li>
@@ -547,6 +563,10 @@ window.addEventListener('DOMContentLoaded', main);
 <li><a class="reference external"
           data-doc-search-tag="train: getLayout(epochs: int): JsonNode" href="train.html#getLayout%2Cint">train: getLayout(epochs: int): JsonNode</a></li>
           </ul></dd>
+<dt><a name="getParams" href="#getParams"><span>getParams:</span></a></dt><dd><ul class="simple">
+<li><a class="reference external"
+          data-doc-search-tag="nn: getParams(m: Module; params: var Params)" href="nn.html#getParams%2CModule%2CParams">nn: getParams(m: Module; params: var Params)</a></li>
+          </ul></dd>
 <dt><a name="glorotInit" href="#glorotInit"><span>glorotInit:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
           data-doc-search-tag="nn: glorotInit(gain = 1.0): InitFunc" href="nn.html#glorotInit%2Cfloat">nn: glorotInit(gain = 1.0): InitFunc</a></li>
@@ -615,6 +635,16 @@ window.addEventListener('DOMContentLoaded', main);
 <li><a class="reference external"
           data-doc-search-tag="LogLevel.Info" href="nimxla.html#Info">LogLevel.Info</a></li>
           </ul></dd>
+<dt><a name="initBatchNorm" href="#initBatchNorm"><span>initBatchNorm:</span></a></dt><dd><ul class="simple">
+<li><a class="reference external"
+          data-doc-search-tag="nn: initBatchNorm(c: Client; rng: var Rand; id: string; numFeatures: int;
+              momentum: float = 0.1; epsilon: float = 0.00001;
+              weights = constantInit(1.0); biases = constantInit(0.0);
+              dtype = F32): Module" href="nn.html#initBatchNorm%2CClient%2CRand%2Cstring%2Cint%2Cfloat%2Cfloat">nn: initBatchNorm(c: Client; rng: var Rand; id: string; numFeatures: int;
+              momentum: float = 0.1; epsilon: float = 0.00001;
+              weights = constantInit(1.0); biases = constantInit(0.0);
+              dtype = F32): Module</a></li>
+          </ul></dd>
 <dt><a name="initConv2d" href="#initConv2d"><span>initConv2d:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
           data-doc-search-tag="nn: initConv2d(c: Client; rng: var Rand; id: string; inChannels, outChannels: int;
@@ -672,6 +702,10 @@ window.addEventListener('DOMContentLoaded', main);
 <dt><a name="last" href="#last"><span>last:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
           data-doc-search-tag="graph: last(comp: Computation): Node" href="graph.html#last%2CComputation">graph: last(comp: Computation): Node</a></li>
+          </ul></dd>
+<dt><a name="learnableVars" href="#learnableVars"><span>learnableVars:</span></a></dt><dd><ul class="simple">
+<li><a class="reference external"
+          data-doc-search-tag="nn: learnableVars(m: Module): seq[Variable]" href="nn.html#learnableVars%2CModule">nn: learnableVars(m: Module): seq[Variable]</a></li>
           </ul></dd>
 <dt><a name="len" href="#len"><span>len:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
@@ -836,8 +870,8 @@ window.addEventListener('DOMContentLoaded', main);
 <dt><a name="newVariable" href="#newVariable"><span>newVariable:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
           data-doc-search-tag="nn: newVariable(c: Client; name: string; dims: openArray[int]; dtype: DataType;
-            init: InitFunc; rng: var Rand): Variable" href="nn.html#newVariable%2CClient%2Cstring%2CopenArray%5Bint%5D%2CDataType%2CInitFunc%2CRand">nn: newVariable(c: Client; name: string; dims: openArray[int]; dtype: DataType;
-            init: InitFunc; rng: var Rand): Variable</a></li>
+            init: InitFunc; rng: var Rand; calcGrad = true): Variable" href="nn.html#newVariable%2CClient%2Cstring%2CopenArray%5Bint%5D%2CDataType%2CInitFunc%2CRand">nn: newVariable(c: Client; name: string; dims: openArray[int]; dtype: DataType;
+            init: InitFunc; rng: var Rand; calcGrad = true): Variable</a></li>
           </ul></dd>
 <dt><a name="Node" href="#Node"><span>Node:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
@@ -894,6 +928,10 @@ window.addEventListener('DOMContentLoaded', main);
 <dt><a name="OpType" href="#OpType"><span>OpType:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
           data-doc-search-tag="graph: OpType" href="graph.html#OpType">graph: OpType</a></li>
+          </ul></dd>
+<dt><a name="Outputs" href="#Outputs"><span>Outputs:</span></a></dt><dd><ul class="simple">
+<li><a class="reference external"
+          data-doc-search-tag="nn: Outputs" href="nn.html#Outputs">nn: Outputs</a></li>
           </ul></dd>
 <dt><a name="pad" href="#pad"><span>pad:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
@@ -1105,13 +1143,17 @@ window.addEventListener('DOMContentLoaded', main);
           </ul></dd>
 <dt><a name="setParams" href="#setParams"><span>setParams:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
-          data-doc-search-tag="nn: setParams(m: Module; params: var Params)" href="nn.html#setParams%2CModule%2CParams">nn: setParams(m: Module; params: var Params)</a></li>
+          data-doc-search-tag="nn: setParams(m: var Module; params: Params)" href="nn.html#setParams%2CModule%2CParams">nn: setParams(m: var Module; params: Params)</a></li>
           </ul></dd>
 <dt><a name="setPrintOpts" href="#setPrintOpts"><span>setPrintOpts:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
           data-doc-search-tag="tensor: setPrintOpts(minWidth = 8; precision = 6; floatMode = ffDefault;
              threshold = 1000; edgeitems = 4)" href="tensor.html#setPrintOpts%2Cint%2Cint%2Cint%2Cint">tensor: setPrintOpts(minWidth = 8; precision = 6; floatMode = ffDefault;
              threshold = 1000; edgeitems = 4)</a></li>
+          </ul></dd>
+<dt><a name="setVars" href="#setVars"><span>setVars:</span></a></dt><dd><ul class="simple">
+<li><a class="reference external"
+          data-doc-search-tag="nn: setVars(m: var Module; vars: varargs[Variable])" href="nn.html#setVars%2CModule%2Cvarargs%5BVariable%5D">nn: setVars(m: var Module; vars: varargs[Variable])</a></li>
           </ul></dd>
 <dt><a name="shape" href="#shape"><span>shape:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
@@ -1200,6 +1242,18 @@ window.addEventListener('DOMContentLoaded', main);
 <dt><a name="tArgmin" href="#tArgmin"><span>tArgmin:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
           data-doc-search-tag="OpType.tArgmin" href="graph.html#tArgmin">OpType.tArgmin</a></li>
+          </ul></dd>
+<dt><a name="tBatchNormGrad" href="#tBatchNormGrad"><span>tBatchNormGrad:</span></a></dt><dd><ul class="simple">
+<li><a class="reference external"
+          data-doc-search-tag="OpType.tBatchNormGrad" href="graph.html#tBatchNormGrad">OpType.tBatchNormGrad</a></li>
+          </ul></dd>
+<dt><a name="tBatchNormInference" href="#tBatchNormInference"><span>tBatchNormInference:</span></a></dt><dd><ul class="simple">
+<li><a class="reference external"
+          data-doc-search-tag="OpType.tBatchNormInference" href="graph.html#tBatchNormInference">OpType.tBatchNormInference</a></li>
+          </ul></dd>
+<dt><a name="tBatchNormTraining" href="#tBatchNormTraining"><span>tBatchNormTraining:</span></a></dt><dd><ul class="simple">
+<li><a class="reference external"
+          data-doc-search-tag="OpType.tBatchNormTraining" href="graph.html#tBatchNormTraining">OpType.tBatchNormTraining</a></li>
           </ul></dd>
 <dt><a name="tBroadcast" href="#tBroadcast"><span>tBroadcast:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
@@ -1344,6 +1398,10 @@ window.addEventListener('DOMContentLoaded', main);
 <dt><a name="tNeg" href="#tNeg"><span>tNeg:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
           data-doc-search-tag="OpType.tNeg" href="graph.html#tNeg">OpType.tNeg</a></li>
+          </ul></dd>
+<dt><a name="tNone" href="#tNone"><span>tNone:</span></a></dt><dd><ul class="simple">
+<li><a class="reference external"
+          data-doc-search-tag="OpType.tNone" href="graph.html#tNone">OpType.tNone</a></li>
           </ul></dd>
 <dt><a name="tNot" href="#tNot"><span>tNot:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
@@ -1587,6 +1645,10 @@ window.addEventListener('DOMContentLoaded', main);
 <li><a class="reference external"
           data-doc-search-tag="nn: uniformInit(min = 0.0; max = 1.0): InitFunc" href="nn.html#uniformInit%2Cfloat%2Cfloat">nn: uniformInit(min = 0.0; max = 1.0): InitFunc</a></li>
           </ul></dd>
+<dt><a name="update" href="#update"><span>update:</span></a></dt><dd><ul class="simple">
+<li><a class="reference external"
+          data-doc-search-tag="nn: update(m: var Module; params: Params)" href="nn.html#update%2CModule%2CParams">nn: update(m: var Module; params: Params)</a></li>
+          </ul></dd>
 <dt><a name="updatePlot" href="#updatePlot"><span>updatePlot:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
           data-doc-search-tag="plots: updatePlot(ws: WebSocket; data: JsonNode; layout: JsonNode = nil)" href="plots.html#updatePlot%2CWebSocket%2CJsonNode%2CJsonNode">plots: updatePlot(ws: WebSocket; data: JsonNode; layout: JsonNode = nil)</a></li>
@@ -1634,7 +1696,7 @@ window.addEventListener('DOMContentLoaded', main);
       <div class="twelve-columns footer">
         <span class="nim-sprite"></span>
         <br/>
-        <small style="color: var(--hint);">Made with Nim. Generated: 2023-07-01 16:10:29 UTC</small>
+        <small style="color: var(--hint);">Made with Nim. Generated: 2023-07-03 15:30:44 UTC</small>
       </div>
     </div>
   </div>

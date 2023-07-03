@@ -1,4 +1,5 @@
 BuilderError	graph.html#BuilderError	graph: BuilderError	
+tNone	graph.html#tNone	OpType.tNone	
 tConst	graph.html#tConst	OpType.tConst	
 tLiteral	graph.html#tLiteral	OpType.tLiteral	
 tParam	graph.html#tParam	OpType.tParam	
@@ -68,6 +69,9 @@ tClamp	graph.html#tClamp	OpType.tClamp
 tTuple	graph.html#tTuple	OpType.tTuple	
 tConcat	graph.html#tConcat	OpType.tConcat	
 tScatter	graph.html#tScatter	OpType.tScatter	
+tBatchNormInference	graph.html#tBatchNormInference	OpType.tBatchNormInference	
+tBatchNormTraining	graph.html#tBatchNormTraining	OpType.tBatchNormTraining	
+tBatchNormGrad	graph.html#tBatchNormGrad	OpType.tBatchNormGrad	
 OpType	graph.html#OpType	graph: OpType	
 Builder	graph.html#Builder	graph: Builder	
 Node	graph.html#Node	graph: Node	
@@ -186,4 +190,7 @@ maxPool1d	graph.html#maxPool1d,Node,int,int	graph: maxPool1d(a: Node; kernelSize
 maxPool2d	graph.html#maxPool2d,Node,Opt2d,Opt2d,Pad2d	graph: maxPool2d(a: Node; kernelSize: Opt2d; strides: Opt2d = 0;\n          padding: Pad2d = pad(0); channelsFirst = false): Node	
 maxPool3d	graph.html#maxPool3d,Node,Opt3d,Opt3d,Pad3d	graph: maxPool3d(a: Node; kernelSize: Opt3d; strides: Opt3d = 0;\n          padding: Pad3d = pad(0); channelsFirst = false): Node	
 selectAndScatter	graph.html#selectAndScatter,Node,Node,openArray[int],openArray[int],openArray[Padding]	graph: selectAndScatter(a, source: Node; windowDims, strides: openArray[int];\n                 padding: openArray[Padding] = []): Node	
+batchNormInference	graph.html#batchNormInference,Node,Node,Node,Node,Node,float,int	graph: batchNormInference(a, scale, offset, mean, variance: Node; epsilon: float;\n                   axis: int): Node	
+batchNormTraining	graph.html#batchNormTraining,Node,Node,Node,float,int	graph: batchNormTraining(a, scale, offset: Node; epsilon: float; axis: int): Node	
+batchNormGrad	graph.html#batchNormGrad,Node,Node,Node,Node,Node,float,int	graph: batchNormGrad(a, scale, mean, variance, gradOutput: Node; epsilon: float;\n              axis: int): Node	
 gradient	graph.html#gradient,Builder,Node,openArray[string]	graph: gradient(b: Builder; output: Node; inputs: openArray[string]): seq[Node]	
