@@ -13,11 +13,11 @@ setPrintOpts(precision=4, minWidth=8, floatMode=ffDecimal, threshold=100, edgeIt
 proc buildModel(c: Client, rng: var Rand, imgSize, nclasses: int): Module =
   let layer1 = c.initLinear(rng, "1", imgSize, 128)
   let layer2 = c.initLinear(rng, "2", 128, nclasses)
-  result.forward = proc(x: Node, training: bool): Node =
+  result.forward = proc(x: Node, training: bool, output: var Outputs): Node =
     let b = x.builder
     let xf = x.convert(F32) / b^255f32
-    let l1 = layer1.forward(xf.flatten(1)).relu
-    layer2.forward(l1).softmax
+    let l1 = layer1.forward(xf.flatten(1), training, output).relu
+    layer2.forward(l1, training, output).softmax
   result.info = "== mnist_mlp =="
   result.add(layer1, layer2)
 

@@ -3,7 +3,7 @@
 # output option will save predicted test labels to a file which can be read by imgview
 
 {.warning[BareExcept]:off.}
-import std/[strutils, strformat, math, logging, random, tables, monotimes]
+import std/[strutils, math, random, logging, tables]
 import nimxla
 import nimxla/[nn, data, train]
 import cligen
@@ -15,13 +15,13 @@ proc buildModel(c: Client, rng: var Rand, nclasses: int): Module =
   let conv2 = c.initConv2d(rng, "2", 20, 40, kernelSize=5)
   let linear1 = c.initLinear(rng, "3", 640, 100)
   let linear2 = c.initLinear(rng, "4", 100, nclasses)
-  result.forward = proc(x: Node, training: bool): Node =
+  result.forward = proc(x: Node, training: bool, output: var Outputs): Node =
     let b = x.builder
     let xf = x.convert(F32) / b^255f32
-    let l1 = conv1.forward(xf).relu.maxPool2d(2)
-    let l2 = conv2.forward(l1).relu.maxPool2d(2)
-    let l3 = linear1.forward(l2.flatten(1)).relu
-    linear2.forward(l3).softmax
+    let l1 = conv1.forward(xf, training, output).relu.maxPool2d(2)
+    let l2 = conv2.forward(l1, training, output).relu.maxPool2d(2)
+    let l3 = linear1.forward(l2.flatten(1), training, output).relu
+    linear2.forward(l3, training, output).softmax
   result.info = "== mnist_cnn =="
   result.add(conv1, conv2, linear1, linear2)  
 

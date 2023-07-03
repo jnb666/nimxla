@@ -186,6 +186,12 @@ xla_op op_reduce_window(const xla_op, const xla_op, const xla_computation, size_
 xla_op op_select_and_scatter(const xla_op, const xla_computation, size_t,
                  const int64_t *, int64_t *, size_t, const int64_t *, const int64_t *,
                  const xla_op, const xla_op, const xla_computation);
+xla_op op_batch_norm_inference(const xla_op, const xla_op, const xla_op, const xla_op,
+                               const xla_op, float, int64_t);
+xla_op op_batch_norm_training(const xla_op, const xla_op, const xla_op, float, int64_t);
+xla_op op_batch_norm_grad(const xla_op, const xla_op, const xla_op, const xla_op,
+                          const xla_op, float, int64_t);
+
 xla_op op_internal_error(const xla_builder, const char *);
 xla_op op_unknown_error(const xla_builder, const char *);
 xla_op op_invalid_argument_error(const xla_builder, const char *);

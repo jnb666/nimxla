@@ -1,7 +1,7 @@
 ## The train module has common functions for training neural networks.
 ## It depends on the nn and data modules in addition to the core nimxla modules.
 
-import std/[tables, json, logging, math, strformat, sugar, monotimes]
+import std/[tables, json, logging, math, strformat, strutils, sugar, times, monotimes]
 import ../nimxla
 import nn, data, plots
 import ws
@@ -63,8 +63,9 @@ proc trainEpoch*[T: ElemType](t: var Trainer, model: var Module, loader: var Dat
   var accuracy = 0.0
   for batch in getBatch(loader, data, targets):
     var params = initParams({"x": t.client.newBuffer(data), "y": t.client.newBuffer(targets)})
-    model.setParams(params)
+    model.getParams(params)
     t.trainer.runWith(params)
+    model.update(params)
     t.trainAcc.runWith(params)
     let loss = params["loss"].f32[].float
     let accVal = params["accuracy"].f32[].float
@@ -76,7 +77,7 @@ proc trainEpoch*[T: ElemType](t: var Trainer, model: var Module, loader: var Dat
       return (loss, 0.0)
     avgLoss += (loss - avgLoss) / float(batch+1)
     accuracy += (accVal - accuracy) / float(batch+1)
-    model.variables = t.optim(params)
+    model.setParams(t.optim(params))
   return (avgLoss, accuracy)
 
 proc getAccuracy*[T: ElemType](t: var Trainer, model: var Module, loader: var Dataloader): float =
@@ -90,7 +91,7 @@ proc getAccuracy*[T: ElemType](t: var Trainer, model: var Module, loader: var Da
   t.heatmap = zeros[int32](nclasses, nclasses)
   for batch in getBatch(loader, data, targets):
     var params = initParams({"x": t.client.newBuffer(data), "y": t.client.newBuffer(targets)})
-    model.setParams(params)
+    model.getParams(params)
     t.tester.runWith(params)
     t.testAcc.runWith(params)
     let accVal = params["accuracy"].f32[].float
@@ -143,30 +144,41 @@ proc getLayout*(epochs: int): JsonNode =
     "margin": {"t": 30, "l": 60, "r": 0, "b": 30},
   }
 
-proc ctrlc() {.noconv.} =
-  echo ":quit"
-  quit()
+proc format(d: Duration): string =
+  let secs = d.inSeconds
+  let dp = toParts(d)
+  if secs == 0:
+    &"{dp[Milliseconds]}ms"
+  elif secs < 60:
+    &"{dp[Seconds]}.{dp[Milliseconds]}s"
+  elif secs < 3600:
+    &"{dp[Minutes]}m:{dp[Seconds]}.{dp[Milliseconds]}s"
+  else:
+    &"{secs div 3600}h:{dp[Minutes]}m:{dp[Seconds]}s"
+
 
 proc trainNetwork*[T: ElemType](t: var Trainer, model: var Module, train, test: var DataLoader, epochs: int, plot = false) =
   ## Training run for given number of epochs. If transform is set it will be applied to each batch of training data.
-  setControlCHook(ctrlc)
   t.stats = initTable[string, seq[float]]()
   var ws: WebSocket
   if plot:
     ws = openWebSocket()
-  let start = getMonoTime().ticks
+  let start = getMonoTime()
   for epoch in 1 .. epochs:
+    let startEpoch = getMonoTime()
     let (loss, trainAcc) = trainEpoch[T](t, model, train)
     if loss.isNan:
       error "loss returns Nan value - aborting"
       break
     let testAcc = getAccuracy[T](t, model, test)
-    echo &"epoch {epoch:3}:  loss: {loss:8.4f}  train accuracy: {trainAcc*100:.1f}%  test accuracy: {testAcc*100:.1f}%"
     t.updateStats({"epoch": epoch.float, "loss": loss, "train": trainAcc, "test": testAcc})
     if plot:
       updatePlot(ws, t.statsPlots(test.dataset.classes), getLayout(epochs))
-  let elapsed = float(getMonoTime().ticks - start) / 1e9
-  echo &"elapsed time = {elapsed:.3f}s"
+    let elapsed = format(getMonoTime() - startEpoch)
+    echo &"epoch {epoch:3}:  loss: {loss:8.4f}  train accuracy: {trainAcc*100:.1f}%  test accuracy: {testAcc*100:.1f}%  elapsed: {elapsed}"
+
+  let totalElapsed = format(getMonoTime() - start)
+  echo &"total elapsed time = {totalElapsed}"
   if plot:
     ws.close
 

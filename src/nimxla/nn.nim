@@ -1,6 +1,6 @@
 ## The nn module provides higher level functions for building neural network models using the nimxla graph API.
 
-import std/[math, random, times, strutils, strformat, sequtils, sugar, tables, logging]
+import std/[math, random, times, strutils, strformat, sequtils, tables, logging]
 import ../nimxla
 
 type
@@ -8,20 +8,27 @@ type
     ## A Variable is a learnable parameter associated with a module.
     name*: string
     data*: Buffer
+    calcGrad*: bool
 
   InitFunc* = proc(c: Client, dims: openarray[int], dtype: DataType, rng: var Rand): Buffer
     ## InitFunc defines a function used to initialise a learnable parameter.
 
-  Optimizer* = proc(params: Params): seq[Variable]
+  Optimizer* = proc(params: Params): Params
     ## Optimizer function to update the model weights.
 
+  Outputs* = object
+    ## List of named output parameters
+    params: seq[Node]
+
   Module* = object
-    ## A module holds the state for a set of variables together with a forward 
-    ## computation which depends on an input value. The training flag is set
-    ## to true when in training mode.
-    variables*: seq[Variable]
-    forward*: proc(x: Node, training = false): Node
-    info*: string
+    ## A module holds the state for a set of variables together with a forward computation which depends on an input value.
+    ## The training flag is set to true when in training mode.
+    ## If the module saves internal state then this is added to the output list at compile time.
+    ## each forward call.
+    variables*:   Table[string, Variable]
+    outputs*:     seq[string]
+    forward*:     proc(x: Node, training: bool, output: var Outputs): Node
+    info*:        string
 
 
 proc initRandom*(seed: int64 = 0): Rand =
@@ -89,9 +96,10 @@ proc heInit*(mean = 0.0, gain = 2.0, fanOut = false): InitFunc =
       sqrt(gain / nin.float)
     normalInit(mean, stddev)(c, dims, dtype, rng)
 
-proc newVariable*(c: Client, name: string, dims: openarray[int], dtype: DataType, init: InitFunc, rng: var Rand): Variable =
+proc newVariable*(c: Client, name: string, dims: openarray[int], dtype: DataType, init: InitFunc, 
+                  rng: var Rand, calcGrad = true): Variable =
   ## Allocate a new variable with the given name and shape and initialise values.
-  Variable(name: name, data: c.init(dims, dtype, rng))
+  Variable(name: name, data: c.init(dims, dtype, rng), calcGrad: calcGrad)
 
 proc param*(b: Builder, p: Variable, suffix = ""): Node =
   ## Create a new parameter node from this Variable
@@ -102,7 +110,9 @@ proc add*(m: var Module, modules: varargs[Module]) =
   ## Add variables from modules to m.
   var info: seq[string]
   for sub in modules:
-    m.variables.add sub.variables
+    for name, v in sub.variables:
+      m.variables[name] = v
+    m.outputs.add sub.outputs
     info.add sub.info
   m.info = if m.info == "":
     info.join("\n")
@@ -112,18 +122,40 @@ proc add*(m: var Module, modules: varargs[Module]) =
 proc `$`*(m: Module): string =
   m.info
 
+proc setVars*(m: var Module, vars: varargs[Variable]) =
+  ## Assign variables to module
+  for v in vars:
+    m.variables[v.name] = v
+
+proc learnableVars*(m: Module): seq[Variable] =
+  ## List of all learnable variables for which we calc the gradients.
+  for v in m.variables.values:
+    if v.calcGrad: result.add v
+
 proc varNames*(m: Module): seq[string] =
-  ## List of all the variable names defined for this module.
-  map(m.variables, x => x.name)
+  ## List of all the learnable variable names defined for this module.
+  for v in m.variables.values:
+    if v.calcGrad: result.add v.name
 
 proc gradNames*(m: Module): seq[string] =
   ## List of all the variable gradient output names for this module.
-  map(m.variables, x => x.name & "_grad")
+  for v in m.variables.values:
+    if v.calcGrad: result.add v.name & "_grad"
 
-proc setParams*(m: Module, params: var Params) =
+proc getParams*(m: Module, params: var Params) =
   ## Add model variables to the params table
-  for p in m.variables:
-    params[p.name] = p.data
+  for v in m.variables.values:
+    params[v.name] = v.data
+
+proc setParams*(m: var Module, params: Params) =
+  ## Update provided parameter list - e.g. from output from optimizer
+  for name, buffer in params:
+    m.variables[name].data = buffer
+
+proc update*(m: var Module, params: Params) =
+  ## Update output parameter values
+  for name in m.outputs:
+    m.variables[name].data = params[name]
 
 proc mseLoss*(pred, target: Node): Node =
   ## Mean square error loss function.
@@ -167,15 +199,15 @@ proc initLinear*(c: Client, rng: var Rand, id: string, nin, nout: int,
   ## are initialised using this function and added to the output.
   result.info = &"{id}: linear(nin={nin}, nout={nout}, bias={biases != nil})"
   let weight = c.newVariable(id & ".w", [nin, nout], dtype, weights, rng)
-  result.variables.add weight
+  result.setVars weight
   if biases == nil:
-    result.forward = proc(x: Node, training = false): Node =
+    result.forward = proc(x: Node, training: bool, output: var Outputs): Node =
       let W = x.builder.param(weight)
       dot(x, W)
   else:
     let bias = c.newVariable(id & ".b", [1, nout], dtype, biases, rng)
-    result.variables.add bias
-    result.forward = proc(x: Node, training = false): Node =
+    result.setVars bias
+    result.forward = proc(x: Node, training: bool, output: var Outputs): Node =
       let W = x.builder.param(weight)
       let B = x.builder.param(bias)
       dot(x, W) + B
@@ -195,25 +227,60 @@ proc initConv2d*(c: Client, rng: var Rand, id: string, inChannels, outChannels: 
 
   let wdims = @[outChannels] & kernelSize.seq2 & @[inChannels]
   let weight = c.newVariable(id & ".w", wdims, dtype, weights, rng)
-  result.variables.add weight
+  result.setVars weight
   if biases == nil:
-    result.forward = proc(x: Node, training = false): Node =
+    result.forward = proc(x: Node, training: bool, output: var Outputs): Node =
       let W = x.builder.param(weight)
       conv2d(x, W, strides, padding, dilation, groups)
   else:
     let bias = c.newVariable(id & ".b", @[1, 1, 1, outChannels], dtype, biases, rng)
-    result.variables.add bias
-    result.forward = proc(x: Node, training: bool): Node =
+    result.setVars bias
+    result.forward = proc(x: Node, training: bool, output: var Outputs): Node =
       let W = x.builder.param(weight)
       let B = x.builder.param(bias)
       conv2d(x, W, strides, padding, dilation, groups) + B
 
+proc initBatchNorm*(c: Client, rng: var Rand, id: string, numFeatures: int, momentum: float = 0.1, epsilon: float = 1e-5,
+                    weights = constantInit(1.0), biases = constantInit(0.0), dtype = F32): Module =
+  ## Create a new 2d batch normalization layer. The input should be in channels last format.
+  ## numFeatures is the number of channels. The momentum parameter is used to compute the exponential running average
+  ## of the mean and variance. epsilon is the value added to the denominator to avoid divide by zero.
+  ## Learnable weight and bias parameters are initialised with the weights and biases initialization functions.
+  result.info = &"{id}: batchNorm({numFeatures}, momentum={momentum}, epsilon={epsilon})"
+  let weight = c.newVariable(id & ".w", [numFeatures], dtype, weights, rng)
+  let bias = c.newVariable(id & ".b", [numFeatures], dtype, biases, rng)
+  let runningMean = c.newVariable(id & ".mean", [numFeatures], dtype, constantInit(0.0), rng, calcGrad=false)
+  let runningVar = c.newVariable(id & ".var", [numFeatures], dtype, constantInit(1.0), rng, calcGrad=false)
+  result.setVars weight, bias, runningMean, runningVar
+  result.outputs.add id & ".mean"
+  result.outputs.add id & ".var"
+
+  result.forward = proc(x: Node, training: bool, output: var Outputs): Node =
+    let b = x.builder
+    let scale = b.param(weight)
+    let offset = b.param(bias)
+    let mean = b.param(runningMean)
+    let variance = b.param(runningVar)
+    if training:
+      let res = batchNormTraining(x, scale, offset, epsilon, -1)
+      let p = b.constant(momentum, dtype)
+      let pp = b.constant(1-momentum, dtype)
+      output.params.add pp*mean + p*res[1]
+      output.params.add pp*variance + p*res[2]
+      res[0]
+    else:
+      batchNormInference(x, scale, offset, mean, variance, epsilon, -1)
+
+
 proc compileTest*(c: Client, m: Module, input: Node): Executable =
   ## Build the execution graph for the given module and compile it to an executable.
   ## The executable returns the output from `m.forward(input)`
-  let pred = m.forward(input, training=false)
+  var output: Outputs
+  let pred = m.forward(input, false, output)
+  assert output.params.len == 0
   let comp = input.builder.build(pred)
-  c.compile(comp, ["pred"])
+  result = c.compile(comp, ["pred"])
+  debug "tester: ", result
 
 proc compileTrain*(c: Client, m: Module, input: Node, lossFn: proc(y: Node): Node): Executable =
   ## Build the execution graph for the given module and compile it to an executable.
@@ -222,26 +289,29 @@ proc compileTrain*(c: Client, m: Module, input: Node, lossFn: proc(y: Node): Nod
   ## - loss: result of `lossFn(pred)`
   ## - <v1.name>_grad, ...: gradients for each input variable with respect to the loss
   let b = input.builder
-  let pred = m.forward(input, training=true)
+  var output: Outputs
+  let pred = m.forward(input, true, output)
   debug "forward function: ", pred.toString
   let loss = lossFn(pred)
   let grads = b.gradient(loss, m.varNames)
-  let comp = b.build b.makeTuple(@[pred, loss] & grads)
-  c.compile(comp, @["pred", "loss"] & m.gradNames)
+  debug "outputs: ", $m.outputs
+  let comp = b.build b.makeTuple(@[pred, loss] & output.params & grads)
+  result = c.compile(comp, @["pred", "loss"] & m.outputs & m.gradNames)
+  debug result
+  debug "trainer: ", result
 
 proc makeOptimizer(m: Module, exec: Executable, init: proc():Params): Optimizer =
   var state = init()
-  proc (params: Params): seq[Variable] =
+  proc (params: Params): Params =
     var vars = params
     for key, val in state:
       vars[key] = val
     exec.runWith(vars)
     for key in state.keys:
       state[key] = vars[key]
-    var res: seq[Variable]
+    result = initParams([])
     for i, name in m.varNames:
-      res.add Variable(name: name, data: vars[name])
-    return res
+      result[name] = vars[name]
 
 proc buildSGD(c: Client, m: Module, learnRate, weightDecay, momentum: float, nesterov: bool): Executable =
   let b = newBuilder("sgd")
@@ -250,7 +320,7 @@ proc buildSGD(c: Client, m: Module, learnRate, weightDecay, momentum: float, nes
   let lr = b.constant(learnRate, F32)
   let decay = b.constant(weightDecay, F32)
   let mu = b.constant(momentum, F32)
-  for p in m.variables:
+  for p in m.learnableVars:
     let x = b.param(p).convert(F32)
     var dx = b.param(p, "_grad").convert(F32)
     if weightDecay != 0 and not p.name.endsWith(".b"):
@@ -278,7 +348,7 @@ proc optimSGD*(c: Client, m: Module, learnRate: float, weightDecay = 0.0,
   let init = proc(): Params =
     var state = initParams([])
     if momentum != 0:
-      for p in m.variables:
+      for p in m.learnableVars:
         let s = p.data.shape
         state[p.name & "_mom"] = c.newBuffer(s.dtype, s.dims)
     return state
@@ -300,7 +370,7 @@ proc buildAdam(c: Client, m: Module, learnRate, weightDecay, beta1, beta2, epsil
   names.add "beta2_t"
   outputs.add b2t * b2
   let one = b.one(F32)
-  for p in m.variables:
+  for p in m.learnableVars:
     let x = b.param(p).convert(F32)
     var dx = b.param(p, "_grad").convert(F32)
     if weightDecay != 0 and not p.name.endsWith(".b"):
@@ -331,7 +401,7 @@ proc optimAdam*(c: Client, m: Module, learnRate: float, weightDecay = 0.0,
       "beta1_t": c.newBuffer(lit(beta1.float32)),
       "beta2_t": c.newBuffer(lit(beta2.float32))
     })
-    for p in m.variables:
+    for p in m.learnableVars:
       let s = p.data.shape
       state[p.name & "_mt"] = c.newBuffer(s.dtype, s.dims)
       state[p.name & "_vt"] = c.newBuffer(s.dtype, s.dims)

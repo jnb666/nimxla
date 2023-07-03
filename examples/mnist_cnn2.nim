@@ -3,7 +3,7 @@
 # output option will save predicted test labels to a file which can be read by imgview
 
 {.warning[BareExcept]:off.}
-import std/[strutils, strformat, math, logging, random, tables, monotimes]
+import std/[strutils, math, random, logging, tables]
 import nimxla
 import nimxla/[nn, data, train, image]
 import cligen
@@ -15,18 +15,18 @@ proc buildModel(c: Client, rng: var Rand, nclasses: int, mean, std: float32): Mo
   let conv2 = c.initConv2d(rng, "2", 32, 64, kernelSize=5)
   let linear1 = c.initLinear(rng, "3", 1024, 1024)
   let linear2 = c.initLinear(rng, "4", 1024, nclasses)
-  result.forward = proc(x: Node, training: bool): Node =
+  result.forward = proc(x: Node, training: bool, output: var Outputs): Node =
     let b = x.builder
     let xf = (x.convert(F32) / b^255f32) 
     let xs = (xf - b^mean) / b^std
-    let l1 = conv1.forward(xs).maxPool2d(2)
-    let l2 = conv2.forward(l1).maxPool2d(2)
-    let l3 = linear1.forward(l2.flatten(1)).relu.dropout(0.5, training)
-    linear2.forward(l3).softmax
+    let l1 = conv1.forward(xs, training, output).maxPool2d(2)
+    let l2 = conv2.forward(l1, training, output).maxPool2d(2)
+    let l3 = linear1.forward(l2.flatten(1), training, output).relu.dropout(0.5, training)
+    linear2.forward(l3, training, output).softmax
   result.info = "== mnist_cnn2 =="
   result.add(conv1, conv2, linear1, linear2)  
 
-proc main(epochs = 50, learnRate = 0.0002, trainBatch = 500, testBatch = 1000, seed: int64 = 0, 
+proc main(epochs = 50, learnRate = 0.0001, trainBatch = 500, testBatch = 1000, seed: int64 = 0, 
           augment = true, output = "", gpu = true, plot = false, debug = false) =
   var logger = newConsoleLogger(levelThreshold=if debug: lvlDebug else: lvlInfo)
   addHandler(logger)

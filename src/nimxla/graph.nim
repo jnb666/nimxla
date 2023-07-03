@@ -29,21 +29,19 @@ type
     at*:      Node
 
   OpType* = enum
-    tConst, tLiteral, tParam, tError, tIota                     ## leaf nodes
+    tNone, tConst, tLiteral, tParam, tError, tIota,             ## leaf nodes
     tNot, tNeg, tAbs, tExp, tFloor, tCeil, tRound, tLog,        ## 1 arg ops
     tLog1p, tSigmoid, tRelu, tSign, tCos, tSin, tTanh, tSqrt,   ## ..
     tRsqrt, tIsFinite, tCopy, tZerosLike, tTupleElement,        ## ..
     tReshape, tBroadcast, tBroadcastInDim, tCollapse,           ## ..
     tTranspose, tNarrow, tConvert, tReverse, tMaxPool,          ## ..
-    tReduceSum, tReduceMin, tReduceMax, tArgmin, tArgmax        ## ..
+    tReduceSum, tReduceMin, tReduceMax, tArgmin, tArgmax,       ## ..
     tAdd, tSub, tMul, tDiv, tRem, tMax, tMin, tPow, tDot,       ## 2 arg ops
     tAnd, tOr, tEq, tNe, tGe, tGt, tLe, tLt, tRngUniform,       ## ..
     tRngNormal, tReduce, tGather, tConv, tReduceWindow,         ## ..
-    tSelectAndScatter,                                          ##
-    tSelect, tClamp, tTuple, tConcat, tScatter                  ## 3 or more arg ops
-
-  GradFn = proc(path: Node): Node
-    ## Local gradient function for autodiff
+    tSelectAndScatter,                                          ## ..
+    tSelect, tClamp, tTuple, tConcat, tScatter,                 ## 3 or more arg ops
+    tBatchNormInference, tBatchNormTraining, tBatchNormGrad     ## ..
 
   BuilderObj = object
     c: xla_builder
@@ -92,11 +90,15 @@ type
       padding:  seq[Padding]
       dilation: seq[int]
       groups:   int
+    of tBatchNormInference, tBatchNormTraining, tBatchNormGrad:
+      epsilon:  float32
+      axis:     int
     else:
       discard
     info:   string
     op:     ref Op
     idnum:  uint64
+    tupleGrads: seq[Node]
 
   ComputationObj = object
     c: xla_computation
@@ -1006,9 +1008,33 @@ proc selectAndScatter*(a, source: Node, windowDims, strides: openarray[int], pad
                          csize_t(padding.len), p1, p2, source.op.c, init.op.c, scatterComp.obj.c)
       result = a.builder.wrap(op, tSelectAndScatter, [a, source])
 
+proc batchNormInference*(a, scale, offset, mean, variance: Node, epsilon: float, axis: int): Node =
+  ## Implements batch normalization in inference mode.
+  ## axis should be the axis of the feature dimension - e.g. 3 or -1 for images in [N,H,W,C] format.
+  ## See [BatchNormInference](https://www.tensorflow.org/xla/operation_semantics#batchnorminference).
+  let axis = normalize(axis, a.rank)
+  let op = op_batch_norm_inference(a.op.c, scale.op.c, offset.op.c, mean.op.c, variance.op.c, epsilon, axis)
+  result = a.builder.wrap(op, tBatchNormInference, [a, scale, offset, mean, variance], &"axis={axis}")
+  result.epsilon = epsilon
+  result.axis = axis
 
-template defn(path, expression: untyped): untyped =
-  GradFn(proc(path: Node): Node = expression)
+proc batchNormTraining*(a, scale, offset: Node, epsilon: float, axis: int): Node =
+  ## Implements batch normalization in training mode. Returns a tuple of (output, batch_mean, batch_var)
+  ## See [BatchNormTraining](https://www.tensorflow.org/xla/operation_semantics#batchnormtraining).
+  let axis = normalize(axis, a.rank)
+  let op = op_batch_norm_training(a.op.c, scale.op.c, offset.op.c, epsilon, axis)
+  result = a.builder.wrap(op, tBatchNormTraining, [a, scale, offset], &"axis={axis}")
+  result.epsilon = epsilon
+  result.axis = axis
+
+proc batchNormGrad*(a, scale, mean, variance, gradOutput: Node, epsilon: float, axis: int): Node =
+  ## Calculates gradient of batch norm. Returns a tuple of (grad_a, grad_scale, grad_offset)
+  ## See [BatchNormGrad](https://www.tensorflow.org/xla/operation_semantics#batchnormgrad).
+  let axis = normalize(axis, a.rank)
+  let op = op_batch_norm_grad(a.op.c, scale.op.c, mean.op.c, variance.op.c, gradOutput.op.c, epsilon, axis)
+  result = a.builder.wrap(op, tBatchNormGrad, info = &"axis={axis}")
+  result.epsilon = epsilon
+  result.axis = axis
 
 proc unbcast(b: Builder, v: Node, xd, yd: openarray[int]): Node =
   ## If inputs to a 2 op node are different shapes and broadcasting was applied then we need to 
@@ -1021,22 +1047,22 @@ proc unbcast(b: Builder, v: Node, xd, yd: openarray[int]): Node =
     if dx == 1 and dy > 1: axes.add i
   if axes.len > 0: v.sum(axes) else: v
 
-proc unreduce(n, x: Node): GradFn =
+proc unreduce(n, x, v: Node): Node =
   ## Inverse of reduceSum operation, broadcast back to original shape
   var shape = x.dims
   for d in n.indices: shape[d] = 1
   let dims = toSeq(0 ..< shape.len)
-  return defn(v, v.reshape(shape).broadcastInDim(x.dims, dims))
+  return v.reshape(shape).broadcastInDim(x.dims, dims)
 
-proc dotgrad(n, x, y: Node): seq[GradFn] =
+proc dotgrad(n, x, y, v: Node): seq[Node] =
   ## Gradient for dot product node
   case n.rank
   of 0:  # vector product: [n] x [n] => []
-    return @[ defn(v, v*y), defn(v, v*x) ]
+    return @[ v*y, v*x ]
   of 1:  # matrix vector product: [m, k] x [k] => [m]
-    return @[ defn(v, dot(v.reshape(-1, 1), y.reshape(1, -1))), defn(v, dot(v, x)) ]
+    return @[ dot(v.reshape(-1, 1), y.reshape(1, -1)), dot(v, x) ]
   of 2: # matrix product: [m, k] x [k, n] => [m, n]
-    return @[ defn(v, dot(v, y.transpose)), defn(v, dot(x.transpose, v)) ]
+    return @[ dot(v, y.transpose), dot(x.transpose, v) ]
   else:
     raiseError("dot gradient not implemented for > 2 dimensions", n)
 
@@ -1049,25 +1075,24 @@ proc getConvAxis(n, x, kernel: Node, axis: int): (int, int, int, int, int, Paddi
   let pads = if n.padding.len > 0: n.padding[axis] else: pad(0)
   (isize, osize, ksize, stride, dilation, pads)
 
-proc convInputGrad(n, x, kernel: Node): GradFn =
+proc convInputGrad(n, x, kernel, v: Node): Node =
   ## Gradient of convolution with respect to input
-  proc(v: Node): Node =
-    let revKernel = kernel.reverse(n.kdims[2 .. ^1])
-    let kernelDims = @[n.kdims[1], n.kdims[0]] & n.kdims[2 .. ^1]
-    var paddings: seq[Padding]
-    for axis in 0 ..< n.rank-2:
-      let (isize, osize, ksize, stride, dilation, pads) = getConvAxis(n, x, kernel, axis)
-      let ksize2 = (ksize-1) * dilation + 1
-      let inputStart = (ksize2 - 1) div 2 - pads.lo
-      let inputEnd = isize - ksize2 div 2 + pads.hi
-      assert inputEnd - inputStart + (stride-1) div stride == osize
-      let outputStart = -inputStart - ((ksize2 - 1) div 2)
-      assert outputStart <= 0
-      let outputEnd = isize - inputStart + ksize2 div 2 - (osize-1) * (stride - 1)
-      assert outputEnd >= osize
-      paddings.add pad(-outputStart, outputEnd - osize)
-    convolution(v, revKernel, n.idims, n.odims, kernelDims, padding=paddings,
-                dilation=n.dilation, inputDilation=n.strides)
+  let revKernel = kernel.reverse(n.kdims[2 .. ^1])
+  let kernelDims = @[n.kdims[1], n.kdims[0]] & n.kdims[2 .. ^1]
+  var paddings: seq[Padding]
+  for axis in 0 ..< n.rank-2:
+    let (isize, osize, ksize, stride, dilation, pads) = getConvAxis(n, x, kernel, axis)
+    let ksize2 = (ksize-1) * dilation + 1
+    let inputStart = (ksize2 - 1) div 2 - pads.lo
+    let inputEnd = isize - ksize2 div 2 + pads.hi
+    assert inputEnd - inputStart + (stride-1) div stride == osize
+    let outputStart = -inputStart - ((ksize2 - 1) div 2)
+    assert outputStart <= 0
+    let outputEnd = isize - inputStart + ksize2 div 2 - (osize-1) * (stride - 1)
+    assert outputEnd >= osize
+    paddings.add pad(-outputStart, outputEnd - osize)
+  convolution(v, revKernel, n.idims, n.odims, kernelDims, padding=paddings,
+              dilation=n.dilation, inputDilation=n.strides)
 
 proc expectedOutputSize(isize, ksize, dilation, stride: int, pads: Padding): int =
   let ksize = (ksize-1)*dilation + 1
@@ -1075,22 +1100,21 @@ proc expectedOutputSize(isize, ksize, dilation, stride: int, pads: Padding): int
   let iend = isize - ksize div 2 + pads.hi
   (iend - istart + stride - 1) div stride
 
-proc convKernelGrad(n, x, kernel: Node): GradFn =
+proc convKernelGrad(n, x, kernel, v: Node): Node =
   ## Gradient of convolution with respect to kernel
-  proc(v: Node): Node =
-    let inputDims = @[n.idims[1], n.idims[0]] & n.idims[2 .. ^1]
-    let outputDims = @[n.kdims[1], n.kdims[0]] & n.kdims[2 .. ^1]
-    let kernelDims = @[n.odims[1], n.odims[0]] & n.odims[2 .. ^1]
-    var paddings = n.padding
-    for axis in 0 ..< n.rank-2:
-      let (isize, osize, ksize, stride, dilation, pads) = getConvAxis(n, x, kernel, axis)
-      assert osize == expectedOutputSize(isize, ksize, dilation, stride, pads)
-      let reverseSize = expectedOutputSize(isize, osize, stride, dilation, pads)
-      paddings[axis].hi += (ksize - reverseSize) * dilation
-    convolution(x, v, inputDims, outputDims, kernelDims, strides=n.dilation,
-                padding=paddings, dilation=n.strides)
+  let inputDims = @[n.idims[1], n.idims[0]] & n.idims[2 .. ^1]
+  let outputDims = @[n.kdims[1], n.kdims[0]] & n.kdims[2 .. ^1]
+  let kernelDims = @[n.odims[1], n.odims[0]] & n.odims[2 .. ^1]
+  var paddings = n.padding
+  for axis in 0 ..< n.rank-2:
+    let (isize, osize, ksize, stride, dilation, pads) = getConvAxis(n, x, kernel, axis)
+    assert osize == expectedOutputSize(isize, ksize, dilation, stride, pads)
+    let reverseSize = expectedOutputSize(isize, osize, stride, dilation, pads)
+    paddings[axis].hi += (ksize - reverseSize) * dilation
+  convolution(x, v, inputDims, outputDims, kernelDims, strides=n.dilation,
+              padding=paddings, dilation=n.strides)
 
-proc localGrad(b: Builder, n: Node): seq[GradFn] =
+proc localGrad(b: Builder, n, v: Node): seq[Node] =
   ## Returns the gradients at each of the inputs to node as a function of the value accumulated so far.
   ## Will raise a BuilderError exception if the node type is not supported.
   var x, y: Node
@@ -1099,80 +1123,84 @@ proc localGrad(b: Builder, n: Node): seq[GradFn] =
   case n.kind
   of tAdd:
     return @[ 
-      defn(v, b.unbcast(v, x.dims, y.dims)), 
-      defn(v, b.unbcast(v, y.dims, x.dims))
+      b.unbcast(v, x.dims, y.dims),
+      b.unbcast(v, y.dims, x.dims)
     ]
   of tSub:
     return @[ 
-      defn(v, b.unbcast(v, x.dims, y.dims)),
-      defn(v, b.unbcast(-v, y.dims, x.dims))
+      b.unbcast(v, x.dims, y.dims),
+      b.unbcast(-v, y.dims, x.dims)
     ]
   of tMul:
     return @[ 
-      defn(v, b.unbcast(v*y, x.dims, y.dims)), 
-      defn(v, b.unbcast(v*x, y.dims, x.dims))
+      b.unbcast(v*y, x.dims, y.dims),
+      b.unbcast(v*x, y.dims, x.dims)
     ]
   of tDiv:
     return @[ 
-      defn(v, b.unbcast(v/y, x.dims, y.dims)), 
-      defn(v, b.unbcast(-v*x/(y*y), y.dims, x.dims))
+      b.unbcast(v/y, x.dims, y.dims),
+      b.unbcast(-v*x/(y*y), y.dims, x.dims)
     ]
   of tDot:
-    return n.dotGrad(x, y)
+    return n.dotGrad(x, y, v)
   of tConv:
-    return @[ n.convInputGrad(x, y), n.convKernelGrad(x, y) ]
+    return @[ n.convInputGrad(x, y, v), n.convKernelGrad(x, y, v) ]
   of tMaxPool:
-    return @[ defn(v, selectAndScatter(x, v, n.wdims, n.wstride, n.wpad)) ]
+    return @[ selectAndScatter(x, v, n.wdims, n.wstride, n.wpad) ]
   of tNeg:
-    return @[ defn(v, -v) ]
+    return @[ -v ]
   of tExp:
-    return @[ defn(v, v*n) ]
+    return @[ v*n ]
   of tLog:
-    return @[ defn(v, v / x) ]
+    return @[ v / x ]
   of tLog1p:
-    return @[ defn(v, v / (b.one(x.dtype) + x) ) ]
+    return @[ v / (b.one(x.dtype) + x) ]
   of tSqrt:
-    return @[ defn(v, v * b.constant(0.5, n.dtype) * x) ]
+    return @[ v * b.constant(0.5, n.dtype) * x ]
   of tRsqrt:
-    return @[ defn(v, v * b.constant(-0.5, n.dtype) * x) ]
+    return @[ v * b.constant(-0.5, n.dtype) * x ]
   of tTanh:
-    return @[ defn(v, v * (b.one(x.dtype) - n * n) ) ]
+    return @[ v * (b.one(x.dtype) - n * n) ]
   of tAbs:
-    return @[ defn(v, v * sign(x)) ]
+    return @[ v * sign(x) ]
   of tSigmoid:
-    return @[ defn(v, v * n * (b.one(x.dtype) - n)) ]
+    return @[ v * n * (b.one(x.dtype) - n) ]
   of tRelu:
     let zero = b.zero(x.dtype)
-    return @[ defn(v, select(x >= zero, v, zero) ) ]
+    return @[ select(x >= zero, v, zero) ]
   of tReduceSum:
-    return @[ unreduce(n, x) ]
+    return @[ unreduce(n, x, v) ]
   of tReshape:
-    return @[ defn(v, v.reshape(x.dims) ) ]
+    return @[ v.reshape(x.dims) ]
   of tTranspose:
-    return @[ defn(v, v.transpose(x.indices) ) ]
+    return @[ v.transpose(x.indices) ]
   of tConvert:
-    return @[ defn(v, v.convert(x.dtype) ) ]
+    return @[ v.convert(x.dtype) ]
   of tGather:
     let indices = y.reshape(-1, x.rank)
-    return @[ defn(v, b.zero(x.dtype, x.dims).addAt(indices, v) ) ]
+    return @[ b.zero(x.dtype, x.dims).addAt(indices, v) ]
   of tSelect:
-    return @[nil,
-      defn(v, select(x, v, b.zero(v.dtype, v.dims)) ),
-      defn(v, select(x, b.zero(v.dtype, v.dims), v) )
-    ]
+    let zero = b.zero(v.dtype, v.dims)
+    return @[ Node(kind: tNone), select(x, v, zero), select(x, zero, v) ]
   of tBroadcast:
-    if x.rank == 0:
-      return @[ defn(v, v.sum() )  ]
+    if x.rank == 0: return @[ v.sum() ]
+  of tBatchNormTraining:
+    let grads = batchNormGrad(x, y, n[1], n[2], v, n.epsilon, n.axis)
+    return @[ grads[0], grads[1], grads[2] ]
   else:
     raiseError("Node type not supported for autograd", n)
 
 proc calcGrads(b: Builder, node, pathValue: Node, inputs: openarray[string], 
                 grads: var openarray[Node], dict: var Table[uint64, Node]) =
   ## Recursively accumulate gradients from node where pathValue is prior value to this point
-  for i, fn in b.localGrad(node):
-    if fn == nil: continue
+  let node = if node.kind == tTupleElement:
+    node.args[0]
+  else:
+    node
+  debug "calcGrads: ", node
+  for i, grad in b.localGrad(node, pathValue):
+    if grad.kind == tNone: continue
     let input = node.args[i]
-    var grad = fn(pathValue)
     let id = input.uid
     dict[id] = if dict.hasKey(id):
       dict[id] + grad

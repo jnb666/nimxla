@@ -17,20 +17,20 @@ proc buildModel(c: Client, rng: var Rand, nclasses: int, mean, std: seq[float32]
   let conv4 = c.initConv2d(rng, "4", 64, 64, kernelSize=3)
   let linear1 = c.initLinear(rng, "5", 2304, 512)
   let linear2 = c.initLinear(rng, "6", 512, nclasses)
-  result.forward = proc(x: Node, training: bool): Node =
+  result.forward = proc(x: Node, training: bool, output: var Outputs): Node =
     let b = x.builder
     let xf = (x.convert(F32) / b^255f32) 
     let xs = (xf - reshape(b^mean, [1, 1, 1, 3])) / reshape(b^std, [1, 1, 1, 3])
-    let l1 = conv1.forward(xs).relu
-    let l2 = conv2.forward(l1).relu.maxPool2d(2).dropout(0.25, training)
-    let l3 = conv3.forward(l2).relu
-    let l4 = conv4.forward(l3).relu.maxPool2d(2).dropout(0.25, training)
-    let l5 = linear1.forward(l4.flatten(1)).relu.dropout(0.5, training)
-    linear2.forward(l5).softmax
+    let l1 = conv1.forward(xs, training, output).relu
+    let l2 = conv2.forward(l1, training, output).relu.maxPool2d(2).dropout(0.25, training)
+    let l3 = conv3.forward(l2, training, output).relu
+    let l4 = conv4.forward(l3, training, output).relu.maxPool2d(2).dropout(0.25, training)
+    let l5 = linear1.forward(l4.flatten(1), training, output).relu.dropout(0.5, training)
+    linear2.forward(l5, training, output).softmax
   result.info = "== cifar10_4 =="
   result.add(conv1, conv2, conv3, conv4, linear1, linear2)  
 
-proc main(epochs = 50, learnRate = 0.001, trainBatch = 200, testBatch = 500, seed: int64 = 0,
+proc main(epochs = 80, learnRate = 0.001, trainBatch = 200, testBatch = 500, seed: int64 = 0,
           augment = true, output = "", gpu = true, plot = false, debug = false) =
   var logger = newConsoleLogger(levelThreshold=if debug: lvlDebug else: lvlInfo)
   addHandler(logger)

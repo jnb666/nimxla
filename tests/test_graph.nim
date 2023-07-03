@@ -353,6 +353,26 @@ suite "graph":
       window=3, strides=1, padding=padSame, channelsFirst=true
     )
 
+  test "batch_norm":
+    let b = newBuilder("test")
+    let input = b.iota(F32, [7, 3], axis=0)
+    let scale = b^[1f32, 2, 3]
+    let offset = b^[10f32, 100, 1000]
+    let mean = b^[0.5f32, 0.5, 1]
+    let variance = b^[1f32, 1, 10]
+    let comp = b.build batchNormInference(input, scale, offset, mean, variance, 1e-7, -1)
+    let res = client.compile(comp).run.f32
+    debug res
+    check res.approxEqual(@@[
+      [9.5f32, 99, 999.05133],
+      [10.5,  101, 1000],
+      [11.5,  103, 1000.94867],
+      [12.5,  105, 1001.8974],
+      [13.5,  107, 1002.84607],
+      [14.5,  109, 1003.79474],
+      [15.5,  111, 1004.7434]
+    ])
+
   test "error":
     let b = newBuilder("test")
     let x = b.parameter(F32, [2, 5], "x")

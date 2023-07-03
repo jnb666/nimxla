@@ -178,6 +178,13 @@ proc op_reduce_window*(a1: xla_op; a2: xla_op; a3: xla_computation; a4: csize_t;
   a7: csize_t, a8: ptr int64; a9: ptr int64): xla_op {.importc: "op_reduce_window".}
 proc op_select_and_scatter*(a1: xla_op; a2: xla_computation; a3: csize_t; a4: ptr int64; a5: ptr int64; a6: csize_t;
   a7: ptr int64; a8: ptr int64; a9: xla_op; a10: xla_op; a11: xla_computation): xla_op {.importc: "op_select_and_scatter".}
+proc op_batch_norm_inference*(a1: xla_op; a2: xla_op; a3: xla_op; a4: xla_op; a5: xla_op;
+  a6: cfloat, a7: int64): xla_op {.importc: "op_batch_norm_inference".}
+proc op_batch_norm_training*(a1: xla_op; a2: xla_op; a3: xla_op;
+  a4: cfloat; a5: int64): xla_op {.importc: "op_batch_norm_training".}
+proc op_batch_norm_grad*(a1: xla_op; a2: xla_op; a3: xla_op; a4: xla_op; a5: xla_op;
+  a6: cfloat; a7: int64): xla_op {.importc: "op_batch_norm_grad".}
+
 proc op_internal_error*(a1: xla_builder; a2: cstring): xla_op {.importc: "op_internal_error".}
 proc op_unknown_error*(a1: xla_builder; a2: cstring): xla_op {.importc: "op_unknown_error".}
 proc op_invalid_argument_error*(a1: xla_builder; a2: cstring): xla_op {.importc: "op_invalid_argument_error".}

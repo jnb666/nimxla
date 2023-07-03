@@ -236,6 +236,7 @@ proc compile*(client: Client, comp: Computation, outputs: openarray[string] = []
   ## outputs may optionally be specified to name the output values - they are used by the runWith method.
   trace "new Executable"
   result.obj = new ExecutableObj
+  debug "compile: outputs = ", $outputs
   let status = compile(client.c, comp.rawPtr, result.obj.c.addr)
   if status != nil:
     let message = $status_error_message(status)
@@ -249,7 +250,7 @@ proc compile*(client: Client, comp: Computation, outputs: openarray[string] = []
   let nout = result.noutputs
   if outputs.len > 0:
     if outputs.len != nout:
-      raiseError("incorrect number of output parameters given", comp.last)
+      raiseError(&"incorrect number of output parameters given: expecting {outputs.len} - got {nout}")
     result.outputs = @outputs
   else:
     result.outputs = map(toSeq(0 ..< nout), x => "result" & $x)

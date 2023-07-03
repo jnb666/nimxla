@@ -843,6 +843,30 @@ xla_op op_select_and_scatter(const xla_op op, const xla_computation select, size
   END_PROTECT_OP(op)
 }
 
+xla_op op_batch_norm_inference(const xla_op operand, const xla_op scale, const xla_op offset, const xla_op mean,
+                              const xla_op variance, float epsilon, int64_t feature_index) {
+  BEGIN_PROTECT_OP
+  return new XlaOp(
+    BatchNormInference(*operand, *scale, *offset, *mean, *variance, epsilon, feature_index));
+  END_PROTECT_OP(operand)
+}
+
+xla_op op_batch_norm_training(const xla_op operand, const xla_op scale, const xla_op offset,
+                             float epsilon, int64_t feature_index) {
+  BEGIN_PROTECT_OP
+  return new XlaOp(
+    BatchNormTraining(*operand, *scale, *offset, epsilon, feature_index));
+  END_PROTECT_OP(operand)
+}
+
+xla_op op_batch_norm_grad(const xla_op operand, const xla_op scale, const xla_op mean, const xla_op variance,
+                         const xla_op grad_output, float epsilon, int64_t feature_index) {
+  BEGIN_PROTECT_OP
+  return new XlaOp(
+    BatchNormGrad(*operand, *scale, *mean, *variance, *grad_output, epsilon, feature_index));
+  END_PROTECT_OP(operand)
+}
+
 xla_op op_internal_error(const xla_builder b, const char *error) {
   BEGIN_PROTECT_OP
   return new XlaOp(b->ReportError(tsl::errors::Internal(error)));
