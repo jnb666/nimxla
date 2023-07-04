@@ -1,6 +1,11 @@
 Variable	nn.html#Variable	nn: Variable	
 InitFunc	nn.html#InitFunc	nn: InitFunc	
 Optimizer	nn.html#Optimizer	nn: Optimizer	
+SGDOptimizer	nn.html#SGDOptimizer	nn: SGDOptimizer	
+AdamOptimizer	nn.html#AdamOptimizer	nn: AdamOptimizer	
+Scheduler	nn.html#Scheduler	nn: Scheduler	
+StepLR	nn.html#StepLR	nn: StepLR	
+CosineAnnealingLR	nn.html#CosineAnnealingLR	nn: CosineAnnealingLR	
 Outputs	nn.html#Outputs	nn: Outputs	
 Module	nn.html#Module	nn: Module	
 initRandom	nn.html#initRandom,int64	nn: initRandom(seed: int64 = 0): Rand	
@@ -9,7 +14,7 @@ uniformInit	nn.html#uniformInit,float,float	nn: uniformInit(min = 0.0; max = 1.0
 normalInit	nn.html#normalInit,float,float	nn: normalInit(mean = 0.0; stddev = 1.0): InitFunc	
 glorotInit	nn.html#glorotInit,float	nn: glorotInit(gain = 1.0): InitFunc	
 heInit	nn.html#heInit,float,float	nn: heInit(mean = 0.0; gain = 2.0; fanOut = false): InitFunc	
-newVariable	nn.html#newVariable,Client,string,openArray[int],DataType,InitFunc,Rand	nn: newVariable(c: Client; name: string; dims: openArray[int]; dtype: DataType;\n            init: InitFunc; rng: var Rand; calcGrad = true): Variable	
+newVariable	nn.html#newVariable,Client,string,openArray[int],InitFunc,Rand	nn: newVariable(c: Client; name: string; dims: openArray[int]; init: InitFunc;\n            rng: var Rand; calcGrad = true): Variable	
 param	nn.html#param,Builder,Variable,string	nn: param(b: Builder; p: Variable; suffix = &quot;&quot;): Node	
 add	nn.html#add,Module,varargs[Module]	nn: add(m: var Module; modules: varargs[Module])	
 `$`	nn.html#$,Module	nn: `$`(m: Module): string	
@@ -29,5 +34,17 @@ initConv2d	nn.html#initConv2d,Client,Rand,string,int,int,Opt2d,Opt2d,Pad2d,Opt2d
 initBatchNorm	nn.html#initBatchNorm,Client,Rand,string,int,float,float	nn: initBatchNorm(c: Client; rng: var Rand; id: string; numFeatures: int;\n              momentum: float = 0.1; epsilon: float = 0.00001;\n              weights = constantInit(1.0); biases = constantInit(0.0);\n              dtype = F32): Module	
 compileTest	nn.html#compileTest,Client,Module,Node	nn: compileTest(c: Client; m: Module; input: Node): Executable	
 compileTrain	nn.html#compileTrain,Client,Module,Node,proc(Node)	nn: compileTrain(c: Client; m: Module; input: Node; lossFn: proc (y: Node): Node): Executable	
+learningRate	nn.html#learningRate,Optimizer	nn: learningRate(optim: Optimizer): float	
+setLearningRate	nn.html#setLearningRate,Optimizer,Client,float	nn: setLearningRate(optim: var Optimizer; c: Client; lr: float)	
+step	nn.html#step,Optimizer,Params	nn: step(optim: var Optimizer; params: Params): Params	
+`$`	nn.html#$.e,Optimizer	nn: `$`(optim: Optimizer): string	
 optimSGD	nn.html#optimSGD,Client,Module,float,float,float	nn: optimSGD(c: Client; m: Module; learnRate: float; weightDecay = 0.0;\n         momentum = 0.0; nesterov = false): Optimizer	
+`$`	nn.html#$.e,SGDOptimizer	nn: `$`(optim: SGDOptimizer): string	
 optimAdam	nn.html#optimAdam,Client,Module,float,float,float,float,float	nn: optimAdam(c: Client; m: Module; learnRate: float; weightDecay = 0.0;\n          beta1 = 0.9; beta2 = 0.999; eps = 1e-8): Optimizer	
+optimAdamW	nn.html#optimAdamW,Client,Module,float,float,float,float,float	nn: optimAdamW(c: Client; m: Module; learnRate: float; weightDecay = 0.0;\n           beta1 = 0.9; beta2 = 0.999; eps = 1e-8): Optimizer	
+`$`	nn.html#$.e,AdamOptimizer	nn: `$`(optim: AdamOptimizer): string	
+step	nn.html#step.e,Scheduler,Client	nn: step(s: Scheduler; c: Client)	
+newStepLR	nn.html#newStepLR,Optimizer,int,float	nn: newStepLR(optim: var Optimizer; stepSize: int; gamma = 0.1): StepLR	
+step	nn.html#step.e,StepLR,Client	nn: step(s: StepLR; c: Client)	
+newCosineAnnealingLR	nn.html#newCosineAnnealingLR,Optimizer,int,float	nn: newCosineAnnealingLR(optim: var Optimizer; tMax: int; lrMin = 0.0): CosineAnnealingLR	
+step	nn.html#step.e,CosineAnnealingLR,Client	nn: step(s: CosineAnnealingLR; c: Client)	

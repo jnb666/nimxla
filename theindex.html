@@ -103,6 +103,12 @@ window.addEventListener('DOMContentLoaded', main);
           <li><a class="reference external"
           data-doc-search-tag="nn: `$`(m: Module): string" href="nn.html#%24%2CModule">nn: `$`(m: Module): string</a></li>
           <li><a class="reference external"
+          data-doc-search-tag="nn: `$`(optim: AdamOptimizer): string" href="nn.html#%24.e%2CAdamOptimizer">nn: `$`(optim: AdamOptimizer): string</a></li>
+          <li><a class="reference external"
+          data-doc-search-tag="nn: `$`(optim: Optimizer): string" href="nn.html#%24.e%2COptimizer">nn: `$`(optim: Optimizer): string</a></li>
+          <li><a class="reference external"
+          data-doc-search-tag="nn: `$`(optim: SGDOptimizer): string" href="nn.html#%24.e%2CSGDOptimizer">nn: `$`(optim: SGDOptimizer): string</a></li>
+          <li><a class="reference external"
           data-doc-search-tag="shape: `$`(p: Padding): string" href="shape.html#%24%2CPadding">shape: `$`(p: Padding): string</a></li>
           <li><a class="reference external"
           data-doc-search-tag="shape: `$`(s: Shape): string" href="shape.html#%24%2CShape">shape: `$`(s: Shape): string</a></li>
@@ -176,6 +182,10 @@ window.addEventListener('DOMContentLoaded', main);
 <dt><a name="accuracyFunc" href="#accuracyFunc"><span>accuracyFunc:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
           data-doc-search-tag="train: accuracyFunc(c: Client; batch, nout: int; outType = F32; labelType = I32): Executable" href="train.html#accuracyFunc%2CClient%2Cint%2Cint">train: accuracyFunc(c: Client; batch, nout: int; outType = F32; labelType = I32): Executable</a></li>
+          </ul></dd>
+<dt><a name="AdamOptimizer" href="#AdamOptimizer"><span>AdamOptimizer:</span></a></dt><dd><ul class="simple">
+<li><a class="reference external"
+          data-doc-search-tag="nn: AdamOptimizer" href="nn.html#AdamOptimizer">nn: AdamOptimizer</a></li>
           </ul></dd>
 <dt><a name="add" href="#add"><span>add:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
@@ -411,6 +421,10 @@ window.addEventListener('DOMContentLoaded', main);
 <li><a class="reference external"
           data-doc-search-tag="graph: cos(a: Node): Node" href="graph.html#cos%2CNode">graph: cos(a: Node): Node</a></li>
           </ul></dd>
+<dt><a name="CosineAnnealingLR" href="#CosineAnnealingLR"><span>CosineAnnealingLR:</span></a></dt><dd><ul class="simple">
+<li><a class="reference external"
+          data-doc-search-tag="nn: CosineAnnealingLR" href="nn.html#CosineAnnealingLR">nn: CosineAnnealingLR</a></li>
+          </ul></dd>
 <dt><a name="crossEntropyLoss" href="#crossEntropyLoss"><span>crossEntropyLoss:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
           data-doc-search-tag="nn: crossEntropyLoss(pred, target: Node): Node" href="nn.html#crossEntropyLoss%2CNode%2CNode">nn: crossEntropyLoss(pred, target: Node): Node</a></li>
@@ -460,6 +474,10 @@ window.addEventListener('DOMContentLoaded', main);
 <dt><a name="dtypeOf" href="#dtypeOf"><span>dtypeOf:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
           data-doc-search-tag="shape: dtypeOf(T: typedesc[ElemType]): DataType" href="shape.html#dtypeOf%2Ctypedesc%5BElemType%5D">shape: dtypeOf(T: typedesc[ElemType]): DataType</a></li>
+          </ul></dd>
+<dt><a name="dump" href="#dump"><span>dump:</span></a></dt><dd><ul class="simple">
+<li><a class="reference external"
+          data-doc-search-tag="graph: dump(n: Node; maxDepth = -1; depth = 0): string" href="graph.html#dump%2CNode%2Cint%2Cint">graph: dump(n: Node; maxDepth = -1; depth = 0): string</a></li>
           </ul></dd>
 <dt><a name="Elastic" href="#Elastic"><span>Elastic:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
@@ -707,6 +725,10 @@ window.addEventListener('DOMContentLoaded', main);
 <li><a class="reference external"
           data-doc-search-tag="nn: learnableVars(m: Module): seq[Variable]" href="nn.html#learnableVars%2CModule">nn: learnableVars(m: Module): seq[Variable]</a></li>
           </ul></dd>
+<dt><a name="learningRate" href="#learningRate"><span>learningRate:</span></a></dt><dd><ul class="simple">
+<li><a class="reference external"
+          data-doc-search-tag="nn: learningRate(optim: Optimizer): float" href="nn.html#learningRate%2COptimizer">nn: learningRate(optim: Optimizer): float</a></li>
+          </ul></dd>
 <dt><a name="len" href="#len"><span>len:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
           data-doc-search-tag="data: len(d: Dataset): int" href="data.html#len%2CDataset">data: len(d: Dataset): int</a></li>
@@ -843,6 +865,10 @@ window.addEventListener('DOMContentLoaded', main);
 <li><a class="reference external"
           data-doc-search-tag="nimxla: newClient(useGPU = true): Client" href="nimxla.html#newClient">nimxla: newClient(useGPU = true): Client</a></li>
           </ul></dd>
+<dt><a name="newCosineAnnealingLR" href="#newCosineAnnealingLR"><span>newCosineAnnealingLR:</span></a></dt><dd><ul class="simple">
+<li><a class="reference external"
+          data-doc-search-tag="nn: newCosineAnnealingLR(optim: var Optimizer; tMax: int; lrMin = 0.0): CosineAnnealingLR" href="nn.html#newCosineAnnealingLR%2COptimizer%2Cint%2Cfloat">nn: newCosineAnnealingLR(optim: var Optimizer; tMax: int; lrMin = 0.0): CosineAnnealingLR</a></li>
+          </ul></dd>
 <dt><a name="newCPUClient" href="#newCPUClient"><span>newCPUClient:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
           data-doc-search-tag="nimxla: newCPUClient(logLevel = Warning): Client" href="nimxla.html#newCPUClient">nimxla: newCPUClient(logLevel = Warning): Client</a></li>
@@ -859,6 +885,10 @@ window.addEventListener('DOMContentLoaded', main);
 <li><a class="reference external"
           data-doc-search-tag="data: newLoader(rng: var Rand; batchSize = 0; shuffle = false): DataLoader" href="data.html#newLoader%2CRand%2Cint">data: newLoader(rng: var Rand; batchSize = 0; shuffle = false): DataLoader</a></li>
           </ul></dd>
+<dt><a name="newStepLR" href="#newStepLR"><span>newStepLR:</span></a></dt><dd><ul class="simple">
+<li><a class="reference external"
+          data-doc-search-tag="nn: newStepLR(optim: var Optimizer; stepSize: int; gamma = 0.1): StepLR" href="nn.html#newStepLR%2COptimizer%2Cint%2Cfloat">nn: newStepLR(optim: var Optimizer; stepSize: int; gamma = 0.1): StepLR</a></li>
+          </ul></dd>
 <dt><a name="newTensor" href="#newTensor"><span>newTensor:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
           data-doc-search-tag="tensor: newTensor[T: ElemType](dims: varargs[int]): Tensor[T]" href="tensor.html#newTensor%2Cvarargs%5Bint%5D">tensor: newTensor[T: ElemType](dims: varargs[int]): Tensor[T]</a></li>
@@ -869,9 +899,9 @@ window.addEventListener('DOMContentLoaded', main);
           </ul></dd>
 <dt><a name="newVariable" href="#newVariable"><span>newVariable:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
-          data-doc-search-tag="nn: newVariable(c: Client; name: string; dims: openArray[int]; dtype: DataType;
-            init: InitFunc; rng: var Rand; calcGrad = true): Variable" href="nn.html#newVariable%2CClient%2Cstring%2CopenArray%5Bint%5D%2CDataType%2CInitFunc%2CRand">nn: newVariable(c: Client; name: string; dims: openArray[int]; dtype: DataType;
-            init: InitFunc; rng: var Rand; calcGrad = true): Variable</a></li>
+          data-doc-search-tag="nn: newVariable(c: Client; name: string; dims: openArray[int]; init: InitFunc;
+            rng: var Rand; calcGrad = true): Variable" href="nn.html#newVariable%2CClient%2Cstring%2CopenArray%5Bint%5D%2CInitFunc%2CRand">nn: newVariable(c: Client; name: string; dims: openArray[int]; init: InitFunc;
+            rng: var Rand; calcGrad = true): Variable</a></li>
           </ul></dd>
 <dt><a name="Node" href="#Node"><span>Node:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
@@ -914,6 +944,12 @@ window.addEventListener('DOMContentLoaded', main);
           data-doc-search-tag="nn: optimAdam(c: Client; m: Module; learnRate: float; weightDecay = 0.0;
           beta1 = 0.9; beta2 = 0.999; eps = 1e-8): Optimizer" href="nn.html#optimAdam%2CClient%2CModule%2Cfloat%2Cfloat%2Cfloat%2Cfloat%2Cfloat">nn: optimAdam(c: Client; m: Module; learnRate: float; weightDecay = 0.0;
           beta1 = 0.9; beta2 = 0.999; eps = 1e-8): Optimizer</a></li>
+          </ul></dd>
+<dt><a name="optimAdamW" href="#optimAdamW"><span>optimAdamW:</span></a></dt><dd><ul class="simple">
+<li><a class="reference external"
+          data-doc-search-tag="nn: optimAdamW(c: Client; m: Module; learnRate: float; weightDecay = 0.0;
+           beta1 = 0.9; beta2 = 0.999; eps = 1e-8): Optimizer" href="nn.html#optimAdamW%2CClient%2CModule%2Cfloat%2Cfloat%2Cfloat%2Cfloat%2Cfloat">nn: optimAdamW(c: Client; m: Module; learnRate: float; weightDecay = 0.0;
+           beta1 = 0.9; beta2 = 0.999; eps = 1e-8): Optimizer</a></li>
           </ul></dd>
 <dt><a name="Optimizer" href="#Optimizer"><span>Optimizer:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
@@ -1111,6 +1147,10 @@ window.addEventListener('DOMContentLoaded', main);
 <li><a class="reference external"
           data-doc-search-tag="graph: scatter(a, indices, b: Node; comp: Computation): Node" href="graph.html#scatter%2CNode%2CNode%2CNode%2CComputation">graph: scatter(a, indices, b: Node; comp: Computation): Node</a></li>
           </ul></dd>
+<dt><a name="Scheduler" href="#Scheduler"><span>Scheduler:</span></a></dt><dd><ul class="simple">
+<li><a class="reference external"
+          data-doc-search-tag="nn: Scheduler" href="nn.html#Scheduler">nn: Scheduler</a></li>
+          </ul></dd>
 <dt><a name="select" href="#select"><span>select:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
           data-doc-search-tag="graph: select(a, onTrue, onFalse: Node): Node" href="graph.html#select%2CNode%2CNode%2CNode">graph: select(a, onTrue, onFalse: Node): Node</a></li>
@@ -1137,6 +1177,10 @@ window.addEventListener('DOMContentLoaded', main);
 <li><a class="reference external"
           data-doc-search-tag="plots: servePlots(): owned(Future[void])" href="plots.html#servePlots">plots: servePlots(): owned(Future[void])</a></li>
           </ul></dd>
+<dt><a name="setLearningRate" href="#setLearningRate"><span>setLearningRate:</span></a></dt><dd><ul class="simple">
+<li><a class="reference external"
+          data-doc-search-tag="nn: setLearningRate(optim: var Optimizer; c: Client; lr: float)" href="nn.html#setLearningRate%2COptimizer%2CClient%2Cfloat">nn: setLearningRate(optim: var Optimizer; c: Client; lr: float)</a></li>
+          </ul></dd>
 <dt><a name="setLogLevel" href="#setLogLevel"><span>setLogLevel:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
           data-doc-search-tag="nimxla: setLogLevel(level: LogLevel)" href="nimxla.html#setLogLevel%2CLogLevel">nimxla: setLogLevel(level: LogLevel)</a></li>
@@ -1154,6 +1198,10 @@ window.addEventListener('DOMContentLoaded', main);
 <dt><a name="setVars" href="#setVars"><span>setVars:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
           data-doc-search-tag="nn: setVars(m: var Module; vars: varargs[Variable])" href="nn.html#setVars%2CModule%2Cvarargs%5BVariable%5D">nn: setVars(m: var Module; vars: varargs[Variable])</a></li>
+          </ul></dd>
+<dt><a name="SGDOptimizer" href="#SGDOptimizer"><span>SGDOptimizer:</span></a></dt><dd><ul class="simple">
+<li><a class="reference external"
+          data-doc-search-tag="nn: SGDOptimizer" href="nn.html#SGDOptimizer">nn: SGDOptimizer</a></li>
           </ul></dd>
 <dt><a name="shape" href="#shape"><span>shape:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
@@ -1212,6 +1260,20 @@ window.addEventListener('DOMContentLoaded', main);
 <dt><a name="statsPlots" href="#statsPlots"><span>statsPlots:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
           data-doc-search-tag="train: statsPlots(t: Trainer; classes: seq[string]): JsonNode" href="train.html#statsPlots%2CTrainer%2Cseq%5Bstring%5D">train: statsPlots(t: Trainer; classes: seq[string]): JsonNode</a></li>
+          </ul></dd>
+<dt><a name="step" href="#step"><span>step:</span></a></dt><dd><ul class="simple">
+<li><a class="reference external"
+          data-doc-search-tag="nn: step(optim: var Optimizer; params: Params): Params" href="nn.html#step%2COptimizer%2CParams">nn: step(optim: var Optimizer; params: Params): Params</a></li>
+          <li><a class="reference external"
+          data-doc-search-tag="nn: step(s: CosineAnnealingLR; c: Client)" href="nn.html#step.e%2CCosineAnnealingLR%2CClient">nn: step(s: CosineAnnealingLR; c: Client)</a></li>
+          <li><a class="reference external"
+          data-doc-search-tag="nn: step(s: Scheduler; c: Client)" href="nn.html#step.e%2CScheduler%2CClient">nn: step(s: Scheduler; c: Client)</a></li>
+          <li><a class="reference external"
+          data-doc-search-tag="nn: step(s: StepLR; c: Client)" href="nn.html#step.e%2CStepLR%2CClient">nn: step(s: StepLR; c: Client)</a></li>
+          </ul></dd>
+<dt><a name="StepLR" href="#StepLR"><span>StepLR:</span></a></dt><dd><ul class="simple">
+<li><a class="reference external"
+          data-doc-search-tag="nn: StepLR" href="nn.html#StepLR">nn: StepLR</a></li>
           </ul></dd>
 <dt><a name="sum" href="#sum"><span>sum:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
@@ -1696,7 +1758,7 @@ window.addEventListener('DOMContentLoaded', main);
       <div class="twelve-columns footer">
         <span class="nim-sprite"></span>
         <br/>
-        <small style="color: var(--hint);">Made with Nim. Generated: 2023-07-03 15:30:44 UTC</small>
+        <small style="color: var(--hint);">Made with Nim. Generated: 2023-07-04 14:16:51 UTC</small>
       </div>
     </div>
   </div>

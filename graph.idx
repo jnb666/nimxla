@@ -82,6 +82,7 @@ rank	graph.html#rank,Node	graph: rank(n: Node): int
 dims	graph.html#dims,Node	graph: dims(n: Node): seq[int]	
 len	graph.html#len,Node	graph: len(n: Node): int	
 `$`	graph.html#$,Node	graph: `$`(n: Node): string	
+dump	graph.html#dump,Node,int,int	graph: dump(n: Node; maxDepth = -1; depth = 0): string	
 repr	graph.html#repr,Node	graph: repr(n: Node): string	
 toString	graph.html#toString,Node	graph: toString(n: Node): string	
 newBuilder	graph.html#newBuilder,string	graph: newBuilder(name: string): Builder	

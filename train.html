@@ -111,6 +111,7 @@ window.addEventListener('DOMContentLoaded', main);
     title="Trainer = object
   client*: Client
   optim*: Optimizer
+  sched*: Scheduler
   trainer*: Executable
   tester*: Executable
   trainAcc*: Executable
@@ -200,6 +201,7 @@ class="link-seesrc" target="_blank">Source</a>
 <dt><pre><a href="train.html#Trainer"><span class="Identifier">Trainer</span></a> <span class="Other">=</span> <span class="Keyword">object</span>
   <span class="Identifier">client</span><span class="Operator">*</span><span class="Other">:</span> <a href="nimxla.html#Client"><span class="Identifier">Client</span></a>
   <span class="Identifier">optim</span><span class="Operator">*</span><span class="Other">:</span> <a href="nn.html#Optimizer"><span class="Identifier">Optimizer</span></a>
+  <span class="Identifier">sched</span><span class="Operator">*</span><span class="Other">:</span> <a href="nn.html#Scheduler"><span class="Identifier">Scheduler</span></a>
   <span class="Identifier">trainer</span><span class="Operator">*</span><span class="Other">:</span> <a href="nimxla.html#Executable"><span class="Identifier">Executable</span></a>
   <span class="Identifier">tester</span><span class="Operator">*</span><span class="Other">:</span> <a href="nimxla.html#Executable"><span class="Identifier">Executable</span></a>
   <span class="Identifier">trainAcc</span><span class="Operator">*</span><span class="Other">:</span> <a href="nimxla.html#Executable"><span class="Identifier">Executable</span></a>
@@ -237,9 +239,9 @@ Helper function to calculate the accuracy from a set of predictions. Callable ha
 </ul>
 
 &nbsp;&nbsp;<a
-href="https://github.com/jnb666/nimxla/tree/main/src/nimxla/train.nim#L40"
+href="https://github.com/jnb666/nimxla/tree/main/src/nimxla/train.nim#L41"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/jnb666/nimxla/edit/devel/src/nimxla/train.nim#L40" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/jnb666/nimxla/edit/devel/src/nimxla/train.nim#L41" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -250,9 +252,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 Calculate the accuracy from the test data set. T should be the type of data returned from the loader.
 &nbsp;&nbsp;<a
-href="https://github.com/jnb666/nimxla/tree/main/src/nimxla/train.nim#L83"
+href="https://github.com/jnb666/nimxla/tree/main/src/nimxla/train.nim#L84"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/jnb666/nimxla/edit/devel/src/nimxla/train.nim#L83" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/jnb666/nimxla/edit/devel/src/nimxla/train.nim#L84" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -262,9 +264,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/jnb666/nimxla/tree/main/src/nimxla/train.nim#L136"
+href="https://github.com/jnb666/nimxla/tree/main/src/nimxla/train.nim#L137"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/jnb666/nimxla/edit/devel/src/nimxla/train.nim#L136" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/jnb666/nimxla/edit/devel/src/nimxla/train.nim#L137" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -275,9 +277,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 Convert stats to format used by plots package
 &nbsp;&nbsp;<a
-href="https://github.com/jnb666/nimxla/tree/main/src/nimxla/train.nim#L118"
+href="https://github.com/jnb666/nimxla/tree/main/src/nimxla/train.nim#L119"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/jnb666/nimxla/edit/devel/src/nimxla/train.nim#L118" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/jnb666/nimxla/edit/devel/src/nimxla/train.nim#L119" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -288,9 +290,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 Compile test function with given input data shape.
 &nbsp;&nbsp;<a
-href="https://github.com/jnb666/nimxla/tree/main/src/nimxla/train.nim#L33"
+href="https://github.com/jnb666/nimxla/tree/main/src/nimxla/train.nim#L34"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/jnb666/nimxla/edit/devel/src/nimxla/train.nim#L33" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/jnb666/nimxla/edit/devel/src/nimxla/train.nim#L34" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -301,9 +303,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 Train on one epoch of batches of data from the training set, returns average loss and accuracy on training dara T should be the type of data returned from the loader. Output loss should be a float32 scalar.
 &nbsp;&nbsp;<a
-href="https://github.com/jnb666/nimxla/tree/main/src/nimxla/train.nim#L57"
+href="https://github.com/jnb666/nimxla/tree/main/src/nimxla/train.nim#L58"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/jnb666/nimxla/edit/devel/src/nimxla/train.nim#L57" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/jnb666/nimxla/edit/devel/src/nimxla/train.nim#L58" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -315,9 +317,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 Compile training function with given input data shape and loss function which is applied to the output.
 &nbsp;&nbsp;<a
-href="https://github.com/jnb666/nimxla/tree/main/src/nimxla/train.nim#L25"
+href="https://github.com/jnb666/nimxla/tree/main/src/nimxla/train.nim#L26"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/jnb666/nimxla/edit/devel/src/nimxla/train.nim#L25" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/jnb666/nimxla/edit/devel/src/nimxla/train.nim#L26" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -329,9 +331,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 Training run for given number of epochs. If transform is set it will be applied to each batch of training data.
 &nbsp;&nbsp;<a
-href="https://github.com/jnb666/nimxla/tree/main/src/nimxla/train.nim#L160"
+href="https://github.com/jnb666/nimxla/tree/main/src/nimxla/train.nim#L161"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/jnb666/nimxla/edit/devel/src/nimxla/train.nim#L160" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/jnb666/nimxla/edit/devel/src/nimxla/train.nim#L161" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -345,7 +347,7 @@ class="link-seesrc" target="_blank">Source</a>
       <div class="twelve-columns footer">
         <span class="nim-sprite"></span>
         <br/>
-        <small style="color: var(--hint);">Made with Nim. Generated: 2023-07-03 15:29:56 UTC</small>
+        <small style="color: var(--hint);">Made with Nim. Generated: 2023-07-04 14:15:52 UTC</small>
       </div>
     </div>
   </div>
