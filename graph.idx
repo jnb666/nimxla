@@ -35,6 +35,7 @@ tNarrow	graph.html#tNarrow	OpType.tNarrow
 tConvert	graph.html#tConvert	OpType.tConvert	
 tReverse	graph.html#tReverse	OpType.tReverse	
 tMaxPool	graph.html#tMaxPool	OpType.tMaxPool	
+tSumPool	graph.html#tSumPool	OpType.tSumPool	
 tReduceSum	graph.html#tReduceSum	OpType.tReduceSum	
 tReduceMin	graph.html#tReduceMin	OpType.tReduceMin	
 tReduceMax	graph.html#tReduceMax	OpType.tReduceMax	
@@ -64,6 +65,7 @@ tGather	graph.html#tGather	OpType.tGather
 tConv	graph.html#tConv	OpType.tConv	
 tReduceWindow	graph.html#tReduceWindow	OpType.tReduceWindow	
 tSelectAndScatter	graph.html#tSelectAndScatter	OpType.tSelectAndScatter	
+tPad	graph.html#tPad	OpType.tPad	
 tSelect	graph.html#tSelect	OpType.tSelect	
 tClamp	graph.html#tClamp	OpType.tClamp	
 tTuple	graph.html#tTuple	OpType.tTuple	
@@ -167,6 +169,7 @@ clamp	graph.html#clamp,Node,Node,Node	graph: clamp(a, min, max: Node): Node
 rngUniform	graph.html#rngUniform,Node,Node,openArray[int]	graph: rngUniform(min, max: Node; dims: openArray[int]): Node	
 rngNormal	graph.html#rngNormal,Node,Node,openArray[int]	graph: rngNormal(mean, stddev: Node; dims: openArray[int]): Node	
 concat	graph.html#concat,Node,openArray[Node],int	graph: concat(a: Node; nodes: openArray[Node]; axis: int): Node	
+pad	graph.html#pad,Node,Node,openArray[]	graph: pad(a, padValue: Node; padConfig: openArray[(int, int, int)]): Node	
 convolution	graph.html#convolution,Node,Node,openArray[int],openArray[int],openArray[int],openArray[int],openArray[Padding],openArray[int],openArray[int],int,int	graph: convolution(a, kernel: Node; inputDims, outputDims, kernelDims: openArray[int];\n            strides: openArray[int] = []; padding: openArray[Padding] = [];\n            dilation, inputDilation: openArray[int] = [];\n            groups, batchGroups = 1): Node	
 getDims	graph.html#getDims,int,bool	graph: getDims(ndims: int; channelsFirst: bool): seq[int]	
 conv1d	graph.html#conv1d,Node,Node,int,int,int	graph: conv1d(a, kernel: Node; strides = 1; padding = pad(0); dilation = 1; groups = 1;\n       channelsFirst = false): Node	
@@ -190,6 +193,9 @@ reduceWindow	graph.html#reduceWindow,Node,Node,Computation,openArray[int],openAr
 maxPool1d	graph.html#maxPool1d,Node,int,int	graph: maxPool1d(a: Node; kernelSize: int; strides = 0; padding = pad(0);\n          channelsFirst = false): Node	
 maxPool2d	graph.html#maxPool2d,Node,Opt2d,Opt2d,Pad2d	graph: maxPool2d(a: Node; kernelSize: Opt2d; strides: Opt2d = 0;\n          padding: Pad2d = pad(0); channelsFirst = false): Node	
 maxPool3d	graph.html#maxPool3d,Node,Opt3d,Opt3d,Pad3d	graph: maxPool3d(a: Node; kernelSize: Opt3d; strides: Opt3d = 0;\n          padding: Pad3d = pad(0); channelsFirst = false): Node	
+avgPool1d	graph.html#avgPool1d,Node,int,int	graph: avgPool1d(a: Node; kernelSize: int; strides = 0; padding = pad(0);\n          channelsFirst = false): Node	
+avgPool2d	graph.html#avgPool2d,Node,Opt2d,Opt2d,Pad2d	graph: avgPool2d(a: Node; kernelSize: Opt2d; strides: Opt2d = 0;\n          padding: Pad2d = pad(0); channelsFirst = false): Node	
+avgPool3d	graph.html#avgPool3d,Node,Opt3d,Opt3d,Pad3d	graph: avgPool3d(a: Node; kernelSize: Opt3d; strides: Opt3d = 0;\n          padding: Pad3d = pad(0); channelsFirst = false): Node	
 selectAndScatter	graph.html#selectAndScatter,Node,Node,openArray[int],openArray[int],openArray[Padding]	graph: selectAndScatter(a, source: Node; windowDims, strides: openArray[int];\n                 padding: openArray[Padding] = []): Node	
 batchNormInference	graph.html#batchNormInference,Node,Node,Node,Node,Node,float,int	graph: batchNormInference(a, scale, offset, mean, variance: Node; epsilon: float;\n                   axis: int): Node	
 batchNormTraining	graph.html#batchNormTraining,Node,Node,Node,float,int	graph: batchNormTraining(a, scale, offset: Node; epsilon: float; axis: int): Node	

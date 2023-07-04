@@ -231,6 +231,24 @@ window.addEventListener('DOMContentLoaded', main);
 <li><a class="reference external"
           data-doc-search-tag="tensor: at[T: ElemType](t: Tensor[T]; ix: Natural): Tensor[T]" href="tensor.html#at%2CTensor%5BT%3A%20ElemType%5D%2CNatural">tensor: at[T: ElemType](t: Tensor[T]; ix: Natural): Tensor[T]</a></li>
           </ul></dd>
+<dt><a name="avgPool1d" href="#avgPool1d"><span>avgPool1d:</span></a></dt><dd><ul class="simple">
+<li><a class="reference external"
+          data-doc-search-tag="graph: avgPool1d(a: Node; kernelSize: int; strides = 0; padding = pad(0);
+          channelsFirst = false): Node" href="graph.html#avgPool1d%2CNode%2Cint%2Cint">graph: avgPool1d(a: Node; kernelSize: int; strides = 0; padding = pad(0);
+          channelsFirst = false): Node</a></li>
+          </ul></dd>
+<dt><a name="avgPool2d" href="#avgPool2d"><span>avgPool2d:</span></a></dt><dd><ul class="simple">
+<li><a class="reference external"
+          data-doc-search-tag="graph: avgPool2d(a: Node; kernelSize: Opt2d; strides: Opt2d = 0;
+          padding: Pad2d = pad(0); channelsFirst = false): Node" href="graph.html#avgPool2d%2CNode%2COpt2d%2COpt2d%2CPad2d">graph: avgPool2d(a: Node; kernelSize: Opt2d; strides: Opt2d = 0;
+          padding: Pad2d = pad(0); channelsFirst = false): Node</a></li>
+          </ul></dd>
+<dt><a name="avgPool3d" href="#avgPool3d"><span>avgPool3d:</span></a></dt><dd><ul class="simple">
+<li><a class="reference external"
+          data-doc-search-tag="graph: avgPool3d(a: Node; kernelSize: Opt3d; strides: Opt3d = 0;
+          padding: Pad3d = pad(0); channelsFirst = false): Node" href="graph.html#avgPool3d%2CNode%2COpt3d%2COpt3d%2CPad3d">graph: avgPool3d(a: Node; kernelSize: Opt3d; strides: Opt3d = 0;
+          padding: Pad3d = pad(0); channelsFirst = false): Node</a></li>
+          </ul></dd>
 <dt><a name="batchNormGrad" href="#batchNormGrad"><span>batchNormGrad:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
           data-doc-search-tag="graph: batchNormGrad(a, scale, mean, variance, gradOutput: Node; epsilon: float;
@@ -971,6 +989,8 @@ window.addEventListener('DOMContentLoaded', main);
           </ul></dd>
 <dt><a name="pad" href="#pad"><span>pad:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
+          data-doc-search-tag="graph: pad(a, padValue: Node; padConfig: openArray[(int, int, int)]): Node" href="graph.html#pad%2CNode%2CNode%2CopenArray%5B%5D">graph: pad(a, padValue: Node; padConfig: openArray[(int, int, int)]): Node</a></li>
+          <li><a class="reference external"
           data-doc-search-tag="shape: pad(val: int): Padding" href="shape.html#pad%2Cint">shape: pad(val: int): Padding</a></li>
           <li><a class="reference external"
           data-doc-search-tag="shape: pad(lo, hi: int): Padding" href="shape.html#pad%2Cint%2Cint">shape: pad(lo, hi: int): Padding</a></li>
@@ -1513,6 +1533,10 @@ window.addEventListener('DOMContentLoaded', main);
           <li><a class="reference external"
           data-doc-search-tag="tensor: toTensor[T: ElemType](value: T): Tensor[T]" href="tensor.html#toTensor%2CT">tensor: toTensor[T: ElemType](value: T): Tensor[T]</a></li>
           </ul></dd>
+<dt><a name="tPad" href="#tPad"><span>tPad:</span></a></dt><dd><ul class="simple">
+<li><a class="reference external"
+          data-doc-search-tag="OpType.tPad" href="graph.html#tPad">OpType.tPad</a></li>
+          </ul></dd>
 <dt><a name="tParam" href="#tParam"><span>tParam:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
           data-doc-search-tag="OpType.tParam" href="graph.html#tParam">OpType.tParam</a></li>
@@ -1643,6 +1667,10 @@ window.addEventListener('DOMContentLoaded', main);
 <li><a class="reference external"
           data-doc-search-tag="OpType.tSub" href="graph.html#tSub">OpType.tSub</a></li>
           </ul></dd>
+<dt><a name="tSumPool" href="#tSumPool"><span>tSumPool:</span></a></dt><dd><ul class="simple">
+<li><a class="reference external"
+          data-doc-search-tag="OpType.tSumPool" href="graph.html#tSumPool">OpType.tSumPool</a></li>
+          </ul></dd>
 <dt><a name="tTanh" href="#tTanh"><span>tTanh:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
           data-doc-search-tag="OpType.tTanh" href="graph.html#tTanh">OpType.tTanh</a></li>
@@ -1758,7 +1786,7 @@ window.addEventListener('DOMContentLoaded', main);
       <div class="twelve-columns footer">
         <span class="nim-sprite"></span>
         <br/>
-        <small style="color: var(--hint);">Made with Nim. Generated: 2023-07-04 14:16:51 UTC</small>
+        <small style="color: var(--hint);">Made with Nim. Generated: 2023-07-04 19:37:35 UTC</small>
       </div>
     </div>
   </div>
