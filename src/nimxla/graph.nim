@@ -34,12 +34,12 @@ type
     tLog1p, tSigmoid, tRelu, tSign, tCos, tSin, tTanh, tSqrt,   ## ..
     tRsqrt, tIsFinite, tCopy, tZerosLike, tTupleElement,        ## ..
     tReshape, tBroadcast, tBroadcastInDim, tCollapse,           ## ..
-    tTranspose, tNarrow, tConvert, tReverse, tMaxPool,          ## ..
+    tTranspose, tNarrow, tConvert, tReverse, tMaxPool, tSumPool,## ..
     tReduceSum, tReduceMin, tReduceMax, tArgmin, tArgmax,       ## ..
     tAdd, tSub, tMul, tDiv, tRem, tMax, tMin, tPow, tDot,       ## 2 arg ops
     tAnd, tOr, tEq, tNe, tGe, tGt, tLe, tLt, tRngUniform,       ## ..
     tRngNormal, tReduce, tGather, tConv, tReduceWindow,         ## ..
-    tSelectAndScatter,                                          ## ..
+    tSelectAndScatter, tPad                                     ## ..
     tSelect, tClamp, tTuple, tConcat, tScatter,                 ## 3 or more arg ops
     tBatchNormInference, tBatchNormTraining, tBatchNormGrad     ## ..
 
@@ -78,7 +78,7 @@ type
       indices:  seq[int]
     of tBroadcastInDim:
       outSize, bcastDims: seq[int]
-    of tReduceWindow, tMaxPool:
+    of tReduceWindow, tMaxPool, tSumPool:
       wdims:    seq[int]
       wstride:  seq[int]
       wpad:     seq[Padding]
@@ -90,6 +90,8 @@ type
       padding:  seq[Padding]
       dilation: seq[int]
       groups:   int
+    of tPad:
+      padConfig: seq[(int, int, int)]
     of tBatchNormInference, tBatchNormTraining, tBatchNormGrad:
       epsilon:  float32
       axis:     int
@@ -608,6 +610,20 @@ proc concat*(a: Node, nodes: openarray[Node], axis: int): Node =
   result = a.builder.wrap(op, tConcat, nodes, &"axis={axis}")
   result.index = axis
 
+proc pad*(a, padValue: Node, padConfig: openarray[(int, int, int)]): Node =
+  ## Add padding to an array. padValue is the scalar value which is used to fill the new elements.
+  ## padConfig is a list of (pad_low, pad_high, pad_interior) tuples for each dimension of a.
+  if a.rank != padConfig.len:
+    raiseError(&"pad: padConfig should have {a.rank} elements - got {padConfig.len}", a)
+  var padLo, padHi, padIn: seq[int64]
+  for (lo, hi, interior) in padConfig:
+    padLo.add lo
+    padHi.add hi
+    padIn.add interior
+  let op = op_pad(a.op.c, padValue.op.c, padLo[0].addr, padHi[0].addr, padIn[0].addr, csize_t(padConfig.len))
+  result = a.builder.wrap(op, tPad, [a, padValue], $padConfig)
+  result.padConfig = @padConfig
+
 proc getPadding(padding: openarray[Padding], kernelSize: openarray[int]): (seq[int64], seq[int64]) =
   var padLo, padHi: seq[int64]
   for i, p in padding:
@@ -958,41 +974,69 @@ proc reduceWindow*(a, initValue: Node, comp: Computation, windowDims, strides: o
       result.wstride = @strides
       result.wpad = @padding
 
+proc reduceMax(a: Node, windowDims, strides: openarray[int], padding: openarray[Padding]): Node =
+  let b = newBuilder("reduceWindow")
+  let sum = b.build(max(b.parameter(a.dtype), b.parameter(a.dtype)))
+  reduceWindow(a, a.builder.minValue(a.dtype), sum, windowDims, strides, padding, nodeType=tMaxPool)
+
+proc maxPool(nd: int, a: Node, kernelSize, strides: openarray[int], padding: openarray[Padding], channelsFirst=false): Node =
+  if a.rank != nd + 2:
+    raiseError(&"maxPool{nd}d: input rank should be {nd+2} - have {a.rank}", a)
+  let windowDims = poolDims(kernelSize, channelsFirst)
+  let strideDims = poolDims(strides, channelsFirst)
+  let padDims = poolPadding(padding, channelsFirst)
+  reduceMax(a, windowDims, strideDims, padDims)
+
 proc maxPool1d*(a: Node, kernelSize: int, strides = 0, padding = pad(0), channelsFirst=false): Node =
   ## Max pooling over 1 dimensional input array. Stride defaults to kernelSize if left as 0.
   ## channelsFirst setting is as per conv1d.
-  if a.rank != 3: raiseError(&"maxPool1d: input rank should be 3 - have {a.rank}", a)
   let strides = if strides == 0: kernelSize else: strides
-  let b = newBuilder("reduceWindow")
-  let sum = b.build(max(b.parameter(a.dtype), b.parameter(a.dtype)))
-  let windowDims = poolDims([kernelSize], channelsFirst)
-  let strideDims = poolDims([strides], channelsFirst)
-  let padDims = poolPadding([padding], channelsFirst)
-  reduceWindow(a, a.builder.minValue(a.dtype), sum, windowDims, strideDims, padDims, nodeType=tMaxPool)
+  maxPool(1, a, [kernelSize], [strides], [padding], channelsFirst)
 
 proc maxPool2d*(a: Node, kernelSize: Opt2d, strides: Opt2d = 0, padding: Pad2d = pad(0), channelsFirst=false): Node =
   ## Max pooling over 2 dimensional input array. Stride defaults to kernelSize if left as 0.
   ## channelsFirst setting is as per conv2d.
-  if a.rank != 4: raiseError(&"maxPool2d: input rank should be 4 - have {a.rank}", a)
   let strides = if strides == 0: kernelSize else: strides
-  let b = newBuilder("reduceWindow")
-  let sum = b.build(max(b.parameter(a.dtype), b.parameter(a.dtype)))
-  let windowDims = poolDims(kernelSize.seq2, channelsFirst)
-  let strideDims = poolDims(strides.seq2, channelsFirst)
-  let padDims = poolPadding(padding.seq2, channelsFirst)
-  reduceWindow(a, a.builder.minValue(a.dtype), sum, windowDims, strideDims, padDims, nodeType=tMaxPool)
+  maxPool(2, a, kernelSize.seq2, strides.seq2, padding.seq2, channelsFirst)
 
 proc maxPool3d*(a: Node, kernelSize: Opt3d, strides: Opt3d = 0, padding: Pad3d = pad(0), channelsFirst=false): Node =
   ## Max pooling over 3 dimensional input array. Stride defaults to kernelSize if left as 0.
   ## channelsFirst setting is as per conv3d.
-  if a.rank != 5: raiseError(&"maxPool2d: input rank should be 5 - have {a.rank}", a)
   let strides = if strides == 0: kernelSize else: strides
+  maxPool(3, a, kernelSize.seq3, strides.seq3, padding.seq3, channelsFirst)
+
+proc reduceSum(a: Node, windowDims, strides: openarray[int], padding: openarray[Padding] = []): Node =
   let b = newBuilder("reduceWindow")
-  let sum = b.build(max(b.parameter(a.dtype), b.parameter(a.dtype)))
-  let windowDims = poolDims(kernelSize.seq3, channelsFirst)
-  let strideDims = poolDims(strides.seq3, channelsFirst)
-  let padDims = poolPadding(padding.seq3, channelsFirst)
-  reduceWindow(a, a.builder.minValue(a.dtype), sum, windowDims, strideDims, padDims, nodeType=tMaxPool)
+  let sum = b.build(b.parameter(a.dtype) + b.parameter(a.dtype))
+  reduceWindow(a, a.builder.zero(a.dtype), sum, windowDims, strides, padding, nodeType=tSumPool)
+
+proc sumPool(nd: int, a: Node, kernelSize, strides: openarray[int], padding: openarray[Padding], channelsFirst=false): Node =
+  if a.rank != nd + 2:
+    raiseError(&"avgPool{nd}d: input rank should be {nd+2} - have {a.rank}", a)
+  let windowDims = poolDims(kernelSize, channelsFirst)
+  let strideDims = poolDims(strides, channelsFirst)
+  let padDims = poolPadding(padding, channelsFirst)
+  reduceSum(a, windowDims, strideDims, padDims)
+
+proc avgPool1d*(a: Node, kernelSize: int, strides = 0, padding = pad(0), channelsFirst=false): Node =
+  ## Average pooling over 1 dimensional input array. Stride defaults to kernelSize if left as 0.
+  ## channelsFirst setting is as per conv1d.
+  let strides = if strides == 0: kernelSize else: strides
+  sumPool(1, a, [kernelSize], [strides], [padding], channelsFirst) / a.builder.constant(kernelSize, a.dtype)
+
+proc avgPool2d*(a: Node, kernelSize: Opt2d, strides: Opt2d = 0, padding: Pad2d = pad(0), channelsFirst=false): Node =
+  ## Average pooling over 2 dimensional input array. Stride defaults to kernelSize if left as 0.
+  ## channelsFirst setting is as per conv2d.
+  let strides = if strides == 0: kernelSize else: strides
+  let ksize = kernelSize.seq2
+  sumPool(2, a, ksize, strides.seq2, padding.seq2, channelsFirst) / a.builder.constant(prod(ksize), a.dtype)
+
+proc avgPool3d*(a: Node, kernelSize: Opt3d, strides: Opt3d = 0, padding: Pad3d = pad(0), channelsFirst=false): Node =
+  ## Average pooling over 3 dimensional input array. Stride defaults to kernelSize if left as 0.
+  ## channelsFirst setting is as per conv3d.
+  let strides = if strides == 0: kernelSize else: strides
+  let ksize = kernelSize.seq3
+  sumPool(3, a, ksize, strides.seq3, padding.seq3, channelsFirst) / a.builder.constant(prod(ksize), a.dtype)
 
 
 proc selectAndScatter*(a, source: Node, windowDims, strides: openarray[int], padding: openarray[Padding] = []): Node =
@@ -1060,7 +1104,7 @@ proc unbcast(b: Builder, v: Node, xd, yd: openarray[int]): Node =
   if axes.len > 0: v.sum(axes) else: v
 
 proc unreduce(n, x, v: Node): Node =
-  ## Inverse of reduceSum operation, broadcast back to original shape
+  ## Inverse of sum operation, broadcast back to original shape
   var shape = x.dims
   for d in n.indices: shape[d] = 1
   let dims = toSeq(0 ..< shape.len)
@@ -1126,6 +1170,25 @@ proc convKernelGrad(n, x, kernel, v: Node): Node =
   convolution(x, v, inputDims, outputDims, kernelDims, strides=n.dilation,
               padding=paddings, dilation=n.strides)
 
+proc sumPoolGrad(b: Builder, x, v: Node, kernelSize, strides: seq[int], paddings: seq[Padding]): Node =
+  ## Gradient of sum reduce window (used for AvgPool)
+  var padConfig = collect:
+    for i, ksize in kernelSize:
+      (ksize div 2, (ksize-1) div 2, strides[i]-1)
+  let vpad = pad(v, b.zero(x.dtype), padConfig)
+  result = reduceSum(vpad, kernelSize, repeat(1, x.rank), repeat(padSame, x.rank))
+  var adjust = false
+  let (padLo, padHi) = getPadding(paddings, kernelSize)
+  padConfig = collect:
+    for i, (xd, od) in zip(x.dims, result.dims):
+      var padStart = 0
+      if paddings.len > 0: padStart = -padLo[i].int
+      let padEnd = xd - od - padStart
+      if padStart != 0 or padEnd != 0: adjust = true
+      (padStart, padEnd, 0)
+  if adjust:
+    result = pad(result, b.zero(x.dtype), padConfig)
+
 proc localGrad(b: Builder, n, v: Node): seq[Node] =
   ## Returns the gradients at each of the inputs to node as a function of the value accumulated so far.
   ## Will raise a BuilderError exception if the node type is not supported.
@@ -1159,6 +1222,8 @@ proc localGrad(b: Builder, n, v: Node): seq[Node] =
     return @[ n.convInputGrad(x, y, v), n.convKernelGrad(x, y, v) ]
   of tMaxPool:
     return @[ selectAndScatter(x, v, n.wdims, n.wstride, n.wpad) ]
+  of tSumPool:
+    return @[ b.sumPoolGrad(x, v, n.wdims, n.wstride, n.wpad) ]
   of tNeg:
     return @[ -v ]
   of tExp:

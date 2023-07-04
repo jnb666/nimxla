@@ -204,7 +204,7 @@ suite "grad":
       [[144,  0.144], [153, 0.153], [162, 0.162]],
     ]])
 
-  test "pool1d":
+  test "max_pool1d":
     let x = @@[[[0.0, 0], [1, 0.1], [2, 0.2], [3, 0.3], [4, 0.4]]]
     let b = newBuilder("pool1d")
     let input = b.parameter(F64, x.dims, "input")
@@ -216,20 +216,48 @@ suite "grad":
     debug "grad(input):", res
     check res == @@[[[0.0, 0], [1, 1], [1, 1], [1, 1], [1, 1]]]
 
-  test "pool2d":
+  test "max_pool2d":
     let x = toTensor[float64](0 .. 24).reshape(1, 5, 5, 1)
     let b = newBuilder("pool2d")
     let input = b.parameter(F64, x.dims, "input")
-    let grads = b.gradient(maxPool2d(input, kernelSize=2), ["input"])
-    let comp = b.build(grads[0])
+    let y = maxPool2d(input, kernelSize=2)
+    let grads = b.gradient(y, ["input"])
+    let comp = b.build b.makeTuple(y, grads[0])
     debug comp
     let exec = client.compile(comp)
-    let res = exec.run([x.toLiteral]).f64
-    debug "grad(input):", res
-    check res == @@[[
+    let res = exec.runAndUnpack([x.toLiteral]).tuple2
+    let yval = res[0].f64
+    debug "y: ", yval
+    check yval == @@[[[[6.0], [8]], [[16], [18]]]]
+    let grad = res[1].f64
+    debug "grad(input):", grad
+    check grad == @@[[
       [[0.0], [0], [0], [0], [0]],
       [[0],   [1], [0], [1], [0]],
       [[0],   [0], [0], [0], [0]],
       [[0],   [1], [0], [1], [0]],
+      [[0],   [0], [0], [0], [0]],
+    ]]
+
+  test "avg_pool2d":
+    let x = toTensor[float64](0 .. 24).reshape(1, 5, 5, 1)
+    let b = newBuilder("pool2d")
+    let input = b.parameter(F64, x.dims, "input")
+    let y = avgPool2d(input, kernelSize=2)
+    let grads = b.gradient(y, ["input"])
+    let comp = b.build b.makeTuple(y, grads[0])
+    debug comp
+    let exec = client.compile(comp)
+    let res = exec.runAndUnpack([x.toLiteral]).tuple2
+    let yval = res[0].f64
+    debug "y: ", yval
+    check yval == @@[[[[3.0], [5]], [[13], [15]]]]
+    let grad = res[1].f64
+    debug "grad(input):", grad
+    check grad == @@[[
+      [[0.25], [0.25], [0.25], [0.25], [0]],
+      [[0.25], [0.25], [0.25], [0.25], [0]],
+      [[0.25], [0.25], [0.25], [0.25], [0]],
+      [[0.25], [0.25], [0.25], [0.25], [0]],
       [[0],   [0], [0], [0], [0]],
     ]]

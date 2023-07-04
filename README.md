@@ -70,7 +70,6 @@ to generate a trace.
 
 ## TODO
 - checkpoint files with current state
-- avg pool and batchnorm layers
 - RNN example
 - complete autograd for all of the defined ops
 - additonal op types: control flow etc.

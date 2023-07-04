@@ -407,6 +407,20 @@ xla_op op_conv(const xla_op lhs, const xla_op rhs, size_t ndims, const int64_t *
   END_PROTECT_OP(lhs)
 }
 
+xla_op op_pad(const xla_op operand, const xla_op pad_value, const int64_t *pad_low, const int64_t *pad_high, 
+              const int64_t *pad_interior, size_t ndims) {
+  BEGIN_PROTECT_OP
+  xla::PaddingConfig padding_config;
+  for (size_t i = 0; i < ndims; ++i) {
+    auto dim = padding_config.add_dimensions();
+    dim->set_edge_padding_low(pad_low[i]);
+    dim->set_edge_padding_high(pad_high[i]);
+    dim->set_interior_padding(pad_interior[i]);
+  }
+  return new XlaOp(Pad(*operand, *pad_value, padding_config));
+  END_PROTECT_OP(operand)
+}
+
 xla_op op_eq(const xla_op lhs, const xla_op rhs) {
   BEGIN_PROTECT_OP
   return new XlaOp(Eq(*lhs, *rhs));

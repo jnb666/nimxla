@@ -270,6 +270,19 @@ suite "graph":
     check res.dims == [2, 2]
     check res.toSeq == [58f32, 64, 139, 154]
 
+  test "pad":
+    let b = newBuilder("test")
+    let x = toTensor[float32](1..6).reshape(2, 3)
+    let comp = b.build pad(b^x, b.zero(F32), [(1, 1, 0), (1, 1, 0)])
+    let res = client.compile(comp).run.f32
+    debug res
+    check res == @@[
+      [0f32, 0, 0, 0, 0],
+      [   0, 1, 2, 3, 0],
+      [   0, 4, 5, 6, 0],
+      [   0, 0, 0, 0, 0]
+    ]
+
   test "conv2d":
     proc test_conv(dims: openarray[int], axis: int, scale: float32,
                    kernel, expect: Tensor[float32], padding = pad(0),
@@ -352,6 +365,15 @@ suite "graph":
         ]],
       window=3, strides=1, padding=padSame, channelsFirst=true
     )
+
+  test "avg_pool":
+    let b = newBuilder("test")
+    let x = b.iota(F32, [1, 3, 3, 1], axis = 2)
+    let x2 = x.concat([x * b^0.1f32], axis = -1)
+    let comp = b.build avgPool2d(x2, 3)
+    let res = client.compile(comp).run.f32
+    debug res
+    check res == @@[[[[1f32, 0.1]]]]
 
   test "batch_norm":
     let b = newBuilder("test")

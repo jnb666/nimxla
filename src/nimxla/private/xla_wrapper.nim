@@ -110,6 +110,8 @@ proc op_dot_general*(a1: xla_op; a2: xla_op; a3: ptr int64; a4: csize_t; a5: ptr
 proc op_conv*(a1: xla_op; a2: xla_op; a3: csize_t; a4: ptr int64; a5: ptr int64; a6: ptr int64;
   a7: ptr int64; a8: ptr int64; a9: ptr int64; a10: csize_t; a11: ptr int64; a12: ptr int64,
   a13: int64, a14: int64): xla_op {.importc: "op_conv".}
+proc op_pad*(a1: xla_op; a2: xla_op; a3: ptr int64; a4: ptr int64; a5: ptr int64;
+  a6: csize_t): xla_op {.importc: "op_pad".}
 proc op_eq*(a1: xla_op; a2: xla_op): xla_op {.importc: "op_eq".}
 proc op_ne*(a1: xla_op; a2: xla_op): xla_op {.importc: "op_ne".}
 proc op_ge*(a1: xla_op; a2: xla_op): xla_op {.importc: "op_ge".}
