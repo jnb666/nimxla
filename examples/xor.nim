@@ -10,15 +10,15 @@ let target = @@[[0f32], [1], [1], [0]]
 
 setPrintOpts(precision=4, minWidth=10, floatMode=ffDecimal)
 
-proc initModel(c: Client): (Module, Executable) =
+proc initModel(c: Client, rng: var Rand): (Module, Executable) =
   let b = newBuilder("xor")
-  let layer1 = c.initLinear("1", nin=2, nout=2, weights = uniformInit())
-  let layer2 = c.initLinear("2", nin=2, nout=1, weights = uniformInit())
+  let layer1 = c.initLinear(rng, "1", nin=2, nout=2, weights = uniformInit())
+  let layer2 = c.initLinear(rng, "2", nin=2, nout=1, weights = uniformInit())
   var model: Module
   model.add(layer1, layer2)
-  model.forward = proc(x: Node, training: bool): Node =
-    let l1 = layer1.forward(x).sigmoid
-    layer2.forward(l1)
+  model.forward = proc(x: Node, training: bool, output: var Outputs): Node =
+    let l1 = layer1.forward(x, training, output).sigmoid
+    layer2.forward(l1, training, output)
   let x = b.parameter(F32, data.dims, "x")
   let y = b.parameter(F32, target.dims, "y")
   let exec = c.compileTrain(model, x, yp => mseLoss(yp, y))
@@ -40,25 +40,21 @@ proc train(epochs = 1000, logEvery = 10, learnRate = 0.2, minLoss = 0.1, seed: i
   var logger = newConsoleLogger(levelThreshold=if debug: lvlDebug else: lvlInfo)
   addHandler(logger)
   # init client
-  let c = if gpu: newGPUClient() else: newCPUClient()
+  let c = newClient(useGPU = gpu)
   echo c
-  # compile model executable and initialise parameters
-  if seed != 0:
-    randomize(seed)
-  else:
-    randomize()
+  var rng = initRandom(seed)
   var params = initParams({"x": c.newBuffer(data), "y": c.newBuffer(target)})
-  var (model, exec) = c.initModel()
-  for p in model.variables:
-    echo &"initial {p.name}: {p.data.f32}"
+  var (model, exec) = c.initModel(rng)
+  for name, v in model.variables:
+    echo &"initial {name}: {v.data.f32}"
   # compile optimizer used to update the weights and function to calc the accuracy
-  let optim = c.optimSGD(model, learnRate, momentum = 0.9)
+  var optim = c.optimSGD(model, learnRate, momentum = 0.9)
   let accFn = c.calcAccuracy()
 
-  echo "training with learning rate = ", learnRate
+  echo "optimizer: ", optim
   for epoch in 1 .. epochs:
     # one step processing the data - both forward and backward pass
-    model.setParams(params)
+    model.getParams(params)
     exec.runWith(params)
     debug params["pred"]
     let loss = params["loss"].f32[]
@@ -71,11 +67,10 @@ proc train(epochs = 1000, logEvery = 10, learnRate = 0.2, minLoss = 0.1, seed: i
       if loss <= minLoss:
         break
     # update weights
-    model.variables = optim(params)
+    model.setParams(optim.step(params))
  
-  for p in model.variables:
-    echo &"final {p.name}: {p.data.f32}"
-
+  for name, v in model.variables:
+    echo &"final {name}: {v.data.f32}"
 
 dispatch train
 

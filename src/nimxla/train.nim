@@ -11,6 +11,7 @@ type
     ## Trainer object holds the state for a training
     client*:   Client
     optim*:    Optimizer
+    sched*:    Scheduler
     trainer*:  Executable
     tester*:   Executable
     trainAcc*: Executable
@@ -77,7 +78,7 @@ proc trainEpoch*[T: ElemType](t: var Trainer, model: var Module, loader: var Dat
       return (loss, 0.0)
     avgLoss += (loss - avgLoss) / float(batch+1)
     accuracy += (accVal - accuracy) / float(batch+1)
-    model.setParams(t.optim(params))
+    model.setParams(t.optim.step(params))
   return (avgLoss, accuracy)
 
 proc getAccuracy*[T: ElemType](t: var Trainer, model: var Module, loader: var Dataloader): float =
@@ -170,6 +171,8 @@ proc trainNetwork*[T: ElemType](t: var Trainer, model: var Module, train, test: 
     if loss.isNan:
       error "loss returns Nan value - aborting"
       break
+    if t.sched != nil:
+      t.sched.step(t.client)
     let testAcc = getAccuracy[T](t, model, test)
     t.updateStats({"epoch": epoch.float, "loss": loss, "train": trainAcc, "test": testAcc})
     if plot:

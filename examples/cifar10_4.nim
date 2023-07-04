@@ -62,7 +62,7 @@ proc main(epochs = 80, learnRate = 0.001, trainBatch = 200, testBatch = 500, see
     trainAcc: c.accuracyFunc(train.batchSize, nclasses),
     testAcc:  c.accuracyFunc(test.batchSize, nclasses)
   )
-  echo "training with learning rate = ", learnRate
+  echo "optimizer: ", t.optim
   trainNetwork[uint8](t, model, train, test, epochs, plot=plot)
   if output != "":
     echo "saving test predictions to ", output

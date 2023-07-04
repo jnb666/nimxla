@@ -255,9 +255,9 @@ proc loaderThread(ctx: LoaderContext, dataset: Dataset) =
   var indexes = toSeq(0 ..< dataset.len)
   let dims = @[ctx.batchSize] & dataset.shape
   var bufix = 0
-  var buffer: array[2, Tensor[uint8]]
-  var labels: array[2, Tensor[int32]]
-  for i in 0..1:
+  var buffer: array[3, Tensor[uint8]]
+  var labels: array[3, Tensor[int32]]
+  for i in 0..2:
     buffer[i] = newTensor[uint8](dims)
     labels[i] = newTensor[int32](ctx.batchSize)
   while true:
@@ -274,7 +274,7 @@ proc loaderThread(ctx: LoaderContext, dataset: Dataset) =
       for i in 0 ..< ctx.batchSize:
         discard ctx.trans.cout[].recv
       ctx.cout[].send (batch, buffer[bufix].rawPtr, labels[bufix].rawPtr)
-      bufix = 1-bufix
+      bufix = (bufix + 1) mod 3
     ctx.cout[].send (-1, nil, nil)
 
 proc initLoader*(channels: static int, d: var DataLoader, dset: Dataset, ops: openarray[ImageOp]) =

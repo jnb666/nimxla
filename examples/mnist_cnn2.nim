@@ -26,7 +26,7 @@ proc buildModel(c: Client, rng: var Rand, nclasses: int, mean, std: float32): Mo
   result.info = "== mnist_cnn2 =="
   result.add(conv1, conv2, linear1, linear2)  
 
-proc main(epochs = 50, learnRate = 0.0001, trainBatch = 500, testBatch = 1000, seed: int64 = 0, 
+proc main(epochs = 30, learnRate = 0.001, wdecay = 1e-5, trainBatch = 200, testBatch = 1000, seed: int64 = 0,
           augment = true, output = "", gpu = true, plot = false, debug = false) =
   var logger = newConsoleLogger(levelThreshold=if debug: lvlDebug else: lvlInfo)
   addHandler(logger)
@@ -50,15 +50,17 @@ proc main(epochs = 50, learnRate = 0.0001, trainBatch = 500, testBatch = 1000, s
   var model = c.buildModel(rng, nclasses, mean[0], std[0])
   echo model
   # compile train funcs
+  var optim = c.optimAdam(model, learnRate, wdecay)
   var t = Trainer(
     client:   c,
-    optim:    c.optimAdam(model, learnRate),
+    optim:    optim,
+    sched:    newStepLR(optim, stepSize=10, gamma=0.2),
     trainer:  c.trainFunc(model, U8, train.shape, crossEntropyLoss),
     tester:   c.testFunc(model, U8, test.shape),
     trainAcc: c.accuracyFunc(train.batchSize, nclasses),
     testAcc:  c.accuracyFunc(test.batchSize, nclasses)
   )
-  echo "training with learning rate = ", learnRate
+  echo "optimizer: ", t.optim
   trainNetwork[uint8](t, model, train, test, epochs, plot=plot)
   if output != "":
     echo "saving test predictions to ", output

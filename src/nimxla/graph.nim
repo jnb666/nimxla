@@ -137,7 +137,7 @@ proc `=destroy`(op: var Op) =
     op.c = nil
 
 # error handling
-proc repr*(n: Node): string
+proc dump*(n: Node, maxDepth = -1, depth = 0): string
 
 proc raiseError*(message: string, node: Node = nil) =
   ## Raise a BuilderError exception annotated with the repr for the given node.
@@ -148,7 +148,7 @@ proc raiseError*(message: string, node: Node = nil) =
   err.msg = "\n" & message
   if node != nil:
     err.at = node
-    err.msg &= " at\n" & node.repr & "\n"
+    err.msg &= " at\n" & node.dump(maxDepth=2) & "\n"
   raise err
 
 proc checkBuilderError(status: status_t, at: Node = nil) =
@@ -204,11 +204,18 @@ proc `$`*(n: Node): string =
     result.add &"{n.id:3}: "
   result.add ($n.kind)[1..^1] & $n.shape & $n.info
 
+proc dump*(n: Node, maxDepth = -1, depth = 0): string =
+  ## Formatted AST tree of this node and it's children. Limited to maxDepth if maxDepth >= 0
+  result = $n
+  if maxDepth < 0 or depth <= maxDepth:
+    for arg in n.args:
+      result.add "\n" & indent(arg.dump(maxDepth, depth+1), 2)
+  else:
+    result.add "\n ..."
+
 proc repr*(n: Node): string =
   ## Formatted AST tree of this node and all of it's children.
-  result = $n
-  for arg in n.args:
-    result.add "\n" & indent(arg.repr, 2)
+  n.dump()
 
 proc toString*(n: Node): string =
   ## Node name and argument names, expanded
@@ -221,7 +228,9 @@ proc toString*(n: Node): string =
     var name = ($n.kind)[1 .. ^1]
     name.removePrefix("reduce")
     name[0] = name[0].toLowerAscii
-    name & "(" & map(n.args, x => x.toString).join(", ") & ")"
+    var args = map(n.args, x => x.toString)
+    if n.info != "": args.add n.info
+    name & "(" & args.join(", ") & ")"
 
 proc newBuilder*(name: string): Builder =
   ## Create a new builder which is used to generate a new graph. The name is used for debug info.
@@ -479,8 +488,11 @@ proc `[]`*(a: Node, index: int): Node =
   result.index = index
 
 proc convert*(a: Node, dtype: DataType): Node =
-  ## Convert type of elements to dtype.
-  a.builder.wrap(op_convert_element_type(a.op.c, cint(dtype)), tConvert, [a], $dtype)
+  ## Convert type of elements to dtype. Noop if a is already of this type.
+  if a.dtype == dtype:
+    a
+  else:
+    a.builder.wrap(op_convert_element_type(a.op.c, cint(dtype)), tConvert, [a], $dtype)
 
 proc reshape*(a: Node, dims: varargs[int]): Node =
   ## Reshape the input node to dims. Total number of elements is unchanged.
@@ -1252,4 +1264,5 @@ proc gradient*(b: Builder, output: Node, inputs: openarray[string]): seq[Node] =
   b.calcGrads(output, pathValue, inputs, result, dict)
   for i, grad in result:
     result[i] = grad.reshapeAs(b, inputs[i])
+    debug &"grad {i}: {inputs[i]} {result[i].shape}"
 

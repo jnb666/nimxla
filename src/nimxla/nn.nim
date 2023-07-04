@@ -1,5 +1,6 @@
 ## The nn module provides higher level functions for building neural network models using the nimxla graph API.
 
+{.warning[LockLevel]:off.}
 import std/[math, random, times, strutils, strformat, sequtils, tables, logging]
 import ../nimxla
 
@@ -13,8 +14,36 @@ type
   InitFunc* = proc(c: Client, dims: openarray[int], dtype: DataType, rng: var Rand): Buffer
     ## InitFunc defines a function used to initialise a learnable parameter.
 
-  Optimizer* = proc(params: Params): Params
+  Optimizer* = ref object of RootRef
     ## Optimizer function to update the model weights.
+    ## Subclasses should implement the step method
+    exec:      Executable
+    state:     Params
+    wdecay:    float
+    varNames:  seq[string]
+
+  SGDOptimizer* = ref object of Optimizer
+    momentum:  float
+    nesterov:  bool
+
+  AdamOptimizer* = ref object of Optimizer
+    beta1: float
+    beta2: float
+    adamW: bool
+
+  Scheduler* = ref object of RootRef
+    ## Scheduler updates the learning rate after each epoch
+    optim: Optimizer
+    epoch: int
+
+  StepLR* = ref object of Scheduler
+    stepSize: int
+    gamma:    float
+
+  CosineAnnealingLR* = ref object of Scheduler
+    tMax:   int
+    lrMin:  float
+    lrMax:  float
 
   Outputs* = object
     ## List of named output parameters
@@ -25,7 +54,7 @@ type
     ## The training flag is set to true when in training mode.
     ## If the module saves internal state then this is added to the output list at compile time.
     ## each forward call.
-    variables*:   Table[string, Variable]
+    variables*:   OrderedTable[string, Variable]
     outputs*:     seq[string]
     forward*:     proc(x: Node, training: bool, output: var Outputs): Node
     info*:        string
@@ -96,10 +125,10 @@ proc heInit*(mean = 0.0, gain = 2.0, fanOut = false): InitFunc =
       sqrt(gain / nin.float)
     normalInit(mean, stddev)(c, dims, dtype, rng)
 
-proc newVariable*(c: Client, name: string, dims: openarray[int], dtype: DataType, init: InitFunc, 
+proc newVariable*(c: Client, name: string, dims: openarray[int], init: InitFunc, 
                   rng: var Rand, calcGrad = true): Variable =
-  ## Allocate a new variable with the given name and shape and initialise values.
-  Variable(name: name, data: c.init(dims, dtype, rng), calcGrad: calcGrad)
+  ## Allocate a new F32 variable with the given name and shape and initialise values.
+  Variable(name: name, data: c.init(dims, F32, rng), calcGrad: calcGrad)
 
 proc param*(b: Builder, p: Variable, suffix = ""): Node =
   ## Create a new parameter node from this Variable
@@ -198,18 +227,18 @@ proc initLinear*(c: Client, rng: var Rand, id: string, nin, nout: int,
   ## Weight parameters are initialised using the weights function. If biases is not nil then bias parameters 
   ## are initialised using this function and added to the output.
   result.info = &"{id}: linear(nin={nin}, nout={nout}, bias={biases != nil})"
-  let weight = c.newVariable(id & ".w", [nin, nout], dtype, weights, rng)
+  let weight = c.newVariable(id & ".w", [nin, nout], weights, rng)
   result.setVars weight
   if biases == nil:
     result.forward = proc(x: Node, training: bool, output: var Outputs): Node =
-      let W = x.builder.param(weight)
+      let W = x.builder.param(weight).convert(dtype)
       dot(x, W)
   else:
-    let bias = c.newVariable(id & ".b", [1, nout], dtype, biases, rng)
+    let bias = c.newVariable(id & ".b", [1, nout], biases, rng)
     result.setVars bias
     result.forward = proc(x: Node, training: bool, output: var Outputs): Node =
-      let W = x.builder.param(weight)
-      let B = x.builder.param(bias)
+      let W = x.builder.param(weight).convert(dtype)
+      let B = x.builder.param(bias).convert(dtype)
       dot(x, W) + B
 
 proc initConv2d*(c: Client, rng: var Rand, id: string, inChannels, outChannels: int, kernelSize: Opt2d, 
@@ -226,18 +255,18 @@ proc initConv2d*(c: Client, rng: var Rand, id: string, inChannels, outChannels: 
   result.info.add &", bias={biases != nil})"
 
   let wdims = @[outChannels] & kernelSize.seq2 & @[inChannels]
-  let weight = c.newVariable(id & ".w", wdims, dtype, weights, rng)
+  let weight = c.newVariable(id & ".w", wdims, weights, rng)
   result.setVars weight
   if biases == nil:
     result.forward = proc(x: Node, training: bool, output: var Outputs): Node =
-      let W = x.builder.param(weight)
+      let W = x.builder.param(weight).convert(dtype)
       conv2d(x, W, strides, padding, dilation, groups)
   else:
-    let bias = c.newVariable(id & ".b", @[1, 1, 1, outChannels], dtype, biases, rng)
+    let bias = c.newVariable(id & ".b", @[1, 1, 1, outChannels], biases, rng)
     result.setVars bias
     result.forward = proc(x: Node, training: bool, output: var Outputs): Node =
-      let W = x.builder.param(weight)
-      let B = x.builder.param(bias)
+      let W = x.builder.param(weight).convert(dtype)
+      let B = x.builder.param(bias).convert(dtype)
       conv2d(x, W, strides, padding, dilation, groups) + B
 
 proc initBatchNorm*(c: Client, rng: var Rand, id: string, numFeatures: int, momentum: float = 0.1, epsilon: float = 1e-5,
@@ -247,28 +276,28 @@ proc initBatchNorm*(c: Client, rng: var Rand, id: string, numFeatures: int, mome
   ## of the mean and variance. epsilon is the value added to the denominator to avoid divide by zero.
   ## Learnable weight and bias parameters are initialised with the weights and biases initialization functions.
   result.info = &"{id}: batchNorm({numFeatures}, momentum={momentum}, epsilon={epsilon})"
-  let weight = c.newVariable(id & ".w", [numFeatures], dtype, weights, rng)
-  let bias = c.newVariable(id & ".b", [numFeatures], dtype, biases, rng)
-  let runningMean = c.newVariable(id & ".mean", [numFeatures], dtype, constantInit(0.0), rng, calcGrad=false)
-  let runningVar = c.newVariable(id & ".var", [numFeatures], dtype, constantInit(1.0), rng, calcGrad=false)
+  let weight = c.newVariable(id & ".w", [numFeatures], weights, rng)
+  let bias = c.newVariable(id & ".b", [numFeatures], biases, rng)
+  let runningMean = c.newVariable(id & ".mean", [numFeatures], constantInit(0.0), rng, calcGrad=false)
+  let runningVar = c.newVariable(id & ".var", [numFeatures], constantInit(1.0), rng, calcGrad=false)
   result.setVars weight, bias, runningMean, runningVar
   result.outputs.add id & ".mean"
   result.outputs.add id & ".var"
 
   result.forward = proc(x: Node, training: bool, output: var Outputs): Node =
     let b = x.builder
-    let scale = b.param(weight)
-    let offset = b.param(bias)
-    let mean = b.param(runningMean)
-    let variance = b.param(runningVar)
+    let scale = b.param(weight).convert(dtype)
+    let offset = b.param(bias).convert(dtype)
     if training:
       let res = batchNormTraining(x, scale, offset, epsilon, -1)
-      let p = b.constant(momentum, dtype)
-      let pp = b.constant(1-momentum, dtype)
-      output.params.add pp*mean + p*res[1]
-      output.params.add pp*variance + p*res[2]
+      let p = b^momentum.float32
+      let pp = b^(1-momentum).float32
+      output.params.add pp*b.param(runningMean) + p*res[1].convert(F32)
+      output.params.add pp*b.param(runningVar)  + p*res[2].convert(F32)
       res[0]
     else:
+      let mean = b.param(runningMean).convert(dtype)
+      let variance = b.param(runningVar).convert(dtype)
       batchNormInference(x, scale, offset, mean, variance, epsilon, -1)
 
 
@@ -291,33 +320,52 @@ proc compileTrain*(c: Client, m: Module, input: Node, lossFn: proc(y: Node): Nod
   let b = input.builder
   var output: Outputs
   let pred = m.forward(input, true, output)
-  debug "forward function: ", pred.toString
+  debug "forward function: ", pred.repr
   let loss = lossFn(pred)
   let grads = b.gradient(loss, m.varNames)
   debug "outputs: ", $m.outputs
   let comp = b.build b.makeTuple(@[pred, loss] & output.params & grads)
   result = c.compile(comp, @["pred", "loss"] & m.outputs & m.gradNames)
-  debug result
   debug "trainer: ", result
 
-proc makeOptimizer(m: Module, exec: Executable, init: proc():Params): Optimizer =
-  var state = init()
-  proc (params: Params): Params =
-    var vars = params
-    for key, val in state:
-      vars[key] = val
-    exec.runWith(vars)
-    for key in state.keys:
-      state[key] = vars[key]
-    result = initParams([])
-    for i, name in m.varNames:
-      result[name] = vars[name]
 
-proc buildSGD(c: Client, m: Module, learnRate, weightDecay, momentum: float, nesterov: bool): Executable =
+proc format(val: float): string =
+  result = formatFloat(val, precision=6)
+  result.trimZeros
+
+proc learningRate*(optim: Optimizer): float =
+  ## Get learning rate parameter
+  optim.state["learnRate"].f32[]
+
+proc setLearningRate*(optim: var Optimizer, c: Client, lr: float) =
+  ## Update learning rate parameter
+  optim.state["learnRate"] = c.newBuffer(lr.float32.toTensor)
+
+proc step*(optim: var Optimizer, params: Params): Params =
+  ## Called after each batch to update the model parameters.
+  var vars = params
+  for key, val in optim.state:
+    vars[key] = val
+  optim.exec.runWith(vars)
+  for key in optim.state.keys:
+    optim.state[key] = vars[key]
+  result = initParams([])
+  for i, name in optim.varNames:
+    result[name] = vars[name]
+
+method `$`*(optim: Optimizer): string {.base.} =
+  raise newException(ValueError, "abstract method")
+
+proc getopts(optim: Optimizer): seq[string] =
+  result.add "learnRate=" & optim.learningRate.format
+  if optim.wdecay != 0:
+    result.add "decay=" & $optim.wdecay
+
+proc buildSGD(c: Client, m: Module, weightDecay, momentum: float, nesterov: bool): Executable =
   let b = newBuilder("sgd")
   var outputs: seq[Node]
   var names: seq[string]
-  let lr = b.constant(learnRate, F32)
+  let lr = b.parameter(F32, name="learnRate")
   let decay = b.constant(weightDecay, F32)
   let mu = b.constant(momentum, F32)
   for p in m.learnableVars:
@@ -337,28 +385,34 @@ proc buildSGD(c: Client, m: Module, learnRate, weightDecay, momentum: float, nes
     names.add p.name
     outputs.add x - lr*dx
   let comp = b.build b.makeTuple(outputs)
-  c.compile(comp, names)
+  result = c.compile(comp, names)
+  debug "optim: ", result
 
-proc optimSGD*(c: Client, m: Module, learnRate: float, weightDecay = 0.0, 
-               momentum = 0.0, nesterov = false): Optimizer =
+proc optimSGD*(c: Client, m: Module, learnRate: float, weightDecay = 0.0, momentum = 0.0, nesterov = false): Optimizer =
   ## Builds and compiles a stochastic gradient descent optimizer to optimize the variables for module m.
   ## This returns a function which takes as input a table with all of the named weight and gradient parameters and
   ## returns the list of model weight variables.
-  let exec = c.buildSGD(m, learnRate, weightDecay, momentum, nesterov)
-  let init = proc(): Params =
-    var state = initParams([])
-    if momentum != 0:
-      for p in m.learnableVars:
-        let s = p.data.shape
-        state[p.name & "_mom"] = c.newBuffer(s.dtype, s.dims)
-    return state
-  makeOptimizer(m, exec, init)
+  let exec = c.buildSGD(m, weightDecay, momentum, nesterov)
+  let lr = learnRate.float32.toTensor
+  var state = initParams({"learnRate": c.newBuffer(lr)})
+  if momentum != 0:
+    for p in m.learnableVars:
+      let s = p.data.shape
+      state[p.name & "_mom"] = c.newBuffer(s.dtype, s.dims)
+  SGDOptimizer(exec: exec, state: state, varNames: m.varNames, wdecay: weightDecay, momentum: momentum, nesterov: nesterov)
 
-proc buildAdam(c: Client, m: Module, learnRate, weightDecay, beta1, beta2, epsilon: float): Executable = 
+method `$`*(optim: SGDOptimizer): string =
+  var opts = optim.getopts
+  if optim.momentum != 0:
+    opts.add "momentum=" & $optim.momentum
+  if optim.nesterov: opts.add "nesterov"
+  "SGD(" & opts.join(" ") & ")"
+
+proc buildAdam(c: Client, m: Module, weightDecay, beta1, beta2, epsilon: float, adamW = false): Executable = 
   let b = newBuilder("adam")
   var outputs: seq[Node]
   var names: seq[string]
-  let lr = b.constant(learnRate, F32)
+  let lr = b.parameter(F32, name="learnRate")
   let eps = b.constant(epsilon, F32)
   let decay = b.constant(weightDecay, F32)
   let b1 = b.constant(beta1, F32)
@@ -371,10 +425,13 @@ proc buildAdam(c: Client, m: Module, learnRate, weightDecay, beta1, beta2, epsil
   outputs.add b2t * b2
   let one = b.one(F32)
   for p in m.learnableVars:
-    let x = b.param(p).convert(F32)
+    var x = b.param(p).convert(F32)
     var dx = b.param(p, "_grad").convert(F32)
     if weightDecay != 0 and not p.name.endsWith(".b"):
-      dx = dx + decay * x
+      if adamW:
+        x = x + decay * lr * x
+      else:
+        dx = dx + decay * x
     let mtPrev = b.param(p, "_mt")
     let mt = b1 * mtPrev + (one-b1) * dx
     let mtp = mt / (one - b1t)
@@ -388,22 +445,76 @@ proc buildAdam(c: Client, m: Module, learnRate, weightDecay, beta1, beta2, epsil
     names.add p.name
     outputs.add x - lr*mtp/(sqrt(vtp) + eps)
   let comp = b.build b.makeTuple(outputs)
-  c.compile(comp, names)
+  result = c.compile(comp, names)
+  debug "optim: ", result
 
-proc optimAdam*(c: Client, m: Module, learnRate: float, weightDecay = 0.0, 
-                beta1 = 0.9, beta2 = 0.999, eps = 1e-8): Optimizer =
+proc optimAdam*(c: Client, m: Module, learnRate: float, weightDecay = 0.0, beta1 = 0.9, beta2 = 0.999, eps = 1e-8): Optimizer =
   ## Builds and compiles an optimizer using the Adam algorithm.
   ## This returns a function which takes as input a table with all of the named weight and gradient parameters and
   ## returns the list of model weight variables.
-  let exec = c.buildAdam(m, learnRate, weightDecay, beta1, beta2, eps)
-  let init = proc(): Params =
-    var state = initParams({
-      "beta1_t": c.newBuffer(lit(beta1.float32)),
-      "beta2_t": c.newBuffer(lit(beta2.float32))
-    })
-    for p in m.learnableVars:
-      let s = p.data.shape
-      state[p.name & "_mt"] = c.newBuffer(s.dtype, s.dims)
-      state[p.name & "_vt"] = c.newBuffer(s.dtype, s.dims)
-    return state
-  makeOptimizer(m, exec, init)
+  let exec = c.buildAdam(m, weightDecay, beta1, beta2, eps)
+  let lr = learnRate.float32.toTensor
+  var state = initParams({
+    "learnRate": c.newBuffer(lr),
+    "beta1_t": c.newBuffer(lit(beta1.float32)),
+    "beta2_t": c.newBuffer(lit(beta2.float32))
+  })
+  for p in m.learnableVars:
+    let s = p.data.shape
+    state[p.name & "_mt"] = c.newBuffer(s.dtype, s.dims)
+    state[p.name & "_vt"] = c.newBuffer(s.dtype, s.dims)
+  AdamOptimizer(exec: exec, state: state, varNames: m.varNames, wdecay: weightDecay, beta1: beta1, beta2: beta2)
+
+proc optimAdamW*(c: Client, m: Module, learnRate: float, weightDecay = 0.0, beta1 = 0.9, beta2 = 0.999, eps = 1e-8): Optimizer =
+  ## Builds and compiles an optimizer using the AdamW algorithm. This is similar to Adam except weight decay is scaled by the learning rate.
+  ## This returns a function which takes as input a table with all of the named weight and gradient parameters and
+  ## returns the list of model weight variables.
+  let exec = c.buildAdam(m, weightDecay, beta1, beta2, eps, adamW=true)
+  let lr = learnRate.float32.toTensor
+  var state = initParams({
+    "learnRate": c.newBuffer(lr),
+    "beta1_t": c.newBuffer(lit(beta1.float32)),
+    "beta2_t": c.newBuffer(lit(beta2.float32))
+  })
+  for p in m.learnableVars:
+    let s = p.data.shape
+    state[p.name & "_mt"] = c.newBuffer(s.dtype, s.dims)
+    state[p.name & "_vt"] = c.newBuffer(s.dtype, s.dims)
+  AdamOptimizer(exec: exec, state: state, varNames: m.varNames, wdecay: weightDecay, beta1: beta1, beta2: beta2, adamW: true)
+
+method `$`*(optim: AdamOptimizer): string =
+  var opts = optim.getopts
+  opts.add "betas=" & $optim.beta1 & "," & $optim.beta2
+  let name = if optim.adamW: "AdamW" else: "Adam"
+  name & "(" & opts.join(" ") & ")"
+
+
+method step*(s: Scheduler, c: Client) {.base.} =
+  raise newException(ValueError, "abstract method")
+
+proc newStepLR*(optim: var Optimizer, stepSize: int, gamma = 0.1): StepLR =
+  ## Create StepLR scheduler which multiplies the learning rate by gamma after each stepSize epochs.
+  result = StepLR(optim: optim, stepSize: stepSize, gamma: gamma)
+
+method step*(s: StepLR, c: Client) =
+  ## Called after each epoch to update the learning rate
+  s.epoch += 1
+  if s.epoch mod s.stepSize == 0:
+    let lr = s.optim.learningRate * s.gamma
+    echo "step learning rate to ", lr.format
+    s.optim.setLearningRate(c, lr)
+
+proc newCosineAnnealingLR*(optim: var Optimizer, tMax: int, lrMin = 0.0): CosineAnnealingLR =
+  ## Create cosine annealing learning rate scheduler such that
+  ## ```
+  ## lr = lrMin + (lrMax - lrMin)/2 * (1 + cos(pi * t/tMax))
+  ## ```
+  ## where t is the current epoch and lrMax is the initial learning rate.
+  result = CosineAnnealingLR(optim: optim, tMax: tMax, lrMin: lrMin, lrMax: optim.learningRate)
+
+method step*(s: CosineAnnealingLR, c: Client) =
+  ## Called after each epoch to update the learning rate
+  s.epoch += 1
+  let lr = s.lrMin + 0.5*(s.lrMax - s.lrMin) * (1.0 + cos(PI * s.epoch.float/s.tMax.float))
+  debug "set learning rate to ", lr.format
+  s.optim.setLearningRate(c, lr)
