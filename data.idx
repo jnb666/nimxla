@@ -16,6 +16,5 @@ newLoader	data.html#newLoader,Rand,int	data: newLoader(rng: var Rand; batchSize 
 shape	data.html#shape,DataLoader	data: shape(d: DataLoader): seq[int]	
 getBatch	data.html#getBatch.i,DataLoader,Tensor[T],Tensor[int32]	data: getBatch[T](d: var DataLoader; data: var Tensor[T]; labels: var Tensor[int32]): int	
 `$`	data.html#$,DataLoader	data: `$`(d: DataLoader): string	
-initLoader	data.html#initLoader,staticint,DataLoader,Dataset,openArray[ImageOp]	data: initLoader(channels: static int; d: var DataLoader; dset: Dataset;\n           ops: openArray[ImageOp])	
 start	data.html#start.t,DataLoader,untyped,staticint,varargs[ImageOp]	data: start(d: var DataLoader; dset: untyped; channels: static int;\n      transforms: varargs[ImageOp])	
-shutdown	data.html#shutdown,DataLoader	data: shutdown(d: var DataLoader)	
+shutdown	data.html#shutdown,DataLoader	data: shutdown(d: DataLoader)	

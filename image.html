@@ -145,7 +145,8 @@ window.addEventListener('DOMContentLoaded', main);
   cout*: ptr Channel[bool]
   seed: int64
   ops: ptr UncheckedArray[ImageOp]
-  nops: int">TransContext</a></li>
+  nops: int
+  workers: ptr Atomic[int]">TransContext</a></li>
   <li><a class="reference" href="#Transformer"
     title="Transformer = object
   ops*: seq[ImageOp]
@@ -195,7 +196,7 @@ window.addEventListener('DOMContentLoaded', main);
   </ul>
   <ul class="simple nested-toc-section">shutdown
       <li><a class="reference" href="#shutdown%2CTransformer"
-    title="shutdown(t: var Transformer)">shutdown(t: var Transformer)</a></li>
+    title="shutdown(t: Transformer)">shutdown(t: Transformer)</a></li>
 
   </ul>
   <ul class="simple nested-toc-section">transform
@@ -311,6 +312,7 @@ class="link-seesrc" target="_blank">Source</a>
   <span class="Identifier">seed</span><span class="Other">:</span> <span class="Identifier">int64</span>
   <span class="Identifier">ops</span><span class="Other">:</span> <span class="Keyword">ptr</span> <span class="Identifier">UncheckedArray</span><span class="Other">[</span><a href="image.html#ImageOp"><span class="Identifier">ImageOp</span></a><span class="Other">]</span>
   <span class="Identifier">nops</span><span class="Other">:</span> <span class="Identifier">int</span>
+  <span class="Identifier">workers</span><span class="Other">:</span> <span class="Keyword">ptr</span> <span class="Identifier">Atomic</span><span class="Other">[</span><span class="Identifier">int</span><span class="Other">]</span>
 </pre></dt>
 <dd>
 
@@ -332,9 +334,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/jnb666/nimxla/tree/main/src/nimxla/image.nim#L57"
+href="https://github.com/jnb666/nimxla/tree/main/src/nimxla/image.nim#L58"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/jnb666/nimxla/edit/devel/src/nimxla/image.nim#L57" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/jnb666/nimxla/edit/devel/src/nimxla/image.nim#L58" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -349,9 +351,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/jnb666/nimxla/tree/main/src/nimxla/image.nim#L109"
+href="https://github.com/jnb666/nimxla/tree/main/src/nimxla/image.nim#L110"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/jnb666/nimxla/edit/devel/src/nimxla/image.nim#L109" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/jnb666/nimxla/edit/devel/src/nimxla/image.nim#L110" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -361,9 +363,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/jnb666/nimxla/tree/main/src/nimxla/image.nim#L124"
+href="https://github.com/jnb666/nimxla/tree/main/src/nimxla/image.nim#L125"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/jnb666/nimxla/edit/devel/src/nimxla/image.nim#L124" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/jnb666/nimxla/edit/devel/src/nimxla/image.nim#L125" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -387,9 +389,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 Random affine transformation with probability p, where image is rotated by up to -rotate..+rotate degrees, scaled by factor between scale[0]..scale[1] and translated by up to transx and transy pixels along x and y. These transforms are all relative to the image center.
 &nbsp;&nbsp;<a
-href="https://github.com/jnb666/nimxla/tree/main/src/nimxla/image.nim#L98"
+href="https://github.com/jnb666/nimxla/tree/main/src/nimxla/image.nim#L99"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/jnb666/nimxla/edit/devel/src/nimxla/image.nim#L98" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/jnb666/nimxla/edit/devel/src/nimxla/image.nim#L99" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -400,9 +402,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 Random elastic transform where kernelSize is the size of the gaussian kernel, stddev is the x and y standard deviation for the kernel, scale is the scaling factor controlling the intensity of the deformation and p is the probabilty of applying the transform.
 &nbsp;&nbsp;<a
-href="https://github.com/jnb666/nimxla/tree/main/src/nimxla/image.nim#L104"
+href="https://github.com/jnb666/nimxla/tree/main/src/nimxla/image.nim#L105"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/jnb666/nimxla/edit/devel/src/nimxla/image.nim#L104" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/jnb666/nimxla/edit/devel/src/nimxla/image.nim#L105" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -412,9 +414,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 Randomly flip images either horizontally or vertically with probability p.
 &nbsp;&nbsp;<a
-href="https://github.com/jnb666/nimxla/tree/main/src/nimxla/image.nim#L88"
+href="https://github.com/jnb666/nimxla/tree/main/src/nimxla/image.nim#L89"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/jnb666/nimxla/edit/devel/src/nimxla/image.nim#L88" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/jnb666/nimxla/edit/devel/src/nimxla/image.nim#L89" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -424,22 +426,22 @@ class="link-seesrc" target="_blank">Source</a>
 
 Translate and wrap around images such that the point which was at (0, 0) is at (dx, dy) where dx is randomly sampled from -max_x..max_x and dy from -max_y..max_y. p is probability of applying the transform to each image.
 &nbsp;&nbsp;<a
-href="https://github.com/jnb666/nimxla/tree/main/src/nimxla/image.nim#L92"
+href="https://github.com/jnb666/nimxla/tree/main/src/nimxla/image.nim#L93"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/jnb666/nimxla/edit/devel/src/nimxla/image.nim#L92" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/jnb666/nimxla/edit/devel/src/nimxla/image.nim#L93" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
 <div id="shutdown,Transformer">
-<dt><pre><span class="Keyword">proc</span> <a href="#shutdown%2CTransformer"><span class="Identifier">shutdown</span></a><span class="Other">(</span><span class="Identifier">t</span><span class="Other">:</span> <span class="Keyword">var</span> <a href="image.html#Transformer"><span class="Identifier">Transformer</span></a><span class="Other">)</span> {.<span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Identifier">Exception</span><span class="Other">,</span> <span class="Identifier">ValueError</span><span class="Other">]</span><span class="Other">,</span>
-                                    <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Identifier">RootEffect</span><span class="Other">,</span> <span class="Identifier">TimeEffect</span><span class="Other">]</span></span>.}</pre></dt>
+<dt><pre><span class="Keyword">proc</span> <a href="#shutdown%2CTransformer"><span class="Identifier">shutdown</span></a><span class="Other">(</span><span class="Identifier">t</span><span class="Other">:</span> <a href="image.html#Transformer"><span class="Identifier">Transformer</span></a><span class="Other">)</span> {.<span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Identifier">Exception</span><span class="Other">]</span><span class="Other">,</span>
+                                <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Identifier">RootEffect</span><span class="Other">,</span> <span class="Identifier">TimeEffect</span><span class="Other">]</span></span>.}</pre></dt>
 <dd>
 
 Shutdown worker threads
 &nbsp;&nbsp;<a
-href="https://github.com/jnb666/nimxla/tree/main/src/nimxla/image.nim#L314"
+href="https://github.com/jnb666/nimxla/tree/main/src/nimxla/image.nim#L315"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/jnb666/nimxla/edit/devel/src/nimxla/image.nim#L314" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/jnb666/nimxla/edit/devel/src/nimxla/image.nim#L315" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -450,9 +452,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 Apply series of image transforms to an array of images in [N,H,W,C] format. The transform will be applied in parallel using multiple threads - the proc will return once all are completed and the data is updated.
 &nbsp;&nbsp;<a
-href="https://github.com/jnb666/nimxla/tree/main/src/nimxla/image.nim#L300"
+href="https://github.com/jnb666/nimxla/tree/main/src/nimxla/image.nim#L301"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/jnb666/nimxla/edit/devel/src/nimxla/image.nim#L300" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/jnb666/nimxla/edit/devel/src/nimxla/image.nim#L301" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -466,7 +468,7 @@ class="link-seesrc" target="_blank">Source</a>
       <div class="twelve-columns footer">
         <span class="nim-sprite"></span>
         <br/>
-        <small style="color: var(--hint);">Made with Nim. Generated: 2023-07-04 19:36:45 UTC</small>
+        <small style="color: var(--hint);">Made with Nim. Generated: 2023-07-05 17:54:21 UTC</small>
       </div>
     </div>
   </div>

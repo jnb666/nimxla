@@ -34,6 +34,7 @@ initConv2d	nn.html#initConv2d,Client,Rand,string,int,int,Opt2d,Opt2d,Pad2d,Opt2d
 initBatchNorm	nn.html#initBatchNorm,Client,Rand,string,int,float,float	nn: initBatchNorm(c: Client; rng: var Rand; id: string; numFeatures: int;\n              momentum: float = 0.1; epsilon: float = 0.00001;\n              weights = constantInit(1.0); biases = constantInit(0.0);\n              dtype = F32): Module	
 compileTest	nn.html#compileTest,Client,Module,Node	nn: compileTest(c: Client; m: Module; input: Node): Executable	
 compileTrain	nn.html#compileTrain,Client,Module,Node,proc(Node)	nn: compileTrain(c: Client; m: Module; input: Node; lossFn: proc (y: Node): Node): Executable	
+format	nn.html#format,float	nn: format(val: float): string	
 learningRate	nn.html#learningRate,Optimizer	nn: learningRate(optim: Optimizer): float	
 setLearningRate	nn.html#setLearningRate,Optimizer,Client,float	nn: setLearningRate(optim: var Optimizer; c: Client; lr: float)	
 step	nn.html#step,Optimizer,Params	nn: step(optim: var Optimizer; params: Params): Params	
@@ -43,8 +44,10 @@ optimSGD	nn.html#optimSGD,Client,Module,float,float,float	nn: optimSGD(c: Client
 optimAdam	nn.html#optimAdam,Client,Module,float,float,float,float,float	nn: optimAdam(c: Client; m: Module; learnRate: float; weightDecay = 0.0;\n          beta1 = 0.9; beta2 = 0.999; eps = 1e-8): Optimizer	
 optimAdamW	nn.html#optimAdamW,Client,Module,float,float,float,float,float	nn: optimAdamW(c: Client; m: Module; learnRate: float; weightDecay = 0.0;\n           beta1 = 0.9; beta2 = 0.999; eps = 1e-8): Optimizer	
 `$`	nn.html#$.e,AdamOptimizer	nn: `$`(optim: AdamOptimizer): string	
-step	nn.html#step.e,Scheduler,Client	nn: step(s: Scheduler; c: Client)	
+`$`	nn.html#$.e,Scheduler	nn: `$`(s: Scheduler): string	
+init	nn.html#init,Scheduler,Client,int	nn: init(s: Scheduler; c: Client; epoch: int)	
+step	nn.html#step,Scheduler,Client	nn: step(s: Scheduler; c: Client)	
 newStepLR	nn.html#newStepLR,Optimizer,int,float	nn: newStepLR(optim: var Optimizer; stepSize: int; gamma = 0.1): StepLR	
-step	nn.html#step.e,StepLR,Client	nn: step(s: StepLR; c: Client)	
+`$`	nn.html#$.e,StepLR	nn: `$`(s: StepLR): string	
 newCosineAnnealingLR	nn.html#newCosineAnnealingLR,Optimizer,int,float	nn: newCosineAnnealingLR(optim: var Optimizer; tMax: int; lrMin = 0.0): CosineAnnealingLR	
-step	nn.html#step.e,CosineAnnealingLR,Client	nn: step(s: CosineAnnealingLR; c: Client)	
+`$`	nn.html#$.e,CosineAnnealingLR	nn: `$`(s: CosineAnnealingLR): string	

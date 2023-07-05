@@ -110,6 +110,7 @@ window.addEventListener('DOMContentLoaded', main);
       <li><a class="reference" href="#Trainer"
     title="Trainer = object
   client*: Client
+  model*: Module
   optim*: Optimizer
   sched*: Scheduler
   trainer*: Executable
@@ -118,7 +119,8 @@ window.addEventListener('DOMContentLoaded', main);
   testAcc*: Executable
   stats*: Table[string, seq[float]]
   predict*: Tensor[int32]
-  heatmap*: Tensor[int32]">Trainer</a></li>
+  heatmap*: Tensor[int32]
+  epoch*: int">Trainer</a></li>
 
   </ul>
 </li>
@@ -131,15 +133,23 @@ window.addEventListener('DOMContentLoaded', main);
 
   </ul>
   <ul class="simple nested-toc-section">getAccuracy
-      <li><a class="reference" href="#getAccuracy%2CTrainer%2CModule%2CDataLoader"
-    title="getAccuracy[T: ElemType](t: var Trainer; model: var Module;
-                         loader: var DataLoader): float">getAccuracy[T: ElemType](t: var Trainer; model: var Module;
-                         loader: var DataLoader): float</a></li>
+      <li><a class="reference" href="#getAccuracy%2CTrainer%2CDataLoader"
+    title="getAccuracy[T: ElemType](t: var Trainer; loader: var DataLoader): (float, bool)">getAccuracy[T: ElemType](t: var Trainer; loader: var DataLoader): (float, bool)</a></li>
 
   </ul>
   <ul class="simple nested-toc-section">getLayout
       <li><a class="reference" href="#getLayout%2Cint"
     title="getLayout(epochs: int): JsonNode">getLayout(epochs: int): JsonNode</a></li>
+
+  </ul>
+  <ul class="simple nested-toc-section">loadCheckpoint
+      <li><a class="reference" href="#loadCheckpoint%2CTrainer%2Cstring"
+    title="loadCheckpoint(t: var Trainer; filename: string)">loadCheckpoint(t: var Trainer; filename: string)</a></li>
+
+  </ul>
+  <ul class="simple nested-toc-section">saveCheckpoint
+      <li><a class="reference" href="#saveCheckpoint%2CTrainer%2Cstring"
+    title="saveCheckpoint(t: Trainer; basename: string)">saveCheckpoint(t: Trainer; basename: string)</a></li>
 
   </ul>
   <ul class="simple nested-toc-section">statsPlots
@@ -153,10 +163,10 @@ window.addEventListener('DOMContentLoaded', main);
 
   </ul>
   <ul class="simple nested-toc-section">trainEpoch
-      <li><a class="reference" href="#trainEpoch%2CTrainer%2CModule%2CDataLoader"
-    title="trainEpoch[T: ElemType](t: var Trainer; model: var Module;
-                        loader: var DataLoader): (float, float)">trainEpoch[T: ElemType](t: var Trainer; model: var Module;
-                        loader: var DataLoader): (float, float)</a></li>
+      <li><a class="reference" href="#trainEpoch%2CTrainer%2CDataLoader"
+    title="trainEpoch[T: ElemType](t: var Trainer; loader: var DataLoader): (float, float,
+    bool)">trainEpoch[T: ElemType](t: var Trainer; loader: var DataLoader): (float, float,
+    bool)</a></li>
 
   </ul>
   <ul class="simple nested-toc-section">trainFunc
@@ -167,10 +177,12 @@ window.addEventListener('DOMContentLoaded', main);
 
   </ul>
   <ul class="simple nested-toc-section">trainNetwork
-      <li><a class="reference" href="#trainNetwork%2CTrainer%2CModule%2CDataLoader%2CDataLoader%2Cint"
-    title="trainNetwork[T: ElemType](t: var Trainer; model: var Module;
-                          train, test: var DataLoader; epochs: int; plot = false)">trainNetwork[T: ElemType](t: var Trainer; model: var Module;
-                          train, test: var DataLoader; epochs: int; plot = false)</a></li>
+      <li><a class="reference" href="#trainNetwork%2CTrainer%2CDataLoader%2CDataLoader%2Cint%2Cstring%2Cint"
+    title="trainNetwork[T: ElemType](t: var Trainer; train, test: var DataLoader;
+                          epochs: int; plot = false; checkpoint = &quot;&quot;;
+                          saveEvery = 10)">trainNetwork[T: ElemType](t: var Trainer; train, test: var DataLoader;
+                          epochs: int; plot = false; checkpoint = &quot;&quot;;
+                          saveEvery = 10)</a></li>
 
   </ul>
 
@@ -200,6 +212,7 @@ class="link-seesrc" target="_blank">Source</a>
 <div id="Trainer">
 <dt><pre><a href="train.html#Trainer"><span class="Identifier">Trainer</span></a> <span class="Other">=</span> <span class="Keyword">object</span>
   <span class="Identifier">client</span><span class="Operator">*</span><span class="Other">:</span> <a href="nimxla.html#Client"><span class="Identifier">Client</span></a>
+  <span class="Identifier">model</span><span class="Operator">*</span><span class="Other">:</span> <a href="nn.html#Module"><span class="Identifier">Module</span></a>
   <span class="Identifier">optim</span><span class="Operator">*</span><span class="Other">:</span> <a href="nn.html#Optimizer"><span class="Identifier">Optimizer</span></a>
   <span class="Identifier">sched</span><span class="Operator">*</span><span class="Other">:</span> <a href="nn.html#Scheduler"><span class="Identifier">Scheduler</span></a>
   <span class="Identifier">trainer</span><span class="Operator">*</span><span class="Other">:</span> <a href="nimxla.html#Executable"><span class="Identifier">Executable</span></a>
@@ -209,14 +222,15 @@ class="link-seesrc" target="_blank">Source</a>
   <span class="Identifier">stats</span><span class="Operator">*</span><span class="Other">:</span> <span class="Identifier">Table</span><span class="Other">[</span><span class="Identifier">string</span><span class="Other">,</span> <span class="Identifier">seq</span><span class="Other">[</span><span class="Identifier">float</span><span class="Other">]</span><span class="Other">]</span>
   <span class="Identifier">predict</span><span class="Operator">*</span><span class="Other">:</span> <a href="tensor.html#Tensor"><span class="Identifier">Tensor</span></a><span class="Other">[</span><span class="Identifier">int32</span><span class="Other">]</span>
   <span class="Identifier">heatmap</span><span class="Operator">*</span><span class="Other">:</span> <a href="tensor.html#Tensor"><span class="Identifier">Tensor</span></a><span class="Other">[</span><span class="Identifier">int32</span><span class="Other">]</span>
+  <span class="Identifier">epoch</span><span class="Operator">*</span><span class="Other">:</span> <span class="Identifier">int</span>
 </pre></dt>
 <dd>
 
 Trainer object holds the state for a training
 &nbsp;&nbsp;<a
-href="https://github.com/jnb666/nimxla/tree/main/src/nimxla/train.nim#L10"
+href="https://github.com/jnb666/nimxla/tree/main/src/nimxla/train.nim#L11"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/jnb666/nimxla/edit/devel/src/nimxla/train.nim#L10" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/jnb666/nimxla/edit/devel/src/nimxla/train.nim#L11" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -239,22 +253,22 @@ Helper function to calculate the accuracy from a set of predictions. Callable ha
 </ul>
 
 &nbsp;&nbsp;<a
-href="https://github.com/jnb666/nimxla/tree/main/src/nimxla/train.nim#L41"
+href="https://github.com/jnb666/nimxla/tree/main/src/nimxla/train.nim#L57"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/jnb666/nimxla/edit/devel/src/nimxla/train.nim#L41" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/jnb666/nimxla/edit/devel/src/nimxla/train.nim#L57" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
-<div id="getAccuracy,Trainer,Module,DataLoader">
-<dt><pre><span class="Keyword">proc</span> <a href="#getAccuracy%2CTrainer%2CModule%2CDataLoader"><span class="Identifier">getAccuracy</span></a><span class="Other">[</span><span class="Identifier">T</span><span class="Other">:</span> <a href="shape.html#ElemType"><span class="Identifier">ElemType</span></a><span class="Other">]</span><span class="Other">(</span><span class="Identifier">t</span><span class="Other">:</span> <span class="Keyword">var</span> <a href="train.html#Trainer"><span class="Identifier">Trainer</span></a><span class="Other">;</span> <span class="Identifier">model</span><span class="Other">:</span> <span class="Keyword">var</span> <a href="nn.html#Module"><span class="Identifier">Module</span></a><span class="Other">;</span>
-                              <span class="Identifier">loader</span><span class="Other">:</span> <span class="Keyword">var</span> <a href="data.html#DataLoader"><span class="Identifier">DataLoader</span></a><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">float</span></pre></dt>
+<div id="getAccuracy,Trainer,DataLoader">
+<dt><pre><span class="Keyword">proc</span> <a href="#getAccuracy%2CTrainer%2CDataLoader"><span class="Identifier">getAccuracy</span></a><span class="Other">[</span><span class="Identifier">T</span><span class="Other">:</span> <a href="shape.html#ElemType"><span class="Identifier">ElemType</span></a><span class="Other">]</span><span class="Other">(</span><span class="Identifier">t</span><span class="Other">:</span> <span class="Keyword">var</span> <a href="train.html#Trainer"><span class="Identifier">Trainer</span></a><span class="Other">;</span> <span class="Identifier">loader</span><span class="Other">:</span> <span class="Keyword">var</span> <a href="data.html#DataLoader"><span class="Identifier">DataLoader</span></a><span class="Other">)</span><span class="Other">:</span> <span class="Other">(</span><span class="Identifier">float</span><span class="Other">,</span>
+    <span class="Identifier">bool</span><span class="Other">)</span></pre></dt>
 <dd>
 
 Calculate the accuracy from the test data set. T should be the type of data returned from the loader.
 &nbsp;&nbsp;<a
-href="https://github.com/jnb666/nimxla/tree/main/src/nimxla/train.nim#L84"
+href="https://github.com/jnb666/nimxla/tree/main/src/nimxla/train.nim#L103"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/jnb666/nimxla/edit/devel/src/nimxla/train.nim#L84" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/jnb666/nimxla/edit/devel/src/nimxla/train.nim#L103" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -264,9 +278,39 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/jnb666/nimxla/tree/main/src/nimxla/train.nim#L137"
+href="https://github.com/jnb666/nimxla/tree/main/src/nimxla/train.nim#L213"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/jnb666/nimxla/edit/devel/src/nimxla/train.nim#L137" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/jnb666/nimxla/edit/devel/src/nimxla/train.nim#L213" class="link-seesrc" target="_blank" >Edit</a>
+
+</dd>
+</div>
+<div id="loadCheckpoint,Trainer,string">
+<dt><pre><span class="Keyword">proc</span> <a href="#loadCheckpoint%2CTrainer%2Cstring"><span class="Identifier">loadCheckpoint</span></a><span class="Other">(</span><span class="Identifier">t</span><span class="Other">:</span> <span class="Keyword">var</span> <a href="train.html#Trainer"><span class="Identifier">Trainer</span></a><span class="Other">;</span> <span class="Identifier">filename</span><span class="Other">:</span> <span class="Identifier">string</span><span class="Other">)</span> {.<span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Identifier">OSError</span><span class="Other">,</span>
+    <span class="Identifier">ValueError</span><span class="Other">,</span> <span class="Identifier">IOError</span><span class="Other">,</span> <span class="Identifier">Exception</span><span class="Other">,</span> <span class="Identifier">JsonParsingError</span><span class="Other">,</span> <span class="Identifier">KeyError</span><span class="Other">,</span> <span class="Identifier">JsonKindError</span><span class="Other">,</span>
+    <span class="Identifier">XLAError</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Identifier">ReadDirEffect</span><span class="Other">,</span> <span class="Identifier">WriteDirEffect</span><span class="Other">,</span> <span class="Identifier">ReadIOEffect</span><span class="Other">,</span>
+                      <span class="Identifier">WriteIOEffect</span><span class="Other">,</span> <span class="Identifier">RootEffect</span><span class="Other">]</span></span>.}</pre></dt>
+<dd>
+
+Read back checkpoint from zip file
+&nbsp;&nbsp;<a
+href="https://github.com/jnb666/nimxla/tree/main/src/nimxla/train.nim#L158"
+class="link-seesrc" target="_blank">Source</a>
+&nbsp;&nbsp;<a href="https://github.com/jnb666/nimxla/edit/devel/src/nimxla/train.nim#L158" class="link-seesrc" target="_blank" >Edit</a>
+
+</dd>
+</div>
+<div id="saveCheckpoint,Trainer,string">
+<dt><pre><span class="Keyword">proc</span> <a href="#saveCheckpoint%2CTrainer%2Cstring"><span class="Identifier">saveCheckpoint</span></a><span class="Other">(</span><span class="Identifier">t</span><span class="Other">:</span> <a href="train.html#Trainer"><span class="Identifier">Trainer</span></a><span class="Other">;</span> <span class="Identifier">basename</span><span class="Other">:</span> <span class="Identifier">string</span><span class="Other">)</span> {.
+    <span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Identifier">ValueError</span><span class="Other">,</span> <span class="Identifier">OSError</span><span class="Other">,</span> <span class="Identifier">IOError</span><span class="Other">,</span> <span class="Identifier">XLAError</span><span class="Other">,</span> <span class="Identifier">Exception</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span>
+    <span class="Identifier">ReadDirEffect</span><span class="Other">,</span> <span class="Identifier">WriteDirEffect</span><span class="Other">,</span> <span class="Identifier">WriteIOEffect</span><span class="Other">,</span> <span class="Identifier">ReadIOEffect</span><span class="Other">,</span> <span class="Identifier">TimeEffect</span><span class="Other">,</span>
+    <span class="Identifier">RootEffect</span><span class="Other">]</span></span>.}</pre></dt>
+<dd>
+
+Save checkpoint with model weights and optimizer state to file
+&nbsp;&nbsp;<a
+href="https://github.com/jnb666/nimxla/tree/main/src/nimxla/train.nim#L132"
+class="link-seesrc" target="_blank">Source</a>
+&nbsp;&nbsp;<a href="https://github.com/jnb666/nimxla/edit/devel/src/nimxla/train.nim#L132" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -277,9 +321,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 Convert stats to format used by plots package
 &nbsp;&nbsp;<a
-href="https://github.com/jnb666/nimxla/tree/main/src/nimxla/train.nim#L119"
+href="https://github.com/jnb666/nimxla/tree/main/src/nimxla/train.nim#L195"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/jnb666/nimxla/edit/devel/src/nimxla/train.nim#L119" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/jnb666/nimxla/edit/devel/src/nimxla/train.nim#L195" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -290,22 +334,22 @@ class="link-seesrc" target="_blank">Source</a>
 
 Compile test function with given input data shape.
 &nbsp;&nbsp;<a
-href="https://github.com/jnb666/nimxla/tree/main/src/nimxla/train.nim#L34"
+href="https://github.com/jnb666/nimxla/tree/main/src/nimxla/train.nim#L50"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/jnb666/nimxla/edit/devel/src/nimxla/train.nim#L34" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/jnb666/nimxla/edit/devel/src/nimxla/train.nim#L50" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
-<div id="trainEpoch,Trainer,Module,DataLoader">
-<dt><pre><span class="Keyword">proc</span> <a href="#trainEpoch%2CTrainer%2CModule%2CDataLoader"><span class="Identifier">trainEpoch</span></a><span class="Other">[</span><span class="Identifier">T</span><span class="Other">:</span> <a href="shape.html#ElemType"><span class="Identifier">ElemType</span></a><span class="Other">]</span><span class="Other">(</span><span class="Identifier">t</span><span class="Other">:</span> <span class="Keyword">var</span> <a href="train.html#Trainer"><span class="Identifier">Trainer</span></a><span class="Other">;</span> <span class="Identifier">model</span><span class="Other">:</span> <span class="Keyword">var</span> <a href="nn.html#Module"><span class="Identifier">Module</span></a><span class="Other">;</span>
-                             <span class="Identifier">loader</span><span class="Other">:</span> <span class="Keyword">var</span> <a href="data.html#DataLoader"><span class="Identifier">DataLoader</span></a><span class="Other">)</span><span class="Other">:</span> <span class="Other">(</span><span class="Identifier">float</span><span class="Other">,</span> <span class="Identifier">float</span><span class="Other">)</span></pre></dt>
+<div id="trainEpoch,Trainer,DataLoader">
+<dt><pre><span class="Keyword">proc</span> <a href="#trainEpoch%2CTrainer%2CDataLoader"><span class="Identifier">trainEpoch</span></a><span class="Other">[</span><span class="Identifier">T</span><span class="Other">:</span> <a href="shape.html#ElemType"><span class="Identifier">ElemType</span></a><span class="Other">]</span><span class="Other">(</span><span class="Identifier">t</span><span class="Other">:</span> <span class="Keyword">var</span> <a href="train.html#Trainer"><span class="Identifier">Trainer</span></a><span class="Other">;</span> <span class="Identifier">loader</span><span class="Other">:</span> <span class="Keyword">var</span> <a href="data.html#DataLoader"><span class="Identifier">DataLoader</span></a><span class="Other">)</span><span class="Other">:</span> <span class="Other">(</span><span class="Identifier">float</span><span class="Other">,</span>
+    <span class="Identifier">float</span><span class="Other">,</span> <span class="Identifier">bool</span><span class="Other">)</span></pre></dt>
 <dd>
 
 Train on one epoch of batches of data from the training set, returns average loss and accuracy on training dara T should be the type of data returned from the loader. Output loss should be a float32 scalar.
 &nbsp;&nbsp;<a
-href="https://github.com/jnb666/nimxla/tree/main/src/nimxla/train.nim#L58"
+href="https://github.com/jnb666/nimxla/tree/main/src/nimxla/train.nim#L74"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/jnb666/nimxla/edit/devel/src/nimxla/train.nim#L58" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/jnb666/nimxla/edit/devel/src/nimxla/train.nim#L74" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -317,23 +361,23 @@ class="link-seesrc" target="_blank">Source</a>
 
 Compile training function with given input data shape and loss function which is applied to the output.
 &nbsp;&nbsp;<a
-href="https://github.com/jnb666/nimxla/tree/main/src/nimxla/train.nim#L26"
+href="https://github.com/jnb666/nimxla/tree/main/src/nimxla/train.nim#L42"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/jnb666/nimxla/edit/devel/src/nimxla/train.nim#L26" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/jnb666/nimxla/edit/devel/src/nimxla/train.nim#L42" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
-<div id="trainNetwork,Trainer,Module,DataLoader,DataLoader,int">
-<dt><pre><span class="Keyword">proc</span> <a href="#trainNetwork%2CTrainer%2CModule%2CDataLoader%2CDataLoader%2Cint"><span class="Identifier">trainNetwork</span></a><span class="Other">[</span><span class="Identifier">T</span><span class="Other">:</span> <a href="shape.html#ElemType"><span class="Identifier">ElemType</span></a><span class="Other">]</span><span class="Other">(</span><span class="Identifier">t</span><span class="Other">:</span> <span class="Keyword">var</span> <a href="train.html#Trainer"><span class="Identifier">Trainer</span></a><span class="Other">;</span> <span class="Identifier">model</span><span class="Other">:</span> <span class="Keyword">var</span> <a href="nn.html#Module"><span class="Identifier">Module</span></a><span class="Other">;</span>
-                               <span class="Identifier">train</span><span class="Other">,</span> <span class="Identifier">test</span><span class="Other">:</span> <span class="Keyword">var</span> <a href="data.html#DataLoader"><span class="Identifier">DataLoader</span></a><span class="Other">;</span> <span class="Identifier">epochs</span><span class="Other">:</span> <span class="Identifier">int</span><span class="Other">;</span>
-                               <span class="Identifier">plot</span> <span class="Other">=</span> <span class="Identifier">false</span><span class="Other">)</span></pre></dt>
+<div id="trainNetwork,Trainer,DataLoader,DataLoader,int,string,int">
+<dt><pre><span class="Keyword">proc</span> <a href="#trainNetwork%2CTrainer%2CDataLoader%2CDataLoader%2Cint%2Cstring%2Cint"><span class="Identifier">trainNetwork</span></a><span class="Other">[</span><span class="Identifier">T</span><span class="Other">:</span> <a href="shape.html#ElemType"><span class="Identifier">ElemType</span></a><span class="Other">]</span><span class="Other">(</span><span class="Identifier">t</span><span class="Other">:</span> <span class="Keyword">var</span> <a href="train.html#Trainer"><span class="Identifier">Trainer</span></a><span class="Other">;</span> <span class="Identifier">train</span><span class="Other">,</span> <span class="Identifier">test</span><span class="Other">:</span> <span class="Keyword">var</span> <a href="data.html#DataLoader"><span class="Identifier">DataLoader</span></a><span class="Other">;</span>
+                               <span class="Identifier">epochs</span><span class="Other">:</span> <span class="Identifier">int</span><span class="Other">;</span> <span class="Identifier">plot</span> <span class="Other">=</span> <span class="Identifier">false</span><span class="Other">;</span> <span class="Identifier">checkpoint</span> <span class="Other">=</span> <span class="StringLit">&quot;&quot;</span><span class="Other">;</span>
+                               <span class="Identifier">saveEvery</span> <span class="Other">=</span> <span class="DecNumber">10</span><span class="Other">)</span></pre></dt>
 <dd>
 
-Training run for given number of epochs. If transform is set it will be applied to each batch of training data.
+Training run for given number of epochs. If transform is set it will be applied to each batch of training data. If checkpoint is set then a checkpoint file is written using this prefix
 &nbsp;&nbsp;<a
-href="https://github.com/jnb666/nimxla/tree/main/src/nimxla/train.nim#L161"
+href="https://github.com/jnb666/nimxla/tree/main/src/nimxla/train.nim#L237"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/jnb666/nimxla/edit/devel/src/nimxla/train.nim#L161" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/jnb666/nimxla/edit/devel/src/nimxla/train.nim#L237" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -347,7 +391,7 @@ class="link-seesrc" target="_blank">Source</a>
       <div class="twelve-columns footer">
         <span class="nim-sprite"></span>
         <br/>
-        <small style="color: var(--hint);">Made with Nim. Generated: 2023-07-04 19:36:47 UTC</small>
+        <small style="color: var(--hint);">Made with Nim. Generated: 2023-07-05 17:54:23 UTC</small>
       </div>
     </div>
   </div>

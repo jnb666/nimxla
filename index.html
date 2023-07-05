@@ -105,9 +105,15 @@ window.addEventListener('DOMContentLoaded', main);
           <li><a class="reference external"
           data-doc-search-tag="nn: `$`(optim: AdamOptimizer): string" href="nn.html#%24.e%2CAdamOptimizer">nn: `$`(optim: AdamOptimizer): string</a></li>
           <li><a class="reference external"
+          data-doc-search-tag="nn: `$`(s: CosineAnnealingLR): string" href="nn.html#%24.e%2CCosineAnnealingLR">nn: `$`(s: CosineAnnealingLR): string</a></li>
+          <li><a class="reference external"
           data-doc-search-tag="nn: `$`(optim: Optimizer): string" href="nn.html#%24.e%2COptimizer">nn: `$`(optim: Optimizer): string</a></li>
           <li><a class="reference external"
+          data-doc-search-tag="nn: `$`(s: Scheduler): string" href="nn.html#%24.e%2CScheduler">nn: `$`(s: Scheduler): string</a></li>
+          <li><a class="reference external"
           data-doc-search-tag="nn: `$`(optim: SGDOptimizer): string" href="nn.html#%24.e%2CSGDOptimizer">nn: `$`(optim: SGDOptimizer): string</a></li>
+          <li><a class="reference external"
+          data-doc-search-tag="nn: `$`(s: StepLR): string" href="nn.html#%24.e%2CStepLR">nn: `$`(s: StepLR): string</a></li>
           <li><a class="reference external"
           data-doc-search-tag="shape: `$`(p: Padding): string" href="shape.html#%24%2CPadding">shape: `$`(p: Padding): string</a></li>
           <li><a class="reference external"
@@ -567,6 +573,8 @@ window.addEventListener('DOMContentLoaded', main);
           </ul></dd>
 <dt><a name="format" href="#format"><span>format:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
+          data-doc-search-tag="nn: format(val: float): string" href="nn.html#format%2Cfloat">nn: format(val: float): string</a></li>
+          <li><a class="reference external"
           data-doc-search-tag="tensor: format[T: ElemType](t: Tensor[T]): string" href="tensor.html#format%2CTensor%5BT%3A%20ElemType%5D">tensor: format[T: ElemType](t: Tensor[T]): string</a></li>
           </ul></dd>
 <dt><a name="gather" href="#gather"><span>gather:</span></a></dt><dd><ul class="simple">
@@ -575,9 +583,7 @@ window.addEventListener('DOMContentLoaded', main);
           </ul></dd>
 <dt><a name="getAccuracy" href="#getAccuracy"><span>getAccuracy:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
-          data-doc-search-tag="train: getAccuracy[T: ElemType](t: var Trainer; model: var Module;
-                         loader: var DataLoader): float" href="train.html#getAccuracy%2CTrainer%2CModule%2CDataLoader">train: getAccuracy[T: ElemType](t: var Trainer; model: var Module;
-                         loader: var DataLoader): float</a></li>
+          data-doc-search-tag="train: getAccuracy[T: ElemType](t: var Trainer; loader: var DataLoader): (float, bool)" href="train.html#getAccuracy%2CTrainer%2CDataLoader">train: getAccuracy[T: ElemType](t: var Trainer; loader: var DataLoader): (float, bool)</a></li>
           </ul></dd>
 <dt><a name="getBatch" href="#getBatch"><span>getBatch:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
@@ -671,6 +677,10 @@ window.addEventListener('DOMContentLoaded', main);
 <li><a class="reference external"
           data-doc-search-tag="LogLevel.Info" href="nimxla.html#Info">LogLevel.Info</a></li>
           </ul></dd>
+<dt><a name="init" href="#init"><span>init:</span></a></dt><dd><ul class="simple">
+<li><a class="reference external"
+          data-doc-search-tag="nn: init(s: Scheduler; c: Client; epoch: int)" href="nn.html#init%2CScheduler%2CClient%2Cint">nn: init(s: Scheduler; c: Client; epoch: int)</a></li>
+          </ul></dd>
 <dt><a name="initBatchNorm" href="#initBatchNorm"><span>initBatchNorm:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
           data-doc-search-tag="nn: initBatchNorm(c: Client; rng: var Rand; id: string; numFeatures: int;
@@ -700,12 +710,6 @@ window.addEventListener('DOMContentLoaded', main);
           data-doc-search-tag="nn: initLinear(c: Client; rng: var Rand; id: string; nin, nout: int;
            weights = heInit(); biases = constantInit(0.0); dtype = F32): Module" href="nn.html#initLinear%2CClient%2CRand%2Cstring%2Cint%2Cint">nn: initLinear(c: Client; rng: var Rand; id: string; nin, nout: int;
            weights = heInit(); biases = constantInit(0.0); dtype = F32): Module</a></li>
-          </ul></dd>
-<dt><a name="initLoader" href="#initLoader"><span>initLoader:</span></a></dt><dd><ul class="simple">
-<li><a class="reference external"
-          data-doc-search-tag="data: initLoader(channels: static int; d: var DataLoader; dset: Dataset;
-           ops: openArray[ImageOp])" href="data.html#initLoader%2Cstaticint%2CDataLoader%2CDataset%2CopenArray%5BImageOp%5D">data: initLoader(channels: static int; d: var DataLoader; dset: Dataset;
-           ops: openArray[ImageOp])</a></li>
           </ul></dd>
 <dt><a name="initParams" href="#initParams"><span>initParams:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
@@ -770,6 +774,10 @@ window.addEventListener('DOMContentLoaded', main);
 <dt><a name="Literal" href="#Literal"><span>Literal:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
           data-doc-search-tag="literal: Literal" href="literal.html#Literal">literal: Literal</a></li>
+          </ul></dd>
+<dt><a name="loadCheckpoint" href="#loadCheckpoint"><span>loadCheckpoint:</span></a></dt><dd><ul class="simple">
+<li><a class="reference external"
+          data-doc-search-tag="train: loadCheckpoint(t: var Trainer; filename: string)" href="train.html#loadCheckpoint%2CTrainer%2Cstring">train: loadCheckpoint(t: var Trainer; filename: string)</a></li>
           </ul></dd>
 <dt><a name="log" href="#log"><span>log:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
@@ -1163,6 +1171,10 @@ window.addEventListener('DOMContentLoaded', main);
 <li><a class="reference external"
           data-doc-search-tag="nimxla: runWith(exec: Executable; params: var Params; checkShape = true)" href="nimxla.html#runWith%2CExecutable%2CParams">nimxla: runWith(exec: Executable; params: var Params; checkShape = true)</a></li>
           </ul></dd>
+<dt><a name="saveCheckpoint" href="#saveCheckpoint"><span>saveCheckpoint:</span></a></dt><dd><ul class="simple">
+<li><a class="reference external"
+          data-doc-search-tag="train: saveCheckpoint(t: Trainer; basename: string)" href="train.html#saveCheckpoint%2CTrainer%2Cstring">train: saveCheckpoint(t: Trainer; basename: string)</a></li>
+          </ul></dd>
 <dt><a name="scatter" href="#scatter"><span>scatter:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
           data-doc-search-tag="graph: scatter(a, indices, b: Node; comp: Computation): Node" href="graph.html#scatter%2CNode%2CNode%2CNode%2CComputation">graph: scatter(a, indices, b: Node; comp: Computation): Node</a></li>
@@ -1247,9 +1259,9 @@ window.addEventListener('DOMContentLoaded', main);
           </ul></dd>
 <dt><a name="shutdown" href="#shutdown"><span>shutdown:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
-          data-doc-search-tag="data: shutdown(d: var DataLoader)" href="data.html#shutdown%2CDataLoader">data: shutdown(d: var DataLoader)</a></li>
+          data-doc-search-tag="data: shutdown(d: DataLoader)" href="data.html#shutdown%2CDataLoader">data: shutdown(d: DataLoader)</a></li>
           <li><a class="reference external"
-          data-doc-search-tag="image: shutdown(t: var Transformer)" href="image.html#shutdown%2CTransformer">image: shutdown(t: var Transformer)</a></li>
+          data-doc-search-tag="image: shutdown(t: Transformer)" href="image.html#shutdown%2CTransformer">image: shutdown(t: Transformer)</a></li>
           </ul></dd>
 <dt><a name="sigmoid" href="#sigmoid"><span>sigmoid:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
@@ -1285,11 +1297,7 @@ window.addEventListener('DOMContentLoaded', main);
 <li><a class="reference external"
           data-doc-search-tag="nn: step(optim: var Optimizer; params: Params): Params" href="nn.html#step%2COptimizer%2CParams">nn: step(optim: var Optimizer; params: Params): Params</a></li>
           <li><a class="reference external"
-          data-doc-search-tag="nn: step(s: CosineAnnealingLR; c: Client)" href="nn.html#step.e%2CCosineAnnealingLR%2CClient">nn: step(s: CosineAnnealingLR; c: Client)</a></li>
-          <li><a class="reference external"
-          data-doc-search-tag="nn: step(s: Scheduler; c: Client)" href="nn.html#step.e%2CScheduler%2CClient">nn: step(s: Scheduler; c: Client)</a></li>
-          <li><a class="reference external"
-          data-doc-search-tag="nn: step(s: StepLR; c: Client)" href="nn.html#step.e%2CStepLR%2CClient">nn: step(s: StepLR; c: Client)</a></li>
+          data-doc-search-tag="nn: step(s: Scheduler; c: Client)" href="nn.html#step%2CScheduler%2CClient">nn: step(s: Scheduler; c: Client)</a></li>
           </ul></dd>
 <dt><a name="StepLR" href="#StepLR"><span>StepLR:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
@@ -1547,9 +1555,9 @@ window.addEventListener('DOMContentLoaded', main);
           </ul></dd>
 <dt><a name="trainEpoch" href="#trainEpoch"><span>trainEpoch:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
-          data-doc-search-tag="train: trainEpoch[T: ElemType](t: var Trainer; model: var Module;
-                        loader: var DataLoader): (float, float)" href="train.html#trainEpoch%2CTrainer%2CModule%2CDataLoader">train: trainEpoch[T: ElemType](t: var Trainer; model: var Module;
-                        loader: var DataLoader): (float, float)</a></li>
+          data-doc-search-tag="train: trainEpoch[T: ElemType](t: var Trainer; loader: var DataLoader): (float, float,
+    bool)" href="train.html#trainEpoch%2CTrainer%2CDataLoader">train: trainEpoch[T: ElemType](t: var Trainer; loader: var DataLoader): (float, float,
+    bool)</a></li>
           </ul></dd>
 <dt><a name="Trainer" href="#Trainer"><span>Trainer:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
@@ -1563,9 +1571,11 @@ window.addEventListener('DOMContentLoaded', main);
           </ul></dd>
 <dt><a name="trainNetwork" href="#trainNetwork"><span>trainNetwork:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
-          data-doc-search-tag="train: trainNetwork[T: ElemType](t: var Trainer; model: var Module;
-                          train, test: var DataLoader; epochs: int; plot = false)" href="train.html#trainNetwork%2CTrainer%2CModule%2CDataLoader%2CDataLoader%2Cint">train: trainNetwork[T: ElemType](t: var Trainer; model: var Module;
-                          train, test: var DataLoader; epochs: int; plot = false)</a></li>
+          data-doc-search-tag="train: trainNetwork[T: ElemType](t: var Trainer; train, test: var DataLoader;
+                          epochs: int; plot = false; checkpoint = &quot;&quot;;
+                          saveEvery = 10)" href="train.html#trainNetwork%2CTrainer%2CDataLoader%2CDataLoader%2Cint%2Cstring%2Cint">train: trainNetwork[T: ElemType](t: var Trainer; train, test: var DataLoader;
+                          epochs: int; plot = false; checkpoint = &quot;&quot;;
+                          saveEvery = 10)</a></li>
           </ul></dd>
 <dt><a name="TransContext" href="#TransContext"><span>TransContext:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
@@ -1786,7 +1796,7 @@ window.addEventListener('DOMContentLoaded', main);
       <div class="twelve-columns footer">
         <span class="nim-sprite"></span>
         <br/>
-        <small style="color: var(--hint);">Made with Nim. Generated: 2023-07-04 19:37:35 UTC</small>
+        <small style="color: var(--hint);">Made with Nim. Generated: 2023-07-05 17:55:16 UTC</small>
       </div>
     </div>
   </div>

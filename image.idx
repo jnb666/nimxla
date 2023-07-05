@@ -18,4 +18,4 @@ randomElastic	image.html#randomElastic,int,float,float,float	image: randomElasti
 `$`	image.html#$,Transformer	image: `$`(t: Transformer): string	
 initTransformer	image.html#initTransformer,staticint,Rand,openArray[ImageOp],int	image: initTransformer(channels: static int; rng: var Rand; ops: openArray[ImageOp];\n                threads = 0): Transformer	
 transform	image.html#transform,Transformer,Tensor[uint8]	image: transform(t: Transformer; arr: var Tensor[uint8])	
-shutdown	image.html#shutdown,Transformer	image: shutdown(t: var Transformer)	
+shutdown	image.html#shutdown,Transformer	image: shutdown(t: Transformer)	
