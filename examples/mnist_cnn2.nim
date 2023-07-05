@@ -10,6 +10,7 @@ import cligen
 
 setPrintOpts(precision=4, minWidth=8, floatMode=ffDecimal, threshold=100, edgeItems=5)
 
+
 proc buildModel(c: Client, rng: var Rand, nclasses: int, mean, std: float32): Module =
   let conv1 = c.initConv2d(rng, "1", 1,  32, kernelSize=5)
   let conv2 = c.initConv2d(rng, "2", 32, 64, kernelSize=5)
@@ -27,7 +28,7 @@ proc buildModel(c: Client, rng: var Rand, nclasses: int, mean, std: float32): Mo
   result.add(conv1, conv2, linear1, linear2)  
 
 proc main(epochs = 30, learnRate = 0.001, wdecay = 1e-5, trainBatch = 200, testBatch = 1000, seed: int64 = 0,
-          augment = true, output = "", gpu = true, plot = false, debug = false) =
+          augment = true, output = "", load = "", checkpoint = "data/mnist_cnn2", gpu = true, plot = false, debug = false) =
   var logger = newConsoleLogger(levelThreshold=if debug: lvlDebug else: lvlInfo)
   addHandler(logger)
   # init client
@@ -53,15 +54,18 @@ proc main(epochs = 30, learnRate = 0.001, wdecay = 1e-5, trainBatch = 200, testB
   var optim = c.optimAdam(model, learnRate, wdecay)
   var t = Trainer(
     client:   c,
+    model:    model,
     optim:    optim,
     sched:    newStepLR(optim, stepSize=10, gamma=0.2),
     trainer:  c.trainFunc(model, U8, train.shape, crossEntropyLoss),
     tester:   c.testFunc(model, U8, test.shape),
-    trainAcc: c.accuracyFunc(train.batchSize, nclasses),
-    testAcc:  c.accuracyFunc(test.batchSize, nclasses)
+    trainAcc: c.accuracyFunc(trainBatch, nclasses),
+    testAcc:  c.accuracyFunc(testBatch, nclasses)
   )
-  echo "optimizer: ", t.optim
-  trainNetwork[uint8](t, model, train, test, epochs, plot=plot)
+  echo "optimizer: ", t.sched
+  if load != "":
+    t.loadCheckpoint(load)
+  trainNetwork[uint8](t, train, test, epochs, plot, checkpoint)
   if output != "":
     echo "saving test predictions to ", output
     t.predict.write(output)

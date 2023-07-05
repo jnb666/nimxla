@@ -1,6 +1,6 @@
 ## A few internal definitions which are shared across multiple modules
 
-import std/math
+import std/[math, atomics]
 import xla_wrapper
 
 const tracemem* {.booldefine.} = false
@@ -22,6 +22,14 @@ proc ptrOffset*[T](p: ptr T, off: int): ptr T {.inline.} =
 proc newChannel*[T](maxItems = 0): ptr Channel[T] =
   result = cast[ptr Channel[T]](allocShared0(sizeof(Channel[T])))
   open(result[], maxItems)
+
+proc freeChannel*[T](ch: ptr Channel[T]) =
+  ch[].close
+  deallocShared(ch)
+
+proc newAtomic*[T](val: T): ptr Atomic[T]  =
+  result = cast[ptr Atomic[T]](allocShared0(sizeof(Atomic[T])))
+  result[].store(val)
 
 template trace*(msg: string): untyped =
   when tracemem:

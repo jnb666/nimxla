@@ -47,6 +47,7 @@ proc main(epochs = 10, learnRate = 0.01, trainBatch = 500, testBatch = 1000, see
   # compile train funcs
   var t = Trainer(
     client:   c,
+    model:    model,  
     optim:    c.optimAdam(model, learnRate),
     trainer:  c.trainFunc(model, U8, train.shape, crossEntropyLoss),
     tester:   c.testFunc(model, U8, test.shape),
@@ -54,7 +55,7 @@ proc main(epochs = 10, learnRate = 0.01, trainBatch = 500, testBatch = 1000, see
     testAcc:  c.accuracyFunc(test.batchSize, nclasses)
   )
   echo "optimizer: ", t.optim
-  trainNetwork[uint8](t, model, train, test, epochs, plot=plot)
+  trainNetwork[uint8](t, train, test, epochs, plot=plot)
   if output != "":
     echo "saving test predictions to ", output
     t.predict.write(output)

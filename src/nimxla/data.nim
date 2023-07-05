@@ -1,7 +1,7 @@
 ## The data module provides functions for loading common datasets and iterating over batches of data.
 
 {.warning[BareExcept]:off.}
-import std/[os, math, httpclient, strformat, strutils, sequtils, sugar, random, streams, endians, macros, logging]
+import std/[os, math, httpclient, strformat, strutils, sequtils, sugar, random, streams, endians, macros, logging, atomics]
 import zippy
 import zippy/tarballs
 import ../nimxla
@@ -25,12 +25,14 @@ type
     data:   seq[uint8]
 
   LoaderContext = object
-    cin:       ptr Channel[bool]
     cout:      ptr Channel[(int, ptr uint8, ptr int32)]
+    tin:       ptr Channel[ImageRequest]
+    tout:      ptr Channel[bool]
     seed:      int64
     batchSize: int
     shuffle:   bool
-    trans:     TransContext
+    workers:   ptr Atomic[int]
+    shutdown:  ptr Atomic[bool]
 
   DataLoader* = object
     ## DataLoader provides an iterator to read batches of data from a dataset.
@@ -238,73 +240,75 @@ iterator getBatch*[T](d: var DataLoader, data: var Tensor[T], labels: var Tensor
 proc `$`*(d: DataLoader): string =
   result = &"{d.dataset} batchSize={d.batchSize} shuffle={d.shuffle}"
   if d.trans.ops.len > 0:
-    result.add &" [{d.trans}]"
-
-proc newContext(d: var DataLoader, trans: TransContext): LoaderContext =
-  LoaderContext(
-    cin:  newChannel[bool](),
-    cout: newChannel[(int, ptr uint8, ptr int32)](maxItems = 1),
-    seed: d.rng.rand(high(int64)),
-    batchSize: d.batchSize,
-    shuffle: d.shuffle,
-    trans: trans,
-  )
+    result.add &"\n transform=[{d.trans}]"
 
 proc loaderThread(ctx: LoaderContext, dataset: Dataset) =
   var rng = initRand(ctx.seed)
   var indexes = toSeq(0 ..< dataset.len)
-  let dims = @[ctx.batchSize] & dataset.shape
+  let batchSize = ctx.batchSize
+  let dims = @[batchSize] & dataset.shape
   var bufix = 0
   var buffer: array[3, Tensor[uint8]]
   var labels: array[3, Tensor[int32]]
   for i in 0..2:
     buffer[i] = newTensor[uint8](dims)
-    labels[i] = newTensor[int32](ctx.batchSize)
+    labels[i] = newTensor[int32](batchSize)
   while true:
     if ctx.shuffle: rng.shuffle(indexes)
-    for batch in 0 ..< dataset.len div ctx.batchSize:
-      let (ok, done) = ctx.cin[].tryRecv
-      if ok and done:
+    for batch in 0 ..< dataset.len div batchSize:
+      # poll for shutdown signal
+      if load(ctx.shutdown[]):
+        atomicDec(ctx.workers[])
         return
-      for i in 0 ..< ctx.batchSize:
-        let ix = indexes[batch*ctx.batchSize + i]
+      # transform batch of images
+      for i in 0 ..< batchSize:
+        let ix = indexes[batch*batchSize + i]
         let t = buffer[bufix].at(i)
         labels[bufix][i] = dataset.getItem(ix, t.rawPtr)
-        ctx.trans.cin[].send ImageRequest(height: t.dims[0], width: t.dims[1], data: t.rawPtr)
-      for i in 0 ..< ctx.batchSize:
-        discard ctx.trans.cout[].recv
+        ctx.tin[].send ImageRequest(height: t.dims[0], width: t.dims[1], data: t.rawPtr)
+      for i in 0 ..< batchSize:
+        discard ctx.tout[].recv
+      # send response
       ctx.cout[].send (batch, buffer[bufix].rawPtr, labels[bufix].rawPtr)
       bufix = (bufix + 1) mod 3
+    # signal end of epoch
     ctx.cout[].send (-1, nil, nil)
-
-proc initLoader*(channels: static int, d: var DataLoader, dset: Dataset, ops: openarray[ImageOp]) =
-  d.dataset = dset
-  if d.batchSize == 0:
-    d.batchSize = d.dataset.len
-  d.trans = initTransformer(channels, d.rng, ops)
 
 template start*(d: var DataLoader, dset: untyped, channels: static int, transforms: varargs[ImageOp]) =
   ## Start should be called to associate a DatatSet with the loader.
   ## If the optional image transforms are set then it will start a new thread to launch the 
   ## image augmentation process in the background. In this case channels should be set to the number
   ## of color channels.
-  initLoader(`channels`, `d`, `dset`, `transforms`)
+  `d`.dataset = `dset`
+  if `d`.batchSize == 0:
+    `d`.batchSize = `d`.dataset.len
+  `d`.trans = initTransformer(`channels`, `d`.rng, `transforms`)
   if `transforms`.len > 0:
     proc spawnThread(ctx: LoaderContext) {.thread.} =
       loaderThread(ctx, `dset`)
     debug "spawn loader thread"
-    `d`.ctx = newContext(`d`, `d`.trans.ctx)
+    `d`.ctx.cout = newChannel[(int, ptr uint8, ptr int32)](maxItems = 1)
+    `d`.ctx.tin = `d`.trans.ctx.cin
+    `d`.ctx.tout = `d`.trans.ctx.cout
+    `d`.ctx.seed = `d`.rng.rand(high(int64))
+    `d`.ctx.shuffle = `d`.shuffle
+    `d`.ctx.batchSize = `d`.batchSize
+    `d`.ctx.shutdown = newAtomic(false)
+    `d`.ctx.workers = newAtomic(1)
     createThread(`d`.thread, spawnThread, `d`.ctx)
 
-proc shutdown*(d: var DataLoader) =
-  ## Shutdown worker transform threads
-  if d.ctx.cin != nil:
-    debug "shutdown dataloader"
-    d.ctx.cin[].send true
-    sleep(100)
-    d.ctx.cin[].close
+proc shutdown*(d: DataLoader) =
+  ## Shutdown worker thread
+  if d.ctx.workers != nil:
+    debug "shutdown DataLoader..."
+    store(d.ctx.shutdown[], true)
     while true:
       let (ok, msg) = d.ctx.cout[].tryRecv
       if not ok: break
-    d.ctx.cout[].close
-  d.trans.shutdown()
+    while load(d.ctx.workers[]) > 0:
+      sleep(20)
+    debug "..done"
+    freeChannel(d.ctx.cout)
+    deallocShared(d.ctx.workers)
+    deallocShared(d.ctx.shutdown)
+  d.trans.shutdown

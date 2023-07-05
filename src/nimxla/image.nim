@@ -4,7 +4,7 @@
 ## C is number of channels (1 for greyscale or 3 for RGB).
 
 {.warning[BareExcept]:off.}
-import std/[math, random, strformat, strutils, sequtils, sugar, logging, os, cpuinfo]
+import std/[math, random, strformat, strutils, sequtils, sugar, logging, os, cpuinfo, atomics]
 import private/utils
 import tensor
 
@@ -53,6 +53,7 @@ type
     seed:  int64
     ops:   ptr UncheckedArray[ImageOp]
     nops:  int
+    workers:  ptr Atomic[int]
 
   Transformer* = object
     ops*:    seq[ImageOp]
@@ -267,18 +268,17 @@ proc transformImage[C: static int](img: Image[C], rng: var Rand, ops: ptr Unchec
 
 proc imageTransformThread[C: static int](ctx: TransContext) {.thread.} =
   var rng = initRand(ctx.seed)
-  let cin = ctx.cin
-  let cout = ctx.cout
   while true:
-    let req = cin[].recv
+    let req = ctx.cin[].recv
     if req.width == 0:
+      atomicDec(ctx.workers[])
       return
     let size = C * req.width * req.height
     var img = newImage[C](req.width, req.height)
     copyMem(img.pixels[0].addr, req.data, size)
     img = transformImage(img, rng, ctx.ops, ctx.nops)
     copyMem(req.data, img.pixels[0].addr, size)
-    cout[].send(true)
+    ctx.cout[].send(true)
 
 proc initTransformer*(channels: static int, rng: var Rand, ops: openarray[ImageOp], threads = 0): Transformer =
   ## Setup a new image transform pipeline which will read apply a series of image ops.
@@ -290,8 +290,9 @@ proc initTransformer*(channels: static int, rng: var Rand, ops: openarray[ImageO
   result.threads = newSeq[Thread[TransContext]](nthreads)
   result.ctx.cin = newChannel[ImageRequest]()
   result.ctx.cout = newChannel[bool]()
-  result.ctx.ops = cast[ptr UncheckedArray[ImageOp]](ops[0].unsafeAddr)
+  result.ctx.ops = cast[ptr UncheckedArray[ImageOp]](addr result.ops[0])
   result.ctx.nops = ops.len
+  result.ctx.workers = newAtomic(nthreads)
   debug &"init transformer with {nthreads} threads: {ops}"
   for i in 0 .. high(result.threads):
     result.ctx.seed = rng.rand(high(int64))
@@ -311,17 +312,16 @@ proc transform*(t: Transformer, arr: var Tensor[uint8]) =
   for i in 0 ..< arr.dims[0]:
     discard t.ctx.cout[].recv
 
-proc shutdown*(t: var Transformer) =
+proc shutdown*(t: Transformer) =
   ## Shutdown worker threads
-  if t.ops.len > 0:
-    debug "shutdown transformer"
+  if t.ctx.workers != nil:
+    debug "shutdown transformer..."
     var done: ImageRequest
     for i in 0 .. high(t.threads):
       t.ctx.cin[].send done
-    sleep(100)
-    t.ctx.cin[].close
-    while true:
-      let (ok, msg) = t.ctx.cout[].tryRecv
-      if not ok: break
-    t.ctx.cout[].close
-    t.ops.setLen(0)
+    while load(t.ctx.workers[]) > 0:
+      sleep(20)
+    debug "..done"
+    freeChannel(t.ctx.cin)
+    freeChannel(t.ctx.cout) 
+    deallocShared(t.ctx.workers)

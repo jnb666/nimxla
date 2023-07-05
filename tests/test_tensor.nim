@@ -98,4 +98,10 @@ suite "tensor":
     let b2 = readTensor[bool](file2)
     debug b2
     check b1 == b2
+    let file3 = joinPath(getTempDir(), "scalar_tensor_test.npy")
+    let s1 = 42i32.toTensor
+    s1.write(file3)
+    let s2 = readTensor[int32](file3)
+    debug s2
+    check s1 == s2
 

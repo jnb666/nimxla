@@ -1,5 +1,5 @@
 {.warning[BareExcept]:off.}
-import std/[unittest, logging, strutils, strformat, random]
+import std/[unittest, logging, strutils, strformat, random, os]
 import nimxla
 import nimxla/[data, image]
 
@@ -55,6 +55,7 @@ suite "data":
     var loader = newLoader(rng, batchSize=100)
     loader.start(cifar10Dataset(train = false), channels = 3, randomFlip(Horizontal), randomWrap(4, 4))
     debug loader
+    sleep(1000)
     var data = newTensor[uint8](100, 32, 32, 3)
     var labels = newTensor[int32](100)
     var count = 0

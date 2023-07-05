@@ -17,8 +17,8 @@ type
   Optimizer* = ref object of RootRef
     ## Optimizer function to update the model weights.
     ## Subclasses should implement the step method
+    state*:    Params
     exec:      Executable
-    state:     Params
     wdecay:    float
     varNames:  seq[string]
 
@@ -35,6 +35,7 @@ type
     ## Scheduler updates the learning rate after each epoch
     optim: Optimizer
     epoch: int
+    initialLR: float
 
   StepLR* = ref object of Scheduler
     stepSize: int
@@ -43,7 +44,6 @@ type
   CosineAnnealingLR* = ref object of Scheduler
     tMax:   int
     lrMin:  float
-    lrMax:  float
 
   Outputs* = object
     ## List of named output parameters
@@ -329,7 +329,7 @@ proc compileTrain*(c: Client, m: Module, input: Node, lossFn: proc(y: Node): Nod
   debug "trainer: ", result
 
 
-proc format(val: float): string =
+proc format*(val: float): string =
   result = formatFloat(val, precision=6)
   result.trimZeros
 
@@ -489,20 +489,35 @@ method `$`*(optim: AdamOptimizer): string =
   name & "(" & opts.join(" ") & ")"
 
 
-method step*(s: Scheduler, c: Client) {.base.} =
+method setLR(s: Scheduler, c: Client) {.base.} =
   raise newException(ValueError, "abstract method")
+
+method `$`*(s: Scheduler): string {.base.} =
+  raise newException(ValueError, "abstract method")
+
+proc init*(s: Scheduler, c: Client, epoch: int) =
+  ## Called when restoring state from checkpoint
+  echo &"init scheduler: epoch = {epoch}"
+  s.epoch = epoch
+  s.setLR(c)
+
+proc step*(s: Scheduler, c: Client) =
+  ## Called after each epoch to update the learning rate
+  s.epoch += 1
+  s.setLR(c)
 
 proc newStepLR*(optim: var Optimizer, stepSize: int, gamma = 0.1): StepLR =
   ## Create StepLR scheduler which multiplies the learning rate by gamma after each stepSize epochs.
-  result = StepLR(optim: optim, stepSize: stepSize, gamma: gamma)
+  result = StepLR(optim: optim, initialLR: optim.learningRate, stepSize: stepSize, gamma: gamma)
 
-method step*(s: StepLR, c: Client) =
-  ## Called after each epoch to update the learning rate
-  s.epoch += 1
-  if s.epoch mod s.stepSize == 0:
-    let lr = s.optim.learningRate * s.gamma
-    echo "step learning rate to ", lr.format
-    s.optim.setLearningRate(c, lr)
+method setLR(s: StepLR, c: Client) =
+  let steps = s.epoch div s.stepSize
+  let lr = s.initialLR * (s.gamma^steps)
+  debug "set learning rate to ", lr.format
+  s.optim.setLearningRate(c, lr)
+
+method `$`*(s: StepLR): string =
+  &"StepLR({s.optim} stepSize={s.stepSize} gamma={s.gamma})"
 
 proc newCosineAnnealingLR*(optim: var Optimizer, tMax: int, lrMin = 0.0): CosineAnnealingLR =
   ## Create cosine annealing learning rate scheduler such that
@@ -510,11 +525,14 @@ proc newCosineAnnealingLR*(optim: var Optimizer, tMax: int, lrMin = 0.0): Cosine
   ## lr = lrMin + (lrMax - lrMin)/2 * (1 + cos(pi * t/tMax))
   ## ```
   ## where t is the current epoch and lrMax is the initial learning rate.
-  result = CosineAnnealingLR(optim: optim, tMax: tMax, lrMin: lrMin, lrMax: optim.learningRate)
+  result = CosineAnnealingLR(optim: optim, initialLR: optim.learningRate, tMax: tMax, lrMin: lrMin)
 
-method step*(s: CosineAnnealingLR, c: Client) =
-  ## Called after each epoch to update the learning rate
-  s.epoch += 1
-  let lr = s.lrMin + 0.5*(s.lrMax - s.lrMin) * (1.0 + cos(PI * s.epoch.float/s.tMax.float))
+method setLR(s: CosineAnnealingLR, c: Client) =
+  let lr = s.lrMin + 0.5*(s.initialLR - s.lrMin) * (1.0 + cos(PI * s.epoch.float/s.tMax.float))
   debug "set learning rate to ", lr.format
   s.optim.setLearningRate(c, lr)
+
+method `$`*(s: CosineAnnealingLR): string =
+  &"CosineAnnealingLR({s.optim} tMax={s.tMax} lrMin={s.lrMin})"
+
+

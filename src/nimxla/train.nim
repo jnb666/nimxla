@@ -1,15 +1,17 @@
 ## The train module has common functions for training neural networks.
 ## It depends on the nn and data modules in addition to the core nimxla modules.
 
-import std/[tables, json, logging, math, strformat, strutils, sugar, times, monotimes]
+import std/[tables, json, logging, math, strformat, strutils, sugar, times, monotimes, atomics, streams, json]
 import ../nimxla
 import nn, data, plots
 import ws
+import zip/zipfiles
 
 type
   Trainer* = object
     ## Trainer object holds the state for a training
     client*:   Client
+    model*:    Module
     optim*:    Optimizer
     sched*:    Scheduler
     trainer*:  Executable
@@ -19,9 +21,23 @@ type
     stats*:    Table[string, seq[float]]
     predict*:  Tensor[int32]
     heatmap*:  Tensor[int32]
+    epoch*:    int
+
+  MetaData = object
+    epoch:      int
+    stats:      Table[string, seq[float]]
+    variables:  seq[string]
+    optimizer:  string
+    optimState: seq[string]
 
 let
   plotNames = @[@["loss"], @["train", "test"]]
+
+var shouldQuit: Atomic[bool]
+shouldQuit.store(false)
+
+proc onCtrlC() {.noconv.} =
+  shouldQuit.store(true)
 
 proc trainFunc*(c: Client, model: Module, dtype: DataType, shape: seq[int], lossFn: proc(yp, y: Node): Node): Executable =
   ## Compile training function with given input data shape and loss function which is applied to the output.
@@ -55,7 +71,7 @@ proc accuracyFunc*(c: Client, batch, nout: int, outType=F32, labelType=I32): Exe
   let comp = b.build(b.makeTuple(labels, accuracy))
   c.compile(comp, @["labels", "accuracy"])
 
-proc trainEpoch*[T: ElemType](t: var Trainer, model: var Module, loader: var DataLoader): (float, float) =
+proc trainEpoch*[T: ElemType](t: var Trainer, loader: var DataLoader): (float, float, bool) =
   ## Train on one epoch of batches of data from the training set, returns average loss and accuracy on training dara
   ## T should be the type of data returned from the loader. Output loss should be a float32 scalar.
   var data = newTensor[T](loader.shape)
@@ -63,10 +79,12 @@ proc trainEpoch*[T: ElemType](t: var Trainer, model: var Module, loader: var Dat
   var avgLoss = 0.0
   var accuracy = 0.0
   for batch in getBatch(loader, data, targets):
+    if shouldQuit.load():
+      return (0, 0, true)
     var params = initParams({"x": t.client.newBuffer(data), "y": t.client.newBuffer(targets)})
-    model.getParams(params)
+    t.model.getParams(params)
     t.trainer.runWith(params)
-    model.update(params)
+    t.model.update(params)
     t.trainAcc.runWith(params)
     let loss = params["loss"].f32[].float
     let accVal = params["accuracy"].f32[].float
@@ -75,13 +93,14 @@ proc trainEpoch*[T: ElemType](t: var Trainer, model: var Module, loader: var Dat
       debug "  tgt: ", targets
       debug "  pred:", params["labels"].i32
     if loss.isNan:
-      return (loss, 0.0)
+      error "loss returns Nan value"
+      return (loss, 0.0, true)
     avgLoss += (loss - avgLoss) / float(batch+1)
     accuracy += (accVal - accuracy) / float(batch+1)
-    model.setParams(t.optim.step(params))
-  return (avgLoss, accuracy)
+    t.model.setParams(t.optim.step(params))
+  return (avgLoss, accuracy, false)
 
-proc getAccuracy*[T: ElemType](t: var Trainer, model: var Module, loader: var Dataloader): float =
+proc getAccuracy*[T: ElemType](t: var Trainer, loader: var Dataloader): (float, bool) =
   ## Calculate the accuracy from the test data set.
   ## T should be the type of data returned from the loader.
   var data = newTensor[T](loader.shape)
@@ -91,8 +110,10 @@ proc getAccuracy*[T: ElemType](t: var Trainer, model: var Module, loader: var Da
   let nclasses = loader.dataset.classes.len
   t.heatmap = zeros[int32](nclasses, nclasses)
   for batch in getBatch(loader, data, targets):
+    if shouldQuit.load():
+      return (0, true)
     var params = initParams({"x": t.client.newBuffer(data), "y": t.client.newBuffer(targets)})
-    model.getParams(params)
+    t.model.getParams(params)
     t.tester.runWith(params)
     t.testAcc.runWith(params)
     let accVal = params["accuracy"].f32[].float
@@ -106,7 +127,62 @@ proc getAccuracy*[T: ElemType](t: var Trainer, model: var Module, loader: var Da
     for i in 0 ..< targets.len:
       let (x, y) = (targets[i].int, labels[i].int)
       t.heatmap[y, x] = t.heatmap[y, x] + 1
-  return accuracy
+  return (accuracy, false)
+
+proc saveCheckpoint*(t: Trainer, basename: string) =
+  ## Save checkpoint with model weights and optimizer state to file
+  let filename = &"{basename}_{t.epoch}.npz"
+  echo "writing checkpoint to ", filename
+  var z: ZipArchive
+  if not z.open(filename, fmWrite):
+    quit(&"error opening checkpoint file: {filename} for writing")
+  var variables: seq[string]
+  for name, v in t.model.variables:
+    variables.add name
+    var s = newStringStream()
+    v.data.f32.write(s)
+    z.addFile("model_" & name, s)
+  var optimState: seq[string]
+  for name, data in t.optim.state:
+    optimState.add name
+    var s = newStringStream()
+    data.f32.write(s)
+    z.addFile("optim_" & name, s)
+  let optim = if t.sched == nil: $t.optim else: $t.sched
+  var metadata = %*{
+    "epoch": t.epoch, "variables": variables, "optimizer": optim, "optimState": optimState, "stats": t.stats
+  }
+  z.addFile("metadata", newStringStream($metadata))
+  z.close()
+
+proc loadCheckpoint*(t: var Trainer, filename: string) =
+  ## Read back checkpoint from zip file
+  var z: ZipArchive
+  if not z.open(filename, fmRead):
+    quit(&"error opening checkpoint file: {filename} for reading")
+  echo "reading checkpoint from ", filename
+  var s = newStringStream()
+  z.extractFile("metadata", s)
+  s.setPosition 0
+  let metadata = parseJson(s)
+  let d = metadata.to(MetaData)
+  debug d.repr
+  for name in d.variables:
+    debug &"extract model_", name
+    var s = newStringStream()
+    z.extractFile("model_" & name, s)
+    s.setPosition 0
+    t.model.variables[name].data = t.client.newBuffer(readTensor[float32](s))
+  for name in d.optimState:
+    debug &"extract optim_", name
+    var s = newStringStream()
+    z.extractFile("optim_" & name, s)
+    s.setPosition 0
+    t.optim.state[name] = t.client.newBuffer(readTensor[float32](s))
+  z.close()
+  t.epoch = d.epoch
+  t.stats = d.stats
+  if t.sched != nil: t.sched.init(t.client, t.epoch)
 
 proc updateStats(t: var Trainer, entries: openarray[(string, float)]) =
   ## Append data to stats
@@ -158,30 +234,43 @@ proc format(d: Duration): string =
     &"{secs div 3600}h:{dp[Minutes]}m:{dp[Seconds]}s"
 
 
-proc trainNetwork*[T: ElemType](t: var Trainer, model: var Module, train, test: var DataLoader, epochs: int, plot = false) =
+proc trainNetwork*[T: ElemType](t: var Trainer, train, test: var DataLoader, epochs: int, plot = false, checkpoint = "", saveEvery = 10) =
   ## Training run for given number of epochs. If transform is set it will be applied to each batch of training data.
-  t.stats = initTable[string, seq[float]]()
+  ## If checkpoint is set then a checkpoint file is written using this prefix
   var ws: WebSocket
   if plot:
     ws = openWebSocket()
+  setControlCHook(onCtrlC)
   let start = getMonoTime()
-  for epoch in 1 .. epochs:
+  var saved = 0
+  while t.epoch < epochs:
+    t.epoch += 1
     let startEpoch = getMonoTime()
-    let (loss, trainAcc) = trainEpoch[T](t, model, train)
-    if loss.isNan:
-      error "loss returns Nan value - aborting"
+    let (loss, trainAcc, quitProg) = trainEpoch[T](t, train)
+    if quitProg:
+      echo "exit"
       break
     if t.sched != nil:
       t.sched.step(t.client)
-    let testAcc = getAccuracy[T](t, model, test)
-    t.updateStats({"epoch": epoch.float, "loss": loss, "train": trainAcc, "test": testAcc})
+    let (testAcc, quitProg2) = getAccuracy[T](t, test)
+    if quitProg2:
+      echo "exit"
+      break
+    t.updateStats({"epoch": t.epoch.float, "loss": loss, "train": trainAcc, "test": testAcc})
     if plot:
       updatePlot(ws, t.statsPlots(test.dataset.classes), getLayout(epochs))
     let elapsed = format(getMonoTime() - startEpoch)
-    echo &"epoch {epoch:3}:  loss: {loss:8.4f}  train accuracy: {trainAcc*100:.1f}%  test accuracy: {testAcc*100:.1f}%  elapsed: {elapsed}"
+    echo &"epoch {t.epoch:3}:  loss: {loss:8.4f}  train accuracy: {trainAcc*100:.1f}%  test accuracy: {testAcc*100:.1f}%" &
+         &"  learnRate: {t.optim.learningRate.format}  elapsed: {elapsed}"
+    if checkpoint != "" and t.epoch mod saveEvery == 0:
+      t.saveCheckpoint(checkpoint)
+      saved = t.epoch
 
+  unsetControlCHook()
   let totalElapsed = format(getMonoTime() - start)
   echo &"total elapsed time = {totalElapsed}"
+  if checkpoint != "" and saved != t.epoch:
+    t.saveCheckpoint(checkpoint)
   if plot:
     ws.close
 

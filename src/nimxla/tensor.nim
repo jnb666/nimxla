@@ -305,7 +305,7 @@ proc readTensor*[T: ElemType](s: Stream): Tensor[T] =
   discard s.readData(header[0].addr, headerLen)
   header = header.replace(" ", "").strip()
   var desc, order, shape: string
-  let ok = scanf(header, "{'descr':$+,'fortran_order':$+,'shape':($+)}", desc, order, shape)
+  let ok = scanf(header, "{'descr':$+,'fortran_order':$+,'shape':($*)}", desc, order, shape)
   if not ok:
     raise newException(IOError, &"read: cannot parse header '{header}'")
   let dtype = desc.fromNumpy
@@ -315,10 +315,12 @@ proc readTensor*[T: ElemType](s: Stream): Tensor[T] =
   if dtype != expType:
     raise newException(IOError, &"read: got type from data as {dtype} - expecting {expType}")
   shape = shape.strip(chars = {','})
-  let dims = try:
-    map(split(shape, ','), x => x.parseInt)
-  except ValueError:
-    raise newException(IOError, &"read: cannot parse shape from header '{shape}'")
+  var dims: seq[int]
+  if shape != "":
+    dims = try:
+      map(split(shape, ','), x => x.parseInt)
+    except ValueError:
+      raise newException(IOError, &"read: cannot parse shape from header '{shape}'")
   result = newTensor[T](dims)
   var bytes = 0
   let length = result.len * sizeOf(T)
@@ -351,6 +353,7 @@ proc write*[T: ElemType](t: Tensor[T], s: Stream) =
   s.write padLenLE
   s.write header
   s.writeData(t.rawPtr, t.len*sizeOf(T))
+  s.flush
 
 proc write*[T: ElemType](t: Tensor[T], filename: string) =
   ## Write tensor attributes and data to a file in Numpy NPY v1 format.

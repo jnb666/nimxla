@@ -31,7 +31,7 @@ proc buildModel(c: Client, rng: var Rand, nclasses: int, mean, std: seq[float32]
   result.add(conv1, conv2, conv3, conv4, linear1, linear2)  
 
 proc main(epochs = 80, learnRate = 0.001, trainBatch = 200, testBatch = 500, seed: int64 = 0,
-          augment = true, output = "", gpu = true, plot = false, debug = false) =
+          augment = true, output = "", load = "", checkpoint = "data/cifar10_4", gpu = true, plot = false, debug = false) =
   var logger = newConsoleLogger(levelThreshold=if debug: lvlDebug else: lvlInfo)
   addHandler(logger)
   # init client
@@ -56,6 +56,7 @@ proc main(epochs = 80, learnRate = 0.001, trainBatch = 200, testBatch = 500, see
   # compile train funcs
   var t = Trainer(
     client:   c,
+    model:    model,
     optim:    c.optimAdam(model, learnRate),
     trainer:  c.trainFunc(model, U8, train.shape, crossEntropyLoss),
     tester:   c.testFunc(model, U8, test.shape),
@@ -63,7 +64,9 @@ proc main(epochs = 80, learnRate = 0.001, trainBatch = 200, testBatch = 500, see
     testAcc:  c.accuracyFunc(test.batchSize, nclasses)
   )
   echo "optimizer: ", t.optim
-  trainNetwork[uint8](t, model, train, test, epochs, plot=plot)
+  if load != "":
+    t.loadCheckpoint(load)
+  trainNetwork[uint8](t, train, test, epochs, plot, checkpoint)
   if output != "":
     echo "saving test predictions to ", output
     t.predict.write(output)

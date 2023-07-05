@@ -12,6 +12,7 @@ bin = @["nimxla/nimxla_plot"]
 requires "nim >= 1.6.12"
 requires "zippy >= 0.10.10"
 requires "ws >= 0.5.0"
+requires "zip >= 0.3.1"
 
 task makedocs, "build the docs":
   exec "rm -fr htdocs"

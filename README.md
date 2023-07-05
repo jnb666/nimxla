@@ -65,11 +65,11 @@ to generate a trace.
 ## Dependencies
 - Core modules depend on XLA headers and shared library only.
 - The data module uses [zippy](https://github.com/guzba/zippy) for gzip uncompress.
+- The train module uses [zip](https://github.com/nim-lang/zip) to read and write zip archives.
 - The plots module bundles https://plotly.com/javascript and depends on the [ws websockets](https://github.com/treeform/ws) library.
 - Examples use [cligen](https://github.com/c-blake/cligen) for command line argument parsing.
 
 ## TODO
-- checkpoint files with current state
 - RNN example
 - complete autograd for all of the defined ops
 - additonal op types: control flow etc.
