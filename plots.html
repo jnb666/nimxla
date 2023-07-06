@@ -172,23 +172,23 @@ class="link-seesrc" target="_blank">Source</a>
 
 Create plotly layout for grid of plots with optional labels for each axis.
 &nbsp;&nbsp;<a
-href="https://github.com/jnb666/nimxla/tree/main/src/nimxla/plots.nim#L45"
+href="https://github.com/jnb666/nimxla/tree/main/src/nimxla/plots.nim#L44"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/jnb666/nimxla/edit/devel/src/nimxla/plots.nim#L45" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/jnb666/nimxla/edit/devel/src/nimxla/plots.nim#L44" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
 <div id="openWebSocket">
-<dt><pre><span class="Keyword">proc</span> <a href="#openWebSocket"><span class="Identifier">openWebSocket</span></a><span class="Other">(</span><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">WebSocket</span> {.<span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Identifier">Exception</span><span class="Other">,</span> <span class="Identifier">IOError</span><span class="Other">,</span> <span class="Identifier">OSError</span><span class="Other">,</span>
-    <span class="Identifier">ValueError</span><span class="Other">,</span> <span class="Identifier">Exception</span><span class="Other">,</span> <span class="Identifier">ValueError</span><span class="Other">,</span> <span class="Identifier">OSError</span><span class="Other">,</span> <span class="Identifier">Exception</span><span class="Other">,</span> <span class="Identifier">ValueError</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span>
-    <span class="Identifier">ExecIOEffect</span><span class="Other">,</span> <span class="Identifier">ReadIOEffect</span><span class="Other">,</span> <span class="Identifier">RootEffect</span><span class="Other">,</span> <span class="Identifier">ReadEnvEffect</span><span class="Other">,</span> <span class="Identifier">TimeEffect</span><span class="Other">]</span></span>.}</pre></dt>
+<dt><pre><span class="Keyword">proc</span> <a href="#openWebSocket"><span class="Identifier">openWebSocket</span></a><span class="Other">(</span><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">WebSocket</span> {.<span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Identifier">OSError</span><span class="Other">,</span> <span class="Identifier">ValueError</span><span class="Other">,</span> <span class="Identifier">Exception</span><span class="Other">,</span>
+    <span class="Identifier">IOError</span><span class="Other">,</span> <span class="Identifier">Exception</span><span class="Other">,</span> <span class="Identifier">ValueError</span><span class="Other">,</span> <span class="Identifier">OSError</span><span class="Other">,</span> <span class="Identifier">Exception</span><span class="Other">,</span> <span class="Identifier">ValueError</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span>
+    <span class="Identifier">ReadIOEffect</span><span class="Other">,</span> <span class="Identifier">ExecIOEffect</span><span class="Other">,</span> <span class="Identifier">RootEffect</span><span class="Other">,</span> <span class="Identifier">ReadEnvEffect</span><span class="Other">,</span> <span class="Identifier">TimeEffect</span><span class="Other">]</span></span>.}</pre></dt>
 <dd>
 
 Blocking open to get client websocket. Will start nimxla_plot server in the background if not already running.
 &nbsp;&nbsp;<a
-href="https://github.com/jnb666/nimxla/tree/main/src/nimxla/plots.nim#L117"
+href="https://github.com/jnb666/nimxla/tree/main/src/nimxla/plots.nim#L119"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/jnb666/nimxla/edit/devel/src/nimxla/plots.nim#L117" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/jnb666/nimxla/edit/devel/src/nimxla/plots.nim#L119" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -199,9 +199,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 Convert data from a uint8 tensor in [H, W, C] layout to a plotly image. number of channels should be either 1 for greyscale or 3 or RGB image data.
 &nbsp;&nbsp;<a
-href="https://github.com/jnb666/nimxla/tree/main/src/nimxla/plots.nim#L63"
+href="https://github.com/jnb666/nimxla/tree/main/src/nimxla/plots.nim#L62"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/jnb666/nimxla/edit/devel/src/nimxla/plots.nim#L63" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/jnb666/nimxla/edit/devel/src/nimxla/plots.nim#L62" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -213,9 +213,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 Plot grid of images and returns data and loyout Json objects for input to plotly. getData callBack function recieves should return a [N,H,W,C] 4d tensor with the images for this page - i.e. <tt class="docutils literal"><span class="pre"><span class="Identifier">t</span><span class="Operator">.</span><span class="Identifier">at</span><span class="Punctuation">(</span><span class="Identifier">row</span><span class="Operator">*</span><span class="Identifier">cols</span> <span class="Operator">+</span> <span class="Identifier">col</span><span class="Punctuation">)</span></span></tt> returns a [H,W,C] grayscale (C=0) or RGB (C=0,1,2) image. and an optional sequence of labels for each image indexed in the same way.
 &nbsp;&nbsp;<a
-href="https://github.com/jnb666/nimxla/tree/main/src/nimxla/plots.nim#L86"
+href="https://github.com/jnb666/nimxla/tree/main/src/nimxla/plots.nim#L85"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/jnb666/nimxla/edit/devel/src/nimxla/plots.nim#L86" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/jnb666/nimxla/edit/devel/src/nimxla/plots.nim#L85" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -226,9 +226,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 Start async http server, serve plot using plotly on localhost and open the default browser on this page.
 &nbsp;&nbsp;<a
-href="https://github.com/jnb666/nimxla/tree/main/src/nimxla/plots.nim#L150"
+href="https://github.com/jnb666/nimxla/tree/main/src/nimxla/plots.nim#L154"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/jnb666/nimxla/edit/devel/src/nimxla/plots.nim#L150" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/jnb666/nimxla/edit/devel/src/nimxla/plots.nim#L154" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -240,9 +240,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 Send message to websocket server to update the plot.
 &nbsp;&nbsp;<a
-href="https://github.com/jnb666/nimxla/tree/main/src/nimxla/plots.nim#L142"
+href="https://github.com/jnb666/nimxla/tree/main/src/nimxla/plots.nim#L146"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/jnb666/nimxla/edit/devel/src/nimxla/plots.nim#L142" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/jnb666/nimxla/edit/devel/src/nimxla/plots.nim#L146" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -256,7 +256,7 @@ class="link-seesrc" target="_blank">Source</a>
       <div class="twelve-columns footer">
         <span class="nim-sprite"></span>
         <br/>
-        <small style="color: var(--hint);">Made with Nim. Generated: 2023-07-05 17:54:20 UTC</small>
+        <small style="color: var(--hint);">Made with Nim. Generated: 2023-07-06 09:12:47 UTC</small>
       </div>
     </div>
   </div>
