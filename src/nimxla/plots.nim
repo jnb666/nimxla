@@ -1,6 +1,6 @@
 ## The plots module contains some utilities for plotting graphs and images.
 {.warning[BareExcept]:off.}
-import std/[asynchttpserver, asyncdispatch, json, strformat, browsers, logging, os, osproc]
+import std/[asynchttpserver, asyncdispatch, json, strformat, browsers, logging, os, osproc, nativesockets]
 import ws
 import tensor
 
@@ -8,7 +8,6 @@ type Pixel = array[3, uint8]
 
 const 
   httpPort  = 8080
-  wsUrl     = &"ws://localhost:{httpPort}/ws"  
   indexHTML = staticRead("resources/index.html")
   plotlyJS  = staticRead("resources/plotly-2.24.1.min.js")
 
@@ -114,12 +113,17 @@ proc plotImageGrid*(title: string, rows, cols: int, getData: proc(): (Tensor[uin
     layout[xaxis(i)] = %*{"visible": false, "range": [0, width]}
   return (images, layout)
 
+proc getWsUrl(): string =
+  &"ws://{getHostname()}:{httpPort}/ws"
+
 proc openWebSocket*(): WebSocket =
   ## Blocking open to get client websocket.
   ## Will start nimxla_plot server in the background if not already running.
+  let hostname = getHostname()
+  let wsUrl = getWsUrl()
   let ps = execProcess("""ps x | grep " nimxla_plot" | grep -v grep""")
   if ps == "":
-    echo &"nimxla_plot not running - starting it on http://localhost:{httpPort}/"
+    echo &"nimxla_plot not running - starting it on http://{hostname}:{httpPort}/"
     let loggers = getHandlers()
     let debugFlag = if loggers.len > 0 and loggers[0].levelThreshold <= lvlDebug: "--debug" else: ""
     let origDir = getCurrentDir()
@@ -133,7 +137,7 @@ proc openWebSocket*(): WebSocket =
     finally:
       setCurrentDir(origDir)
   else:
-    echo &"nimxla_plot already listening on http://localhost:{httpPort}/"
+    echo &"nimxla_plot already listening on http://{hostname}:{httpPort}/"
     try:
       waitFor newWebSocket(wsUrl)
     except OSError:
@@ -154,6 +158,7 @@ proc servePlots*() {.async.} =
 
   proc cb(req: Request) {.async.} =
     debug req.reqMethod, " ", req.url.path
+    let wsUrl = getWsUrl()
     var contentType = "text/plain"
     var content = ""
     if req.url.path == "/ws":
