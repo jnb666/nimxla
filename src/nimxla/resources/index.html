@@ -9,17 +9,45 @@
 <body style="background-color:#222;">
   <div id="plot_1"></div>  
   <script>
-    doRelayout = function() {{
-      var margin = 50;
-      Plotly.relayout('plot_1', {{width: window.innerWidth-margin, height: window.innerHeight-margin}});
-    }};
+    const margin = 50;
+    const axes = ["xaxis", "yaxis", "yaxis2"];
+    var axisRange = {{}};
+    var plotID = document.getElementById('plot_1');
+
+    function doRelayout() {{
+      Plotly.relayout(plotID, {{width: window.innerWidth-margin, height: window.innerHeight-margin}});
+    }}
     window.onresize = doRelayout;
-    Plotly.newPlot('plot_1', [], {jsonLayout}).then(doRelayout);
+
+    Plotly.newPlot(plotID, [], {jsonLayout}).then(doRelayout);
     var socket = new WebSocket("{wsUrl}")
     socket.onmessage = function(e) {{
       var p = JSON.parse(e.data);
-      Plotly.react("plot_1", p.data, p.layout);
+      for (axis in axisRange) {{
+        p.layout[axis]["range"] = axisRange[axis];
+      }}
+      Plotly.react(plotID, p.data, p.layout);
     }}
+
+    function setRange(ev, axis) {{
+      if (ev[axis + ".autorange"]) {{
+        console.log('auto range: ', axis);
+        delete axisRange[axis];
+        return;
+      }}
+      const lo = axis + ".range[0]";
+      const hi = axis + ".range[1]";
+      if (lo in ev && hi in ev) {{
+        const r = [ev[lo], ev[hi]];
+        axisRange[axis] = r;
+      }}
+    }}
+
+    plotID.on('plotly_relayout', function(ev) {{
+      for (const axis of axes) {{
+        setRange(ev, axis);
+      }}
+    }});
   </script> 
 </body>
 </html>

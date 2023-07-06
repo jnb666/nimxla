@@ -55,9 +55,10 @@ proc gridLayout*(rows = 1, cols = 1, ytitle, xtitle: openarray[string] = []): Js
     if xtitle.len >= i:
       result[xaxis(i)]["title"] = %xtitle[i-1]
 
-proc annotation(row, col: int, title: string): JsonNode =
+proc annotation(row, col: int, title: string, err: bool): JsonNode =
+  let bgcol = if err: "#611" else: "#222"
   %*{"text": title, "showarrow": false, "xref": "x" & $col, "yref": "y" & $row,
-     "x": 0, "y": 0, "xanchor": "left", "yanchor": "top", "bgcolor": "#222", "opacity": 0.8}
+     "x": 0, "y": 0, "xanchor": "left", "yanchor": "top", "bgcolor": bgcol, "opacity": 0.8}
 
 proc plotImage*(t: Tensor[uint8], row, col: int): JsonNode =
   ## Convert data from a uint8 tensor in [H, W, C] layout to a plotly image.
@@ -82,7 +83,7 @@ proc plotImage*(t: Tensor[uint8], row, col: int): JsonNode =
     "colormodel": "rgb",
   }
 
-proc plotImageGrid*(title: string, rows, cols: int, getData: proc(): (Tensor[uint8], seq[string])): (JsonNode, JsonNode) =
+proc plotImageGrid*(title: string, rows, cols: int, getData: proc(): (Tensor[uint8], seq[string], seq[bool])): (JsonNode, JsonNode) =
   ## Plot grid of images and returns data and loyout Json objects for input to plotly.
   ## getData callBack function recieves should return a [N,H,W,C] 4d tensor with the images for this page -
   ## i.e. `t.at(row*cols + col)` returns a [H,W,C] grayscale (C=0) or RGB (C=0,1,2) image.
@@ -94,7 +95,7 @@ proc plotImageGrid*(title: string, rows, cols: int, getData: proc(): (Tensor[uin
     "annotations": [],
   }
   var images = %[]
-  let (t, labels) = getData()
+  let (t, labels, err) = getData()
   if t.dims.len != 4:
     raise newException(ValueError, &"plotImageGrid: expecting 4d tensor with images from getData() - got {t.dims}")
   let (width, height) = (t.dims[2], t.dims[1])
@@ -105,7 +106,7 @@ proc plotImageGrid*(title: string, rows, cols: int, getData: proc(): (Tensor[uin
       let img = if ix < t.dims[0]: t.at(ix) else: blank
       images.add plotImage(img, row, col)
       if labels.len > ix:
-        layout["annotations"].add annotation(row, col, labels[ix])
+        layout["annotations"].add annotation(row, col, labels[ix], err[ix])
       ix += 1
   for i in 1 .. rows:
     layout[yaxis(i)] = %*{"visible": false, "range": [height, 0]}

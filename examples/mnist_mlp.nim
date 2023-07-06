@@ -21,8 +21,8 @@ proc buildModel(c: Client, rng: var Rand, imgSize, nclasses: int): Module =
   result.info = "== mnist_mlp =="
   result.add(layer1, layer2)
 
-proc main(epochs = 10, learnRate = 0.01, trainBatch = 500, testBatch = 1000, seed: int64 = 0, 
-          output = "", gpu = true, plot = false, debug = false) =
+proc main(epochs = 10, learnRate = 0.01, trainBatch = 500, testBatch = 1000, seed = 0i64,
+          gpu = true, plot = false, debug = false) =
   var logger = newConsoleLogger(levelThreshold=if debug: lvlDebug else: lvlInfo)
   addHandler(logger)
   # init client
@@ -52,8 +52,5 @@ proc main(epochs = 10, learnRate = 0.01, trainBatch = 500, testBatch = 1000, see
   )
   echo "optimizer: ", t.optim
   trainNetwork[uint8](t, train, test, epochs, plot=plot)
-  if output != "":
-    echo "saving test predictions to ", output
-    t.predict.write(output)
 
 dispatch main

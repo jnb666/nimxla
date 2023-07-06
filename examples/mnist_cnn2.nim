@@ -27,8 +27,9 @@ proc buildModel(c: Client, rng: var Rand, nclasses: int, mean, std: float32): Mo
   result.info = "== mnist_cnn2 =="
   result.add(conv1, conv2, linear1, linear2)  
 
-proc main(epochs = 30, learnRate = 0.001, wdecay = 1e-5, trainBatch = 200, testBatch = 1000, seed: int64 = 0,
-          augment = true, output = "", load = "", checkpoint = "data/mnist_cnn2", gpu = true, plot = false, debug = false) =
+
+proc main(epochs=30, learnRate=0.001, wdecay=1e-5, trainBatch=200, testBatch=1000, seed=0i64, augment=true,
+          load="", checkpoint="data/mnist_cnn2", gpu=true, plot=false, debug=false) =
   var logger = newConsoleLogger(levelThreshold=if debug: lvlDebug else: lvlInfo)
   addHandler(logger)
   # init client
@@ -66,9 +67,6 @@ proc main(epochs = 30, learnRate = 0.001, wdecay = 1e-5, trainBatch = 200, testB
   if load != "":
     t.loadCheckpoint(load)
   trainNetwork[uint8](t, train, test, epochs, plot, checkpoint)
-  if output != "":
-    echo "saving test predictions to ", output
-    t.predict.write(output)
   train.shutdown()
 
 dispatch main

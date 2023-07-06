@@ -330,7 +330,9 @@ proc compileTrain*(c: Client, m: Module, input: Node, lossFn: proc(y: Node): Nod
 
 
 proc format*(val: float): string =
-  result = formatFloat(val, precision=6)
+  var fmt = ffDefault
+  if abs(val) < 0.001: fmt = ffScientific
+  result = formatFloat(val, format=fmt, precision=3)
   result.trimZeros
 
 proc learningRate*(optim: Optimizer): float =

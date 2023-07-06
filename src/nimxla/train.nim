@@ -129,6 +129,13 @@ proc getAccuracy*[T: ElemType](t: var Trainer, loader: var Dataloader): (float, 
       t.heatmap[y, x] = t.heatmap[y, x] + 1
   return (accuracy, false)
 
+proc extractStream(z: var ZipArchive, filename: string): Stream =
+  debug "extract ", filename
+  var s = newStringStream()
+  z.extractFile(filename, s)
+  s.setPosition(0)
+  return s
+
 proc saveCheckpoint*(t: Trainer, basename: string) =
   ## Save checkpoint with model weights and optimizer state to file
   let filename = &"{basename}_{t.epoch}.npz"
@@ -136,16 +143,19 @@ proc saveCheckpoint*(t: Trainer, basename: string) =
   var z: ZipArchive
   if not z.open(filename, fmWrite):
     quit(&"error opening checkpoint file: {filename} for writing")
+  var s = newStringStream()
+  t.predict.write(s)
+  z.addFile("predict", s)
   var variables: seq[string]
   for name, v in t.model.variables:
     variables.add name
-    var s = newStringStream()
+    s = newStringStream()
     v.data.f32.write(s)
     z.addFile("model_" & name, s)
   var optimState: seq[string]
   for name, data in t.optim.state:
     optimState.add name
-    var s = newStringStream()
+    s = newStringStream()
     data.f32.write(s)
     z.addFile("optim_" & name, s)
   let optim = if t.sched == nil: $t.optim else: $t.sched
@@ -156,33 +166,33 @@ proc saveCheckpoint*(t: Trainer, basename: string) =
   z.close()
 
 proc loadCheckpoint*(t: var Trainer, filename: string) =
-  ## Read back checkpoint from zip file
+  ## Read back checkpoint from zip file. Trainer should have already been initialised.
   var z: ZipArchive
   if not z.open(filename, fmRead):
     quit(&"error opening checkpoint file: {filename} for reading")
   echo "reading checkpoint from ", filename
-  var s = newStringStream()
-  z.extractFile("metadata", s)
-  s.setPosition 0
-  let metadata = parseJson(s)
+  let metadata = parseJson(z.extractStream("metadata"))
   let d = metadata.to(MetaData)
   debug d.repr
+  t.predict = readTensor[int32](z.extractStream("predict"))
   for name in d.variables:
-    debug &"extract model_", name
-    var s = newStringStream()
-    z.extractFile("model_" & name, s)
-    s.setPosition 0
+    let s = z.extractStream("model_" & name)
     t.model.variables[name].data = t.client.newBuffer(readTensor[float32](s))
   for name in d.optimState:
-    debug &"extract optim_", name
-    var s = newStringStream()
-    z.extractFile("optim_" & name, s)
-    s.setPosition 0
+    let s = z.extractStream("optim_" & name)
     t.optim.state[name] = t.client.newBuffer(readTensor[float32](s))
   z.close()
   t.epoch = d.epoch
   t.stats = d.stats
   if t.sched != nil: t.sched.init(t.client, t.epoch)
+
+proc readCheckpointFile*(archiveFile, name: string): Stream =
+  ## Read named file from the checkpoint archive
+  var z: ZipArchive
+  if not z.open(archiveFile, fmRead):
+    quit(&"error opening checkpoint file: {archiveFile} for reading")
+  result = z.extractStream(name)
+  z.close()
 
 proc updateStats(t: var Trainer, entries: openarray[(string, float)]) =
   ## Append data to stats
@@ -227,9 +237,10 @@ proc format(d: Duration): string =
   if secs == 0:
     &"{dp[Milliseconds]}ms"
   elif secs < 60:
-    &"{dp[Seconds]}.{dp[Milliseconds]}s"
+    let fsecs = dp[Seconds].float + (dp[Milliseconds] div 10).float / 100
+    &"{fsecs:.2f}s"
   elif secs < 3600:
-    &"{dp[Minutes]}m:{dp[Seconds]}.{dp[Milliseconds]}s"
+    &"{dp[Minutes]}m:{dp[Seconds]}s"
   else:
     &"{secs div 3600}h:{dp[Minutes]}m:{dp[Seconds]}s"
 
@@ -244,7 +255,6 @@ proc trainNetwork*[T: ElemType](t: var Trainer, train, test: var DataLoader, epo
   let start = getMonoTime()
   var saved = 0
   while t.epoch < epochs:
-    t.epoch += 1
     let startEpoch = getMonoTime()
     let (loss, trainAcc, quitProg) = trainEpoch[T](t, train)
     if quitProg:
@@ -256,12 +266,15 @@ proc trainNetwork*[T: ElemType](t: var Trainer, train, test: var DataLoader, epo
     if quitProg2:
       echo "exit"
       break
+    t.epoch += 1
     t.updateStats({"epoch": t.epoch.float, "loss": loss, "train": trainAcc, "test": testAcc})
     if plot:
       updatePlot(ws, t.statsPlots(test.dataset.classes), getLayout(epochs))
     let elapsed = format(getMonoTime() - startEpoch)
-    echo &"epoch {t.epoch:3}:  loss: {loss:8.4f}  train accuracy: {trainAcc*100:.1f}%  test accuracy: {testAcc*100:.1f}%" &
-         &"  learnRate: {t.optim.learningRate.format}  elapsed: {elapsed}"
+    var logMsg = &"epoch {t.epoch:3}:  loss: {loss:8.4f}  train accuracy: {trainAcc*100:.1f}%  test accuracy: {testAcc*100:.1f}%  elapsed: {elapsed}"
+    if t.sched != nil:
+      logMsg.add &"  lr: {t.optim.learningRate.format}"
+    echo logMsg
     if checkpoint != "" and t.epoch mod saveEvery == 0:
       t.saveCheckpoint(checkpoint)
       saved = t.epoch

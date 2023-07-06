@@ -48,9 +48,8 @@ proc buildModel(c: Client, rng: var Rand, nclasses: int, mean, std: seq[float32]
   result.add(block1, block2, block3, linear)
 
 
-proc main(epochs = 80, learnRate = 0.001, trainBatch = 128, testBatch = 250, seed: int64 = 0,
-          augment = true, bfloat16 = false, output = "", load = "", checkpoint = "data/cifar10_6",
-          gpu = true, plot = false, debug = false) =
+proc main(epochs=80, learnRate=0.001, trainBatch=128, testBatch=250, seed=0i64, augment=true, 
+          bfloat16=false, load="", checkpoint="data/cifar10_6", gpu=true, plot=false, debug=false) =
   var logger = newConsoleLogger(levelThreshold=if debug: lvlDebug else: lvlInfo)
   addHandler(logger)
   # init client
@@ -89,9 +88,6 @@ proc main(epochs = 80, learnRate = 0.001, trainBatch = 128, testBatch = 250, see
   if load != "":
     t.loadCheckpoint(load)
   trainNetwork[uint8](t, train, test, epochs, plot, checkpoint)
-  if output != "":
-    echo "saving test predictions to ", output
-    t.predict.write(output)
   train.shutdown()
 
 dispatch main
