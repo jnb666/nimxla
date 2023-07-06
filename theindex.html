@@ -1050,10 +1050,10 @@ window.addEventListener('DOMContentLoaded', main);
 <dt><a name="plotImageGrid" href="#plotImageGrid"><span>plotImageGrid:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
           data-doc-search-tag="plots: plotImageGrid(title: string; rows, cols: int;
-              getData: proc (): (Tensor[uint8], seq[string])): (JsonNode,
-    JsonNode)" href="plots.html#plotImageGrid%2Cstring%2Cint%2Cint%2Cproc%29">plots: plotImageGrid(title: string; rows, cols: int;
-              getData: proc (): (Tensor[uint8], seq[string])): (JsonNode,
-    JsonNode)</a></li>
+              getData: proc (): (Tensor[uint8], seq[string], seq[bool])): (
+    JsonNode, JsonNode)" href="plots.html#plotImageGrid%2Cstring%2Cint%2Cint%2Cproc%29">plots: plotImageGrid(title: string; rows, cols: int;
+              getData: proc (): (Tensor[uint8], seq[string], seq[bool])): (
+    JsonNode, JsonNode)</a></li>
           </ul></dd>
 <dt><a name="pow" href="#pow"><span>pow:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
@@ -1092,6 +1092,10 @@ window.addEventListener('DOMContentLoaded', main);
           data-doc-search-tag="literal: rawPtr(lit: Literal): literal_t" href="literal.html#rawPtr%2CLiteral">literal: rawPtr(lit: Literal): literal_t</a></li>
           <li><a class="reference external"
           data-doc-search-tag="tensor: rawPtr[T: ElemType](t: Tensor[T]): ptr T" href="tensor.html#rawPtr%2CTensor%5BT%3A%20ElemType%5D">tensor: rawPtr[T: ElemType](t: Tensor[T]): ptr T</a></li>
+          </ul></dd>
+<dt><a name="readCheckpointFile" href="#readCheckpointFile"><span>readCheckpointFile:</span></a></dt><dd><ul class="simple">
+<li><a class="reference external"
+          data-doc-search-tag="train: readCheckpointFile(archiveFile, name: string): Stream" href="train.html#readCheckpointFile%2Cstring%2Cstring">train: readCheckpointFile(archiveFile, name: string): Stream</a></li>
           </ul></dd>
 <dt><a name="readTensor" href="#readTensor"><span>readTensor:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
@@ -1796,7 +1800,7 @@ window.addEventListener('DOMContentLoaded', main);
       <div class="twelve-columns footer">
         <span class="nim-sprite"></span>
         <br/>
-        <small style="color: var(--hint);">Made with Nim. Generated: 2023-07-06 09:13:43 UTC</small>
+        <small style="color: var(--hint);">Made with Nim. Generated: 2023-07-06 13:32:36 UTC</small>
       </div>
     </div>
   </div>

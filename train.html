@@ -147,6 +147,11 @@ window.addEventListener('DOMContentLoaded', main);
     title="loadCheckpoint(t: var Trainer; filename: string)">loadCheckpoint(t: var Trainer; filename: string)</a></li>
 
   </ul>
+  <ul class="simple nested-toc-section">readCheckpointFile
+      <li><a class="reference" href="#readCheckpointFile%2Cstring%2Cstring"
+    title="readCheckpointFile(archiveFile, name: string): Stream">readCheckpointFile(archiveFile, name: string): Stream</a></li>
+
+  </ul>
   <ul class="simple nested-toc-section">saveCheckpoint
       <li><a class="reference" href="#saveCheckpoint%2CTrainer%2Cstring"
     title="saveCheckpoint(t: Trainer; basename: string)">saveCheckpoint(t: Trainer; basename: string)</a></li>
@@ -278,39 +283,53 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/jnb666/nimxla/tree/main/src/nimxla/train.nim#L213"
+href="https://github.com/jnb666/nimxla/tree/main/src/nimxla/train.nim#L223"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/jnb666/nimxla/edit/devel/src/nimxla/train.nim#L213" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/jnb666/nimxla/edit/devel/src/nimxla/train.nim#L223" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
 <div id="loadCheckpoint,Trainer,string">
 <dt><pre><span class="Keyword">proc</span> <a href="#loadCheckpoint%2CTrainer%2Cstring"><span class="Identifier">loadCheckpoint</span></a><span class="Other">(</span><span class="Identifier">t</span><span class="Other">:</span> <span class="Keyword">var</span> <a href="train.html#Trainer"><span class="Identifier">Trainer</span></a><span class="Other">;</span> <span class="Identifier">filename</span><span class="Other">:</span> <span class="Identifier">string</span><span class="Other">)</span> {.<span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Identifier">OSError</span><span class="Other">,</span>
-    <span class="Identifier">ValueError</span><span class="Other">,</span> <span class="Identifier">IOError</span><span class="Other">,</span> <span class="Identifier">Exception</span><span class="Other">,</span> <span class="Identifier">JsonParsingError</span><span class="Other">,</span> <span class="Identifier">KeyError</span><span class="Other">,</span> <span class="Identifier">JsonKindError</span><span class="Other">,</span>
+    <span class="Identifier">ValueError</span><span class="Other">,</span> <span class="Identifier">IOError</span><span class="Other">,</span> <span class="Identifier">JsonParsingError</span><span class="Other">,</span> <span class="Identifier">Exception</span><span class="Other">,</span> <span class="Identifier">KeyError</span><span class="Other">,</span> <span class="Identifier">JsonKindError</span><span class="Other">,</span>
     <span class="Identifier">XLAError</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Identifier">ReadDirEffect</span><span class="Other">,</span> <span class="Identifier">WriteDirEffect</span><span class="Other">,</span> <span class="Identifier">ReadIOEffect</span><span class="Other">,</span>
                       <span class="Identifier">WriteIOEffect</span><span class="Other">,</span> <span class="Identifier">RootEffect</span><span class="Other">]</span></span>.}</pre></dt>
 <dd>
 
-Read back checkpoint from zip file
+Read back checkpoint from zip file. Trainer should have already been initialised.
 &nbsp;&nbsp;<a
-href="https://github.com/jnb666/nimxla/tree/main/src/nimxla/train.nim#L158"
+href="https://github.com/jnb666/nimxla/tree/main/src/nimxla/train.nim#L168"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/jnb666/nimxla/edit/devel/src/nimxla/train.nim#L158" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/jnb666/nimxla/edit/devel/src/nimxla/train.nim#L168" class="link-seesrc" target="_blank" >Edit</a>
+
+</dd>
+</div>
+<div id="readCheckpointFile,string,string">
+<dt><pre><span class="Keyword">proc</span> <a href="#readCheckpointFile%2Cstring%2Cstring"><span class="Identifier">readCheckpointFile</span></a><span class="Other">(</span><span class="Identifier">archiveFile</span><span class="Other">,</span> <span class="Identifier">name</span><span class="Other">:</span> <span class="Identifier">string</span><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">Stream</span> {.
+    <span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Identifier">OSError</span><span class="Other">,</span> <span class="Identifier">ValueError</span><span class="Other">,</span> <span class="Identifier">Exception</span><span class="Other">,</span> <span class="Identifier">IOError</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Identifier">ReadDirEffect</span><span class="Other">,</span>
+    <span class="Identifier">WriteDirEffect</span><span class="Other">,</span> <span class="Identifier">RootEffect</span><span class="Other">,</span> <span class="Identifier">ReadIOEffect</span><span class="Other">,</span> <span class="Identifier">WriteIOEffect</span><span class="Other">]</span></span>.}</pre></dt>
+<dd>
+
+Read named file from the checkpoint archive
+&nbsp;&nbsp;<a
+href="https://github.com/jnb666/nimxla/tree/main/src/nimxla/train.nim#L189"
+class="link-seesrc" target="_blank">Source</a>
+&nbsp;&nbsp;<a href="https://github.com/jnb666/nimxla/edit/devel/src/nimxla/train.nim#L189" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
 <div id="saveCheckpoint,Trainer,string">
 <dt><pre><span class="Keyword">proc</span> <a href="#saveCheckpoint%2CTrainer%2Cstring"><span class="Identifier">saveCheckpoint</span></a><span class="Other">(</span><span class="Identifier">t</span><span class="Other">:</span> <a href="train.html#Trainer"><span class="Identifier">Trainer</span></a><span class="Other">;</span> <span class="Identifier">basename</span><span class="Other">:</span> <span class="Identifier">string</span><span class="Other">)</span> {.
-    <span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Identifier">ValueError</span><span class="Other">,</span> <span class="Identifier">OSError</span><span class="Other">,</span> <span class="Identifier">IOError</span><span class="Other">,</span> <span class="Identifier">XLAError</span><span class="Other">,</span> <span class="Identifier">Exception</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span>
+    <span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Identifier">ValueError</span><span class="Other">,</span> <span class="Identifier">OSError</span><span class="Other">,</span> <span class="Identifier">IOError</span><span class="Other">,</span> <span class="Identifier">Exception</span><span class="Other">,</span> <span class="Identifier">XLAError</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span>
     <span class="Identifier">ReadDirEffect</span><span class="Other">,</span> <span class="Identifier">WriteDirEffect</span><span class="Other">,</span> <span class="Identifier">WriteIOEffect</span><span class="Other">,</span> <span class="Identifier">ReadIOEffect</span><span class="Other">,</span> <span class="Identifier">TimeEffect</span><span class="Other">,</span>
     <span class="Identifier">RootEffect</span><span class="Other">]</span></span>.}</pre></dt>
 <dd>
 
 Save checkpoint with model weights and optimizer state to file
 &nbsp;&nbsp;<a
-href="https://github.com/jnb666/nimxla/tree/main/src/nimxla/train.nim#L132"
+href="https://github.com/jnb666/nimxla/tree/main/src/nimxla/train.nim#L139"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/jnb666/nimxla/edit/devel/src/nimxla/train.nim#L132" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/jnb666/nimxla/edit/devel/src/nimxla/train.nim#L139" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -321,9 +340,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 Convert stats to format used by plots package
 &nbsp;&nbsp;<a
-href="https://github.com/jnb666/nimxla/tree/main/src/nimxla/train.nim#L195"
+href="https://github.com/jnb666/nimxla/tree/main/src/nimxla/train.nim#L205"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/jnb666/nimxla/edit/devel/src/nimxla/train.nim#L195" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/jnb666/nimxla/edit/devel/src/nimxla/train.nim#L205" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -375,9 +394,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 Training run for given number of epochs. If transform is set it will be applied to each batch of training data. If checkpoint is set then a checkpoint file is written using this prefix
 &nbsp;&nbsp;<a
-href="https://github.com/jnb666/nimxla/tree/main/src/nimxla/train.nim#L237"
+href="https://github.com/jnb666/nimxla/tree/main/src/nimxla/train.nim#L248"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/jnb666/nimxla/edit/devel/src/nimxla/train.nim#L237" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/jnb666/nimxla/edit/devel/src/nimxla/train.nim#L248" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -391,7 +410,7 @@ class="link-seesrc" target="_blank">Source</a>
       <div class="twelve-columns footer">
         <span class="nim-sprite"></span>
         <br/>
-        <small style="color: var(--hint);">Made with Nim. Generated: 2023-07-06 09:13:14 UTC</small>
+        <small style="color: var(--hint);">Made with Nim. Generated: 2023-07-06 13:32:08 UTC</small>
       </div>
     </div>
   </div>

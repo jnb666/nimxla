@@ -125,10 +125,10 @@ window.addEventListener('DOMContentLoaded', main);
   <ul class="simple nested-toc-section">plotImageGrid
       <li><a class="reference" href="#plotImageGrid%2Cstring%2Cint%2Cint%2Cproc%29"
     title="plotImageGrid(title: string; rows, cols: int;
-              getData: proc (): (Tensor[uint8], seq[string])): (JsonNode,
-    JsonNode)">plotImageGrid(title: string; rows, cols: int;
-              getData: proc (): (Tensor[uint8], seq[string])): (JsonNode,
-    JsonNode)</a></li>
+              getData: proc (): (Tensor[uint8], seq[string], seq[bool])): (
+    JsonNode, JsonNode)">plotImageGrid(title: string; rows, cols: int;
+              getData: proc (): (Tensor[uint8], seq[string], seq[bool])): (
+    JsonNode, JsonNode)</a></li>
 
   </ul>
   <ul class="simple nested-toc-section">servePlots
@@ -186,9 +186,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 Blocking open to get client websocket. Will start nimxla_plot server in the background if not already running.
 &nbsp;&nbsp;<a
-href="https://github.com/jnb666/nimxla/tree/main/src/nimxla/plots.nim#L119"
+href="https://github.com/jnb666/nimxla/tree/main/src/nimxla/plots.nim#L120"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/jnb666/nimxla/edit/devel/src/nimxla/plots.nim#L119" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/jnb666/nimxla/edit/devel/src/nimxla/plots.nim#L120" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -199,23 +199,23 @@ class="link-seesrc" target="_blank">Source</a>
 
 Convert data from a uint8 tensor in [H, W, C] layout to a plotly image. number of channels should be either 1 for greyscale or 3 or RGB image data.
 &nbsp;&nbsp;<a
-href="https://github.com/jnb666/nimxla/tree/main/src/nimxla/plots.nim#L62"
+href="https://github.com/jnb666/nimxla/tree/main/src/nimxla/plots.nim#L63"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/jnb666/nimxla/edit/devel/src/nimxla/plots.nim#L62" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/jnb666/nimxla/edit/devel/src/nimxla/plots.nim#L63" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
 <div id="plotImageGrid,string,int,int,proc)">
 <dt><pre><span class="Keyword">proc</span> <a href="#plotImageGrid%2Cstring%2Cint%2Cint%2Cproc%29"><span class="Identifier">plotImageGrid</span></a><span class="Other">(</span><span class="Identifier">title</span><span class="Other">:</span> <span class="Identifier">string</span><span class="Other">;</span> <span class="Identifier">rows</span><span class="Other">,</span> <span class="Identifier">cols</span><span class="Other">:</span> <span class="Identifier">int</span><span class="Other">;</span>
-                   <span class="Identifier">getData</span><span class="Other">:</span> <span class="Keyword">proc</span> <span class="Other">(</span><span class="Other">)</span><span class="Other">:</span> <span class="Other">(</span><a href="tensor.html#Tensor"><span class="Identifier">Tensor</span></a><span class="Other">[</span><span class="Identifier">uint8</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">seq</span><span class="Other">[</span><span class="Identifier">string</span><span class="Other">]</span><span class="Other">)</span><span class="Other">)</span><span class="Other">:</span> <span class="Other">(</span><span class="Identifier">JsonNode</span><span class="Other">,</span>
-    <span class="Identifier">JsonNode</span><span class="Other">)</span> {.<span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Identifier">ValueError</span><span class="Other">,</span> <span class="Identifier">KeyError</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span>.}</pre></dt>
+                   <span class="Identifier">getData</span><span class="Other">:</span> <span class="Keyword">proc</span> <span class="Other">(</span><span class="Other">)</span><span class="Other">:</span> <span class="Other">(</span><a href="tensor.html#Tensor"><span class="Identifier">Tensor</span></a><span class="Other">[</span><span class="Identifier">uint8</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">seq</span><span class="Other">[</span><span class="Identifier">string</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">seq</span><span class="Other">[</span><span class="Identifier">bool</span><span class="Other">]</span><span class="Other">)</span><span class="Other">)</span><span class="Other">:</span> <span class="Other">(</span>
+    <span class="Identifier">JsonNode</span><span class="Other">,</span> <span class="Identifier">JsonNode</span><span class="Other">)</span> {.<span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Identifier">ValueError</span><span class="Other">,</span> <span class="Identifier">KeyError</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span>.}</pre></dt>
 <dd>
 
 Plot grid of images and returns data and loyout Json objects for input to plotly. getData callBack function recieves should return a [N,H,W,C] 4d tensor with the images for this page - i.e. <tt class="docutils literal"><span class="pre"><span class="Identifier">t</span><span class="Operator">.</span><span class="Identifier">at</span><span class="Punctuation">(</span><span class="Identifier">row</span><span class="Operator">*</span><span class="Identifier">cols</span> <span class="Operator">+</span> <span class="Identifier">col</span><span class="Punctuation">)</span></span></tt> returns a [H,W,C] grayscale (C=0) or RGB (C=0,1,2) image. and an optional sequence of labels for each image indexed in the same way.
 &nbsp;&nbsp;<a
-href="https://github.com/jnb666/nimxla/tree/main/src/nimxla/plots.nim#L85"
+href="https://github.com/jnb666/nimxla/tree/main/src/nimxla/plots.nim#L86"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/jnb666/nimxla/edit/devel/src/nimxla/plots.nim#L85" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/jnb666/nimxla/edit/devel/src/nimxla/plots.nim#L86" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -226,9 +226,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 Start async http server, serve plot using plotly on localhost and open the default browser on this page.
 &nbsp;&nbsp;<a
-href="https://github.com/jnb666/nimxla/tree/main/src/nimxla/plots.nim#L154"
+href="https://github.com/jnb666/nimxla/tree/main/src/nimxla/plots.nim#L155"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/jnb666/nimxla/edit/devel/src/nimxla/plots.nim#L154" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/jnb666/nimxla/edit/devel/src/nimxla/plots.nim#L155" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -240,9 +240,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 Send message to websocket server to update the plot.
 &nbsp;&nbsp;<a
-href="https://github.com/jnb666/nimxla/tree/main/src/nimxla/plots.nim#L146"
+href="https://github.com/jnb666/nimxla/tree/main/src/nimxla/plots.nim#L147"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/jnb666/nimxla/edit/devel/src/nimxla/plots.nim#L146" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/jnb666/nimxla/edit/devel/src/nimxla/plots.nim#L147" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -256,7 +256,7 @@ class="link-seesrc" target="_blank">Source</a>
       <div class="twelve-columns footer">
         <span class="nim-sprite"></span>
         <br/>
-        <small style="color: var(--hint);">Made with Nim. Generated: 2023-07-06 09:12:47 UTC</small>
+        <small style="color: var(--hint);">Made with Nim. Generated: 2023-07-06 13:31:41 UTC</small>
       </div>
     </div>
   </div>
