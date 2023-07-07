@@ -453,7 +453,7 @@ window.addEventListener('DOMContentLoaded', main);
           </ul></dd>
 <dt><a name="crossEntropyLoss" href="#crossEntropyLoss"><span>crossEntropyLoss:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
-          data-doc-search-tag="nn: crossEntropyLoss(pred, target: Node): Node" href="nn.html#crossEntropyLoss%2CNode%2CNode">nn: crossEntropyLoss(pred, target: Node): Node</a></li>
+          data-doc-search-tag="graph: crossEntropyLoss(pred, target: Node): Node" href="graph.html#crossEntropyLoss%2CNode%2CNode">graph: crossEntropyLoss(pred, target: Node): Node</a></li>
           </ul></dd>
 <dt><a name="DataLoader" href="#DataLoader"><span>DataLoader:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
@@ -867,7 +867,7 @@ window.addEventListener('DOMContentLoaded', main);
           </ul></dd>
 <dt><a name="mseLoss" href="#mseLoss"><span>mseLoss:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
-          data-doc-search-tag="nn: mseLoss(pred, target: Node): Node" href="nn.html#mseLoss%2CNode%2CNode">nn: mseLoss(pred, target: Node): Node</a></li>
+          data-doc-search-tag="graph: mseLoss(pred, target: Node): Node" href="graph.html#mseLoss%2CNode%2CNode">graph: mseLoss(pred, target: Node): Node</a></li>
           </ul></dd>
 <dt><a name="name" href="#name"><span>name:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
@@ -950,6 +950,10 @@ window.addEventListener('DOMContentLoaded', main);
 <dt><a name="one" href="#one"><span>one:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
           data-doc-search-tag="graph: one(b: Builder; dtype = F32; dims: openArray[int] = []): Node" href="graph.html#one%2CBuilder%2Cenum">graph: one(b: Builder; dtype = F32; dims: openArray[int] = []): Node</a></li>
+          </ul></dd>
+<dt><a name="oneHot" href="#oneHot"><span>oneHot:</span></a></dt><dd><ul class="simple">
+<li><a class="reference external"
+          data-doc-search-tag="graph: oneHot(x: Node; classes: int; dtype: DataType): Node" href="graph.html#oneHot%2CNode%2Cint%2CDataType">graph: oneHot(x: Node; classes: int; dtype: DataType): Node</a></li>
           </ul></dd>
 <dt><a name="OpaqueType" href="#OpaqueType"><span>OpaqueType:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
@@ -1280,10 +1284,6 @@ window.addEventListener('DOMContentLoaded', main);
 <dt><a name="sin" href="#sin"><span>sin:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
           data-doc-search-tag="graph: sin(a: Node): Node" href="graph.html#sin%2CNode">graph: sin(a: Node): Node</a></li>
-          </ul></dd>
-<dt><a name="softmax" href="#softmax"><span>softmax:</span></a></dt><dd><ul class="simple">
-<li><a class="reference external"
-          data-doc-search-tag="nn: softmax(a: Node; axis = -1): Node" href="nn.html#softmax%2CNode%2Cint">nn: softmax(a: Node; axis = -1): Node</a></li>
           </ul></dd>
 <dt><a name="sqrt" href="#sqrt"><span>sqrt:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
@@ -1675,6 +1675,10 @@ window.addEventListener('DOMContentLoaded', main);
 <li><a class="reference external"
           data-doc-search-tag="OpType.tSin" href="graph.html#tSin">OpType.tSin</a></li>
           </ul></dd>
+<dt><a name="tSoftmax" href="#tSoftmax"><span>tSoftmax:</span></a></dt><dd><ul class="simple">
+<li><a class="reference external"
+          data-doc-search-tag="OpType.tSoftmax" href="graph.html#tSoftmax">OpType.tSoftmax</a></li>
+          </ul></dd>
 <dt><a name="tSqrt" href="#tSqrt"><span>tSqrt:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
           data-doc-search-tag="OpType.tSqrt" href="graph.html#tSqrt">OpType.tSqrt</a></li>
@@ -1802,7 +1806,7 @@ window.addEventListener('DOMContentLoaded', main);
       <div class="twelve-columns footer">
         <span class="nim-sprite"></span>
         <br/>
-        <small style="color: var(--hint);">Made with Nim. Generated: 2023-07-07 15:33:47 UTC</small>
+        <small style="color: var(--hint);">Made with Nim. Generated: 2023-07-07 19:51:53 UTC</small>
       </div>
     </div>
   </div>

@@ -41,6 +41,7 @@ tReduceMin	graph.html#tReduceMin	OpType.tReduceMin
 tReduceMax	graph.html#tReduceMax	OpType.tReduceMax	
 tArgmin	graph.html#tArgmin	OpType.tArgmin	
 tArgmax	graph.html#tArgmax	OpType.tArgmax	
+tSoftmax	graph.html#tSoftmax	OpType.tSoftmax	
 tAdd	graph.html#tAdd	OpType.tAdd	
 tSub	graph.html#tSub	OpType.tSub	
 tMul	graph.html#tMul	OpType.tMul	
@@ -190,6 +191,9 @@ max	graph.html#max,Node,openArray[int]	graph: max(a: Node; dims: openArray[int] 
 max	graph.html#max,Node,int	graph: max(a: Node; axis: int; keepDims = false): Node	
 argMax	graph.html#argMax,Node,int,bool,enum	graph: argMax(a: Node; axis: int; keepDims = false; ixType = I64): Node	
 argMin	graph.html#argMin,Node,int,bool,enum	graph: argMin(a: Node; axis: int; keepDims = false; ixType = I64): Node	
+oneHot	graph.html#oneHot,Node,int,DataType	graph: oneHot(x: Node; classes: int; dtype: DataType): Node	
+mseLoss	graph.html#mseLoss,Node,Node	graph: mseLoss(pred, target: Node): Node	
+crossEntropyLoss	graph.html#crossEntropyLoss,Node,Node	graph: crossEntropyLoss(pred, target: Node): Node	
 reduceWindow	graph.html#reduceWindow,Node,Node,Computation,openArray[int],openArray[int],openArray[Padding]	graph: reduceWindow(a, initValue: Node; comp: Computation;\n             windowDims, strides: openArray[int];\n             padding: openArray[Padding] = []; nodeType = tReduceWindow): Node	
 maxPool1d	graph.html#maxPool1d,Node,int,int	graph: maxPool1d(a: Node; kernelSize: int; strides = 0; padding = pad(0);\n          channelsFirst = false): Node	
 maxPool2d	graph.html#maxPool2d,Node,Opt2d,Opt2d,Pad2d	graph: maxPool2d(a: Node; kernelSize: Opt2d; strides: Opt2d = 0;\n          padding: Pad2d = pad(0); channelsFirst = false): Node	

@@ -25,9 +25,6 @@ gradNames	nn.html#gradNames,Module	nn: gradNames(m: Module): seq[string]
 getParams	nn.html#getParams,Module,Params	nn: getParams(m: Module; params: var Params)	
 setParams	nn.html#setParams,Module,Params	nn: setParams(m: var Module; params: Params)	
 update	nn.html#update,Module,Params	nn: update(m: var Module; params: Params)	
-mseLoss	nn.html#mseLoss,Node,Node	nn: mseLoss(pred, target: Node): Node	
-crossEntropyLoss	nn.html#crossEntropyLoss,Node,Node	nn: crossEntropyLoss(pred, target: Node): Node	
-softmax	nn.html#softmax,Node,int	nn: softmax(a: Node; axis = -1): Node	
 dropout	nn.html#dropout,Node,float,bool	nn: dropout(a: Node; ratio: float; training: bool; normalize = true): Node	
 initLinear	nn.html#initLinear,Client,Rand,string,int,int	nn: initLinear(c: Client; rng: var Rand; id: string; nin, nout: int;\n           weights = heInit(); biases = constantInit(0.0); dtype = F32): Module	
 initConv2d	nn.html#initConv2d,Client,Rand,string,int,int,Opt2d,Opt2d,Pad2d,Opt2d,int	nn: initConv2d(c: Client; rng: var Rand; id: string; inChannels, outChannels: int;\n           kernelSize: Opt2d; strides: Opt2d = 1; padding: Pad2d = pad(0);\n           dilation: Opt2d = 1; groups = 1; weights = heInit();\n           biases = constantInit(0.0); dtype = F32): Module	
