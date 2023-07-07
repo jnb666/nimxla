@@ -2,7 +2,6 @@
 
 import std/[strutils, strformat, sequtils, logging, random, math, os, parsecsv]
 import nimxla
-import nimxla/nn
 import cligen
 
 setPrintOpts(precision=4, minWidth=10, floatMode=ffDecimal, threshold=100, edgeItems=5)
@@ -53,7 +52,7 @@ proc model(c: Client, batch, nin, nout: int): Executable =
   let input = b.parameter(F32, [batch, nin], "x")
   let weights = b.parameter(F32, [nin, nout], "w")
   let labels = b.parameter(I64, [batch], "y")
-  let output = dot(input, weights).softmax(axis=1)
+  let output = dot(input, weights)
   let loss = crossEntropyLoss(output, labels)
   debug "forward graph: ", loss.toString
   let grad = b.gradient(loss, ["w"])[0]

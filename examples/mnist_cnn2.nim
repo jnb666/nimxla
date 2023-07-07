@@ -23,7 +23,7 @@ proc buildModel(c: Client, rng: var Rand, nclasses: int, mean, std: float32): Mo
     let l1 = conv1.forward(xs, training, output).maxPool2d(2)
     let l2 = conv2.forward(l1, training, output).maxPool2d(2)
     let l3 = linear1.forward(l2.flatten(1), training, output).relu.dropout(0.5, training)
-    linear2.forward(l3, training, output).softmax
+    linear2.forward(l3, training, output)
   result.info = "== mnist_cnn2 =="
   result.add(conv1, conv2, linear1, linear2)  
 

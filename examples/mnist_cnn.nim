@@ -21,7 +21,7 @@ proc buildModel(c: Client, rng: var Rand, nclasses: int): Module =
     let l1 = conv1.forward(xf, training, output).relu.maxPool2d(2)
     let l2 = conv2.forward(l1, training, output).relu.maxPool2d(2)
     let l3 = linear1.forward(l2.flatten(1), training, output).relu
-    linear2.forward(l3, training, output).softmax
+    linear2.forward(l3, training, output)
   result.info = "== mnist_cnn =="
   result.add(conv1, conv2, linear1, linear2)  
 

@@ -17,7 +17,7 @@ proc buildModel(c: Client, rng: var Rand, imgSize, nclasses: int): Module =
     let b = x.builder
     let xf = x.convert(F32) / b^255f32
     let l1 = layer1.forward(xf.flatten(1), training, output).relu
-    layer2.forward(l1, training, output).softmax
+    layer2.forward(l1, training, output)
   result.info = "== mnist_mlp =="
   result.add(layer1, layer2)
 

@@ -36,10 +36,11 @@ type
     tReshape, tBroadcast, tBroadcastInDim, tCollapse,           ## ..
     tTranspose, tNarrow, tConvert, tReverse, tMaxPool, tSumPool,## ..
     tReduceSum, tReduceMin, tReduceMax, tArgmin, tArgmax,       ## ..
+    tSoftmax,                                                   ## ..
     tAdd, tSub, tMul, tDiv, tRem, tMax, tMin, tPow, tDot,       ## 2 arg ops
     tAnd, tOr, tEq, tNe, tGe, tGt, tLe, tLt, tRngUniform,       ## ..
     tRngNormal, tReduce, tGather, tConv, tReduceWindow,         ## ..
-    tSelectAndScatter, tPad                                     ## ..
+    tSelectAndScatter, tPad,                                    ## ..
     tSelect, tClamp, tTuple, tConcat, tScatter,                 ## 3 or more arg ops
     tBatchNormInference, tBatchNormTraining, tBatchNormGrad     ## ..
 
@@ -95,6 +96,8 @@ type
     of tBatchNormInference, tBatchNormTraining, tBatchNormGrad:
       epsilon:  float32
       axis:     int
+    of tSoftmax:
+      yOneHot:  Node
     else:
       discard
     info:   string
@@ -932,6 +935,42 @@ argMinMax(argMax, `>=`, minValue, tArgmax)
 argMinMax(argMin, `<=`, maxValue, tArgmin)
 
 
+proc oneHot*(x: Node, classes: int, dtype: DataType): Node =
+  ## Convert a vector into a 2d [x.len, classes] array of type dtype
+  ## where result[i, x[i]] = 1 and other values are zero.
+  if x.rank != 1:
+    raiseError(&"oneHot: x should be 1d vector - got {x.dims}", x)
+  let lhs = x.reshape(x.dims[0], 1)
+  let rhs = x.builder.iota(x.dtype, [x.dims[0], classes], 1)
+  return (lhs == rhs).convert(dtype)
+
+proc mseLoss*(pred, target: Node): Node =
+  ## Mean square error loss function.
+  let n = pred.builder.constant(math.prod(pred.dims), pred.dtype)
+  sum((pred - target) * (pred - target)) / n
+
+proc crossEntropyLoss*(pred, target: Node): Node =
+  ## Mean cross entropy loss function calculated from softmax output.
+  ## Pred should be predicted values with shape [n, classes] while target is a
+  ## 1d integer vector of labels each in range 0..classes.
+  ## Note that the softmax function is applied to pred as part of this function
+  ## to optimise the gradient calculation.
+  if pred.rank != 2:
+    raiseError(&"crossEntropy: pred should be 2d array - got {pred.dims}", pred)
+  if target.rank != 1:
+    raiseError(&"crossEntropy: target should be 1d vector - got {target.dims}", target)
+  let exp_a = exp(pred - pred.max([1], keepDims=true))
+  var softmax = exp_a / exp_a.sum([1], keepDims=true)
+  softmax.kind = tSoftmax
+  softmax.args = @[pred]
+  softmax.yOneHot = oneHot(target, pred.dims[1], pred.dtype)
+  let b = pred.builder
+  let shape = [target.dims[0], 1]
+  let indices = concat(b.iota(target.dtype, shape, axis=0), [target.reshape(shape)], axis=1)
+  let nitems = b.constant(target.dims[0], pred.dtype)
+  -sum(log(gather(softmax, indices.reshape(-1, 1, 2)))) / nitems
+
+
 proc poolDims(val: openarray[int], channelsFirst: bool): seq[int] =
   if channelsFirst:
     @[1, 1] & @val
@@ -1223,10 +1262,12 @@ proc localGrad(b: Builder, n, v: Node): seq[Node] =
     return @[ selectAndScatter(x, v, n.wdims, n.wstride, n.wpad) ]
   of tSumPool:
     return @[ b.sumPoolGrad(x, v, n.wdims, n.wstride, n.wpad) ]
+  of tCopy:
+    return @[ v ]
   of tNeg:
     return @[ -v ]
   of tExp:
-    return @[ v*n ]
+    return @[ v * n ]
   of tLog:
     return @[ v / x ]
   of tLog1p:
@@ -1263,6 +1304,8 @@ proc localGrad(b: Builder, n, v: Node): seq[Node] =
   of tBatchNormTraining:
     let grads = batchNormGrad(x, y, n[1], n[2], v, n.epsilon, n.axis)
     return @[ grads[0], grads[1], grads[2] ]
+  of tSoftmax:
+    return @[ (n - n.yOneHot) / b.constant(n.dims[0], n.dtype) ]
   else:
     raiseError("Node type not supported for autograd", n)
 

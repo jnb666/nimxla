@@ -26,7 +26,7 @@ proc buildModel(c: Client, rng: var Rand, nclasses: int, mean, std: seq[float32]
     let l3 = conv3.forward(l2, training, output).relu
     let l4 = conv4.forward(l3, training, output).relu.maxPool2d(2).dropout(0.25, training)
     let l5 = linear1.forward(l4.flatten(1), training, output).relu.dropout(0.5, training)
-    linear2.forward(l5, training, output).softmax
+    linear2.forward(l5, training, output)
   result.info = "== cifar10_4 =="
   result.add(conv1, conv2, conv3, conv4, linear1, linear2)  
 

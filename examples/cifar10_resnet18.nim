@@ -1,4 +1,4 @@
-# CIFAR10 VGG convolutional net model
+# CIFAR10 Resnet 18 convolutional net model
 # params to the main proc can be set via cmd line argmuments
 # output option will save predicted test labels to a file which can be read by imgview
 
@@ -10,36 +10,40 @@ import cligen
 
 setPrintOpts(precision=4, minWidth=8, floatMode=ffDecimal, threshold=100, edgeItems=5)
 
+let defn = @[(64, 64, 1),   (64, 64, 1),   (64, 128, 2),  (128, 128, 1),
+             (128, 256, 2), (256, 256, 1), (256, 512, 2), (512, 512, 1)]
 
-proc layer(c: Client, rng: var Rand, id: string, nin, nout: int, dtype: DataType): Module =
-  let conv = c.initConv2d(rng, id & ".1", nin, nout, kernelSize=3, padding=pad(1), biases=nil, dtype=dtype)
-  let norm = c.initBatchNorm(rng, id & ".2", nout, dtype=dtype)
-  result.add(conv, norm)
-  result.forward = proc(x: Node, training: bool, output: var Outputs): Node =
-    let l1 = conv.forward(x, training, output)
-    norm.forward(l1, training, output).relu
-
-proc stack(c: Client, rng: var Rand, id: string, n, nin, nout: int, dtype: DataType): Module =
-  var layers: seq[Module]
-  for i in 1..n:
-    layers.add c.layer(rng, id & "." & $i, if i == 1: nin else: nout, nout, dtype)
-  result.add layers
-  result.forward = proc(x: Node, training: bool, output: var Outputs): Node =
-    var xv = x
-    for l in layers:
-      xv = l.forward(xv, training, output)
-    xv.maxPool2d(2)
+proc makeBlock(c: Client, rng: var Rand, id: string, nin, nout, strides: int, dtype: DataType): Module =
+  let conv1 = c.initConv2d(rng, id & ".1", nin, nout, kernelSize=3, strides=strides, padding=pad(1), biases=nil, dtype=dtype)
+  let norm1 = c.initBatchNorm(rng, id & ".2", nout, dtype=dtype)
+  let conv2 = c.initConv2d(rng, id & ".3", nout, nout, kernelSize=3, padding=pad(1), biases=nil, dtype=dtype)
+  let norm2 = c.initBatchNorm(rng, id & ".4", nout, dtype=dtype)
+  result.add(conv1, norm1, conv2, norm2)
+  if strides == 1:
+    result.forward = proc(x: Node, training: bool, output: var Outputs): Node =
+      let l1 = norm1.forward(conv1.forward(x, training, output), training, output).relu
+      let l2 = norm2.forward(conv2.forward(l1, training, output), training, output)
+      (l2 + x).relu
+  else:
+    let conv3 = c.initConv2d(rng, id & ".5", nin, nout, kernelSize=1, strides=strides, biases=nil, dtype=dtype)
+    let norm3 = c.initBatchNorm(rng, id & ".6", nout, dtype=dtype)
+    result.add(conv3, norm3)
+    result.forward = proc(x: Node, training: bool, output: var Outputs): Node =
+      let l1 = norm1.forward(conv1.forward(x, training, output), training, output).relu
+      let l2 = norm2.forward(conv2.forward(l1, training, output), training, output)
+      let l3 = norm3.forward(conv3.forward(x, training, output), training, output)
+      (l2 + l3).relu
 
 proc buildModel(c: Client, rng: var Rand, nclasses: int, mean, std: seq[float32], dtype: DataType): Module =
-  result.info = "== cifar10_vgg =="
+  result.info = "== cifar10_resnet18 =="
+  let conv = c.initConv2d(rng, "1.1", 3, 64, kernelSize=3, padding=pad(1), biases=nil, dtype=dtype)
+  let norm = c.initBatchNorm(rng, "1.2", 64, dtype=dtype)
+  result.add(conv, norm)
   var blocks: seq[Module]
-  blocks.add c.stack(rng, "1", 2, 3, 64, dtype)
-  blocks.add c.stack(rng, "2", 2, 64, 128, dtype)
-  blocks.add c.stack(rng, "3", 3, 128, 256, dtype)
-  blocks.add c.stack(rng, "4", 3, 256, 512, dtype)
-  blocks.add c.stack(rng, "5", 3, 512, 512, dtype)
+  for i, (nin, nout, strides) in defn:
+    blocks.add c.makeBlock(rng, $(i+2), nin, nout, strides, dtype)
   result.add blocks
-  let linear = c.initLinear(rng, "6", 512, nclasses)
+  let linear = c.initLinear(rng, "10", 512, nclasses)
   result.add linear
 
   result.forward = proc(x: Node, training: bool, output: var Outputs): Node =
@@ -48,13 +52,14 @@ proc buildModel(c: Client, rng: var Rand, nclasses: int, mean, std: seq[float32]
     let mean = (b^mean).convert(dtype).reshape(1, 1, 1, 3)
     let std = (b^std).convert(dtype).reshape(1, 1, 1, 3)
     var xs = (xf - mean) / std
+    xs = norm.forward(conv.forward(xs, training, output), training, output).relu
     for b in blocks:
       xs = b.forward(xs, training, output)
-    linear.forward(xs.flatten(1).convert(F32), training, output)
+    linear.forward(xs.avgPool2d(4).flatten(1).convert(F32), training, output)
 
 
-proc main(epochs=100, learnRate=0.01, wdecay=0.005, trainBatch=128, testBatch=250, seed=0i64, augment=true,
-          bfloat16=true, load="", checkpoint="data/cifar10_vgg", gpu=true, plot=false, debug=false) =
+proc main(epochs=150, learnRate=0.02, wdecay=0.001, trainBatch=128, testBatch=250, seed=0i64, augment=true,
+          bfloat16=true, load="", checkpoint="data/cifar10_res18", gpu=true, plot=false, debug=false) =
   var logger = newConsoleLogger(levelThreshold=if debug: lvlDebug else: lvlInfo)
   addHandler(logger)
   # init client

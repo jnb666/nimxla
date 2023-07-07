@@ -42,7 +42,7 @@ proc buildModel(c: Client, rng: var Rand, nclasses: int, mean, std: seq[float32]
     let l1 = block1.forward(xs, training, output)
     let l2 = block2.forward(l1, training, output)
     let l3 = block3.forward(l2, training, output)
-    linear.forward(l3.flatten(1).convert(F32), training, output).softmax
+    linear.forward(l3.flatten(1).convert(F32), training, output)
 
   result.info = "== cifar10_6 =="
   result.add(block1, block2, block3, linear)

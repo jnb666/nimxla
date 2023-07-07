@@ -283,6 +283,19 @@ suite "graph":
       [   0, 0, 0, 0, 0]
     ]
 
+  test "one_hot":
+    let b = newBuilder("test")
+    let x = [1i32, 0, 3, 4].toTensor
+    let comp = b.build oneHot(b^x, 5, F32)
+    let res = client.compile(comp).run.f32
+    debug res
+    check res == @@[
+      [0f32, 1, 0, 0, 0],
+      [   1, 0, 0, 0, 0],
+      [   0, 0, 0, 1, 0],
+      [   0, 0, 0, 0, 1]
+    ]
+
   test "conv2d":
     proc test_conv(dims: openarray[int], axis: int, scale: float32,
                    kernel, expect: Tensor[float32], padding = pad(0),

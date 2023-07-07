@@ -186,28 +186,6 @@ proc update*(m: var Module, params: Params) =
   for name in m.outputs:
     m.variables[name].data = params[name]
 
-proc mseLoss*(pred, target: Node): Node =
-  ## Mean square error loss function.
-  let n = pred.builder.constant(math.prod(pred.dims), pred.dtype)
-  sum((pred - target) * (pred - target)) / n
-
-proc crossEntropyLoss*(pred, target: Node): Node =
-  ## Mean cross entropy loss function calculated from softmax output.
-  ## Pred should be predicted values with shape [n, classes] while target is a
-  ## 1d vector of I64 labels each in range 0..classes.
-  let shape = [target.dims[0], 1]
-  let indices = concat(pred.builder.iota(target.dtype, shape, axis=0), [target.reshape(shape)], axis=1)
-  let nitems = pred.builder.constant(target.dims[0], pred.dtype)
-  -sum(log(pred.gather(indices.reshape(-1, 1, 2)))) / nitems
-
-proc softmax*(a: Node, axis = -1): Node =
-  ## Softmax operation, shifted for numerical stability.
-  let maxval = a.max([axis], keepDims=true)
-  maxval.noGrad = true
-  let exp_a = exp(a - maxval)
-  let sum_a = a.builder.clone(exp_a).sum([axis], keepDims=true)
-  result = exp_a / sum_a
-
 proc dropout*(a: Node, ratio: float, training: bool, normalize = true): Node =
   ## Dropout randomly replaces ratio fraction of input values with zeros when training is true
   ## else if a no-op in test mode. If normalize is set then the output is scaled by `1 / (1-ratio)`
@@ -320,7 +298,7 @@ proc compileTrain*(c: Client, m: Module, input: Node, lossFn: proc(y: Node): Nod
   let b = input.builder
   var output: Outputs
   let pred = m.forward(input, true, output)
-  debug "forward function: ", pred.repr
+  debug "forward function: ", pred.toString
   let loss = lossFn(pred)
   let grads = b.gradient(loss, m.varNames)
   debug "outputs: ", $m.outputs
