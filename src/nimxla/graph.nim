@@ -14,7 +14,7 @@
 ## Shapes and host literal types are defined in the literal module.
 ##
 
-import std/[sugar, sequtils, strformat, strutils, tables, math, macros, logging]
+import std/[sugar, sequtils, strformat, strutils, tables, sets, math, macros, logging]
 import tensor, literal, shape
 import private/[xla_wrapper, utils]
 
@@ -99,8 +99,6 @@ type
       discard
     info:   string
     op:     ref Op
-    idnum:  uint64
-    tupleGrads: seq[Node]
 
   ComputationObj = object
     c: xla_computation
@@ -177,13 +175,6 @@ proc getShape(b: Builder, op: xla_op): (Shape, status_t) =
   else:
     (Shape(), status)
 
-proc uid(n: Node): uint64 = 
-  ## Unique node id from pointer to xla_op
-  if n.op != nil:
-    cast[uint64](n.op.c)
-  else:
-    n.idnum
-
 proc dtype*(n: Node): DataType = 
   ## Element type for this node
   n.shape.dtype
@@ -240,12 +231,9 @@ proc newBuilder*(name: string): Builder =
   new result
   result.obj.c = xla_builder_create(name)
 
-proc addNode(b: Builder, node: var Node): Node =
+proc addNode(b: Builder, node: Node): Node =
   ## If node already defined return it from the nodes list, else add it and assign it's id.
   for n in b.nodes:
-    if n.uid == node.uid:
-      node.op = nil
-      return n
     if node.kind == tConst and n.kind == tConst and n.shape == node.shape and n.info == node.info:
       node.op = nil
       return n
@@ -264,6 +252,17 @@ proc wrap(b: Builder, xop: xla_op, typ: OpType, args: openarray[Node] = [], info
     err = b.obj.c.get_current_status
   checkBuilderError(err, node)
   b.addNode(node)
+
+proc clone*(b: Builder, node: Node): Node =
+  ## Recursively make a copy of node and all of its inputs.
+  ## This will assign a new id to each of the non-leaf nodes.
+  if node.args.len == 0:
+    return node
+  new result
+  result[] = node[]
+  for i, arg in node.args:
+    result.args[i] = b.clone(arg)
+  b.addNode(result)
 
 proc build*(b: Builder, root: Node): Computation =
   ## Build a computation from the specified root operation. Should only be called once for a given graph.
@@ -1141,7 +1140,7 @@ proc convInputGrad(n, x, kernel, v: Node): Node =
     let ksize2 = (ksize-1) * dilation + 1
     let inputStart = (ksize2 - 1) div 2 - pads.lo
     let inputEnd = isize - ksize2 div 2 + pads.hi
-    assert inputEnd - inputStart + (stride-1) div stride == osize
+    assert (inputEnd - inputStart + (stride-1)) div stride == osize
     let outputStart = -inputStart - ((ksize2 - 1) div 2)
     assert outputStart <= 0
     let outputEnd = isize - inputStart + ksize2 div 2 - (osize-1) * (stride - 1)
@@ -1268,8 +1267,12 @@ proc localGrad(b: Builder, n, v: Node): seq[Node] =
     raiseError("Node type not supported for autograd", n)
 
 proc calcGrads(b: Builder, node, pathValue: Node, inputs: openarray[string], 
-                grads: var openarray[Node], dict: var Table[uint64, Node]) =
+                grads: var openarray[Node], dict: var Table[int, Node], seen: var HashSet[int]) =
   ## Recursively accumulate gradients from node where pathValue is prior value to this point
+  if node.id in seen:
+    debug "skip: ", node
+    return
+  seen.incl(node.id)
   let node = if node.kind == tTupleElement:
     node.args[0]
   else:
@@ -1278,13 +1281,13 @@ proc calcGrads(b: Builder, node, pathValue: Node, inputs: openarray[string],
   for i, grad in b.localGrad(node, pathValue):
     if grad.kind == tNone: continue
     let input = node.args[i]
-    let id = input.uid
+    let id = input.id
     dict[id] = if dict.hasKey(id):
       dict[id] + grad
     else:
       grad
     if input.len > 0 and not input.noGrad:
-      b.calcGrads(input, grad, inputs, grads, dict)
+      b.calcGrads(input, grad, inputs, grads, dict, seen)
     elif input.kind == tParam:
       let n = inputs.find(input.name)
       if n >= 0:
@@ -1324,9 +1327,10 @@ proc gradient*(b: Builder, output: Node, inputs: openarray[string]): seq[Node] =
 
   debug &"get gradient at: {inputs}"
   let pathValue = b.one(output.dtype, output.dims)
-  var dict = initTable[uint64, Node]()
+  var dict = initTable[int, Node]()
   result = newSeq[Node](inputs.len)
-  b.calcGrads(output, pathValue, inputs, result, dict)
+  var seen: HashSet[int]
+  b.calcGrads(output, pathValue, inputs, result, dict, seen)
   for i, grad in result:
     result[i] = grad.reshapeAs(b, inputs[i])
     debug &"grad {i}: {inputs[i]} {result[i].shape}"

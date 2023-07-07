@@ -205,7 +205,7 @@ proc softmax*(a: Node, axis = -1): Node =
   let maxval = a.max([axis], keepDims=true)
   maxval.noGrad = true
   let exp_a = exp(a - maxval)
-  let sum_a = exp_a.sum([axis], keepDims=true)
+  let sum_a = a.builder.clone(exp_a).sum([axis], keepDims=true)
   result = exp_a / sum_a
 
 proc dropout*(a: Node, ratio: float, training: bool, normalize = true): Node =
