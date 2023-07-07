@@ -88,6 +88,7 @@ dump	graph.html#dump,Node,int,int	graph: dump(n: Node; maxDepth = -1; depth = 0)
 repr	graph.html#repr,Node	graph: repr(n: Node): string	
 toString	graph.html#toString,Node	graph: toString(n: Node): string	
 newBuilder	graph.html#newBuilder,string	graph: newBuilder(name: string): Builder	
+clone	graph.html#clone,Builder,Node	graph: clone(b: Builder; node: Node): Node	
 build	graph.html#build,Builder,Node	graph: build(b: Builder; root: Node): Computation	
 last	graph.html#last,Computation	graph: last(comp: Computation): Node	
 rawPtr	graph.html#rawPtr,Computation	graph: rawPtr(comp: Computation): xla_computation	
