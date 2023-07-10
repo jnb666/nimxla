@@ -169,7 +169,7 @@ window.addEventListener('DOMContentLoaded', main);
   </ul>
   <ul class="simple nested-toc-section">compileTest
       <li><a class="reference" href="#compileTest%2CClient%2CModule%2CNode"
-    title="compileTest(c: Client; m: Module; input: Node): Executable">compileTest(c: Client; m: Module; input: Node): Executable</a></li>
+    title="compileTest(c: Client; m: Module; input: Node; softmax = false): Executable">compileTest(c: Client; m: Module; input: Node; softmax = false): Executable</a></li>
 
   </ul>
   <ul class="simple nested-toc-section">compileTrain
@@ -237,6 +237,19 @@ window.addEventListener('DOMContentLoaded', main);
            kernelSize: Opt2d; strides: Opt2d = 1; padding: Pad2d = pad(0);
            dilation: Opt2d = 1; groups = 1; weights = heInit();
            biases = constantInit(0.0); dtype = F32): Module</a></li>
+
+  </ul>
+  <ul class="simple nested-toc-section">initConv2dBatchNorm
+      <li><a class="reference" href="#initConv2dBatchNorm%2CClient%2CRand%2Cstring%2Cint%2Cint%2COpt2d%2COpt2d%2CPad2d%2COpt2d%2Cint%2Cfloat%2Cfloat"
+    title="initConv2dBatchNorm(c: Client; rng: var Rand; id: string;
+                    inChannels, outChannels: int; kernelSize: Opt2d;
+                    strides: Opt2d = 1; padding: Pad2d = pad(0);
+                    dilation: Opt2d = 1; groups = 1; momentum: float = 0.1;
+                    epsilon: float = 0.00001; weights = heInit(); dtype = F32): Module">initConv2dBatchNorm(c: Client; rng: var Rand; id: string;
+                    inChannels, outChannels: int; kernelSize: Opt2d;
+                    strides: Opt2d = 1; padding: Pad2d = pad(0);
+                    dilation: Opt2d = 1; groups = 1; momentum: float = 0.1;
+                    epsilon: float = 0.00001; weights = heInit(); dtype = F32): Module</a></li>
 
   </ul>
   <ul class="simple nested-toc-section">initLinear
@@ -574,22 +587,22 @@ class="link-seesrc" target="_blank">Source</a>
 </dd>
 </div>
 <div id="compileTest,Client,Module,Node">
-<dt><pre><span class="Keyword">proc</span> <a href="#compileTest%2CClient%2CModule%2CNode"><span class="Identifier">compileTest</span></a><span class="Other">(</span><span class="Identifier">c</span><span class="Other">:</span> <a href="nimxla.html#Client"><span class="Identifier">Client</span></a><span class="Other">;</span> <span class="Identifier">m</span><span class="Other">:</span> <a href="nn.html#Module"><span class="Identifier">Module</span></a><span class="Other">;</span> <span class="Identifier">input</span><span class="Other">:</span> <a href="graph.html#Node"><span class="Identifier">Node</span></a><span class="Other">)</span><span class="Other">:</span> <a href="nimxla.html#Executable"><span class="Identifier">Executable</span></a> {.
+<dt><pre><span class="Keyword">proc</span> <a href="#compileTest%2CClient%2CModule%2CNode"><span class="Identifier">compileTest</span></a><span class="Other">(</span><span class="Identifier">c</span><span class="Other">:</span> <a href="nimxla.html#Client"><span class="Identifier">Client</span></a><span class="Other">;</span> <span class="Identifier">m</span><span class="Other">:</span> <a href="nn.html#Module"><span class="Identifier">Module</span></a><span class="Other">;</span> <span class="Identifier">input</span><span class="Other">:</span> <a href="graph.html#Node"><span class="Identifier">Node</span></a><span class="Other">;</span> <span class="Identifier">softmax</span> <span class="Other">=</span> <span class="Identifier">false</span><span class="Other">)</span><span class="Other">:</span> <a href="nimxla.html#Executable"><span class="Identifier">Executable</span></a> {.
     <span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Identifier">Exception</span><span class="Other">,</span> <span class="Identifier">BuilderError</span><span class="Other">,</span> <span class="Identifier">ValueError</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Identifier">RootEffect</span><span class="Other">]</span></span>.}</pre></dt>
 <dd>
 
-Build the execution graph for the given module and compile it to an executable. The executable returns the output from <tt class="docutils literal"><span class="pre"><span class="Identifier">m</span><span class="Operator">.</span><span class="Identifier">forward</span><span class="Punctuation">(</span><span class="Identifier">input</span><span class="Punctuation">)</span></span></tt>
+Build the execution graph for the given module and compile it to an executable. The executable returns the output from <tt class="docutils literal"><span class="pre"><span class="Identifier">m</span><span class="Operator">.</span><span class="Identifier">forward</span><span class="Punctuation">(</span><span class="Identifier">input</span><span class="Punctuation">)</span></span></tt> If softmax is set then apply softmax function to the output.
 &nbsp;&nbsp;<a
-href="https://github.com/jnb666/nimxla/tree/main/src/nimxla/nn.nim#L282"
+href="https://github.com/jnb666/nimxla/tree/main/src/nimxla/nn.nim#L297"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/jnb666/nimxla/edit/devel/src/nimxla/nn.nim#L282" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/jnb666/nimxla/edit/devel/src/nimxla/nn.nim#L297" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
 <div id="compileTrain,Client,Module,Node,proc(Node)">
 <dt><pre><span class="Keyword">proc</span> <a href="#compileTrain%2CClient%2CModule%2CNode%2Cproc%28Node%29"><span class="Identifier">compileTrain</span></a><span class="Other">(</span><span class="Identifier">c</span><span class="Other">:</span> <a href="nimxla.html#Client"><span class="Identifier">Client</span></a><span class="Other">;</span> <span class="Identifier">m</span><span class="Other">:</span> <a href="nn.html#Module"><span class="Identifier">Module</span></a><span class="Other">;</span> <span class="Identifier">input</span><span class="Other">:</span> <a href="graph.html#Node"><span class="Identifier">Node</span></a><span class="Other">;</span>
                   <span class="Identifier">lossFn</span><span class="Other">:</span> <span class="Keyword">proc</span> <span class="Other">(</span><span class="Identifier">y</span><span class="Other">:</span> <a href="graph.html#Node"><span class="Identifier">Node</span></a><span class="Other">)</span><span class="Other">:</span> <a href="graph.html#Node"><span class="Identifier">Node</span></a><span class="Other">)</span><span class="Other">:</span> <a href="nimxla.html#Executable"><span class="Identifier">Executable</span></a> {.
-    <span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Identifier">Exception</span><span class="Other">,</span> <span class="Identifier">ValueError</span><span class="Other">,</span> <span class="Identifier">BuilderError</span><span class="Other">,</span> <span class="Identifier">KeyError</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Identifier">RootEffect</span><span class="Other">]</span></span>.}</pre></dt>
+    <span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Identifier">Exception</span><span class="Other">,</span> <span class="Identifier">ValueError</span><span class="Other">,</span> <span class="Identifier">KeyError</span><span class="Other">,</span> <span class="Identifier">BuilderError</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Identifier">RootEffect</span><span class="Other">]</span></span>.}</pre></dt>
 <dd>
 
 Build the execution graph for the given module and compile it to an executable. The executable returns a tuple with the following outputs:<ul class="simple"><li>pred: result of <tt class="docutils literal"><span class="pre"><span class="Identifier">m</span><span class="Operator">.</span><span class="Identifier">forward</span><span class="Punctuation">(</span><span class="Identifier">input</span><span class="Punctuation">)</span></span></tt></li>
@@ -598,9 +611,9 @@ Build the execution graph for the given module and compile it to an executable. 
 </ul>
 
 &nbsp;&nbsp;<a
-href="https://github.com/jnb666/nimxla/tree/main/src/nimxla/nn.nim#L292"
+href="https://github.com/jnb666/nimxla/tree/main/src/nimxla/nn.nim#L310"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/jnb666/nimxla/edit/devel/src/nimxla/nn.nim#L292" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/jnb666/nimxla/edit/devel/src/nimxla/nn.nim#L310" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -635,9 +648,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/jnb666/nimxla/tree/main/src/nimxla/nn.nim#L310"
+href="https://github.com/jnb666/nimxla/tree/main/src/nimxla/nn.nim#L328"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/jnb666/nimxla/edit/devel/src/nimxla/nn.nim#L310" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/jnb666/nimxla/edit/devel/src/nimxla/nn.nim#L328" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -704,9 +717,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 Called when restoring state from checkpoint
 &nbsp;&nbsp;<a
-href="https://github.com/jnb666/nimxla/tree/main/src/nimxla/nn.nim#L478"
+href="https://github.com/jnb666/nimxla/tree/main/src/nimxla/nn.nim#L496"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/jnb666/nimxla/edit/devel/src/nimxla/nn.nim#L478" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/jnb666/nimxla/edit/devel/src/nimxla/nn.nim#L496" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -720,9 +733,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 Create a new 2d batch normalization layer. The input should be in channels last format. numFeatures is the number of channels. The momentum parameter is used to compute the exponential running average of the mean and variance. epsilon is the value added to the denominator to avoid divide by zero. Learnable weight and bias parameters are initialised with the weights and biases initialization functions.
 &nbsp;&nbsp;<a
-href="https://github.com/jnb666/nimxla/tree/main/src/nimxla/nn.nim#L250"
+href="https://github.com/jnb666/nimxla/tree/main/src/nimxla/nn.nim#L253"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/jnb666/nimxla/edit/devel/src/nimxla/nn.nim#L250" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/jnb666/nimxla/edit/devel/src/nimxla/nn.nim#L253" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -736,9 +749,26 @@ class="link-seesrc" target="_blank">Source</a>
 
 Create a new 2 dimensional convolution layer with parameters in channels last format. Weight parameters are initialised using the weights function. If biases is not nil then bias parameters are initialised using this function and added to the output.
 &nbsp;&nbsp;<a
-href="https://github.com/jnb666/nimxla/tree/main/src/nimxla/nn.nim#L222"
+href="https://github.com/jnb666/nimxla/tree/main/src/nimxla/nn.nim#L223"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/jnb666/nimxla/edit/devel/src/nimxla/nn.nim#L222" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/jnb666/nimxla/edit/devel/src/nimxla/nn.nim#L223" class="link-seesrc" target="_blank" >Edit</a>
+
+</dd>
+</div>
+<div id="initConv2dBatchNorm,Client,Rand,string,int,int,Opt2d,Opt2d,Pad2d,Opt2d,int,float,float">
+<dt><pre><span class="Keyword">proc</span> <a href="#initConv2dBatchNorm%2CClient%2CRand%2Cstring%2Cint%2Cint%2COpt2d%2COpt2d%2CPad2d%2COpt2d%2Cint%2Cfloat%2Cfloat"><span class="Identifier">initConv2dBatchNorm</span></a><span class="Other">(</span><span class="Identifier">c</span><span class="Other">:</span> <a href="nimxla.html#Client"><span class="Identifier">Client</span></a><span class="Other">;</span> <span class="Identifier">rng</span><span class="Other">:</span> <span class="Keyword">var</span> <span class="Identifier">Rand</span><span class="Other">;</span> <span class="Identifier">id</span><span class="Other">:</span> <span class="Identifier">string</span><span class="Other">;</span>
+                         <span class="Identifier">inChannels</span><span class="Other">,</span> <span class="Identifier">outChannels</span><span class="Other">:</span> <span class="Identifier">int</span><span class="Other">;</span> <span class="Identifier">kernelSize</span><span class="Other">:</span> <a href="shape.html#Opt2d"><span class="Identifier">Opt2d</span></a><span class="Other">;</span>
+                         <span class="Identifier">strides</span><span class="Other">:</span> <span class="Identifier">Opt2d</span> <span class="Other">=</span> <span class="DecNumber">1</span><span class="Other">;</span> <span class="Identifier">padding</span><span class="Other">:</span> <a href="shape.html#Pad2d"><span class="Identifier">Pad2d</span></a> <span class="Other">=</span> <span class="Identifier">pad</span><span class="Other">(</span><span class="DecNumber">0</span><span class="Other">)</span><span class="Other">;</span>
+                         <span class="Identifier">dilation</span><span class="Other">:</span> <span class="Identifier">Opt2d</span> <span class="Other">=</span> <span class="DecNumber">1</span><span class="Other">;</span> <span class="Identifier">groups</span> <span class="Other">=</span> <span class="DecNumber">1</span><span class="Other">;</span> <span class="Identifier">momentum</span><span class="Other">:</span> <span class="Identifier">float</span> <span class="Other">=</span> <span class="FloatNumber">0.1</span><span class="Other">;</span>
+                         <span class="Identifier">epsilon</span><span class="Other">:</span> <span class="Identifier">float</span> <span class="Other">=</span> <span class="FloatNumber">0.00001</span><span class="Other">;</span> <span class="Identifier">weights</span> <span class="Other">=</span> <span class="Identifier">heInit</span><span class="Other">(</span><span class="Other">)</span><span class="Other">;</span>
+                         <span class="Identifier">dtype</span> <span class="Other">=</span> <span class="Identifier">F32</span><span class="Other">)</span><span class="Other">:</span> <a href="nn.html#Module"><span class="Identifier">Module</span></a></pre></dt>
+<dd>
+
+Create a 2 dimensional convolution layer with no bias followed by batch normalisation weights is the initialisation for the conv layer. The batchNorm layer will use default initialisation.
+&nbsp;&nbsp;<a
+href="https://github.com/jnb666/nimxla/tree/main/src/nimxla/nn.nim#L284"
+class="link-seesrc" target="_blank">Source</a>
+&nbsp;&nbsp;<a href="https://github.com/jnb666/nimxla/edit/devel/src/nimxla/nn.nim#L284" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -788,9 +818,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/jnb666/nimxla/tree/main/src/nimxla/nn.nim#L316"
+href="https://github.com/jnb666/nimxla/tree/main/src/nimxla/nn.nim#L334"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/jnb666/nimxla/edit/devel/src/nimxla/nn.nim#L316" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/jnb666/nimxla/edit/devel/src/nimxla/nn.nim#L334" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -805,9 +835,9 @@ lr = lrMin + (lrMax - lrMin)/2 * (1 + cos(pi * t/tMax))
 </pre> where t is the current epoch and lrMax is the initial learning rate.</p>
 
 &nbsp;&nbsp;<a
-href="https://github.com/jnb666/nimxla/tree/main/src/nimxla/nn.nim#L502"
+href="https://github.com/jnb666/nimxla/tree/main/src/nimxla/nn.nim#L520"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/jnb666/nimxla/edit/devel/src/nimxla/nn.nim#L502" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/jnb666/nimxla/edit/devel/src/nimxla/nn.nim#L520" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -818,9 +848,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 Create StepLR scheduler which multiplies the learning rate by gamma after each stepSize epochs.
 &nbsp;&nbsp;<a
-href="https://github.com/jnb666/nimxla/tree/main/src/nimxla/nn.nim#L489"
+href="https://github.com/jnb666/nimxla/tree/main/src/nimxla/nn.nim#L507"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/jnb666/nimxla/edit/devel/src/nimxla/nn.nim#L489" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/jnb666/nimxla/edit/devel/src/nimxla/nn.nim#L507" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -858,9 +888,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/jnb666/nimxla/tree/main/src/nimxla/nn.nim#L431"
+href="https://github.com/jnb666/nimxla/tree/main/src/nimxla/nn.nim#L449"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/jnb666/nimxla/edit/devel/src/nimxla/nn.nim#L431" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/jnb666/nimxla/edit/devel/src/nimxla/nn.nim#L449" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -872,9 +902,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/jnb666/nimxla/tree/main/src/nimxla/nn.nim#L448"
+href="https://github.com/jnb666/nimxla/tree/main/src/nimxla/nn.nim#L466"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/jnb666/nimxla/edit/devel/src/nimxla/nn.nim#L448" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/jnb666/nimxla/edit/devel/src/nimxla/nn.nim#L466" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -886,9 +916,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/jnb666/nimxla/tree/main/src/nimxla/nn.nim#L371"
+href="https://github.com/jnb666/nimxla/tree/main/src/nimxla/nn.nim#L389"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/jnb666/nimxla/edit/devel/src/nimxla/nn.nim#L371" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/jnb666/nimxla/edit/devel/src/nimxla/nn.nim#L389" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -912,9 +942,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 Update learning rate parameter
 &nbsp;&nbsp;<a
-href="https://github.com/jnb666/nimxla/tree/main/src/nimxla/nn.nim#L320"
+href="https://github.com/jnb666/nimxla/tree/main/src/nimxla/nn.nim#L338"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/jnb666/nimxla/edit/devel/src/nimxla/nn.nim#L320" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/jnb666/nimxla/edit/devel/src/nimxla/nn.nim#L338" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -949,9 +979,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 Called after each batch to update the model parameters.
 &nbsp;&nbsp;<a
-href="https://github.com/jnb666/nimxla/tree/main/src/nimxla/nn.nim#L324"
+href="https://github.com/jnb666/nimxla/tree/main/src/nimxla/nn.nim#L342"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/jnb666/nimxla/edit/devel/src/nimxla/nn.nim#L324" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/jnb666/nimxla/edit/devel/src/nimxla/nn.nim#L342" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -961,9 +991,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 Called after each epoch to update the learning rate
 &nbsp;&nbsp;<a
-href="https://github.com/jnb666/nimxla/tree/main/src/nimxla/nn.nim#L484"
+href="https://github.com/jnb666/nimxla/tree/main/src/nimxla/nn.nim#L502"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/jnb666/nimxla/edit/devel/src/nimxla/nn.nim#L484" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/jnb666/nimxla/edit/devel/src/nimxla/nn.nim#L502" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -1015,9 +1045,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/jnb666/nimxla/tree/main/src/nimxla/nn.nim#L465"
+href="https://github.com/jnb666/nimxla/tree/main/src/nimxla/nn.nim#L483"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/jnb666/nimxla/edit/devel/src/nimxla/nn.nim#L465" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/jnb666/nimxla/edit/devel/src/nimxla/nn.nim#L483" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -1027,9 +1057,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/jnb666/nimxla/tree/main/src/nimxla/nn.nim#L336"
+href="https://github.com/jnb666/nimxla/tree/main/src/nimxla/nn.nim#L354"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/jnb666/nimxla/edit/devel/src/nimxla/nn.nim#L336" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/jnb666/nimxla/edit/devel/src/nimxla/nn.nim#L354" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -1040,9 +1070,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/jnb666/nimxla/tree/main/src/nimxla/nn.nim#L384"
+href="https://github.com/jnb666/nimxla/tree/main/src/nimxla/nn.nim#L402"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/jnb666/nimxla/edit/devel/src/nimxla/nn.nim#L384" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/jnb666/nimxla/edit/devel/src/nimxla/nn.nim#L402" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -1052,9 +1082,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/jnb666/nimxla/tree/main/src/nimxla/nn.nim#L515"
+href="https://github.com/jnb666/nimxla/tree/main/src/nimxla/nn.nim#L533"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/jnb666/nimxla/edit/devel/src/nimxla/nn.nim#L515" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/jnb666/nimxla/edit/devel/src/nimxla/nn.nim#L533" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -1064,9 +1094,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/jnb666/nimxla/tree/main/src/nimxla/nn.nim#L475"
+href="https://github.com/jnb666/nimxla/tree/main/src/nimxla/nn.nim#L493"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/jnb666/nimxla/edit/devel/src/nimxla/nn.nim#L475" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/jnb666/nimxla/edit/devel/src/nimxla/nn.nim#L493" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -1076,9 +1106,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/jnb666/nimxla/tree/main/src/nimxla/nn.nim#L499"
+href="https://github.com/jnb666/nimxla/tree/main/src/nimxla/nn.nim#L517"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/jnb666/nimxla/edit/devel/src/nimxla/nn.nim#L499" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/jnb666/nimxla/edit/devel/src/nimxla/nn.nim#L517" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -1092,7 +1122,7 @@ class="link-seesrc" target="_blank">Source</a>
       <div class="twelve-columns footer">
         <span class="nim-sprite"></span>
         <br/>
-        <small style="color: var(--hint);">Made with Nim. Generated: 2023-07-07 19:51:53 UTC</small>
+        <small style="color: var(--hint);">Made with Nim. Generated: 2023-07-10 15:05:44 UTC</small>
       </div>
     </div>
   </div>

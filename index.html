@@ -357,7 +357,7 @@ window.addEventListener('DOMContentLoaded', main);
           </ul></dd>
 <dt><a name="compileTest" href="#compileTest"><span>compileTest:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
-          data-doc-search-tag="nn: compileTest(c: Client; m: Module; input: Node): Executable" href="nn.html#compileTest%2CClient%2CModule%2CNode">nn: compileTest(c: Client; m: Module; input: Node): Executable</a></li>
+          data-doc-search-tag="nn: compileTest(c: Client; m: Module; input: Node; softmax = false): Executable" href="nn.html#compileTest%2CClient%2CModule%2CNode">nn: compileTest(c: Client; m: Module; input: Node; softmax = false): Executable</a></li>
           </ul></dd>
 <dt><a name="compileTrain" href="#compileTrain"><span>compileTrain:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
@@ -591,10 +591,6 @@ window.addEventListener('DOMContentLoaded', main);
 <li><a class="reference external"
           data-doc-search-tag="data: getBatch[T](d: var DataLoader; data: var Tensor[T]; labels: var Tensor[int32]): int" href="data.html#getBatch.i%2CDataLoader%2CTensor%5BT%5D%2CTensor%5Bint32%5D">data: getBatch[T](d: var DataLoader; data: var Tensor[T]; labels: var Tensor[int32]): int</a></li>
           </ul></dd>
-<dt><a name="getDims" href="#getDims"><span>getDims:</span></a></dt><dd><ul class="simple">
-<li><a class="reference external"
-          data-doc-search-tag="graph: getDims(ndims: int; channelsFirst: bool): seq[int]" href="graph.html#getDims%2Cint%2Cbool">graph: getDims(ndims: int; channelsFirst: bool): seq[int]</a></li>
-          </ul></dd>
 <dt><a name="getItem" href="#getItem"><span>getItem:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
           data-doc-search-tag="data: getItem(d: CIFAR10Dataset; i: int; dout: pointer): int32" href="data.html#getItem.e%2CCIFAR10Dataset%2Cint%2Cpointer">data: getItem(d: CIFAR10Dataset; i: int; dout: pointer): int32</a></li>
@@ -702,6 +698,18 @@ window.addEventListener('DOMContentLoaded', main);
            kernelSize: Opt2d; strides: Opt2d = 1; padding: Pad2d = pad(0);
            dilation: Opt2d = 1; groups = 1; weights = heInit();
            biases = constantInit(0.0); dtype = F32): Module</a></li>
+          </ul></dd>
+<dt><a name="initConv2dBatchNorm" href="#initConv2dBatchNorm"><span>initConv2dBatchNorm:</span></a></dt><dd><ul class="simple">
+<li><a class="reference external"
+          data-doc-search-tag="nn: initConv2dBatchNorm(c: Client; rng: var Rand; id: string;
+                    inChannels, outChannels: int; kernelSize: Opt2d;
+                    strides: Opt2d = 1; padding: Pad2d = pad(0);
+                    dilation: Opt2d = 1; groups = 1; momentum: float = 0.1;
+                    epsilon: float = 0.00001; weights = heInit(); dtype = F32): Module" href="nn.html#initConv2dBatchNorm%2CClient%2CRand%2Cstring%2Cint%2Cint%2COpt2d%2COpt2d%2CPad2d%2COpt2d%2Cint%2Cfloat%2Cfloat">nn: initConv2dBatchNorm(c: Client; rng: var Rand; id: string;
+                    inChannels, outChannels: int; kernelSize: Opt2d;
+                    strides: Opt2d = 1; padding: Pad2d = pad(0);
+                    dilation: Opt2d = 1; groups = 1; momentum: float = 0.1;
+                    epsilon: float = 0.00001; weights = heInit(); dtype = F32): Module</a></li>
           </ul></dd>
 <dt><a name="InitFunc" href="#InitFunc"><span>InitFunc:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
@@ -1285,6 +1293,10 @@ window.addEventListener('DOMContentLoaded', main);
 <li><a class="reference external"
           data-doc-search-tag="graph: sin(a: Node): Node" href="graph.html#sin%2CNode">graph: sin(a: Node): Node</a></li>
           </ul></dd>
+<dt><a name="softmax" href="#softmax"><span>softmax:</span></a></dt><dd><ul class="simple">
+<li><a class="reference external"
+          data-doc-search-tag="graph: softmax(a: Node; axis = -1): Node" href="graph.html#softmax%2CNode%2Cint">graph: softmax(a: Node; axis = -1): Node</a></li>
+          </ul></dd>
 <dt><a name="sqrt" href="#sqrt"><span>sqrt:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
           data-doc-search-tag="graph: sqrt(a: Node): Node" href="graph.html#sqrt%2CNode">graph: sqrt(a: Node): Node</a></li>
@@ -1579,9 +1591,9 @@ window.addEventListener('DOMContentLoaded', main);
 <li><a class="reference external"
           data-doc-search-tag="train: trainNetwork[T: ElemType](t: var Trainer; train, test: var DataLoader;
                           epochs: int; plot = false; checkpoint = &quot;&quot;;
-                          saveEvery = 10)" href="train.html#trainNetwork%2CTrainer%2CDataLoader%2CDataLoader%2Cint%2Cstring%2Cint">train: trainNetwork[T: ElemType](t: var Trainer; train, test: var DataLoader;
+                          saveEvery = 20)" href="train.html#trainNetwork%2CTrainer%2CDataLoader%2CDataLoader%2Cint%2Cstring%2Cint">train: trainNetwork[T: ElemType](t: var Trainer; train, test: var DataLoader;
                           epochs: int; plot = false; checkpoint = &quot;&quot;;
-                          saveEvery = 10)</a></li>
+                          saveEvery = 20)</a></li>
           </ul></dd>
 <dt><a name="TransContext" href="#TransContext"><span>TransContext:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
@@ -1806,7 +1818,7 @@ window.addEventListener('DOMContentLoaded', main);
       <div class="twelve-columns footer">
         <span class="nim-sprite"></span>
         <br/>
-        <small style="color: var(--hint);">Made with Nim. Generated: 2023-07-07 19:51:53 UTC</small>
+        <small style="color: var(--hint);">Made with Nim. Generated: 2023-07-10 15:05:44 UTC</small>
       </div>
     </div>
   </div>

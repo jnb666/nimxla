@@ -118,7 +118,7 @@ window.addEventListener('DOMContentLoaded', main);
   trainAcc*: Executable
   testAcc*: Executable
   stats*: Table[string, seq[float]]
-  predict*: Tensor[int32]
+  predict*: Tensor[float32]
   heatmap*: Tensor[int32]
   epoch*: int">Trainer</a></li>
 
@@ -185,9 +185,9 @@ window.addEventListener('DOMContentLoaded', main);
       <li><a class="reference" href="#trainNetwork%2CTrainer%2CDataLoader%2CDataLoader%2Cint%2Cstring%2Cint"
     title="trainNetwork[T: ElemType](t: var Trainer; train, test: var DataLoader;
                           epochs: int; plot = false; checkpoint = &quot;&quot;;
-                          saveEvery = 10)">trainNetwork[T: ElemType](t: var Trainer; train, test: var DataLoader;
+                          saveEvery = 20)">trainNetwork[T: ElemType](t: var Trainer; train, test: var DataLoader;
                           epochs: int; plot = false; checkpoint = &quot;&quot;;
-                          saveEvery = 10)</a></li>
+                          saveEvery = 20)</a></li>
 
   </ul>
 
@@ -225,7 +225,7 @@ class="link-seesrc" target="_blank">Source</a>
   <span class="Identifier">trainAcc</span><span class="Operator">*</span><span class="Other">:</span> <a href="nimxla.html#Executable"><span class="Identifier">Executable</span></a>
   <span class="Identifier">testAcc</span><span class="Operator">*</span><span class="Other">:</span> <a href="nimxla.html#Executable"><span class="Identifier">Executable</span></a>
   <span class="Identifier">stats</span><span class="Operator">*</span><span class="Other">:</span> <span class="Identifier">Table</span><span class="Other">[</span><span class="Identifier">string</span><span class="Other">,</span> <span class="Identifier">seq</span><span class="Other">[</span><span class="Identifier">float</span><span class="Other">]</span><span class="Other">]</span>
-  <span class="Identifier">predict</span><span class="Operator">*</span><span class="Other">:</span> <a href="tensor.html#Tensor"><span class="Identifier">Tensor</span></a><span class="Other">[</span><span class="Identifier">int32</span><span class="Other">]</span>
+  <span class="Identifier">predict</span><span class="Operator">*</span><span class="Other">:</span> <a href="tensor.html#Tensor"><span class="Identifier">Tensor</span></a><span class="Other">[</span><span class="Identifier">float32</span><span class="Other">]</span>
   <span class="Identifier">heatmap</span><span class="Operator">*</span><span class="Other">:</span> <a href="tensor.html#Tensor"><span class="Identifier">Tensor</span></a><span class="Other">[</span><span class="Identifier">int32</span><span class="Other">]</span>
   <span class="Identifier">epoch</span><span class="Operator">*</span><span class="Other">:</span> <span class="Identifier">int</span>
 </pre></dt>
@@ -271,9 +271,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 Calculate the accuracy from the test data set. T should be the type of data returned from the loader.
 &nbsp;&nbsp;<a
-href="https://github.com/jnb666/nimxla/tree/main/src/nimxla/train.nim#L103"
+href="https://github.com/jnb666/nimxla/tree/main/src/nimxla/train.nim#L110"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/jnb666/nimxla/edit/devel/src/nimxla/train.nim#L103" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/jnb666/nimxla/edit/devel/src/nimxla/train.nim#L110" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -283,9 +283,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/jnb666/nimxla/tree/main/src/nimxla/train.nim#L223"
+href="https://github.com/jnb666/nimxla/tree/main/src/nimxla/train.nim#L230"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/jnb666/nimxla/edit/devel/src/nimxla/train.nim#L223" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/jnb666/nimxla/edit/devel/src/nimxla/train.nim#L230" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -298,9 +298,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 Read back checkpoint from zip file. Trainer should have already been initialised.
 &nbsp;&nbsp;<a
-href="https://github.com/jnb666/nimxla/tree/main/src/nimxla/train.nim#L168"
+href="https://github.com/jnb666/nimxla/tree/main/src/nimxla/train.nim#L175"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/jnb666/nimxla/edit/devel/src/nimxla/train.nim#L168" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/jnb666/nimxla/edit/devel/src/nimxla/train.nim#L175" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -312,9 +312,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 Read named file from the checkpoint archive
 &nbsp;&nbsp;<a
-href="https://github.com/jnb666/nimxla/tree/main/src/nimxla/train.nim#L189"
+href="https://github.com/jnb666/nimxla/tree/main/src/nimxla/train.nim#L196"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/jnb666/nimxla/edit/devel/src/nimxla/train.nim#L189" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/jnb666/nimxla/edit/devel/src/nimxla/train.nim#L196" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -327,9 +327,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 Save checkpoint with model weights and optimizer state to file
 &nbsp;&nbsp;<a
-href="https://github.com/jnb666/nimxla/tree/main/src/nimxla/train.nim#L139"
+href="https://github.com/jnb666/nimxla/tree/main/src/nimxla/train.nim#L146"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/jnb666/nimxla/edit/devel/src/nimxla/train.nim#L139" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/jnb666/nimxla/edit/devel/src/nimxla/train.nim#L146" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -340,9 +340,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 Convert stats to format used by plots package
 &nbsp;&nbsp;<a
-href="https://github.com/jnb666/nimxla/tree/main/src/nimxla/train.nim#L205"
+href="https://github.com/jnb666/nimxla/tree/main/src/nimxla/train.nim#L212"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/jnb666/nimxla/edit/devel/src/nimxla/train.nim#L205" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/jnb666/nimxla/edit/devel/src/nimxla/train.nim#L212" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -351,7 +351,7 @@ class="link-seesrc" target="_blank">Source</a>
     <span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Identifier">Exception</span><span class="Other">,</span> <span class="Identifier">ValueError</span><span class="Other">,</span> <span class="Identifier">BuilderError</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Identifier">RootEffect</span><span class="Other">]</span></span>.}</pre></dt>
 <dd>
 
-Compile test function with given input data shape.
+Compile test function with given input data shape. Will apply softmax function to the output.
 &nbsp;&nbsp;<a
 href="https://github.com/jnb666/nimxla/tree/main/src/nimxla/train.nim#L50"
 class="link-seesrc" target="_blank">Source</a>
@@ -366,9 +366,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 Train on one epoch of batches of data from the training set, returns average loss and accuracy on training dara T should be the type of data returned from the loader. Output loss should be a float32 scalar.
 &nbsp;&nbsp;<a
-href="https://github.com/jnb666/nimxla/tree/main/src/nimxla/train.nim#L74"
+href="https://github.com/jnb666/nimxla/tree/main/src/nimxla/train.nim#L79"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/jnb666/nimxla/edit/devel/src/nimxla/train.nim#L74" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/jnb666/nimxla/edit/devel/src/nimxla/train.nim#L79" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -389,14 +389,14 @@ class="link-seesrc" target="_blank">Source</a>
 <div id="trainNetwork,Trainer,DataLoader,DataLoader,int,string,int">
 <dt><pre><span class="Keyword">proc</span> <a href="#trainNetwork%2CTrainer%2CDataLoader%2CDataLoader%2Cint%2Cstring%2Cint"><span class="Identifier">trainNetwork</span></a><span class="Other">[</span><span class="Identifier">T</span><span class="Other">:</span> <a href="shape.html#ElemType"><span class="Identifier">ElemType</span></a><span class="Other">]</span><span class="Other">(</span><span class="Identifier">t</span><span class="Other">:</span> <span class="Keyword">var</span> <a href="train.html#Trainer"><span class="Identifier">Trainer</span></a><span class="Other">;</span> <span class="Identifier">train</span><span class="Other">,</span> <span class="Identifier">test</span><span class="Other">:</span> <span class="Keyword">var</span> <a href="data.html#DataLoader"><span class="Identifier">DataLoader</span></a><span class="Other">;</span>
                                <span class="Identifier">epochs</span><span class="Other">:</span> <span class="Identifier">int</span><span class="Other">;</span> <span class="Identifier">plot</span> <span class="Other">=</span> <span class="Identifier">false</span><span class="Other">;</span> <span class="Identifier">checkpoint</span> <span class="Other">=</span> <span class="StringLit">&quot;&quot;</span><span class="Other">;</span>
-                               <span class="Identifier">saveEvery</span> <span class="Other">=</span> <span class="DecNumber">10</span><span class="Other">)</span></pre></dt>
+                               <span class="Identifier">saveEvery</span> <span class="Other">=</span> <span class="DecNumber">20</span><span class="Other">)</span></pre></dt>
 <dd>
 
 Training run for given number of epochs. If transform is set it will be applied to each batch of training data. If checkpoint is set then a checkpoint file is written using this prefix
 &nbsp;&nbsp;<a
-href="https://github.com/jnb666/nimxla/tree/main/src/nimxla/train.nim#L248"
+href="https://github.com/jnb666/nimxla/tree/main/src/nimxla/train.nim#L255"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/jnb666/nimxla/edit/devel/src/nimxla/train.nim#L248" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/jnb666/nimxla/edit/devel/src/nimxla/train.nim#L255" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -410,7 +410,7 @@ class="link-seesrc" target="_blank">Source</a>
       <div class="twelve-columns footer">
         <span class="nim-sprite"></span>
         <br/>
-        <small style="color: var(--hint);">Made with Nim. Generated: 2023-07-07 19:51:28 UTC</small>
+        <small style="color: var(--hint);">Made with Nim. Generated: 2023-07-10 15:05:19 UTC</small>
       </div>
     </div>
   </div>

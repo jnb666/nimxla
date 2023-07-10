@@ -173,7 +173,6 @@ rngNormal	graph.html#rngNormal,Node,Node,openArray[int]	graph: rngNormal(mean, s
 concat	graph.html#concat,Node,openArray[Node],int	graph: concat(a: Node; nodes: openArray[Node]; axis: int): Node	
 pad	graph.html#pad,Node,Node,openArray[]	graph: pad(a, padValue: Node; padConfig: openArray[(int, int, int)]): Node	
 convolution	graph.html#convolution,Node,Node,openArray[int],openArray[int],openArray[int],openArray[int],openArray[Padding],openArray[int],openArray[int],int,int	graph: convolution(a, kernel: Node; inputDims, outputDims, kernelDims: openArray[int];\n            strides: openArray[int] = []; padding: openArray[Padding] = [];\n            dilation, inputDilation: openArray[int] = [];\n            groups, batchGroups = 1): Node	
-getDims	graph.html#getDims,int,bool	graph: getDims(ndims: int; channelsFirst: bool): seq[int]	
 conv1d	graph.html#conv1d,Node,Node,int,int,int	graph: conv1d(a, kernel: Node; strides = 1; padding = pad(0); dilation = 1; groups = 1;\n       channelsFirst = false): Node	
 conv2d	graph.html#conv2d,Node,Node,Opt2d,Pad2d,Opt2d,int	graph: conv2d(a, kernel: Node; strides: Opt2d = 1; padding: Pad2d = pad(0);\n       dilation: Opt2d = 1; groups = 1; channelsFirst = false): Node	
 conv3d	graph.html#conv3d,Node,Node,Opt3d,Pad3d,Opt3d,int	graph: conv3d(a, kernel: Node; strides: Opt3d = 1; padding: Pad3d = pad(0);\n       dilation: Opt3d = 1; groups = 1; channelsFirst = false): Node	
@@ -193,6 +192,7 @@ argMax	graph.html#argMax,Node,int,bool,enum	graph: argMax(a: Node; axis: int; ke
 argMin	graph.html#argMin,Node,int,bool,enum	graph: argMin(a: Node; axis: int; keepDims = false; ixType = I64): Node	
 oneHot	graph.html#oneHot,Node,int,DataType	graph: oneHot(x: Node; classes: int; dtype: DataType): Node	
 mseLoss	graph.html#mseLoss,Node,Node	graph: mseLoss(pred, target: Node): Node	
+softmax	graph.html#softmax,Node,int	graph: softmax(a: Node; axis = -1): Node	
 crossEntropyLoss	graph.html#crossEntropyLoss,Node,Node	graph: crossEntropyLoss(pred, target: Node): Node	
 reduceWindow	graph.html#reduceWindow,Node,Node,Computation,openArray[int],openArray[int],openArray[Padding]	graph: reduceWindow(a, initValue: Node; comp: Computation;\n             windowDims, strides: openArray[int];\n             padding: openArray[Padding] = []; nodeType = tReduceWindow): Node	
 maxPool1d	graph.html#maxPool1d,Node,int,int	graph: maxPool1d(a: Node; kernelSize: int; strides = 0; padding = pad(0);\n          channelsFirst = false): Node	

@@ -9,4 +9,4 @@ loadCheckpoint	train.html#loadCheckpoint,Trainer,string	train: loadCheckpoint(t:
 readCheckpointFile	train.html#readCheckpointFile,string,string	train: readCheckpointFile(archiveFile, name: string): Stream	
 statsPlots	train.html#statsPlots,Trainer,seq[string]	train: statsPlots(t: Trainer; classes: seq[string]): JsonNode	
 getLayout	train.html#getLayout,int	train: getLayout(epochs: int): JsonNode	
-trainNetwork	train.html#trainNetwork,Trainer,DataLoader,DataLoader,int,string,int	train: trainNetwork[T: ElemType](t: var Trainer; train, test: var DataLoader;\n                          epochs: int; plot = false; checkpoint = &quot;&quot;;\n                          saveEvery = 10)	
+trainNetwork	train.html#trainNetwork,Trainer,DataLoader,DataLoader,int,string,int	train: trainNetwork[T: ElemType](t: var Trainer; train, test: var DataLoader;\n                          epochs: int; plot = false; checkpoint = &quot;&quot;;\n                          saveEvery = 20)	
