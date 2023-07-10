@@ -4,7 +4,9 @@ Optimizer	nn.html#Optimizer	nn: Optimizer
 SGDOptimizer	nn.html#SGDOptimizer	nn: SGDOptimizer	
 AdamOptimizer	nn.html#AdamOptimizer	nn: AdamOptimizer	
 Scheduler	nn.html#Scheduler	nn: Scheduler	
+ChainedScheduler	nn.html#ChainedScheduler	nn: ChainedScheduler	
 StepLR	nn.html#StepLR	nn: StepLR	
+LinearLR	nn.html#LinearLR	nn: LinearLR	
 CosineAnnealingLR	nn.html#CosineAnnealingLR	nn: CosineAnnealingLR	
 Outputs	nn.html#Outputs	nn: Outputs	
 Module	nn.html#Module	nn: Module	
@@ -42,10 +44,10 @@ optimSGD	nn.html#optimSGD,Client,Module,float,float,float	nn: optimSGD(c: Client
 optimAdam	nn.html#optimAdam,Client,Module,float,float,float,float,float	nn: optimAdam(c: Client; m: Module; learnRate: float; weightDecay = 0.0;\n          beta1 = 0.9; beta2 = 0.999; eps = 1e-8): Optimizer	
 optimAdamW	nn.html#optimAdamW,Client,Module,float,float,float,float,float	nn: optimAdamW(c: Client; m: Module; learnRate: float; weightDecay = 0.0;\n           beta1 = 0.9; beta2 = 0.999; eps = 1e-8): Optimizer	
 `$`	nn.html#$.e,AdamOptimizer	nn: `$`(optim: AdamOptimizer): string	
-`$`	nn.html#$.e,Scheduler	nn: `$`(s: Scheduler): string	
 init	nn.html#init,Scheduler,Client,int	nn: init(s: Scheduler; c: Client; epoch: int)	
 step	nn.html#step,Scheduler,Client	nn: step(s: Scheduler; c: Client)	
+`$`	nn.html#$,Scheduler	nn: `$`(s: Scheduler): string	
 newStepLR	nn.html#newStepLR,Optimizer,int,float	nn: newStepLR(optim: var Optimizer; stepSize: int; gamma = 0.1): StepLR	
-`$`	nn.html#$.e,StepLR	nn: `$`(s: StepLR): string	
+newLinearLR	nn.html#newLinearLR,Optimizer,int,float,float	nn: newLinearLR(optim: var Optimizer; epochs: int; startFactor, endFactor: float): LinearLR	
 newCosineAnnealingLR	nn.html#newCosineAnnealingLR,Optimizer,int,float	nn: newCosineAnnealingLR(optim: var Optimizer; tMax: int; lrMin = 0.0): CosineAnnealingLR	
-`$`	nn.html#$.e,CosineAnnealingLR	nn: `$`(s: CosineAnnealingLR): string	
+newChainedScheduler	nn.html#newChainedScheduler,varargs[Scheduler]	nn: newChainedScheduler(schedulers: varargs[Scheduler]): ChainedScheduler	

@@ -103,17 +103,13 @@ window.addEventListener('DOMContentLoaded', main);
           <li><a class="reference external"
           data-doc-search-tag="nn: `$`(m: Module): string" href="nn.html#%24%2CModule">nn: `$`(m: Module): string</a></li>
           <li><a class="reference external"
-          data-doc-search-tag="nn: `$`(optim: AdamOptimizer): string" href="nn.html#%24.e%2CAdamOptimizer">nn: `$`(optim: AdamOptimizer): string</a></li>
+          data-doc-search-tag="nn: `$`(s: Scheduler): string" href="nn.html#%24%2CScheduler">nn: `$`(s: Scheduler): string</a></li>
           <li><a class="reference external"
-          data-doc-search-tag="nn: `$`(s: CosineAnnealingLR): string" href="nn.html#%24.e%2CCosineAnnealingLR">nn: `$`(s: CosineAnnealingLR): string</a></li>
+          data-doc-search-tag="nn: `$`(optim: AdamOptimizer): string" href="nn.html#%24.e%2CAdamOptimizer">nn: `$`(optim: AdamOptimizer): string</a></li>
           <li><a class="reference external"
           data-doc-search-tag="nn: `$`(optim: Optimizer): string" href="nn.html#%24.e%2COptimizer">nn: `$`(optim: Optimizer): string</a></li>
           <li><a class="reference external"
-          data-doc-search-tag="nn: `$`(s: Scheduler): string" href="nn.html#%24.e%2CScheduler">nn: `$`(s: Scheduler): string</a></li>
-          <li><a class="reference external"
           data-doc-search-tag="nn: `$`(optim: SGDOptimizer): string" href="nn.html#%24.e%2CSGDOptimizer">nn: `$`(optim: SGDOptimizer): string</a></li>
-          <li><a class="reference external"
-          data-doc-search-tag="nn: `$`(s: StepLR): string" href="nn.html#%24.e%2CStepLR">nn: `$`(s: StepLR): string</a></li>
           <li><a class="reference external"
           data-doc-search-tag="shape: `$`(p: Padding): string" href="shape.html#%24%2CPadding">shape: `$`(p: Padding): string</a></li>
           <li><a class="reference external"
@@ -318,6 +314,10 @@ window.addEventListener('DOMContentLoaded', main);
 <dt><a name="ceil" href="#ceil"><span>ceil:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
           data-doc-search-tag="graph: ceil(a: Node): Node" href="graph.html#ceil%2CNode">graph: ceil(a: Node): Node</a></li>
+          </ul></dd>
+<dt><a name="ChainedScheduler" href="#ChainedScheduler"><span>ChainedScheduler:</span></a></dt><dd><ul class="simple">
+<li><a class="reference external"
+          data-doc-search-tag="nn: ChainedScheduler" href="nn.html#ChainedScheduler">nn: ChainedScheduler</a></li>
           </ul></dd>
 <dt><a name="CIFAR10Dataset" href="#CIFAR10Dataset"><span>CIFAR10Dataset:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
@@ -771,6 +771,10 @@ window.addEventListener('DOMContentLoaded', main);
           <li><a class="reference external"
           data-doc-search-tag="tensor: len(t: Tensor): int" href="tensor.html#len%2CTensor">tensor: len(t: Tensor): int</a></li>
           </ul></dd>
+<dt><a name="LinearLR" href="#LinearLR"><span>LinearLR:</span></a></dt><dd><ul class="simple">
+<li><a class="reference external"
+          data-doc-search-tag="nn: LinearLR" href="nn.html#LinearLR">nn: LinearLR</a></li>
+          </ul></dd>
 <dt><a name="lit" href="#lit"><span>lit:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
           data-doc-search-tag="literal: lit(value`gensym64: float32): Literal" href="literal.html#lit%2Cfloat32">literal: lit(value`gensym64: float32): Literal</a></li>
@@ -897,6 +901,10 @@ window.addEventListener('DOMContentLoaded', main);
 <li><a class="reference external"
           data-doc-search-tag="graph: newBuilder(name: string): Builder" href="graph.html#newBuilder%2Cstring">graph: newBuilder(name: string): Builder</a></li>
           </ul></dd>
+<dt><a name="newChainedScheduler" href="#newChainedScheduler"><span>newChainedScheduler:</span></a></dt><dd><ul class="simple">
+<li><a class="reference external"
+          data-doc-search-tag="nn: newChainedScheduler(schedulers: varargs[Scheduler]): ChainedScheduler" href="nn.html#newChainedScheduler%2Cvarargs%5BScheduler%5D">nn: newChainedScheduler(schedulers: varargs[Scheduler]): ChainedScheduler</a></li>
+          </ul></dd>
 <dt><a name="newClient" href="#newClient"><span>newClient:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
           data-doc-search-tag="nimxla: newClient(useGPU = true): Client" href="nimxla.html#newClient">nimxla: newClient(useGPU = true): Client</a></li>
@@ -912,6 +920,10 @@ window.addEventListener('DOMContentLoaded', main);
 <dt><a name="newGPUClient" href="#newGPUClient"><span>newGPUClient:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
           data-doc-search-tag="nimxla: newGPUClient(memoryFraction = 1.0; preallocate = false; logLevel = Warning): Client" href="nimxla.html#newGPUClient%2Cfloat">nimxla: newGPUClient(memoryFraction = 1.0; preallocate = false; logLevel = Warning): Client</a></li>
+          </ul></dd>
+<dt><a name="newLinearLR" href="#newLinearLR"><span>newLinearLR:</span></a></dt><dd><ul class="simple">
+<li><a class="reference external"
+          data-doc-search-tag="nn: newLinearLR(optim: var Optimizer; epochs: int; startFactor, endFactor: float): LinearLR" href="nn.html#newLinearLR%2COptimizer%2Cint%2Cfloat%2Cfloat">nn: newLinearLR(optim: var Optimizer; epochs: int; startFactor, endFactor: float): LinearLR</a></li>
           </ul></dd>
 <dt><a name="newLiteral" href="#newLiteral"><span>newLiteral:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
@@ -1818,7 +1830,7 @@ window.addEventListener('DOMContentLoaded', main);
       <div class="twelve-columns footer">
         <span class="nim-sprite"></span>
         <br/>
-        <small style="color: var(--hint);">Made with Nim. Generated: 2023-07-10 15:05:44 UTC</small>
+        <small style="color: var(--hint);">Made with Nim. Generated: 2023-07-10 21:00:12 UTC</small>
       </div>
     </div>
   </div>
