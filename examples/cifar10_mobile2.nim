@@ -1,4 +1,4 @@
-# CIFAR10 Resnet 18 convolutional net model
+# CIFAR10 MobileNet v2 convolutional net model
 # params to the main proc can be set via cmd line argmuments
 # output option will save predicted test labels to a file which can be read by imgview
 
@@ -10,38 +10,56 @@ import cligen
 
 setPrintOpts(precision=4, minWidth=8, floatMode=ffDecimal, threshold=100, edgeItems=5)
 
-let defn = @[(64, 1), (64, 1), (128, 2),  (128, 1), (256, 2), (256, 1), (512, 2), (512, 1)]
+let defn = @[(1,  16, 1, 1), 
+             (6,  24, 2, 1),
+             (6,  32, 3, 2),
+             (6,  64, 4, 2),
+             (6,  96, 3, 1),
+             (6, 160, 3, 2),
+             (6, 320, 1, 1)]
 
-proc makeBlock(c: Client, rng: var Rand, id: string, nin, nout, strides: int, dtype: DataType): Module =
-  let conv1 = c.initConv2dBatchNorm(rng, id & ".a1", nin, nout, kernelSize=3, strides=strides, padding=pad(1), dtype=dtype)
-  let conv2 = c.initConv2dBatchNorm(rng, id & ".a2", nout, nout, kernelSize=3, padding=pad(1), dtype=dtype)
-  result.info = "residual:"
-  result.add(conv1, conv2)
+let
+  convInit = heInit(fanOut = true)
+  linearInit = normalInit(stddev = 0.001)
+
+proc makeBlock(c: Client, rng: var Rand, id: string, nin, nout, expand, strides: int, dtype: DataType): Module =
+  let d = nin*expand
+  let conv1 = c.initConv2dBatchNorm(rng, id & ".a1", nin, d, kernelSize=1, weights=convInit, dtype=dtype)
+  let conv2 = c.initConv2dBatchNorm(rng, id & ".a2", d, d, kernelSize=3, strides=strides, padding=pad(1), 
+                                                     groups=d, weights=convInit, dtype=dtype)
+  let conv3 = c.initConv2dBatchNorm(rng, id & ".a3", d, nout, kernelSize=1, weights=convInit, dtype=dtype)
+  result.info = if strides == 1: "residual:" else: "block:"
+  result.add(conv1, conv2, conv3)
   var shortcut: Module
-  if strides != 1:
-    shortcut = c.initConv2dBatchNorm(rng, id & ".b1", nin, nout, kernelSize=1, strides=strides, dtype=dtype)
+  if strides == 1 and nin != nout:
+    shortcut = c.initConv2dBatchNorm(rng, id & ".b1", nin, nout, kernelSize=1, weights=convInit, dtype=dtype)
     result.add shortcut
-
   result.forward = proc(x: Node, training: bool, output: var Outputs): Node =
-      let l1 = conv1.forward(x, training, output).relu
-      let l2 = conv2.forward(l1, training, output)
-      if strides == 1:
-        (l2 + x).relu
+    let l1 = conv1.forward(x, training, output).relu
+    let l2 = conv2.forward(l1, training, output).relu
+    result = conv3.forward(l2, training, output)
+    if strides == 1:
+      if nin != nout:
+        result = result + shortcut.forward(x, training, output)
       else:
-        (l2 + shortcut.forward(x, training, output)).relu
+        result = result + x
 
 proc buildModel(c: Client, rng: var Rand, nclasses: int, mean, std: seq[float32], dtype: DataType): Module =
-  result.info = "== cifar10_resnet18 =="
-  let conv = c.initConv2dBatchNorm(rng, "1", 3, 64, kernelSize=3, padding=pad(1), dtype=dtype)
-  result.add conv
+  result.info = "== cifar10_mobilenet2 =="
+  let conv1 = c.initConv2dBatchNorm(rng, "1", 3, 32, kernelSize=3, padding=pad(1), weights=convInit, dtype=dtype)
+  result.add conv1
   var blocks: seq[Module]
-  var nin = 64
-  for i, (nout, strides) in defn:
-    blocks.add c.makeBlock(rng, $(i+2), nin, nout, strides, dtype)
-    nin = nout
+  var nin = 32
+  for i, (expand, nout, layers, strides) in defn:
+    var stride = strides
+    for j in 1..layers:
+      blocks.add c.makeBlock(rng, &"{i+2}.{j}", nin, nout, expand, stride, dtype)
+      nin = nout
+      stride = 1
   result.add blocks
-  let linear = c.initLinear(rng, "10", 512, nclasses)
-  result.add linear
+  let conv2 = c.initConv2dBatchNorm(rng, "9", nin, 1280, kernelSize=1, weights=convInit, dtype=dtype)
+  let linear = c.initLinear(rng, "10", 1280, nclasses, weights=linearInit)
+  result.add(conv2, linear)
 
   result.forward = proc(x: Node, training: bool, output: var Outputs): Node =
     let b = x.builder
@@ -49,14 +67,15 @@ proc buildModel(c: Client, rng: var Rand, nclasses: int, mean, std: seq[float32]
     let mean = (b^mean).convert(dtype).reshape(1, 1, 1, 3)
     let std = (b^std).convert(dtype).reshape(1, 1, 1, 3)
     var xs = (xf - mean) / std
-    xs = conv.forward(xs, training, output).relu
+    xs = conv1.forward(xs, training, output).relu
     for b in blocks:
       xs = b.forward(xs, training, output)
+    xs = conv2.forward(xs, training, output).relu
     linear.forward(xs.avgPool2d(4).flatten(1).convert(F32), training, output)
 
 
-proc main(epochs=100, learnRate=0.05, wdecay=0.001, trainBatch=128, testBatch=250, seed=0i64, augment=true,
-          bfloat16=true, load="", checkpoint="data/cifar10_res18", gpu=true, plot=false, debug=false) =
+proc main(epochs=150, learnRate=0.05, wdecay=0.001, trainBatch=128, testBatch=250, seed=0i64, augment=true,
+          bfloat16=true, load="", checkpoint="data/cifar10_mobile2", gpu=true, plot=false, debug=false) =
   var logger = newConsoleLogger(levelThreshold=if debug: lvlDebug else: lvlInfo)
   addHandler(logger)
   # init client

@@ -10,6 +10,15 @@ import nimxla/[data, plots, image, train]
 import cligen
 import ws
 
+proc prediction(pred: Tensor[float32], ix: int): (int, float32) =
+  # predicted class number and probability
+  var class = -1
+  var pmax = -999f32
+  for i in 0 ..< pred.dims[1]:
+    let v = pred[ix, i]
+    if v > pmax: (class, pmax) = (i, v)
+  return (class, pmax)
+
 proc filterClass(dset: Dataset, class: string): seq[int] =
   if class == "":
     return toSeq(0 ..< dset.len)
@@ -20,13 +29,13 @@ proc filterClass(dset: Dataset, class: string): seq[int] =
     if dset.classes[label] == class:
       result.add i
 
-proc filterErrors(dset: Dataset, indexes: seq[int], pred: Tensor[int32]): seq[int] = 
+proc filterErrors(dset: Dataset, indexes: seq[int], pred: Tensor[float32]): seq[int] = 
   echo "filtering to return only errors"
   var t = newTensor[uint8](dset.shape)
   for ix in indexes:
     let label = dset.getItem(ix, t.rawPtr)
-    if pred[ix] != label:
-      result.add ix
+    let (predicted, _) = prediction(pred, ix)
+    if predicted != label: result.add ix
 
 proc main(page = 1, rows = 8, cols = 12, class = "", input = "", errors = false, cifar10 = false,
           flip = false, wrap = 0, rotate = false, scale = false, elastic = 0.0, debug = false) =
@@ -58,12 +67,12 @@ proc main(page = 1, rows = 8, cols = 12, class = "", input = "", errors = false,
   echo dset
 
   var indexes = dset.filterClass(class)
-  var pred: Tensor[int32]
+  var pred: Tensor[float32]
   if input != "":
     let s = readCheckpointFile(input, "predict")
-    pred = readTensor[int32](s)
+    pred = readTensor[float32](s)
     echo "read predictions: ", pred.shape
-    if pred.len != dset.len:
+    if pred.dims[0] != dset.len:
       quit("Error: prediction file size does not match dataset")
     if errors:
       indexes = filterErrors(dset, indexes, pred)
@@ -79,8 +88,8 @@ proc main(page = 1, rows = 8, cols = 12, class = "", input = "", errors = false,
         let class = dset.getItem(indexes[n], imgs.at(i).rawPtr)
         text[i] = $indexes[n] & ":"
         if input != "":
-          let predicted = pred[indexes[n]]
-          text[i] &= " " & dset.classes[predicted]
+          let (predicted, pmax) = prediction(pred, indexes[n])
+          text[i] &= &" {dset.classes[predicted]}  {int(pmax*100+0.5)}%" 
           err[i] = (class != predicted)
     trans.transform(imgs)
     return (imgs, text, err)

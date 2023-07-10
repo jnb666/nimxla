@@ -10,24 +10,16 @@ import cligen
 
 setPrintOpts(precision=4, minWidth=8, floatMode=ffDecimal, threshold=100, edgeItems=5)
 
-
-proc layer(c: Client, rng: var Rand, id: string, nin, nout: int, dtype: DataType): Module =
-  let conv = c.initConv2d(rng, id & ".1", nin, nout, kernelSize=3, padding=pad(1), biases=nil, dtype=dtype)
-  let norm = c.initBatchNorm(rng, id & ".2", nout, dtype=dtype)
-  result.add(conv, norm)
-  result.forward = proc(x: Node, training: bool, output: var Outputs): Node =
-    let l1 = conv.forward(x, training, output)
-    norm.forward(l1, training, output).relu
-
 proc stack(c: Client, rng: var Rand, id: string, n, nin, nout: int, dtype: DataType): Module =
   var layers: seq[Module]
   for i in 1..n:
-    layers.add c.layer(rng, id & "." & $i, if i == 1: nin else: nout, nout, dtype)
+    layers.add c.initConv2dBatchNorm(rng, id & "." & $i, if i == 1: nin else: nout, nout,
+                                     kernelSize=3, padding=pad(1), dtype=dtype)
   result.add layers
   result.forward = proc(x: Node, training: bool, output: var Outputs): Node =
     var xv = x
     for l in layers:
-      xv = l.forward(xv, training, output)
+      xv = l.forward(xv, training, output).relu
     xv.maxPool2d(2)
 
 proc buildModel(c: Client, rng: var Rand, nclasses: int, mean, std: seq[float32], dtype: DataType): Module =
