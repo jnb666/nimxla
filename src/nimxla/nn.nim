@@ -1,7 +1,7 @@
 ## The nn module provides higher level functions for building neural network models using the nimxla graph API.
 
 {.warning[LockLevel]:off.}
-import std/[math, random, times, strutils, strformat, sequtils, tables, logging]
+import std/[math, random, times, strutils, strformat, sequtils, sugar, tables, logging]
 import ../nimxla
 
 type
@@ -36,14 +36,23 @@ type
     optim: Optimizer
     epoch: int
     initialLR: float
+    maxEpoch: int
+    name: string
+
+  ChainedScheduler* = ref object of Scheduler
+    ## Runs a sequence of schedulers in series
+    sched: seq[Scheduler]
 
   StepLR* = ref object of Scheduler
     stepSize: int
     gamma:    float
 
+  LinearLR* = ref object of Scheduler
+    startFactor: float
+    endFactor:   float
+
   CosineAnnealingLR* = ref object of Scheduler
-    tMax:   int
-    lrMin:  float
+    lrMin: float
 
   Outputs* = object
     ## List of named output parameters
@@ -95,8 +104,8 @@ proc getFanInOut(dims: openarray[int]): (int, int) =
     (dims[0], dims[1])
   else:
     # conv layer with channels last layout
-    let ksize = prod(dims[1..^2])
-    (dims[^1]*ksize, dims[0]*ksize)
+    let ksize = prod(dims[0..^3])
+    (dims[^2]*ksize, dims[^1]*ksize)
 
 proc glorotInit*(gain = 1.0): InitFunc =
   ## Initialisation function with values set in uniform range from
@@ -490,7 +499,7 @@ method `$`*(optim: AdamOptimizer): string =
 method setLR(s: Scheduler, c: Client) {.base.} =
   raise newException(ValueError, "abstract method")
 
-method `$`*(s: Scheduler): string {.base.} =
+method args(s: Scheduler): seq[string] {.base.} =
   raise newException(ValueError, "abstract method")
 
 proc init*(s: Scheduler, c: Client, epoch: int) =
@@ -504,18 +513,38 @@ proc step*(s: Scheduler, c: Client) =
   s.epoch += 1
   s.setLR(c)
 
+proc `$`*(s: Scheduler): string  =
+  s.name & "(" & $s.optim & " " & s.args.join(" ") & ")"
+
 proc newStepLR*(optim: var Optimizer, stepSize: int, gamma = 0.1): StepLR =
   ## Create StepLR scheduler which multiplies the learning rate by gamma after each stepSize epochs.
-  result = StepLR(optim: optim, initialLR: optim.learningRate, stepSize: stepSize, gamma: gamma)
+  StepLR(name: "StepLR", optim: optim, initialLR: optim.learningRate, stepSize: stepSize, gamma: gamma)
 
 method setLR(s: StepLR, c: Client) =
   let steps = s.epoch div s.stepSize
   let lr = s.initialLR * (s.gamma^steps)
-  debug "set learning rate to ", lr.format
+  debug "StepLR: set learning rate to ", lr.format
   s.optim.setLearningRate(c, lr)
 
-method `$`*(s: StepLR): string =
-  &"StepLR({s.optim} stepSize={s.stepSize} gamma={s.gamma})"
+method args(s: StepLR): seq[string] =
+  @[&"stepSize={s.stepSize}", &"gamma={s.gamma}"]
+
+proc newLinearLR*(optim: var Optimizer, epochs: int, startFactor, endFactor: float): LinearLR =
+  ## Create LinearLR scheduler which linearly decays the learning rate from startFactor at the
+  ## first epoch to endFactor after epochs.
+  LinearLR(name: "LinearLR", optim: optim, initialLR: optim.learningRate, maxEpoch: epochs, 
+           startFactor: startFactor, endFactor: endFactor)
+
+method setLR(s: LinearLR, c: Client) =
+  let factor = if s.epoch < s.maxEpoch:
+    s.startFactor + (s.endFactor-s.startFactor)*float(s.epoch)/float(s.maxEpoch)
+  else:
+    s.endFactor
+  debug "LinearLR: set learning rate to ", s.initialLR*factor
+  s.optim.setLearningRate(c, s.initialLR*factor)
+
+method args(s: LinearLR): seq[string] =
+  @[&"epochs={s.maxEpoch}", &"factor={s.startFactor}..{s.endFactor}"]
 
 proc newCosineAnnealingLR*(optim: var Optimizer, tMax: int, lrMin = 0.0): CosineAnnealingLR =
   ## Create cosine annealing learning rate scheduler such that
@@ -523,14 +552,37 @@ proc newCosineAnnealingLR*(optim: var Optimizer, tMax: int, lrMin = 0.0): Cosine
   ## lr = lrMin + (lrMax - lrMin)/2 * (1 + cos(pi * t/tMax))
   ## ```
   ## where t is the current epoch and lrMax is the initial learning rate.
-  result = CosineAnnealingLR(optim: optim, initialLR: optim.learningRate, tMax: tMax, lrMin: lrMin)
+  CosineAnnealingLR(name: "CosineAnnealingLR", optim: optim, initialLR: optim.learningRate,
+                   maxEpoch: tMax, lrMin: lrMin)
 
 method setLR(s: CosineAnnealingLR, c: Client) =
-  let lr = s.lrMin + 0.5*(s.initialLR - s.lrMin) * (1.0 + cos(PI * s.epoch.float/s.tMax.float))
-  debug "set learning rate to ", lr.format
+  let lr = s.lrMin + 0.5*(s.initialLR - s.lrMin) * (1.0 + cos(PI * s.epoch.float/s.maxEpoch.float))
+  debug "CosineAnnealingLR: set learning rate to ", lr.format
   s.optim.setLearningRate(c, lr)
 
-method `$`*(s: CosineAnnealingLR): string =
-  &"CosineAnnealingLR({s.optim} tMax={s.tMax} lrMin={s.lrMin})"
+method args(s: CosineAnnealingLR): seq[string] =
+  @[&"tMax={s.maxEpoch}", &"lrMin={s.lrMin}"]
 
+proc newChainedScheduler*(schedulers: varargs[Scheduler]): ChainedScheduler =
+  ## Create a ChainedScheduler to run a number of schedulers one after the other.
+  let optim = schedulers[0].optim
+  ChainedScheduler(name: "Chained", optim: optim, initialLR: optim.learningRate, sched: @schedulers)
+
+proc current(s: ChainedScheduler): Scheduler =
+  var base = 0
+  for sched in s.sched:
+    if sched.maxEpoch == 0 or s.epoch <= base + sched.maxEpoch:
+      sched.epoch = s.epoch - base
+      return sched
+    base += sched.maxEpoch
+  return nil
+
+method setLR(s: ChainedScheduler, c: Client) =
+  let sched = s.current()
+  if not sched.isNil:
+    debug &"ChainedScheduler: epoch={s.epoch} sched={sched.name}"
+    sched.setLR(c)
+
+method args(s: ChainedScheduler): seq[string] =
+  map(s.sched, x => x.name & "(" & x.args.join(" ") & ")")
 

@@ -263,12 +263,12 @@ proc trainNetwork*[T: ElemType](t: var Trainer, train, test: var DataLoader, epo
   var saved = 0
   while t.epoch < epochs:
     let startEpoch = getMonoTime()
+    if t.sched != nil:
+      t.sched.step(t.client)
     let (loss, trainAcc, quitProg) = trainEpoch[T](t, train)
     if quitProg:
       echo "exit"
       break
-    if t.sched != nil:
-      t.sched.step(t.client)
     let (testAcc, quitProg2) = getAccuracy[T](t, test)
     if quitProg2:
       echo "exit"
