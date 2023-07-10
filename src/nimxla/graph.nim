@@ -163,7 +163,7 @@ proc checkBuilderError(status: status_t, at: Node = nil) =
 
 proc i64seq(arr: openarray[int], length: int, def: int64 = 0, name = ""): seq[int64] =
   if arr.len == 0:
-    result = repeat(def, length)
+    result = @[]
   elif arr.len == length:
     result = map(arr, x => x.int64)
   else:
@@ -196,9 +196,7 @@ proc len*(n: Node): int =
 
 proc `$`*(n: Node): string =
   ## Print node id, type, shape and info fields.
-  if n.id > 0:
-    result.add &"{n.id:3}: "
-  result.add ($n.kind)[1..^1] & $n.shape & $n.info
+  result.add &"{n.id:3}: " & ($n.kind)[1..^1] & $n.shape & $n.info
 
 proc dump*(n: Node, maxDepth = -1, depth = 0): string =
   ## Formatted AST tree of this node and it's children. Limited to maxDepth if maxDepth >= 0
@@ -240,7 +238,7 @@ proc addNode(b: Builder, node: Node): Node =
     if node.kind == tConst and n.kind == tConst and n.shape == node.shape and n.info == node.info:
       node.op = nil
       return n
-  node.id = b.nodes.len + 1
+  node.id = b.nodes.len
   b.nodes.add node
   return node
 
@@ -273,7 +271,8 @@ proc build*(b: Builder, root: Node): Computation =
   result.obj = new ComputationObj
   let status = b.obj.c.build(root.op.c, result.obj.c.addr)
   checkBuilderError(status, root)
-  for n in mitems(b.nodes):
+  for i, n in mpairs(b.nodes):
+    assert n.id == i
     n.op = nil
   result.nodes = b.nodes
   result.params = b.params
@@ -655,21 +654,25 @@ proc convolution*(a, kernel: Node, inputDims, outputDims, kernelDims: openarray[
   if inputDims.len < 3:
     raiseError("convolution: number input/output/kernel dimensions should be at least 3", a)
   let nd = inputDims.len - 2
+  if padding.len != 0 and padding.len != nd:
+    raiseError(&"convolution: number of padding values should be {nd} - got {padding.len}")
   var idims = map(inputDims, x => x.int64)
   var odims = map(outputDims, x => x.int64)
   var kdims = map(kernelDims, x => x.int64)
   var stride = i64seq(strides, nd, 1, "stride")
   var inDilation = i64seq(inputDilation, nd, 1, "input dilation")
   var kDilation = i64seq(dilation, nd, 1, "dilation")
-  if padding.len != 0 and padding.len != nd:
-    raiseError(&"convolution: number of padding values should be {nd} - got {padding.len}")
+  var sptr, indptr, kdptr: ptr int64
+  if stride.len > 0: sptr = addr stride[0]
+  if inDilation.len > 0: indptr = addr inDilation[0]
+  if kDilation.len > 0: kdptr = addr kDilation[0]
   let kernelSize = collect:
     for i in 0 ..< padding.len:
       int((kernel.dims[kdims[i+2]] - 1) * kDilation[i] + 1)
   var (padLo, padHi) = getPadding(padding, kernelSize)
   let op = op_conv(a.op.c, kernel.op.c, csize_t(nd), idims[0].addr, odims[0].addr, kdims[0].addr,
-                   stride[0].addr, inDilation[0].addr, kDilation[0].addr, csize_t(padding.len), 
-                   padLo[0].addr, padHi[0].addr, groups, batchGroups)
+                   csize_t(stride.len), sptr, csize_t(inDilation.len), indptr, csize_t(kDilation.len),
+                   kdptr, csize_t(padding.len), padLo[0].addr, padHi[0].addr, groups, batchGroups)
   result = a.builder.wrap(op, tConv, [a, kernel], &"strides={strides},padding={padding}")
   if dilation.len > 0:
     result.info.add &",dilation={dilation}"
@@ -683,19 +686,26 @@ proc convolution*(a, kernel: Node, inputDims, outputDims, kernelDims: openarray[
   result.dilation = @dilation
   result.groups = groups
 
-proc getDims*(ndims: int, channelsFirst: bool): seq[int] =
-  ## Get dimension index numbers for given layout.
+proc getDims(ndims: int, channelsFirst: bool): seq[int] =
+  ## Get data dimension index numbers for given layout as [batch, channels, spatial...]
   if channelsFirst:
     @[0, 1] & toSeq(2 .. ndims+1)
   else:
     @[0, ndims+1] & toSeq(1 .. ndims)
+
+proc kernelDims(ndims: int, channelsFirst: bool): seq[int] =
+  ## Get kernel dimension index number for given layout as [output_channels, input_channels, spatial...]
+  if channelsFirst:
+    @[0, 1] & toSeq(2 .. ndims+1)
+  else:
+    @[ndims+1, ndims] & toSeq(0 ..< ndims)
 
 proc conv1d*(a, kernel: Node, strides=1, padding=pad(0), dilation=1, groups=1, channelsFirst=false): Node =
   ## One dimensional convolution with optional low and high padding and either strides or dilation.
   ##
   ## Default layout should be
   ## - a:      [N, W, C]
-  ## - kernel: [K, W, C]
+  ## - kernel: [W, C, K]
   ##
   ## If channelsFirst is set then
   ## - a:      [N, C, W]
@@ -706,7 +716,8 @@ proc conv1d*(a, kernel: Node, strides=1, padding=pad(0), dilation=1, groups=1, c
   if a.rank != 3 or kernel.rank != 3:
     raiseError(&"conv1d: input and kernel rank should be 3 - have {a.rank},{kernel.rank}", a)
   let dims = getDims(1, channelsFirst)
-  convolution(a, kernel, dims, dims, dims, [strides], [padding], [dilation], groups=groups)
+  let kdims = kernelDims(1, channelsFirst)
+  convolution(a, kernel, dims, dims, kdims, [strides], [padding], [dilation], groups=groups)
 
 proc conv2d*(a, kernel: Node, strides: Opt2d = 1, padding: Pad2d = pad(0), dilation: Opt2d = 1, 
              groups=1, channelsFirst=false): Node =
@@ -714,7 +725,7 @@ proc conv2d*(a, kernel: Node, strides: Opt2d = 1, padding: Pad2d = pad(0), dilat
   ##
   ## Default layout should be
   ## - a:      [N, H, W, C]
-  ## - kernel: [K, H, W, C]
+  ## - kernel: [H, W, C, K]
   ##
   ## If channelsFirst is set then
   ## - a:      [N, C, H, W]
@@ -725,7 +736,8 @@ proc conv2d*(a, kernel: Node, strides: Opt2d = 1, padding: Pad2d = pad(0), dilat
   if a.rank != 4 or kernel.rank != 4:
     raiseError(&"conv2d: input and kernel rank should be 4 - have {a.rank},{kernel.rank}", a)
   let dims = getDims(2, channelsFirst)
-  convolution(a, kernel, dims, dims, dims, strides.seq2, padding.seq2, dilation.seq2, groups=groups)
+  let kdims = kernelDims(2, channelsFirst)
+  convolution(a, kernel, dims, dims, kdims, strides.seq2, padding.seq2, dilation.seq2, groups=groups)
 
 proc conv3d*(a, kernel: Node, strides: Opt3d = 1, padding: Pad3d = pad(0), dilation: Opt3d = 1, 
              groups=1, channelsFirst=false): Node =
@@ -733,7 +745,7 @@ proc conv3d*(a, kernel: Node, strides: Opt3d = 1, padding: Pad3d = pad(0), dilat
   ##
   ## Default layout should be
   ## - a:      [N, D, H, W, C]
-  ## - kernel: [K, D, H, W, C]
+  ## - kernel: [D, H, W, C, K]
   ##
   ## If channelsFirst is set then
   ## - a:      [N, C, D, H, W]
@@ -744,7 +756,8 @@ proc conv3d*(a, kernel: Node, strides: Opt3d = 1, padding: Pad3d = pad(0), dilat
   if a.rank != 5 or kernel.rank != 5:
     raiseError(&"conv1d: input and kernel rank should be 5 - have {a.rank},{kernel.rank}", a)
   let dims = getDims(3, channelsFirst)
-  convolution(a, kernel, dims, dims, dims, strides.seq3, padding.seq3, dilation.seq3, groups=groups)
+  let kdims = kernelDims(3, channelsFirst)
+  convolution(a, kernel, dims, dims, kdims, strides.seq3, padding.seq3, dilation.seq3, groups=groups)
 
 proc gather*(a, indices: Node): Node =
   ## Builds a new tensor by taking individual values from the original tensor at the given indices.
@@ -949,6 +962,13 @@ proc mseLoss*(pred, target: Node): Node =
   let n = pred.builder.constant(math.prod(pred.dims), pred.dtype)
   sum((pred - target) * (pred - target)) / n
 
+proc softmax*(a: Node, axis = -1): Node =
+  ## Softmax function along given axis, adjusted for numerical stability.
+  let maxval = a.max(axis, keepDims=true)
+  maxval.noGrad = true
+  let exp_a = exp(a - maxval)
+  exp_a / exp_a.sum(axis, keepDims=true)
+
 proc crossEntropyLoss*(pred, target: Node): Node =
   ## Mean cross entropy loss function calculated from softmax output.
   ## Pred should be predicted values with shape [n, classes] while target is a
@@ -959,16 +979,15 @@ proc crossEntropyLoss*(pred, target: Node): Node =
     raiseError(&"crossEntropy: pred should be 2d array - got {pred.dims}", pred)
   if target.rank != 1:
     raiseError(&"crossEntropy: target should be 1d vector - got {target.dims}", target)
-  let exp_a = exp(pred - pred.max([1], keepDims=true))
-  var softmax = exp_a / exp_a.sum([1], keepDims=true)
-  softmax.kind = tSoftmax
-  softmax.args = @[pred]
-  softmax.yOneHot = oneHot(target, pred.dims[1], pred.dtype)
+  var n = pred.softmax()
+  n.kind = tSoftmax
+  n.args = @[pred]
+  n.yOneHot = oneHot(target, pred.dims[1], pred.dtype)
   let b = pred.builder
   let shape = [target.dims[0], 1]
   let indices = concat(b.iota(target.dtype, shape, axis=0), [target.reshape(shape)], axis=1)
   let nitems = b.constant(target.dims[0], pred.dtype)
-  -sum(log(gather(softmax, indices.reshape(-1, 1, 2)))) / nitems
+  -sum(log(gather(n, indices.reshape(-1, 1, 2)))) / nitems
 
 
 proc poolDims(val: openarray[int], channelsFirst: bool): seq[int] =
@@ -1139,7 +1158,9 @@ proc unbcast(b: Builder, v: Node, xd, yd: openarray[int]): Node =
   let yShape = repeat(1, ndim-yd.len) & @yd
   for i, (dx, dy) in zip(xShape, yShape):
     if dx == 1 and dy > 1: axes.add i
-  if axes.len > 0: v.sum(axes) else: v
+  result = if axes.len > 0: v.sum(axes) else: v
+  if result.dims != xd:
+    result = result.reshape(xd)
 
 proc unreduce(n, x, v: Node): Node =
   ## Inverse of sum operation, broadcast back to original shape
@@ -1169,9 +1190,27 @@ proc getConvAxis(n, x, kernel: Node, axis: int): (int, int, int, int, int, Paddi
   let pads = if n.padding.len > 0: n.padding[axis] else: pad(0)
   (isize, osize, ksize, stride, dilation, pads)
 
+proc getConvKernel(kernel: Node, odim, idim, groups: int): Node =
+  if groups == 1:
+    return kernel
+  var y = kernel
+  let size2 = y.dims[odim] div groups
+  var shape = y.dims
+  shape[odim] = groups
+  shape.insert(size2, odim+1)
+  y = y.reshape(shape)
+  var perm = collect:
+    for i in 0 ..< y.rank:
+      if i != odim: i
+  perm.insert(odim, idim)
+  shape.delete(odim)
+  shape[idim] *= y.dims[odim]
+  y.transpose(perm).reshape(shape)
+
 proc convInputGrad(n, x, kernel, v: Node): Node =
   ## Gradient of convolution with respect to input
-  let revKernel = kernel.reverse(n.kdims[2 .. ^1])
+  let y = getConvKernel(kernel, n.kdims[0], n.kdims[1], n.groups)
+  let revKernel = y.reverse(n.kdims[2 .. ^1])
   let kernelDims = @[n.kdims[1], n.kdims[0]] & n.kdims[2 .. ^1]
   var paddings: seq[Padding]
   for axis in 0 ..< n.rank-2:
@@ -1185,8 +1224,8 @@ proc convInputGrad(n, x, kernel, v: Node): Node =
     let outputEnd = isize - inputStart + ksize2 div 2 - (osize-1) * (stride - 1)
     assert outputEnd >= osize
     paddings.add pad(-outputStart, outputEnd - osize)
-  convolution(v, revKernel, n.idims, n.odims, kernelDims, padding=paddings,
-              dilation=n.dilation, inputDilation=n.strides)
+  convolution(v, revKernel, n.odims, n.idims, kernelDims, padding=paddings,
+              dilation=n.dilation, inputDilation=n.strides, groups=n.groups)
 
 proc expectedOutputSize(isize, ksize, dilation, stride: int, pads: Padding): int =
   let ksize = (ksize-1)*dilation + 1
@@ -1206,7 +1245,7 @@ proc convKernelGrad(n, x, kernel, v: Node): Node =
     let reverseSize = expectedOutputSize(isize, osize, stride, dilation, pads)
     paddings[axis].hi += (ksize - reverseSize) * dilation
   convolution(x, v, inputDims, outputDims, kernelDims, strides=n.dilation,
-              padding=paddings, dilation=n.strides)
+              padding=paddings, dilation=n.strides, batchGroups=n.groups)
 
 proc sumPoolGrad(b: Builder, x, v: Node, kernelSize, strides: seq[int], paddings: seq[Padding]): Node =
   ## Gradient of sum reduce window (used for AvgPool)
@@ -1304,47 +1343,37 @@ proc localGrad(b: Builder, n, v: Node): seq[Node] =
   of tBatchNormTraining:
     let grads = batchNormGrad(x, y, n[1], n[2], v, n.epsilon, n.axis)
     return @[ grads[0], grads[1], grads[2] ]
+  of tTupleElement:
+    if x.kind == tBatchNormTraining:
+      if n.index == 0:
+        return @[ v ]
+      else:
+        return @[ Node(kind: tNone) ]
   of tSoftmax:
     return @[ (n - n.yOneHot) / b.constant(n.dims[0], n.dtype) ]
   else:
     raiseError("Node type not supported for autograd", n)
 
-proc calcGrads(b: Builder, node, pathValue: Node, inputs: openarray[string], 
-                grads: var openarray[Node], dict: var Table[int, Node], seen: var HashSet[int]) =
-  ## Recursively accumulate gradients from node where pathValue is prior value to this point
-  if node.id in seen:
-    debug "skip: ", node
-    return
-  seen.incl(node.id)
-  let node = if node.kind == tTupleElement:
-    node.args[0]
-  else:
-    node
-  debug "calcGrads: ", node
-  for i, grad in b.localGrad(node, pathValue):
-    if grad.kind == tNone: continue
-    let input = node.args[i]
-    let id = input.id
-    dict[id] = if dict.hasKey(id):
-      dict[id] + grad
-    else:
-      grad
-    if input.len > 0 and not input.noGrad:
-      b.calcGrads(input, grad, inputs, grads, dict, seen)
-    elif input.kind == tParam:
-      let n = inputs.find(input.name)
-      if n >= 0:
-        grads[n] = dict[id]
+proc checkDepends(n: Node, inputs: openarray[string], needed: var Table[int, bool]): bool =
+  ## For node n, does it depend on any of the parameters in inputs?
+  if n.id in needed:
+    return needed[n.id]
+  if n.kind == tParam and n.name in inputs:
+    needed[n.id] = true
+    return true
+  if n.noGrad:
+    needed[n.id] = false
+    return false
+  for arg in n.args:
+    if arg.checkDepends(inputs, needed):
+      result = true
+  needed[n.id] = result
 
-proc reshapeAs(n: Node, b: Builder, name: string): Node =
-  ## Returns n reshaped to match the parameter with the given name.
-  for p in b.params:
-    if p.name == name:
-      if n.dims == p.dims:
-        return n
-      else:
-        return n.reshape(p.dims)
-  raiseError("gradient cannot be calculated for " & name & " parameter not found", n)
+proc expectedShape(n: Node): Shape =
+  if n.shape.kind == TupleKind:
+    n.shape.elems[0]
+  else:
+    n.shape
 
 proc gradient*(b: Builder, output: Node, inputs: openarray[string]): seq[Node] =
   ## Generate the graph to calculate the gradients at each of the given input
@@ -1369,12 +1398,39 @@ proc gradient*(b: Builder, output: Node, inputs: openarray[string]): seq[Node] =
     echo comp
 
   debug &"get gradient at: {inputs}"
-  let pathValue = b.one(output.dtype, output.dims)
-  var dict = initTable[int, Node]()
   result = newSeq[Node](inputs.len)
-  var seen: HashSet[int]
-  b.calcGrads(output, pathValue, inputs, result, dict, seen)
-  for i, grad in result:
-    result[i] = grad.reshapeAs(b, inputs[i])
-    debug &"grad {i}: {inputs[i]} {result[i].shape}"
+  var needed: Table[int, bool]
+  discard checkDepends(output, inputs, needed)
+  var vjp = newSeq[Node](output.id+1)
+  vjp[output.id] = b.one(output.dtype, output.dims)
+
+  # since inputs are alwars added to the nodes list before the consumer node
+  # we only need to check prior entries in the list to calc the grad for any given node
+  for id in countdown(output.id, 0):
+    if id in needed and needed[id]:
+      let node = b.nodes[id]
+      if node.args.len == 0:
+        if node.kind == tParam:
+          let n = inputs.find(node.name)
+          if n >= 0:
+            debug "gotGrad: ", node
+            result[n] = vjp[id]
+      else:
+        debug "calcGrad:", node
+        assert not vjp[id].isNil
+        for i, grad in b.localGrad(node, vjp[id]):
+          if grad.kind == tNone: continue
+          let input = node.args[i]
+          let s = input.shape
+          if grad.shape != input.expectedShape:
+            raiseError(&"gradient shape {grad.shape} does not match {input.expectedShape}", grad)
+          let id = input.id
+          if vjp[id].isNil:
+            vjp[id] = grad
+          else:
+            vjp[id] = vjp[id] + grad
+
+  for i, name in inputs:
+    if result[i].isNil:
+      raiseError("gradient cannot be calculated for " & name)
 

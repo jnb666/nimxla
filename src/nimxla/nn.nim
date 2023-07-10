@@ -204,7 +204,8 @@ proc initLinear*(c: Client, rng: var Rand, id: string, nin, nout: int,
   ## Create a new fully connected linear layer with the given unique id and number of inputs and outputs.
   ## Weight parameters are initialised using the weights function. If biases is not nil then bias parameters 
   ## are initialised using this function and added to the output.
-  result.info = &"{id}: linear(nin={nin}, nout={nout}, bias={biases != nil})"
+  result.info = &"{id}: linear(nin={nin}, nout={nout}"
+  result.info.add if biases != nil: ", bias)" else: ")"
   let weight = c.newVariable(id & ".w", [nin, nout], weights, rng)
   result.setVars weight
   if biases == nil:
@@ -225,14 +226,16 @@ proc initConv2d*(c: Client, rng: var Rand, id: string, inChannels, outChannels: 
   ## Create a new 2 dimensional convolution layer with parameters in channels last format.
   ## Weight parameters are initialised using the weights function. If biases is not nil then bias parameters 
   ## are initialised using this function and added to the output.
+  if inChannels mod groups != 0 or outChannels mod groups != 0:
+    raise newException(ValueError, &"conv2d: channels {inChannels},{outChannels} must be divisble by groups {groups}")
   result.info = &"{id}: conv2d(inChannels={inChannels}, outChannels={outChannels}, kernelSize={kernelSize}"
   if strides != 1: result.info.add &", strides={strides}"
   if padding != pad(0): result.info.add &", padding={padding}"
   if dilation != 1: result.info.add &", dilation={dilation}"
   if groups != 1: result.info.add &", groups={groups}"
-  result.info.add &", bias={biases != nil})"
+  result.info.add if biases != nil: ", bias)" else: ")"
 
-  let wdims = @[outChannels] & kernelSize.seq2 & @[inChannels]
+  let wdims = kernelSize.seq2 & @[inChannels div groups, outChannels]
   let weight = c.newVariable(id & ".w", wdims, weights, rng)
   result.setVars weight
   if biases == nil:
@@ -278,12 +281,27 @@ proc initBatchNorm*(c: Client, rng: var Rand, id: string, numFeatures: int, mome
       let variance = b.param(runningVar).convert(dtype)
       batchNormInference(x, scale, offset, mean, variance, epsilon, -1)
 
+proc initConv2dBatchNorm*(c: Client, rng: var Rand, id: string, inChannels, outChannels: int, kernelSize: Opt2d,
+                          strides: Opt2d = 1, padding: Pad2d = pad(0), dilation: Opt2d = 1, groups = 1,
+                          momentum: float = 0.1, epsilon: float = 1e-5, weights = heInit(), dtype = F32): Module =
+  ## Create a 2 dimensional convolution layer with no bias followed by batch normalisation
+  ## weights is the initialisation for the conv layer. The batchNorm layer will use default initialisation.
+  let l1 = c.initConv2d(rng, id, inChannels, outChannels, kernelSize, strides, padding, dilation, groups,
+                          weights=weights, biases=nil, dtype=dtype)
+  let l2 = c.initBatchNorm(rng, id & "bn", outChannels, momentum, epsilon, dtype=dtype)
+  result.add(l1, l2)
+  result.info = l1.info.replace("conv2d", "conv2dBatchNorm")
+  result.forward = proc(x: Node, training: bool, output: var Outputs): Node =
+    l2.forward(l1.forward(x, training, output), training, output)
 
-proc compileTest*(c: Client, m: Module, input: Node): Executable =
+proc compileTest*(c: Client, m: Module, input: Node, softmax = false): Executable =
   ## Build the execution graph for the given module and compile it to an executable.
   ## The executable returns the output from `m.forward(input)`
+  ## If softmax is set then apply softmax function to the output.
   var output: Outputs
-  let pred = m.forward(input, false, output)
+  var pred = m.forward(input, false, output)
+  if softmax:
+    pred = pred.softmax
   assert output.params.len == 0
   let comp = input.builder.build(pred)
   result = c.compile(comp, ["pred"])
@@ -298,7 +316,7 @@ proc compileTrain*(c: Client, m: Module, input: Node, lossFn: proc(y: Node): Nod
   let b = input.builder
   var output: Outputs
   let pred = m.forward(input, true, output)
-  debug "forward function: ", pred.toString
+  #debug "forward function: ", pred.repr
   let loss = lossFn(pred)
   let grads = b.gradient(loss, m.varNames)
   debug "outputs: ", $m.outputs

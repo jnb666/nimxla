@@ -19,7 +19,7 @@ type
     trainAcc*: Executable
     testAcc*:  Executable
     stats*:    Table[string, seq[float]]
-    predict*:  Tensor[int32]
+    predict*:  Tensor[float32]
     heatmap*:  Tensor[int32]
     epoch*:    int
 
@@ -48,11 +48,11 @@ proc trainFunc*(c: Client, model: Module, dtype: DataType, shape: seq[int], loss
   c.compileTrain(model, x, yp => lossFn(yp, y))
 
 proc testFunc*(c: Client, model: Module, dtype: DataType, shape: seq[int]): Executable =
-  ## Compile test function with given input data shape.
+  ## Compile test function with given input data shape. Will apply softmax function to the output.
   debug &"testFunc: shape={shape}"
   let b = newBuilder("tester")
   let x = b.parameter(dtype, shape, "x")
-  c.compileTest(model, x)
+  c.compileTest(model, x, softmax=true)
 
 proc accuracyFunc*(c: Client, batch, nout: int, outType=F32, labelType=I32): Executable =
   ## Helper function to calculate the accuracy from a set of predictions.
@@ -71,6 +71,11 @@ proc accuracyFunc*(c: Client, batch, nout: int, outType=F32, labelType=I32): Exe
   let comp = b.build(b.makeTuple(labels, accuracy))
   c.compile(comp, @["labels", "accuracy"])
 
+proc isInfOrNan(x: float32): bool =
+  case classify(x)
+  of fcNan, fcInf, fcNegInf: true
+  else: false
+
 proc trainEpoch*[T: ElemType](t: var Trainer, loader: var DataLoader): (float, float, bool) =
   ## Train on one epoch of batches of data from the training set, returns average loss and accuracy on training dara
   ## T should be the type of data returned from the loader. Output loss should be a float32 scalar.
@@ -78,27 +83,29 @@ proc trainEpoch*[T: ElemType](t: var Trainer, loader: var DataLoader): (float, f
   var targets = newTensor[int32](loader.batchSize)
   var avgLoss = 0.0
   var accuracy = 0.0
+  var samples = 0
   for batch in getBatch(loader, data, targets):
     if shouldQuit.load():
       return (0, 0, true)
     var params = initParams({"x": t.client.newBuffer(data), "y": t.client.newBuffer(targets)})
     t.model.getParams(params)
     t.trainer.runWith(params)
+    let loss = params["loss"].f32[]
+    if loss.isInfOrNan:
+      warn &"skip batch - loss = {loss}"
+      continue
     t.model.update(params)
     t.trainAcc.runWith(params)
-    let loss = params["loss"].f32[].float
-    let accVal = params["accuracy"].f32[].float
+    let accVal = params["accuracy"].f32[]
     if batch mod 10 == 0:
       debug &"train batch {batch}: loss = {loss:.2f}  accuracy = {accVal:.3f}"
       debug "  tgt: ", targets
       debug "  pred:", params["labels"].i32
-    if loss.isNan:
-      error "loss returns Nan value"
-      return (loss, 0.0, true)
-    avgLoss += (loss - avgLoss) / float(batch+1)
-    accuracy += (accVal - accuracy) / float(batch+1)
+    samples += 1
+    avgLoss += (loss - avgLoss) / samples.float
+    accuracy += (accVal - accuracy) / samples.float
     t.model.setParams(t.optim.step(params))
-  return (avgLoss, accuracy, false)
+  return (avgLoss, accuracy, samples == 0)
 
 proc getAccuracy*[T: ElemType](t: var Trainer, loader: var Dataloader): (float, bool) =
   ## Calculate the accuracy from the test data set.
@@ -106,8 +113,8 @@ proc getAccuracy*[T: ElemType](t: var Trainer, loader: var Dataloader): (float, 
   var data = newTensor[T](loader.shape)
   var targets = newTensor[int32](loader.batchSize)
   var accuracy = 0.0
-  t.predict = newTensor[int32](0)
   let nclasses = loader.dataset.classes.len
+  t.predict = newTensor[float32](0, nclasses)
   t.heatmap = zeros[int32](nclasses, nclasses)
   for batch in getBatch(loader, data, targets):
     if shouldQuit.load():
@@ -116,14 +123,14 @@ proc getAccuracy*[T: ElemType](t: var Trainer, loader: var Dataloader): (float, 
     t.model.getParams(params)
     t.tester.runWith(params)
     t.testAcc.runWith(params)
-    let accVal = params["accuracy"].f32[].float
+    let accVal = params["accuracy"].f32[]
     if batch mod 10 == 0:
       debug &"test batch {batch}: accuracy = {accVal:.3f}"
       debug "  tgt: ", targets
       debug "  pred:", params["labels"].i32
     accuracy += (accVal - accuracy) / float(batch+1)
+    t.predict = t.predict.append(params["pred"].f32)
     let labels = params["labels"].i32
-    t.predict = t.predict.append(labels)
     for i in 0 ..< targets.len:
       let (x, y) = (targets[i].int, labels[i].int)
       t.heatmap[y, x] = t.heatmap[y, x] + 1
@@ -174,7 +181,7 @@ proc loadCheckpoint*(t: var Trainer, filename: string) =
   let metadata = parseJson(z.extractStream("metadata"))
   let d = metadata.to(MetaData)
   debug d.repr
-  t.predict = readTensor[int32](z.extractStream("predict"))
+  t.predict = readTensor[float32](z.extractStream("predict"))
   for name in d.variables:
     let s = z.extractStream("model_" & name)
     t.model.variables[name].data = t.client.newBuffer(readTensor[float32](s))
@@ -211,7 +218,7 @@ proc statsPlots*(t: Trainer, classes: seq[string]): JsonNode =
   # heatmap plot
   let nclasses = classes.len
   var heatmap: seq[seq[float]]
-  let scale = nclasses / t.predict.len
+  let scale = nclasses*nclasses / t.predict.len
   for y in 0 ..< nclasses:
     var row: seq[float]
     for x in 0 ..< nclasses:
@@ -245,7 +252,7 @@ proc format(d: Duration): string =
     &"{secs div 3600}h:{dp[Minutes]}m:{dp[Seconds]}s"
 
 
-proc trainNetwork*[T: ElemType](t: var Trainer, train, test: var DataLoader, epochs: int, plot = false, checkpoint = "", saveEvery = 10) =
+proc trainNetwork*[T: ElemType](t: var Trainer, train, test: var DataLoader, epochs: int, plot = false, checkpoint = "", saveEvery = 20) =
   ## Training run for given number of epochs. If transform is set it will be applied to each batch of training data.
   ## If checkpoint is set then a checkpoint file is written using this prefix
   var ws: WebSocket

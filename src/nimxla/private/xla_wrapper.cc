@@ -379,9 +379,10 @@ xla_op op_dot_general(const xla_op lhs, const xla_op rhs, const int64_t *lhs_c,
 }
 
 xla_op op_conv(const xla_op lhs, const xla_op rhs, size_t ndims, const int64_t *input_dims,
-               const int64_t *output_dims, const int64_t *kernel_dims, const int64_t *strides,
-               const int64_t *lhs_dilation, const int64_t *rhs_dilation, size_t npad, const int64_t *pad_low,
-               const int64_t *pad_high, int64_t feature_groups, int64_t batch_groups) {
+               const int64_t *output_dims, const int64_t *kernel_dims, size_t nstride, const int64_t *strides,
+               size_t n_lhs_d, const int64_t *lhs_dilation, size_t n_rhs_d, const int64_t *rhs_dilation, 
+               size_t npad, const int64_t *pad_low, const int64_t *pad_high, 
+               int64_t feature_groups, int64_t batch_groups) {
   BEGIN_PROTECT_OP
   xla::ConvolutionDimensionNumbers dims;
   dims.set_input_batch_dimension(input_dims[0]);
@@ -395,9 +396,9 @@ xla_op op_conv(const xla_op lhs, const xla_op rhs, size_t ndims, const int64_t *
     dims.add_output_spatial_dimensions(output_dims[i+2]);
     dims.add_kernel_spatial_dimensions(kernel_dims[i+2]);
   }
-  auto stride = absl::Span<const int64_t>(strides, ndims);
-  auto lhs_d = absl::Span<const int64_t>(lhs_dilation, ndims);
-  auto rhs_d = absl::Span<const int64_t>(rhs_dilation, ndims);
+  auto stride = absl::Span<const int64_t>(strides, nstride);
+  auto lhs_d = absl::Span<const int64_t>(lhs_dilation, n_lhs_d);
+  auto rhs_d = absl::Span<const int64_t>(rhs_dilation, n_rhs_d);
   std::vector<std::pair<int64_t, int64_t>> padding;
   for (size_t i = 0; i < npad; ++i) {
     padding.push_back(std::pair<int64_t, int64_t>(pad_low[i], pad_high[i]));
