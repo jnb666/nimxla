@@ -47,11 +47,10 @@ type
 # memory management
 proc `=copy`[T](a: var TensorDataObj[T], b: TensorDataObj[T]) {.error.}
 
-proc `=destroy`[T](data: var TensorDataObj[T]) =
+proc `=destroy`[T](data: TensorDataObj[T]) =
   if data.arr != nil:
     trace "free Tensor"
     deallocShared(data.arr)
-    data.arr = nil
 
 proc allocData[T: ElemType](size: int, zero = false): TensorData[T] =
   trace "new Tensor"
@@ -195,7 +194,7 @@ proc `[]`*[T: ElemType](t: Tensor[T], ix: varargs[int]): T =
   t.data.arr[t.offset+pos]
 
 proc `[]=`*[T: ElemType](t: var Tensor, ix: varargs[int], value: T) =
-  ## Update the element at the position given by the array of indices similar to [].
+  ## Update the element at the position given by the array of indices similar to `[]`.
   let pos = index(t.dims, ix)
   assert pos < t.len
   t.data.arr[t.offset+pos] = value
@@ -217,7 +216,7 @@ proc approxEqual*[T: ElemType](t1, t2: Tensor[T], eps = 1e-6): bool =
   return true
 
 proc at*[T: ElemType](t: Tensor[T], ix: Natural): Tensor[T] =
-  ## Get tensor indexed by leading dimension -  e.g. if shape of t is [2, 3, 4] then t.at(1) => [3, 4].
+  ## Get tensor indexed by leading dimension -  e.g. if shape of t is `[2, 3, 4]` then `t.at(1) => [3, 4]`.
   ## Note that this returns a view of the data from tensor t. Use clone on the result if you need a copy.
   if t.dims.len < 1 or ix >= t.dims[0]:
     raise newException(IndexDefect, &"index {ix} out of range for at {t.dims}")
@@ -237,7 +236,7 @@ proc clone*[T: ElemType](t: Tensor[T]): Tensor[T] =
 
 proc append*[T: ELemType](t, t2: Tensor[T]): Tensor[T] =
   ## Append the data from t2 to the end of t. This will allocate and return a new tensor.
-  ## New shape is [t.d0+t.d2.d0, ...] where any dimensions following the first must be the same.
+  ## New shape is `[t.d0+t.d2.d0, ...]` where any dimensions following the first must be the same.
   if t.dims.len < 1 or t2.dims.len < 1 or t.dims.len != t2.dims.len or t.dims[1..^1] != t2.dims[1..^1]:
     raise newException(ValueError, &"invalid dimensions for append {t.dims} {t2.dims}")
   var dims = t.dims

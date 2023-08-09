@@ -9,7 +9,7 @@ installExt = @["nim"]
 bin = @["nimxla/nimxla_plot"]
 
 # Dependencies
-requires "nim >= 1.6.12"
+requires "nim >= 2.0.0"
 requires "zippy >= 0.10.10"
 requires "ws >= 0.5.0"
 requires "zip >= 0.3.1"

@@ -41,7 +41,7 @@ proc xaxis(i: int): string =
 proc yaxis(i: int): string =
   if i == 1: "yaxis" else: "yaxis" & $i
 
-proc gridLayout*(rows = 1, cols = 1, ytitle, xtitle: openarray[string] = []): JsonNode =
+proc gridLayout*(rows = 1, cols = 1, ytitle: openarray[string] = [], xtitle: openarray[string] = []): JsonNode =
   ## Create plotly layout for grid of plots with optional labels for each axis.
   result = %*{
     "grid": {"rows": rows, "columns": cols},
@@ -61,7 +61,7 @@ proc annotation(row, col: int, title: string, err: bool): JsonNode =
      "x": 0, "y": 0, "xanchor": "left", "yanchor": "top", "bgcolor": bgcol, "opacity": 0.8}
 
 proc plotImage*(t: Tensor[uint8], row, col: int): JsonNode =
-  ## Convert data from a uint8 tensor in [H, W, C] layout to a plotly image.
+  ## Convert data from a uint8 tensor in \[H, W, C\] layout to a plotly image.
   ## number of channels should be either 1 for greyscale or 3 or RGB image data.
   let (h, w, c) = (t.dims[0], t.dims[1], t.dims[2])
   assert c == 1 or c == 3
@@ -85,8 +85,8 @@ proc plotImage*(t: Tensor[uint8], row, col: int): JsonNode =
 
 proc plotImageGrid*(title: string, rows, cols: int, getData: proc(): (Tensor[uint8], seq[string], seq[bool])): (JsonNode, JsonNode) =
   ## Plot grid of images and returns data and loyout Json objects for input to plotly.
-  ## getData callBack function recieves should return a [N,H,W,C] 4d tensor with the images for this page -
-  ## i.e. `t.at(row*cols + col)` returns a [H,W,C] grayscale (C=0) or RGB (C=0,1,2) image.
+  ## getData callBack function recieves should return a \[N,H,W,C\] 4d tensor with the images for this page -
+  ## i.e. `t.at(row*cols + col)` returns a \[H,W,C\] grayscale (C=0) or RGB (C=0,1,2) image.
   ## and an optional sequence of labels for each image indexed in the same way.
   var layout = %*{
     "title": {"text": title},

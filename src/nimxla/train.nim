@@ -57,8 +57,8 @@ proc testFunc*(c: Client, model: Module, dtype: DataType, shape: seq[int]): Exec
 proc accuracyFunc*(c: Client, batch, nout: int, outType=F32, labelType=I32): Executable =
   ## Helper function to calculate the accuracy from a set of predictions.
   ## Callable has two input parameters
-  ## - model output array of shape <outType>[batch, nout]
-  ## - target labels of shape <labelType>[batch]
+  ## - model output array of shape <outType>\[batch, nout\]
+  ## - target labels of shape <labelType>\[batch\]
   ## And tuple with two outputs
   ## - labels array of predicted class for each sample, and
   ## - accuracy F32 scalar in range 0-1 from comparison with labels

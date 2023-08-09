@@ -67,23 +67,20 @@ type
 # memory management
 proc free(address: pointer) {.importc, header: "<stdlib.h>".}
 
-proc `=destroy`(client: var ClientObj) =
+proc `=destroy`(client: ClientObj) =
   if client.c != nil:
     trace "free Client"
     pjrt_client_free(client.c)
-    client.c = nil
 
-proc `=destroy`(buf: var BufferObj) =
+proc `=destroy`(buf: BufferObj) =
   if buf.c != nil:
     trace "free Buffer"
     pjrt_buffer_free(buf.c)
-    buf.c = nil
 
-proc `=destroy`(exec: var ExecutableObj) =
+proc `=destroy`(exec: ExecutableObj) =
   if exec.c != nil:
     trace "free Executable"
     pjrt_loaded_executable_free(exec.c)
-    exec.c = nil
 
 proc `=copy`(a: var BufferObj, b: BufferObj) {.error.}
 proc `=copy`(a: var ExecutableObj, b: ExecutableObj) {.error.}
@@ -241,12 +238,12 @@ proc compile*(client: Client, comp: Computation, outputs: openarray[string] = []
   if status != nil:
     let message = $status_error_message(status)
     status_free(status)
-    raiseError(message, comp.last)
+    raiseError(message)
   result.name = comp.name
-  for param in comp.params:
-    result.params.add param.name
-    result.inShapes.add param.shape
-  result.outShape = comp.last.shape
+  let (params, inShapes) = comp.parameters
+  result.params = params
+  result.inShapes = inShapes
+  result.outShape = comp.resultShape
   let nout = result.noutputs
   if outputs.len > 0:
     if outputs.len != nout:

@@ -20,6 +20,7 @@ type
   struct_xla_builder = distinct object
   struct_xla_computation = distinct object
   struct_xla_op = distinct object
+  struct_hlo_module_proto = distinct object
   struct_literal = distinct object
   struct_status = distinct object
   struct_shape = distinct object
@@ -31,6 +32,7 @@ type
   xla_builder* = ptr struct_xla_builder
   xla_computation* = ptr struct_xla_computation
   xla_op* = ptr struct_xla_op
+  hlo_module_proto* = ptr struct_hlo_module_proto
   status_t* = ptr struct_status
   shape_t* = ptr struct_shape
   literal_t* = ptr struct_literal
@@ -90,6 +92,9 @@ proc execute_b*(a1: pjrt_loaded_executable; a2: ptr pjrt_buffer; a3: cint;
 proc first_error*(a1: xla_builder): status_t {.importc: "first_error".}
 proc get_current_status*(a1: xla_builder): status_t {.importc: "get_current_status".}
 proc xla_computation_name*(a1: xla_computation): cstring {.importc: "xla_computation_name".}
+proc num_parameters*(a1: xla_computation; a2: ptr cint): status_t {.importc: "num_parameters".}
+proc get_parameters*(a1: xla_computation; a2: ptr shape_t; a3: ptr cstring): status_t {.importc: "get_parameters".}
+proc result_shape*(a1: xla_computation; a2: ptr shape_t): status_t {.importc: "result_shape".}
 proc xla_computation_free*(a1: xla_computation) {.importc: "xla_computation_free".}
 
 proc op_add*(a1: xla_op; a2: xla_op): xla_op {.importc: "op_add".}
@@ -246,3 +251,7 @@ proc constant_r1_double*(a0: xla_builder; a1: ptr cdouble; a2: csize_t): xla_op 
 proc create_r0_double*(a0: cdouble): literalt {.cdecl, importc: "create_r0_double".}
 proc create_r1_double*(a0: ptr cdouble; a1: csize_t): literalt {.cdecl, importc: "create_r1_double".}
 
+proc xla_computation_proto*(a0: xla_computation): hlo_module_proto {.importc: "xla_computation_proto"}
+proc xla_computation_from_hlo_module_proto*(a0: hlo_module_proto): xla_computation {.importc: "xla_computation_from_hlo_module_proto"}
+proc hlo_module_proto_to_string*(a0: hlo_module_proto; a1: ptr cstring): status_t {.importc: "hlo_module_proto_to_string"}
+proc hlo_module_proto_free*(a0: hlo_module_proto) {.importc: "hlo_module_proto_free"}

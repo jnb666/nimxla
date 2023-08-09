@@ -1170,9 +1170,33 @@ void literal_free(literal l) { delete l; }
 
 void status_free(status s) { delete s; }
 
-char *xla_computation_name(xla_computation c) {
+char *xla_computation_name(const xla_computation c) {
   return strdup(std::string(c->name()).c_str());
 }
+
+status num_parameters(const xla_computation c, int *n) {
+  ASSIGN_OR_RETURN_STATUS(s, c->GetProgramShape());
+  *n = s.parameters_size();
+  return nullptr;
+}
+
+status get_parameters(const xla_computation c, shape *shapes, char **names) {
+  ASSIGN_OR_RETURN_STATUS(s, c->GetProgramShape());
+  auto params = s.parameters();
+  auto param_names = s.parameter_names();
+  for (int i = 0; i < s.parameters_size(); ++i) {
+    shapes[i] = new Shape(params[i]);
+    names[i] = strdup(param_names[i].c_str());
+  }
+  return nullptr;
+}
+
+status result_shape(const xla_computation c, shape *out_shape) {
+  ASSIGN_OR_RETURN_STATUS(s, c->GetProgramShape());
+  *out_shape = new Shape(s.result());
+  return nullptr;
+}
+
 
 void xla_computation_free(xla_computation c) { delete c; }
 
@@ -1220,6 +1244,13 @@ status hlo_module_proto_parse_proto(const char *d, size_t len, bool binary,
 xla_computation
 xla_computation_from_hlo_module_proto(const hlo_module_proto p) {
   return new XlaComputation(*p);
+}
+
+status hlo_module_proto_to_string(hlo_module_proto p, char **output) {
+  ASSIGN_OR_RETURN_STATUS(config, HloModule::CreateModuleConfigFromProto(*p, {}));
+  ASSIGN_OR_RETURN_STATUS(hmp, HloModule::CreateFromProto(*p, config));
+  *output = strdup(std::string(hmp->ToString()).c_str());
+  return nullptr;
 }
 
 void hlo_module_proto_free(hlo_module_proto p) { delete p; }

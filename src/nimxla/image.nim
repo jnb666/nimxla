@@ -1,6 +1,6 @@
 ## The image module provides some simple functions for image augmentation. 
 ##
-## Image arrays are stored as a Tensor[uint8] with dimensions [N,H,W,C] where N=number of images, HxW is image size and 
+## Image arrays are stored as a `Tensor[uint8]` with dimensions `[N,H,W,C]` where N=number of images, HxW is image size and 
 ## C is number of channels (1 for greyscale or 3 for RGB).
 
 {.warning[BareExcept]:off.}
@@ -92,13 +92,13 @@ proc randomFlip*(direction: Direction, p = 0.5): ImageOp =
 
 proc randomWrap*(max_x, max_y: int, p = 0.5): ImageOp =
   ## Translate and wrap around images such that the point which was at (0, 0) is at (dx, dy) 
-  ## where dx is randomly sampled from -max_x..max_x and dy from -max_y..max_y. 
+  ## where dx is randomly sampled from `-max_x..max_x` and dy from `-max_y..max_y`. 
   ## p is probability of applying the transform to each image.
   ImageOp(kind: Wrap, p: p, max_x: max_x, max_y: maxy)
 
 proc randomAffine*(rotate = 0.0, scale = (1.0, 1.0), transx = 0.0, transy = 0.0, p = 0.5): ImageOp =
   ## Random affine transformation with probability p, where image is rotated by up to -rotate..+rotate degrees, 
-  ## scaled by factor between scale[0]..scale[1] and translated by up to transx and transy pixels along x and y. 
+  ## scaled by factor between `scale[0]..scale[1]` and translated by up to transx and transy pixels along x and y. 
   ## These transforms are all relative to the image center.
   ImageOp(kind: Affine, p: p, rotate: rotate, scalexy: scale, transx: transx, transy: transy)
 
@@ -299,7 +299,7 @@ proc initTransformer*(channels: static int, rng: var Rand, ops: openarray[ImageO
     createThread(result.threads[i], imageTransformThread[channels], result.ctx)
 
 proc transform*(t: Transformer, arr: var Tensor[uint8]) =
-  ## Apply series of image transforms to an array of images in [N,H,W,C] format.
+  ## Apply series of image transforms to an array of images in \[N,H,W,C\] format.
   ## The transform will be applied in parallel using multiple threads - the 
   ## proc will return once all are completed and the data is updated.
   if arr.dims.len != 4:

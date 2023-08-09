@@ -252,9 +252,13 @@ status hlo_module_proto_parse_and_return_unverified_module(const char *, size_t,
 status hlo_module_proto_parse_proto(const char *, size_t, bool,
                                     hlo_module_proto *);
 xla_computation xla_computation_from_hlo_module_proto(const hlo_module_proto);
+status hlo_module_proto_to_string(hlo_module_proto, char **);
 void hlo_module_proto_free(hlo_module_proto);
 
-char *xla_computation_name(xla_computation);
+char *xla_computation_name(const xla_computation);
+status num_parameters(const xla_computation, int *);
+status get_parameters(const xla_computation, shape *, char **);
+status result_shape(const xla_computation, shape *);
 hlo_module_proto xla_computation_proto(const xla_computation);
 void xla_computation_free(xla_computation);
 

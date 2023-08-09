@@ -102,7 +102,7 @@ proc dtypeOf*(T: typedesc[ElemType]): DataType =
   else:
     raise newException(XLAError, "invalid type")
 
-proc `==`*(s1, s2: Shape): bool =
+func `==`*(s1, s2: Shape): bool =
   ## Have same data type and dimensions?
   if s1.kind == ArrayKind and s2.kind == ArrayKind:
     s1.dtype == s2.dtype and s1.dims == s2.dims

@@ -44,8 +44,8 @@ suite "graph":
     let x = b.parameter(F32, name="x")
     let comp = b.build sqrt(x)
     debug comp
-    check comp.params.len == 1
-    check comp.params[0].name == "x"
+    let (params, _) = comp.parameters
+    check params == ["x"]
     let exec = client.compile(comp)
     for x in 1 .. 5:
       let res = exec.run([lit(x.float32)]).f32
@@ -59,7 +59,8 @@ suite "graph":
     let y = b.parameter(F32, name="y")
     let comp = b.build sqrt(x*x + y*y)
     debug comp
-    check comp.paramNames == ["x", "y"]
+    let (params, _) = comp.parameters
+    check params == ["x", "y"]
     let exec = client.compile(comp)
     for i in 1 .. 3:
       for j in 2 .. 4:
@@ -436,3 +437,16 @@ suite "graph":
     debug res.toLiteral
     check res.shape == arrayShape(I32, 3, 4)
 
+  test "hlo":
+    let b = newBuilder("test")
+    let sum = b^20.0 + b^[22.0, 44.0]
+    let comp = b.build(sum)
+    debug comp
+    let hlo = comp.toHlo
+    debug $hlo
+    let comp2 = fromHlo(hlo)
+    let exec = client.compile(comp2)
+    let res = exec.run.f64
+    debug "result = ", res
+    check res.dims == [2]
+    check res.toSeq == [42.0, 64.0]

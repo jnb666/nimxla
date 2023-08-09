@@ -4,8 +4,6 @@
 import std/[strutils, streams, strformat, algorithm, math]
 import tensor, shape
 import private/[xla_wrapper, utils]
-when defined tracemem:
-  import std/logging
 
 type
   LiteralObj = object
@@ -19,11 +17,10 @@ type
 # memory management
 proc `=copy`(a: var LiteralObj, b: LiteralObj) {.error.}
 
-proc `=destroy`(buf: var LiteralObj) =
+proc `=destroy`(buf: LiteralObj) =
   if buf.c != nil:
     trace &"free Literal" 
     literal_free(buf.c)
-    buf.c = nil
 
 proc newLiteral*(dtype: DataType, dims: openarray[int]): Literal =
   ## Allocate a new literal tensor with the given shape. Initialises values to zero.

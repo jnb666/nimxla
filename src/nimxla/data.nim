@@ -46,7 +46,7 @@ type
     thread:     Thread[LoaderContext]
 
 
-method getItem*(d: Dataset, i: int, data: pointer): int32 {.base.} =
+method getItem*(d: Dataset, i: int, data: pointer): int32 {.base, gcsafe.} =
   ## Get ith entry and copy data to to data Tensor. Returns label.
   raise newException(ValueError, "abstract method")
 
@@ -128,7 +128,7 @@ proc mnistLabels(file: string): seq[int32] =
 proc mnistDataset*(train = false): MNISTDataset =
   ## MNIST dataset of handwritten digits per http://yann.lecun.com/exdb/mnist/
   ## will download the data to and save a cached copy.
-  ## Returned shape of each image is [28, 28, 1]
+  ## Returned shape of each image is \[28, 28, 1\]
   const baseURL = "http://yann.lecun.com/exdb/mnist/"
   let dir = cacheDir("mnist")
   let prefix = if train: "train" else: "t10k"

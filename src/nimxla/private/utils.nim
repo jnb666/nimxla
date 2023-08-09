@@ -33,7 +33,7 @@ proc newAtomic*[T](val: T): ptr Atomic[T]  =
 
 template trace*(msg: string): untyped =
   when tracemem:
-    debug msg
+    echo msg
 
 template withDims*(dptr: untyped, dims: openarray[int], code: untyped): untyped =
   block:

@@ -106,38 +106,39 @@ type
   ComputationObj = object
     c: xla_computation
 
-  Computation* = object
+  Computation* = ref ComputationObj
     ## A Computation wraps the constructed graph after it has been finalised. It holds a reference to
     ## the xla_computation object.
-    ##
-    ## The nodes sequence is a distinct list of nodes in order in which they were declared.
-    ## params contatins a reference the parameters indexed by the provided index when they were defined.
-    nodes*:  seq[Node]
-    params*: seq[Node]
-    obj: ref ComputationObj
+
+  HloModule* = object
+    ## HloModule is a serialized version of a Computation in StableHLO format.
+    c: hlo_module_proto
 
 # memory management
 proc `=copy`(a: var BuilderObj, b: BuilderObj) {.error.}
 proc `=copy`(a: var ComputationObj, b: ComputationObj) {.error.}
+proc `=copy`(a: var HloModule, b: HloModule) {.error.}
 proc `=copy`(dst: var Op, src: Op) {.error.}
 
-proc `=destroy`(builder: var BuilderObj) =
+proc `=destroy`(builder: BuilderObj) =
   if builder.c != nil:
     trace "free Builder"
     xla_builder_free(builder.c)
-    builder.c = nil
 
-proc `=destroy`(comp: var ComputationObj) =
+proc `=destroy`(comp: ComputationObj) =
   if comp.c != nil:
     xla_computation_free(comp.c)
     trace "free Computation"
-    comp.c = nil
 
-proc `=destroy`(op: var Op) =
+proc `=destroy`(proto: HloModule) =
+  if proto.c != nil:
+    hlo_module_proto_free(proto.c)
+    trace "free HloModule"
+
+proc `=destroy`(op: Op) =
   if op.c != nil:
     trace "free Op"
     xla_op_free(op.c)
-    op.c = nil
 
 # error handling
 proc dump*(n: Node, maxDepth = -1, depth = 0): string
@@ -268,40 +269,69 @@ proc clone*(b: Builder, node: Node): Node =
 proc build*(b: Builder, root: Node): Computation =
   ## Build a computation from the specified root operation. Should only be called once for a given graph.
   trace "new Computation"
-  result.obj = new ComputationObj
-  let status = b.obj.c.build(root.op.c, result.obj.c.addr)
+  result = new ComputationObj
+  let status = b.obj.c.build(root.op.c, result.c.addr)
   checkBuilderError(status, root)
   for i, n in mpairs(b.nodes):
     assert n.id == i
     n.op = nil
-  result.nodes = b.nodes
-  result.params = b.params
   b.nodes = @[]
   b.params = @[]
 
-proc last*(comp: Computation): Node =
-  ## Last node defined in the graph
-  comp.nodes[^1]
-
-proc rawPtr*(comp: Computation): xla_computation = comp.obj.c
+proc rawPtr*(comp: Computation): xla_computation = comp.c
 
 proc name*(comp: Computation): string =
   ## Name of the computation specified when the builder was created + count of number of ops.
-  $xla_computation_name(comp.obj.c)
+  $xla_computation_name(comp.c)
 
-proc paramNames*(comp: Computation): seq[string] =
-  ## Names of the parameters which have been defined.
-  map(comp.params, x => x.name)
+proc parameters*(comp: Computation): (seq[string], seq[Shape]) =
+  ## Names and shapes of the parameters which have been defined.
+  var names: seq[string]
+  var shapes: seq[Shape]
+  var n: cint
+  var status = num_parameters(comp.c, addr n)
+  checkError(status)
+  if n > 0:
+    var cnames = newSeq[cstring](n)
+    var cshapes = newSeq[shape_t](n)
+    status = get_parameters(comp.c, addr cshapes[0], addr cnames[0])
+    checkError(status)
+    for i in 0 ..< n:
+      names.add $cnames[i]
+      shapes.add toShape(cshapes[i])
+  return (names, shapes)
+
+proc resultShape*(comp: Computation): Shape =
+  var cshape: shape_t
+  let status = result_shape(comp.c, addr cshape)
+  checkError(status)
+  toShape(cshape)
 
 proc `$`*(comp: Computation): string =
   ## Dumps out the name, parameters and info for each node added to the graph.
-  let params = comp.paramNames.join(", ")
-  result.add &"Computation::{comp.name}({params})"
-  for node in comp.nodes:
-    result.add "\n" & $node
-    if node.args.len > 0:
-      result.add "(" & map(node.args, x => $x.id).join(", ") & ")"
+  let (names, shapes) = comp.parameters
+  let params = collect:
+    for (name, shape) in zip(names, shapes):
+      name & ":" & $shape
+  "Computation::" & comp.name & "(" & params.join(", ") & ")" & " => " & $comp.resultShape
 
+proc toHlo*(comp: Computation): HloModule =
+  ## Save computation to StableHLO format.
+  trace "new HloModule"
+  result.c = xla_computation_proto(comp.c)
+
+proc fromHlo*(hlo: HloModule): Computation =
+  ## Load computation from StableHLO format.
+  trace "new Computation"
+  result = new ComputationObj
+  result.c = xla_computation_from_hlo_module_proto(hlo.c)
+
+proc `$`*(hlo: HloModule): string =
+  ## Dump computation in StableHLO MLIR text format.
+  var cstr: cstring
+  let status = hlo_module_proto_to_string(hlo.c, addr cstr)
+  checkError(status)
+  $cstr
 
 proc parameter*(b: Builder, dtype: DataType, dims: openarray[int] = [], name = ""): Node =
   ## Create a new parameter with the given shape. The parameter index is set automatically
@@ -575,9 +605,8 @@ proc narrow*(a: Node, dim, start, stop: int, stride = 1): Node =
 
 proc relu*(a: Node): Node =
   ## Rectified linear unit activation function: max(0, a)
-  result = max(a.builder.zero(a.dtype), a)
-  result.kind = tRelu
-  result.args = @[a]
+  let zero = a.builder.zero(a.dtype)
+  a.builder.wrap(op_max(a.op.c, zero.op.c), tRelu, [a])
 
 proc select*(a, onTrue, onFalse: Node): Node =
   ## Select values from onTrue where a is true else from onFalse.
@@ -639,13 +668,14 @@ proc getPadding(padding: openarray[Padding], kernelSize: openarray[int]): (seq[i
 
 proc convolution*(a, kernel: Node, inputDims, outputDims, kernelDims: openarray[int],
                   strides: openarray[int] = [], padding: openarray[Padding] = [],
-                  dilation, inputDilation: openarray[int] = [], groups, batchGroups = 1): Node =
+                  dilation: openarray[int] = [], inputDilation: openarray[int] = [],
+                  groups = 1, batchGroups = 1): Node =
   ## General n dimensional convolution call. See conv1d, conv2d and conv3d for simplified version.
   ##
   ## inputDims, outputDims and kernelDims provide the layout for the dimensions of each tensor
-  ## - dims[0] = batch / kernel output dimension
-  ## - dims[1] = channel / kernel input dimension
-  ## - dims[2..] = spatial dimensions
+  ## - `dims[0]` = batch / kernel output dimension
+  ## - `dims[1]` = channel / kernel input dimension
+  ## - `dims[2..]` = spatial dimensions
   ## If set then strides, padding and dilation should have same number of entries as spatial dimensions.
   ##
   ## See [ConvWithGeneralPadding](https://www.tensorflow.org/xla/operation_semantics#convwithgeneralpadding_convolution).
@@ -704,12 +734,12 @@ proc conv1d*(a, kernel: Node, strides=1, padding=pad(0), dilation=1, groups=1, c
   ## One dimensional convolution with optional low and high padding and either strides or dilation.
   ##
   ## Default layout should be
-  ## - a:      [N, W, C]
-  ## - kernel: [W, C, K]
+  ## - a:      `[N, W, C]`
+  ## - kernel: `[W, C, K]`
   ##
   ## If channelsFirst is set then
-  ## - a:      [N, C, W]
-  ## - kernel: [K, C, W]
+  ## - a:      `[N, C, W]`
+  ## - kernel: `[K, C, W]`
   ##
   ## Where N = number of batches, C = input channels, K = output channels and W is the spatial dimension.
   ## If groups is > 1 then performs a grouped convolution. In this case C and K should be divisible by groups.
@@ -724,12 +754,12 @@ proc conv2d*(a, kernel: Node, strides: Opt2d = 1, padding: Pad2d = pad(0), dilat
   ## Two dimensional convolution with optional padding and either strides or dilation.
   ##
   ## Default layout should be
-  ## - a:      [N, H, W, C]
-  ## - kernel: [H, W, C, K]
+  ## - a:      `[N, H, W, C]`
+  ## - kernel: `[H, W, C, K]`
   ##
   ## If channelsFirst is set then
-  ## - a:      [N, C, H, W]
-  ## - kernel: [K, C, H, W]
+  ## - a:      `[N, C, H, W]`
+  ## - kernel: `[K, C, H, W]`
   ##
   ## Where N = number of batches, C = input channels, K = output channels and H, W are spatial dimensions.
   ## If groups is > 1 then performs a grouped convolution. In this case C and K should be divisible by groups.
@@ -744,12 +774,12 @@ proc conv3d*(a, kernel: Node, strides: Opt3d = 1, padding: Pad3d = pad(0), dilat
   ## Three dimensional convolution with optional padding and either strides or dilation.
   ##
   ## Default layout should be
-  ## - a:      [N, D, H, W, C]
-  ## - kernel: [D, H, W, C, K]
+  ## - a:      `[N, D, H, W, C]`
+  ## - kernel: `[D, H, W, C, K]`
   ##
   ## If channelsFirst is set then
-  ## - a:      [N, C, D, H, W]
-  ## - kernel: [K, C, D, H, W]
+  ## - a:      `[N, C, D, H, W]`
+  ## - kernel: `[K, C, D, H, W]`
   ##
   ## Where N = number of batches, C = input channels, K = output channels and D, H, W are spatial dimensions.
   ## If groups is > 1 then performs a grouped convolution. In this case C and K should be divisible by groups.
@@ -789,7 +819,7 @@ proc gather*(a, indices: Node): Node =
 
 proc scatter*(a, indices, b: Node, comp: Computation): Node =
   ## Get the values of input array a at the specified indices and updated with values
-  ## in b using comp. Indices should have shape [n, a.rank] - i.e. each row is an element
+  ## in b using comp. Indices should have shape \[n, a.rank\] - i.e. each row is an element
   ## to update and the columns indicate the location in the target vector (which can be repeated.)
   ##
   ## This is the opposite of gather. It is a simplified version of the
@@ -806,7 +836,7 @@ proc scatter*(a, indices, b: Node, comp: Computation): Node =
   let axes = toSeq(0 ..< a.rank)
   let ndims = csize_t(a.rank)
   withDims(dptr, axes):
-    let op = op_scatter(a.op.c, indices.op.c, b.op.c, comp.obj.c,
+    let op = op_scatter(a.op.c, indices.op.c, b.op.c, comp.c,
                       a.rank,                  # index_vector_dim
                       nil, 0,                  # update_window_dims
                       dptr, ndims,             # inserted_window_dims
@@ -848,7 +878,7 @@ proc reduce*(a, initValue: Node, comp: Computation, dims: openarray[int] = [],
   var shape = a.dims
   var dims2 = reduceDims(shape, dims)
   withDims(dptr, dims2):
-    let op = op_reduce(a.op.c, initValue.op.c, comp.obj.c, dptr, csize_t(dims2.len))
+    let op = op_reduce(a.op.c, initValue.op.c, comp.c, dptr, csize_t(dims2.len))
     var info = $dims2
     if keepDims: info.add ":keepDims" 
     result = a.builder.wrap(op, nodeType, [a, initValue], info)
@@ -933,7 +963,7 @@ macro argMinMax(procName, compare, initVal, opType: untyped): untyped =
       var dims = @[`axis`]
       withDims(dptr, dims):
         let op = op_reduce2(b.obj.c, `a`.op.c, initValue.op.c, indexes.op.c, initIndex.op.c, 
-                            comp.obj.c, dptr, csize_t(dims.len))
+                            comp.c, dptr, csize_t(dims.len))
         var info = $dims
         if `keepDims`: info.add ":keepDims" 
         # calc both min/max and argmin/argmax, but just use the latter
@@ -949,8 +979,8 @@ argMinMax(argMin, `<=`, maxValue, tArgmin)
 
 
 proc oneHot*(x: Node, classes: int, dtype: DataType): Node =
-  ## Convert a vector into a 2d [x.len, classes] array of type dtype
-  ## where result[i, x[i]] = 1 and other values are zero.
+  ## Convert a vector into a 2d `[x.len, classes]` array of type dtype
+  ## where `result[i, x[i]] = 1` and other values are zero.
   if x.rank != 1:
     raiseError(&"oneHot: x should be 1d vector - got {x.dims}", x)
   let lhs = x.reshape(x.dims[0], 1)
@@ -967,12 +997,13 @@ proc softmax*(a: Node, axis = -1): Node =
   let maxval = a.max(axis, keepDims=true)
   maxval.noGrad = true
   let exp_a = exp(a - maxval)
-  exp_a / exp_a.sum(axis, keepDims=true)
+  let sum = exp_a.sum(axis, keepDims=true)
+  a.builder.wrap(op_div(exp_a.op.c, sum.op.c), tSoftmax, [a])
 
 proc crossEntropyLoss*(pred, target: Node): Node =
   ## Mean cross entropy loss function calculated from softmax output.
-  ## Pred should be predicted values with shape [n, classes] while target is a
-  ## 1d integer vector of labels each in range 0..classes.
+  ## Pred should be predicted values with shape \[n, classes\] while target is a
+  ## 1d integer vector of labels each in range `0..classes`.
   ## Note that the softmax function is applied to pred as part of this function
   ## to optimise the gradient calculation.
   if pred.rank != 2:
@@ -980,7 +1011,6 @@ proc crossEntropyLoss*(pred, target: Node): Node =
   if target.rank != 1:
     raiseError(&"crossEntropy: target should be 1d vector - got {target.dims}", target)
   var n = pred.softmax()
-  n.kind = tSoftmax
   n.args = @[pred]
   n.yOneHot = oneHot(target, pred.dims[1], pred.dtype)
   let b = pred.builder
@@ -1024,7 +1054,7 @@ proc reduceWindow*(a, initValue: Node, comp: Computation, windowDims, strides: o
   withDims(dptr1, windowDims):
     withDims(dptr2, strides):
       let (p1, p2) = if padding.len > 0: (padLo[0].addr, padHi[0].addr) else: (nil, nil)
-      let op = op_reduce_window(a.op.c, initValue.op.c, comp.obj.c, csize_t(rank), dptr1, dptr2,
+      let op = op_reduce_window(a.op.c, initValue.op.c, comp.c, csize_t(rank), dptr1, dptr2,
                                 csize_t(padding.len), p1, p2)
       result = a.builder.wrap(op, nodeType, [a, initValue], &"dims={windowDims},strides={strides},padding={padding}")
       result.wdims = @windowDims
@@ -1117,13 +1147,13 @@ proc selectAndScatter*(a, source: Node, windowDims, strides: openarray[int], pad
   withDims(dptr1, windowDims):
     withDims(dptr2, strides):
       let (p1, p2) = if padding.len > 0: (padLo[0].addr, padHi[0].addr) else: (nil, nil)
-      let op = op_select_and_scatter(a.op.c, selectComp.obj.c, csize_t(rank), dptr1, dptr2, 
-                         csize_t(padding.len), p1, p2, source.op.c, init.op.c, scatterComp.obj.c)
+      let op = op_select_and_scatter(a.op.c, selectComp.c, csize_t(rank), dptr1, dptr2, 
+                         csize_t(padding.len), p1, p2, source.op.c, init.op.c, scatterComp.c)
       result = a.builder.wrap(op, tSelectAndScatter, [a, source])
 
 proc batchNormInference*(a, scale, offset, mean, variance: Node, epsilon: float, axis: int): Node =
   ## Implements batch normalization in inference mode.
-  ## axis should be the axis of the feature dimension - e.g. 3 or -1 for images in [N,H,W,C] format.
+  ## axis should be the axis of the feature dimension - e.g. 3 or -1 for images in \[N,H,W,C\] format.
   ## See [BatchNormInference](https://www.tensorflow.org/xla/operation_semantics#batchnorminference).
   let axis = normalize(axis, a.rank)
   let op = op_batch_norm_inference(a.op.c, scale.op.c, offset.op.c, mean.op.c, variance.op.c, epsilon, axis)

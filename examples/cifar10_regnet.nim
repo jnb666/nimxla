@@ -113,8 +113,8 @@ proc main(epochs=100, learnRate=0.1, wdecay=0.0005, trainBatch=128, testBatch=25
     testAcc:  c.accuracyFunc(test.batchSize, nclasses)
   )
   t.sched = newChainedScheduler(
-    newLinearLR(t.optim, epochs=20, startFactor=0.1, endFactor=1.0),
-    newCosineAnnealingLR(t.optim, tMax=epochs-20, lrMin=0.001)
+    newLinearLR(t.optim, epochs=(epochs div 5), startFactor=0.1, endFactor=1.0),
+    newCosineAnnealingLR(t.optim, tMax=epochs-(epochs div 5), lrMin=0.001)
   )
   echo "optimizer: ", t.sched
   if load != "":
