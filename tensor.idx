@@ -1,29 +1,33 @@
-Tensor	tensor.html#Tensor	tensor: Tensor	
-rawPtr	tensor.html#rawPtr,Tensor[T: ElemType]	tensor: rawPtr[T: ElemType](t: Tensor[T]): ptr T	
-len	tensor.html#len,Tensor	tensor: len(t: Tensor): int	
-shape	tensor.html#shape,Tensor[T: ElemType]	tensor: shape[T: ElemType](t: Tensor[T]): Shape	
-newTensor	tensor.html#newTensor,varargs[int]	tensor: newTensor[T: ElemType](dims: varargs[int]): Tensor[T]	
-zeros	tensor.html#zeros,varargs[int]	tensor: zeros[T: ElemType](dims: varargs[int]): Tensor[T]	
-fill	tensor.html#fill,openArray[int],T	tensor: fill[T: ElemType](dims: openArray[int]; value: T): Tensor[T]	
-toTensor	tensor.html#toTensor,T	tensor: toTensor[T: ElemType](value: T): Tensor[T]	
-toTensor	tensor.html#toTensor,openArray[T]	tensor: toTensor[T: ElemType](values: openArray[T]): Tensor[T]	
-toTensor	tensor.html#toTensor,openArray[int]	tensor: toTensor(values: openArray[int]): Tensor[int64]	
-toTensor	tensor.html#toTensor,HSlice[int,int]	tensor: toTensor[T: ElemType](slice: HSlice[int, int]): Tensor[T]	
-`@@`	tensor.html#@@.m,untyped	tensor: `@@`(value: untyped): untyped	
-`[]`	tensor.html#[],Tensor[T: ElemType],varargs[int]	tensor: `[]`[T: ElemType](t: Tensor[T]; ix: varargs[int]): T	
-`[]=`	tensor.html#[]=,Tensor,varargs[int],T	tensor: `[]=`[T: ElemType](t: var Tensor; ix: varargs[int]; value: T)	
-`==`	tensor.html#==,Tensor[T: ElemType],Tensor[T: ElemType]	tensor: `==`[T: ElemType](t1, t2: Tensor[T]): bool	
-approxEqual	tensor.html#approxEqual,Tensor[T: ElemType],Tensor[T: ElemType],float	tensor: approxEqual[T: ElemType](t1, t2: Tensor[T]; eps = 0.000001): bool	
-at	tensor.html#at,Tensor[T: ElemType],Natural	tensor: at[T: ElemType](t: Tensor[T]; ix: Natural): Tensor[T]	
-toSeq	tensor.html#toSeq,Tensor[T: ElemType]	tensor: toSeq[T: ElemType](t: Tensor[T]): seq[T]	
-clone	tensor.html#clone,Tensor[T: ElemType]	tensor: clone[T: ElemType](t: Tensor[T]): Tensor[T]	
-append	tensor.html#append,Tensor[T: ElemType],Tensor[T: ElemType]	tensor: append[T: ElemType](t, t2: Tensor[T]): Tensor[T]	
-reshape	tensor.html#reshape,Tensor[T: ElemType],varargs[int]	tensor: reshape[T: ElemType](t: Tensor[T]; dims: varargs[int]): Tensor[T]	
-convert	tensor.html#convert,Tensor[T: ElemType],typedesc[ElemType]	tensor: convert[T: ElemType](t: Tensor[T]; typ: typedesc[ElemType]): Tensor[typ]	
-readTensor	tensor.html#readTensor,Stream	tensor: readTensor[T: ElemType](s: Stream): Tensor[T]	
-readTensor	tensor.html#readTensor,string	tensor: readTensor[T: ElemType](filename: string): Tensor[T]	
-write	tensor.html#write,Tensor[T: ElemType],Stream	tensor: write[T: ElemType](t: Tensor[T]; s: Stream)	
-write	tensor.html#write,Tensor[T: ElemType],string	tensor: write[T: ElemType](t: Tensor[T]; filename: string)	
-setPrintOpts	tensor.html#setPrintOpts,int,int,int,int	tensor: setPrintOpts(minWidth = 8; precision = 6; floatMode = ffDefault;\n             threshold = 1000; edgeitems = 4)	
-format	tensor.html#format,Tensor[T: ElemType]	tensor: format[T: ElemType](t: Tensor[T]): string	
-`$`	tensor.html#$,Tensor[T: ElemType]	tensor: `$`[T: ElemType](t: Tensor[T]): string	
+nimTitle	tensor	tensor.html	module nimxla/tensor		0
+nim	Tensor	tensor.html#Tensor	object Tensor		22
+nim	rawPtr	tensor.html#rawPtr,Tensor[T: ElemType]	proc rawPtr[T: ElemType](t: Tensor[T]): ptr T		66
+nim	len	tensor.html#len,Tensor	proc len(t: Tensor): int		70
+nim	shape	tensor.html#shape,Tensor[T: ElemType]	proc shape[T: ElemType](t: Tensor[T]): Shape		74
+nim	newTensor	tensor.html#newTensor,varargs[int]	proc newTensor[T: ElemType](dims: varargs[int]): Tensor[T]		79
+nim	zeros	tensor.html#zeros,varargs[int]	proc zeros[T: ElemType](dims: varargs[int]): Tensor[T]		83
+nim	fill	tensor.html#fill,openArray[int],T	proc fill[T: ElemType](dims: openArray[int]; value: T): Tensor[T]		87
+nim	toTensor	tensor.html#toTensor,T	proc toTensor[T: ElemType](value: T): Tensor[T]		93
+nim	toTensor	tensor.html#toTensor,openArray[T]	proc toTensor[T: ElemType](values: openArray[T]): Tensor[T]		98
+nim	toTensor	tensor.html#toTensor,openArray[int]	proc toTensor(values: openArray[int]): Tensor[int64]		103
+nim	toTensor	tensor.html#toTensor,HSlice[int,int]	proc toTensor[T: ElemType](slice: HSlice[int, int]): Tensor[T]		107
+nim	`@@`	tensor.html#@@.m,untyped	macro `@@`(value: untyped): untyped		158
+nim	`[]`	tensor.html#[],Tensor[T: ElemType],varargs[int]	proc `[]`[T: ElemType](t: Tensor[T]; ix: varargs[int]): T		188
+nim	`[]=`	tensor.html#[]=,Tensor,varargs[int],T	proc `[]=`[T: ElemType](t: var Tensor; ix: varargs[int]; value: T)		196
+nim	`==`	tensor.html#==,Tensor[T: ElemType],Tensor[T: ElemType]	proc `==`[T: ElemType](t1, t2: Tensor[T]): bool		202
+nim	approxEqual	tensor.html#approxEqual,Tensor[T: ElemType],Tensor[T: ElemType],float	proc approxEqual[T: ElemType](t1, t2: Tensor[T]; eps = 0.000001): bool		210
+nim	at	tensor.html#at,Tensor[T: ElemType],Natural	proc at[T: ElemType](t: Tensor[T]; ix: Natural): Tensor[T]		218
+nim	toSeq	tensor.html#toSeq,Tensor[T: ElemType]	proc toSeq[T: ElemType](t: Tensor[T]): seq[T]		227
+nim	clone	tensor.html#clone,Tensor[T: ElemType]	proc clone[T: ElemType](t: Tensor[T]): Tensor[T]		232
+nim	append	tensor.html#append,Tensor[T: ElemType],Tensor[T: ElemType]	proc append[T: ElemType](t, t2: Tensor[T]): Tensor[T]		237
+nim	reshape	tensor.html#reshape,Tensor[T: ElemType],varargs[int]	proc reshape[T: ElemType](t: Tensor[T]; dims: varargs[int]): Tensor[T]		250
+nim	convert	tensor.html#convert,Tensor[T: ElemType],typedesc[ElemType]	proc convert[T: ElemType](t: Tensor[T]; typ: typedesc[ElemType]): Tensor[typ]		260
+nim	readTensor	tensor.html#readTensor,Stream	proc readTensor[T: ElemType](s: Stream): Tensor[T]		287
+nim	readTensor	tensor.html#readTensor,string	proc readTensor[T: ElemType](filename: string): Tensor[T]		329
+nim	write	tensor.html#write,Tensor[T: ElemType],Stream	proc write[T: ElemType](t: Tensor[T]; s: Stream)		336
+nim	write	tensor.html#write,Tensor[T: ElemType],string	proc write[T: ElemType](t: Tensor[T]; filename: string)		357
+nim	setPrintOpts	tensor.html#setPrintOpts,int,int,int,int	proc setPrintOpts(minWidth = 8; precision = 6; floatMode = ffDefault;\n             threshold = 1000; edgeitems = 4)		367
+nim	format	tensor.html#format,Tensor[T: ElemType]	proc format[T: ElemType](t: Tensor[T]): string		422
+nim	`$`	tensor.html#$,Tensor[T: ElemType]	proc `$`[T: ElemType](t: Tensor[T]): string		431
+nimgrp	readtensor	tensor.html#readTensor-procs-all	proc		287
+nimgrp	write	tensor.html#write-procs-all	proc		336
+nimgrp	totensor	tensor.html#toTensor-procs-all	proc		93

@@ -1,208 +1,221 @@
-BuilderError	graph.html#BuilderError	graph: BuilderError	
-tNone	graph.html#tNone	OpType.tNone	
-tConst	graph.html#tConst	OpType.tConst	
-tLiteral	graph.html#tLiteral	OpType.tLiteral	
-tParam	graph.html#tParam	OpType.tParam	
-tError	graph.html#tError	OpType.tError	
-tIota	graph.html#tIota	OpType.tIota	
-tNot	graph.html#tNot	OpType.tNot	
-tNeg	graph.html#tNeg	OpType.tNeg	
-tAbs	graph.html#tAbs	OpType.tAbs	
-tExp	graph.html#tExp	OpType.tExp	
-tFloor	graph.html#tFloor	OpType.tFloor	
-tCeil	graph.html#tCeil	OpType.tCeil	
-tRound	graph.html#tRound	OpType.tRound	
-tLog	graph.html#tLog	OpType.tLog	
-tLog1p	graph.html#tLog1p	OpType.tLog1p	
-tSigmoid	graph.html#tSigmoid	OpType.tSigmoid	
-tRelu	graph.html#tRelu	OpType.tRelu	
-tSign	graph.html#tSign	OpType.tSign	
-tCos	graph.html#tCos	OpType.tCos	
-tSin	graph.html#tSin	OpType.tSin	
-tTanh	graph.html#tTanh	OpType.tTanh	
-tSqrt	graph.html#tSqrt	OpType.tSqrt	
-tRsqrt	graph.html#tRsqrt	OpType.tRsqrt	
-tIsFinite	graph.html#tIsFinite	OpType.tIsFinite	
-tCopy	graph.html#tCopy	OpType.tCopy	
-tZerosLike	graph.html#tZerosLike	OpType.tZerosLike	
-tTupleElement	graph.html#tTupleElement	OpType.tTupleElement	
-tReshape	graph.html#tReshape	OpType.tReshape	
-tBroadcast	graph.html#tBroadcast	OpType.tBroadcast	
-tBroadcastInDim	graph.html#tBroadcastInDim	OpType.tBroadcastInDim	
-tCollapse	graph.html#tCollapse	OpType.tCollapse	
-tTranspose	graph.html#tTranspose	OpType.tTranspose	
-tNarrow	graph.html#tNarrow	OpType.tNarrow	
-tConvert	graph.html#tConvert	OpType.tConvert	
-tReverse	graph.html#tReverse	OpType.tReverse	
-tMaxPool	graph.html#tMaxPool	OpType.tMaxPool	
-tSumPool	graph.html#tSumPool	OpType.tSumPool	
-tReduceSum	graph.html#tReduceSum	OpType.tReduceSum	
-tReduceMin	graph.html#tReduceMin	OpType.tReduceMin	
-tReduceMax	graph.html#tReduceMax	OpType.tReduceMax	
-tArgmin	graph.html#tArgmin	OpType.tArgmin	
-tArgmax	graph.html#tArgmax	OpType.tArgmax	
-tSoftmax	graph.html#tSoftmax	OpType.tSoftmax	
-tAdd	graph.html#tAdd	OpType.tAdd	
-tSub	graph.html#tSub	OpType.tSub	
-tMul	graph.html#tMul	OpType.tMul	
-tDiv	graph.html#tDiv	OpType.tDiv	
-tRem	graph.html#tRem	OpType.tRem	
-tMax	graph.html#tMax	OpType.tMax	
-tMin	graph.html#tMin	OpType.tMin	
-tPow	graph.html#tPow	OpType.tPow	
-tDot	graph.html#tDot	OpType.tDot	
-tAnd	graph.html#tAnd	OpType.tAnd	
-tOr	graph.html#tOr	OpType.tOr	
-tEq	graph.html#tEq	OpType.tEq	
-tNe	graph.html#tNe	OpType.tNe	
-tGe	graph.html#tGe	OpType.tGe	
-tGt	graph.html#tGt	OpType.tGt	
-tLe	graph.html#tLe	OpType.tLe	
-tLt	graph.html#tLt	OpType.tLt	
-tRngUniform	graph.html#tRngUniform	OpType.tRngUniform	
-tRngNormal	graph.html#tRngNormal	OpType.tRngNormal	
-tReduce	graph.html#tReduce	OpType.tReduce	
-tGather	graph.html#tGather	OpType.tGather	
-tConv	graph.html#tConv	OpType.tConv	
-tReduceWindow	graph.html#tReduceWindow	OpType.tReduceWindow	
-tSelectAndScatter	graph.html#tSelectAndScatter	OpType.tSelectAndScatter	
-tPad	graph.html#tPad	OpType.tPad	
-tSelect	graph.html#tSelect	OpType.tSelect	
-tClamp	graph.html#tClamp	OpType.tClamp	
-tTuple	graph.html#tTuple	OpType.tTuple	
-tConcat	graph.html#tConcat	OpType.tConcat	
-tScatter	graph.html#tScatter	OpType.tScatter	
-tBatchNormInference	graph.html#tBatchNormInference	OpType.tBatchNormInference	
-tBatchNormTraining	graph.html#tBatchNormTraining	OpType.tBatchNormTraining	
-tBatchNormGrad	graph.html#tBatchNormGrad	OpType.tBatchNormGrad	
-OpType	graph.html#OpType	graph: OpType	
-Builder	graph.html#Builder	graph: Builder	
-Node	graph.html#Node	graph: Node	
-Computation	graph.html#Computation	graph: Computation	
-raiseError	graph.html#raiseError,string,Node	graph: raiseError(message: string; node: Node = nil)	
-dtype	graph.html#dtype,Node	graph: dtype(n: Node): DataType	
-rank	graph.html#rank,Node	graph: rank(n: Node): int	
-dims	graph.html#dims,Node	graph: dims(n: Node): seq[int]	
-len	graph.html#len,Node	graph: len(n: Node): int	
-`$`	graph.html#$,Node	graph: `$`(n: Node): string	
-dump	graph.html#dump,Node,int,int	graph: dump(n: Node; maxDepth = -1; depth = 0): string	
-repr	graph.html#repr,Node	graph: repr(n: Node): string	
-toString	graph.html#toString,Node	graph: toString(n: Node): string	
-newBuilder	graph.html#newBuilder,string	graph: newBuilder(name: string): Builder	
-clone	graph.html#clone,Builder,Node	graph: clone(b: Builder; node: Node): Node	
-build	graph.html#build,Builder,Node	graph: build(b: Builder; root: Node): Computation	
-last	graph.html#last,Computation	graph: last(comp: Computation): Node	
-rawPtr	graph.html#rawPtr,Computation	graph: rawPtr(comp: Computation): xla_computation	
-name	graph.html#name,Computation	graph: name(comp: Computation): string	
-paramNames	graph.html#paramNames,Computation	graph: paramNames(comp: Computation): seq[string]	
-`$`	graph.html#$,Computation	graph: `$`(comp: Computation): string	
-parameter	graph.html#parameter,Builder,DataType,openArray[int],string	graph: parameter(b: Builder; dtype: DataType; dims: openArray[int] = []; name = &quot;&quot;): Node	
-makeTuple	graph.html#makeTuple,Builder,varargs[Node]	graph: makeTuple(b: Builder; args: varargs[Node]): Node	
-iota	graph.html#iota,Builder,DataType,int	graph: iota(b: Builder; dtype: DataType; length: int): Node	
-iota	graph.html#iota,Builder,DataType,openArray[int],int	graph: iota(b: Builder; dtype: DataType; dims: openArray[int]; axis: int): Node	
-errorNode	graph.html#errorNode,Builder,string	graph: errorNode(b: Builder; message: string): Node	
-constant	graph.html#constant,Builder,Literal	graph: constant(b: Builder; lit: Literal): Node	
-constant	graph.html#constant,Builder,Tensor[T: ElemType]	graph: constant[T: ElemType](b: Builder; t: Tensor[T]): Node	
-constant	graph.html#constant,Builder,int32	graph: constant(b: Builder; value: int32): Node	
-constant	graph.html#constant,Builder,	graph: constant(b: Builder; value: openArray[int32]): Node	
-constant	graph.html#constant,Builder,int64	graph: constant(b: Builder; value: int64): Node	
-constant	graph.html#constant,Builder,_2	graph: constant(b: Builder; value: openArray[int64]): Node	
-constant	graph.html#constant,Builder,float32	graph: constant(b: Builder; value: float32): Node	
-constant	graph.html#constant,Builder,_3	graph: constant(b: Builder; value: openArray[float32]): Node	
-constant	graph.html#constant,Builder,float64	graph: constant(b: Builder; value: float64): Node	
-constant	graph.html#constant,Builder,_4	graph: constant(b: Builder; value: openArray[float64]): Node	
-constant	graph.html#constant,Builder,int	graph: constant(b: Builder; value: int): Node	
-constant	graph.html#constant,Builder,openArray[int]	graph: constant(b: Builder; value: openArray[int]): Node	
-constant	graph.html#constant,Builder,T,DataType	graph: constant[T: float | int](b: Builder; value: T; dtype: DataType): Node	
-`^`	graph.html#^.t,Builder,untyped	graph: `^`(b: Builder; value: untyped): Node	
-zero	graph.html#zero,Builder,enum	graph: zero(b: Builder; dtype = F32; dims: openArray[int] = []): Node	
-one	graph.html#one,Builder,enum	graph: one(b: Builder; dtype = F32; dims: openArray[int] = []): Node	
-minValue	graph.html#minValue,Builder,enum	graph: minValue(b: Builder; dtype = F32; dims: openArray[int] = []): Node	
-maxValue	graph.html#maxValue,Builder,enum	graph: maxValue(b: Builder; dtype = F32; dims: openArray[int] = []): Node	
-`+`	graph.html#+,Node,Node	graph: `+`(a, b: Node): Node	
-`-`	graph.html#-,Node,Node	graph: `-`(a, b: Node): Node	
-`*`	graph.html#*,Node,Node	graph: `*`(a, b: Node): Node	
-`/`	graph.html#/,Node,Node	graph: `/`(a, b: Node): Node	
-rem	graph.html#rem,Node,Node	graph: rem(a, b: Node): Node	
-max	graph.html#max,Node,Node	graph: max(a, b: Node): Node	
-min	graph.html#min,Node,Node	graph: min(a, b: Node): Node	
-pow	graph.html#pow,Node,Node	graph: pow(a, b: Node): Node	
-dot	graph.html#dot,Node,Node	graph: dot(a, b: Node): Node	
-logicalAnd	graph.html#logicalAnd,Node,Node	graph: logicalAnd(a, b: Node): Node	
-logicalOr	graph.html#logicalOr,Node,Node	graph: logicalOr(a, b: Node): Node	
-`==`	graph.html#==,Node,Node	graph: `==`(a, b: Node): Node	
-`!=`	graph.html#!=,Node,Node	graph: `!=`(a, b: Node): Node	
-`&gt;=`	graph.html#>=,Node,Node	graph: `&gt;=`(a, b: Node): Node	
-`&gt;`	graph.html#>,Node,Node	graph: `&gt;`(a, b: Node): Node	
-`&lt;=`	graph.html#<=,Node,Node	graph: `&lt;=`(a, b: Node): Node	
-`&lt;`	graph.html#<,Node,Node	graph: `&lt;`(a, b: Node): Node	
-`!`	graph.html#!,Node	graph: `!`(a: Node): Node	
-`-`	graph.html#-,Node	graph: `-`(a: Node): Node	
-abs	graph.html#abs,Node	graph: abs(a: Node): Node	
-exp	graph.html#exp,Node	graph: exp(a: Node): Node	
-floor	graph.html#floor,Node	graph: floor(a: Node): Node	
-ceil	graph.html#ceil,Node	graph: ceil(a: Node): Node	
-round	graph.html#round,Node	graph: round(a: Node): Node	
-log	graph.html#log,Node	graph: log(a: Node): Node	
-log1p	graph.html#log1p,Node	graph: log1p(a: Node): Node	
-sigmoid	graph.html#sigmoid,Node	graph: sigmoid(a: Node): Node	
-sign	graph.html#sign,Node	graph: sign(a: Node): Node	
-cos	graph.html#cos,Node	graph: cos(a: Node): Node	
-sin	graph.html#sin,Node	graph: sin(a: Node): Node	
-tanh	graph.html#tanh,Node	graph: tanh(a: Node): Node	
-sqrt	graph.html#sqrt,Node	graph: sqrt(a: Node): Node	
-rsqrt	graph.html#rsqrt,Node	graph: rsqrt(a: Node): Node	
-isFinite	graph.html#isFinite,Node	graph: isFinite(a: Node): Node	
-copy	graph.html#copy,Node	graph: copy(a: Node): Node	
-zerosLike	graph.html#zerosLike,Node	graph: zerosLike(a: Node): Node	
-`[]`	graph.html#[],Node,int	graph: `[]`(a: Node; index: int): Node	
-convert	graph.html#convert,Node,DataType	graph: convert(a: Node; dtype: DataType): Node	
-reshape	graph.html#reshape,Node,varargs[int]	graph: reshape(a: Node; dims: varargs[int]): Node	
-flatten	graph.html#flatten,Node,int,int	graph: flatten(a: Node; startDim = 0; endDim = -1): Node	
-reverse	graph.html#reverse,Node,varargs[int]	graph: reverse(a: Node; axes: varargs[int]): Node	
-broadcast	graph.html#broadcast,Node,openArray[int]	graph: broadcast(a: Node; dims: openArray[int]): Node	
-broadcastInDim	graph.html#broadcastInDim,Node,openArray[int],openArray[int]	graph: broadcastInDim(a: Node; outSize, bcastDims: openArray[int]): Node	
-collapse	graph.html#collapse,Node,openArray[int]	graph: collapse(a: Node; dims: openArray[int]): Node	
-transpose	graph.html#transpose,Node,varargs[int]	graph: transpose(a: Node; axes: varargs[int]): Node	
-narrow	graph.html#narrow,Node,int,int,int,int	graph: narrow(a: Node; dim, start, stop: int; stride = 1): Node	
-relu	graph.html#relu,Node	graph: relu(a: Node): Node	
-select	graph.html#select,Node,Node,Node	graph: select(a, onTrue, onFalse: Node): Node	
-clamp	graph.html#clamp,Node,Node,Node	graph: clamp(a, min, max: Node): Node	
-rngUniform	graph.html#rngUniform,Node,Node,openArray[int]	graph: rngUniform(min, max: Node; dims: openArray[int]): Node	
-rngNormal	graph.html#rngNormal,Node,Node,openArray[int]	graph: rngNormal(mean, stddev: Node; dims: openArray[int]): Node	
-concat	graph.html#concat,Node,openArray[Node],int	graph: concat(a: Node; nodes: openArray[Node]; axis: int): Node	
-pad	graph.html#pad,Node,Node,openArray[]	graph: pad(a, padValue: Node; padConfig: openArray[(int, int, int)]): Node	
-convolution	graph.html#convolution,Node,Node,openArray[int],openArray[int],openArray[int],openArray[int],openArray[Padding],openArray[int],openArray[int],int,int	graph: convolution(a, kernel: Node; inputDims, outputDims, kernelDims: openArray[int];\n            strides: openArray[int] = []; padding: openArray[Padding] = [];\n            dilation, inputDilation: openArray[int] = [];\n            groups, batchGroups = 1): Node	
-conv1d	graph.html#conv1d,Node,Node,int,int,int	graph: conv1d(a, kernel: Node; strides = 1; padding = pad(0); dilation = 1; groups = 1;\n       channelsFirst = false): Node	
-conv2d	graph.html#conv2d,Node,Node,Opt2d,Pad2d,Opt2d,int	graph: conv2d(a, kernel: Node; strides: Opt2d = 1; padding: Pad2d = pad(0);\n       dilation: Opt2d = 1; groups = 1; channelsFirst = false): Node	
-conv3d	graph.html#conv3d,Node,Node,Opt3d,Pad3d,Opt3d,int	graph: conv3d(a, kernel: Node; strides: Opt3d = 1; padding: Pad3d = pad(0);\n       dilation: Opt3d = 1; groups = 1; channelsFirst = false): Node	
-gather	graph.html#gather,Node,Node	graph: gather(a, indices: Node): Node	
-scatter	graph.html#scatter,Node,Node,Node,Computation	graph: scatter(a, indices, b: Node; comp: Computation): Node	
-addAt	graph.html#addAt,Node,Node,Node	graph: addAt(a, indices, b: Node): Node	
-reduce	graph.html#reduce,Node,Node,Computation,openArray[int]	graph: reduce(a, initValue: Node; comp: Computation; dims: openArray[int] = [];\n       nodeType = tReduce; keepDims = false): Node	
-sum	graph.html#sum,Node,openArray[int]	graph: sum(a: Node; dims: openArray[int] = []; keepDims = false): Node	
-sum	graph.html#sum,Node,int	graph: sum(a: Node; axis: int; keepDims = false): Node	
-mean	graph.html#mean,Node,openArray[int]	graph: mean(a: Node; dims: openArray[int] = []; keepDims = false): Node	
-mean	graph.html#mean,Node,int	graph: mean(a: Node; axis: int; keepDims = false): Node	
-min	graph.html#min,Node,openArray[int]	graph: min(a: Node; dims: openArray[int] = []; keepDims = false): Node	
-min	graph.html#min,Node,int	graph: min(a: Node; axis: int; keepDims = false): Node	
-max	graph.html#max,Node,openArray[int]	graph: max(a: Node; dims: openArray[int] = []; keepDims = false): Node	
-max	graph.html#max,Node,int	graph: max(a: Node; axis: int; keepDims = false): Node	
-argMax	graph.html#argMax,Node,int,bool,enum	graph: argMax(a: Node; axis: int; keepDims = false; ixType = I64): Node	
-argMin	graph.html#argMin,Node,int,bool,enum	graph: argMin(a: Node; axis: int; keepDims = false; ixType = I64): Node	
-oneHot	graph.html#oneHot,Node,int,DataType	graph: oneHot(x: Node; classes: int; dtype: DataType): Node	
-mseLoss	graph.html#mseLoss,Node,Node	graph: mseLoss(pred, target: Node): Node	
-softmax	graph.html#softmax,Node,int	graph: softmax(a: Node; axis = -1): Node	
-crossEntropyLoss	graph.html#crossEntropyLoss,Node,Node	graph: crossEntropyLoss(pred, target: Node): Node	
-reduceWindow	graph.html#reduceWindow,Node,Node,Computation,openArray[int],openArray[int],openArray[Padding]	graph: reduceWindow(a, initValue: Node; comp: Computation;\n             windowDims, strides: openArray[int];\n             padding: openArray[Padding] = []; nodeType = tReduceWindow): Node	
-maxPool1d	graph.html#maxPool1d,Node,int,int	graph: maxPool1d(a: Node; kernelSize: int; strides = 0; padding = pad(0);\n          channelsFirst = false): Node	
-maxPool2d	graph.html#maxPool2d,Node,Opt2d,Opt2d,Pad2d	graph: maxPool2d(a: Node; kernelSize: Opt2d; strides: Opt2d = 0;\n          padding: Pad2d = pad(0); channelsFirst = false): Node	
-maxPool3d	graph.html#maxPool3d,Node,Opt3d,Opt3d,Pad3d	graph: maxPool3d(a: Node; kernelSize: Opt3d; strides: Opt3d = 0;\n          padding: Pad3d = pad(0); channelsFirst = false): Node	
-avgPool1d	graph.html#avgPool1d,Node,int,int	graph: avgPool1d(a: Node; kernelSize: int; strides = 0; padding = pad(0);\n          channelsFirst = false): Node	
-avgPool2d	graph.html#avgPool2d,Node,Opt2d,Opt2d,Pad2d	graph: avgPool2d(a: Node; kernelSize: Opt2d; strides: Opt2d = 0;\n          padding: Pad2d = pad(0); channelsFirst = false): Node	
-avgPool3d	graph.html#avgPool3d,Node,Opt3d,Opt3d,Pad3d	graph: avgPool3d(a: Node; kernelSize: Opt3d; strides: Opt3d = 0;\n          padding: Pad3d = pad(0); channelsFirst = false): Node	
-selectAndScatter	graph.html#selectAndScatter,Node,Node,openArray[int],openArray[int],openArray[Padding]	graph: selectAndScatter(a, source: Node; windowDims, strides: openArray[int];\n                 padding: openArray[Padding] = []): Node	
-batchNormInference	graph.html#batchNormInference,Node,Node,Node,Node,Node,float,int	graph: batchNormInference(a, scale, offset, mean, variance: Node; epsilon: float;\n                   axis: int): Node	
-batchNormTraining	graph.html#batchNormTraining,Node,Node,Node,float,int	graph: batchNormTraining(a, scale, offset: Node; epsilon: float; axis: int): Node	
-batchNormGrad	graph.html#batchNormGrad,Node,Node,Node,Node,Node,float,int	graph: batchNormGrad(a, scale, mean, variance, gradOutput: Node; epsilon: float;\n              axis: int): Node	
-gradient	graph.html#gradient,Builder,Node,openArray[string]	graph: gradient(b: Builder; output: Node; inputs: openArray[string]): seq[Node]	
+nimTitle	graph	graph.html	module nimxla/graph		0
+nim	BuilderError	graph.html#BuilderError	type BuilderError		24
+nim	tNone	graph.html#tNone	OpType.tNone		31
+nim	tConst	graph.html#tConst	OpType.tConst		31
+nim	tLiteral	graph.html#tLiteral	OpType.tLiteral		31
+nim	tParam	graph.html#tParam	OpType.tParam		31
+nim	tError	graph.html#tError	OpType.tError		31
+nim	tIota	graph.html#tIota	OpType.tIota		31
+nim	tNot	graph.html#tNot	OpType.tNot		31
+nim	tNeg	graph.html#tNeg	OpType.tNeg		31
+nim	tAbs	graph.html#tAbs	OpType.tAbs		31
+nim	tExp	graph.html#tExp	OpType.tExp		31
+nim	tFloor	graph.html#tFloor	OpType.tFloor		31
+nim	tCeil	graph.html#tCeil	OpType.tCeil		31
+nim	tRound	graph.html#tRound	OpType.tRound		31
+nim	tLog	graph.html#tLog	OpType.tLog		31
+nim	tLog1p	graph.html#tLog1p	OpType.tLog1p		31
+nim	tSigmoid	graph.html#tSigmoid	OpType.tSigmoid		31
+nim	tRelu	graph.html#tRelu	OpType.tRelu		31
+nim	tSign	graph.html#tSign	OpType.tSign		31
+nim	tCos	graph.html#tCos	OpType.tCos		31
+nim	tSin	graph.html#tSin	OpType.tSin		31
+nim	tTanh	graph.html#tTanh	OpType.tTanh		31
+nim	tSqrt	graph.html#tSqrt	OpType.tSqrt		31
+nim	tRsqrt	graph.html#tRsqrt	OpType.tRsqrt		31
+nim	tIsFinite	graph.html#tIsFinite	OpType.tIsFinite		31
+nim	tCopy	graph.html#tCopy	OpType.tCopy		31
+nim	tZerosLike	graph.html#tZerosLike	OpType.tZerosLike		31
+nim	tTupleElement	graph.html#tTupleElement	OpType.tTupleElement		31
+nim	tReshape	graph.html#tReshape	OpType.tReshape		31
+nim	tBroadcast	graph.html#tBroadcast	OpType.tBroadcast		31
+nim	tBroadcastInDim	graph.html#tBroadcastInDim	OpType.tBroadcastInDim		31
+nim	tCollapse	graph.html#tCollapse	OpType.tCollapse		31
+nim	tTranspose	graph.html#tTranspose	OpType.tTranspose		31
+nim	tNarrow	graph.html#tNarrow	OpType.tNarrow		31
+nim	tConvert	graph.html#tConvert	OpType.tConvert		31
+nim	tReverse	graph.html#tReverse	OpType.tReverse		31
+nim	tMaxPool	graph.html#tMaxPool	OpType.tMaxPool		31
+nim	tSumPool	graph.html#tSumPool	OpType.tSumPool		31
+nim	tReduceSum	graph.html#tReduceSum	OpType.tReduceSum		31
+nim	tReduceMin	graph.html#tReduceMin	OpType.tReduceMin		31
+nim	tReduceMax	graph.html#tReduceMax	OpType.tReduceMax		31
+nim	tArgmin	graph.html#tArgmin	OpType.tArgmin		31
+nim	tArgmax	graph.html#tArgmax	OpType.tArgmax		31
+nim	tSoftmax	graph.html#tSoftmax	OpType.tSoftmax		31
+nim	tAdd	graph.html#tAdd	OpType.tAdd		31
+nim	tSub	graph.html#tSub	OpType.tSub		31
+nim	tMul	graph.html#tMul	OpType.tMul		31
+nim	tDiv	graph.html#tDiv	OpType.tDiv		31
+nim	tRem	graph.html#tRem	OpType.tRem		31
+nim	tMax	graph.html#tMax	OpType.tMax		31
+nim	tMin	graph.html#tMin	OpType.tMin		31
+nim	tPow	graph.html#tPow	OpType.tPow		31
+nim	tDot	graph.html#tDot	OpType.tDot		31
+nim	tAnd	graph.html#tAnd	OpType.tAnd		31
+nim	tOr	graph.html#tOr	OpType.tOr		31
+nim	tEq	graph.html#tEq	OpType.tEq		31
+nim	tNe	graph.html#tNe	OpType.tNe		31
+nim	tGe	graph.html#tGe	OpType.tGe		31
+nim	tGt	graph.html#tGt	OpType.tGt		31
+nim	tLe	graph.html#tLe	OpType.tLe		31
+nim	tLt	graph.html#tLt	OpType.tLt		31
+nim	tRngUniform	graph.html#tRngUniform	OpType.tRngUniform		31
+nim	tRngNormal	graph.html#tRngNormal	OpType.tRngNormal		31
+nim	tReduce	graph.html#tReduce	OpType.tReduce		31
+nim	tGather	graph.html#tGather	OpType.tGather		31
+nim	tConv	graph.html#tConv	OpType.tConv		31
+nim	tReduceWindow	graph.html#tReduceWindow	OpType.tReduceWindow		31
+nim	tSelectAndScatter	graph.html#tSelectAndScatter	OpType.tSelectAndScatter		31
+nim	tPad	graph.html#tPad	OpType.tPad		31
+nim	tSelect	graph.html#tSelect	OpType.tSelect		31
+nim	tClamp	graph.html#tClamp	OpType.tClamp		31
+nim	tTuple	graph.html#tTuple	OpType.tTuple		31
+nim	tConcat	graph.html#tConcat	OpType.tConcat		31
+nim	tScatter	graph.html#tScatter	OpType.tScatter		31
+nim	tBatchNormInference	graph.html#tBatchNormInference	OpType.tBatchNormInference		31
+nim	tBatchNormTraining	graph.html#tBatchNormTraining	OpType.tBatchNormTraining		31
+nim	tBatchNormGrad	graph.html#tBatchNormGrad	OpType.tBatchNormGrad		31
+nim	OpType	graph.html#OpType	enum OpType		31
+nim	Builder	graph.html#Builder	type Builder		50
+nim	Node	graph.html#Node	type Node		59
+nim	Computation	graph.html#Computation	type Computation		109
+nim	HloModule	graph.html#HloModule	object HloModule		113
+nim	dump	graph.html#dump,Node,int,int	proc dump(n: Node; maxDepth = -1; depth = 0): string		144
+nim	raiseError	graph.html#raiseError,string,Node	proc raiseError(message: string; node: Node = nil)		146
+nim	dtype	graph.html#dtype,Node	proc dtype(n: Node): DataType		182
+nim	rank	graph.html#rank,Node	proc rank(n: Node): int		186
+nim	dims	graph.html#dims,Node	proc dims(n: Node): seq[int]		190
+nim	len	graph.html#len,Node	proc len(n: Node): int		194
+nim	`$`	graph.html#$,Node	proc `$`(n: Node): string		198
+nim	repr	graph.html#repr,Node	proc repr(n: Node): string		211
+nim	toString	graph.html#toString,Node	proc toString(n: Node): string		215
+nim	newBuilder	graph.html#newBuilder,string	proc newBuilder(name: string): Builder		230
+nim	clone	graph.html#clone,Builder,Node	proc clone(b: Builder; node: Node): Node		258
+nim	build	graph.html#build,Builder,Node	proc build(b: Builder; root: Node): Computation		269
+nim	rawPtr	graph.html#rawPtr,Computation	proc rawPtr(comp: Computation): xla_computation		281
+nim	name	graph.html#name,Computation	proc name(comp: Computation): string		283
+nim	parameters	graph.html#parameters,Computation	proc parameters(comp: Computation): (seq[string], seq[Shape])		287
+nim	resultShape	graph.html#resultShape,Computation	proc resultShape(comp: Computation): Shape		304
+nim	`$`	graph.html#$,Computation	proc `$`(comp: Computation): string		310
+nim	toHlo	graph.html#toHlo,Computation	proc toHlo(comp: Computation): HloModule		318
+nim	fromHlo	graph.html#fromHlo,HloModule	proc fromHlo(hlo: HloModule): Computation		323
+nim	`$`	graph.html#$,HloModule	proc `$`(hlo: HloModule): string		329
+nim	parameter	graph.html#parameter,Builder,DataType,openArray[int],string	proc parameter(b: Builder; dtype: DataType; dims: openArray[int] = []; name = ""): Node		336
+nim	makeTuple	graph.html#makeTuple,Builder,varargs[Node]	proc makeTuple(b: Builder; args: varargs[Node]): Node		348
+nim	iota	graph.html#iota,Builder,DataType,int	proc iota(b: Builder; dtype: DataType; length: int): Node		358
+nim	iota	graph.html#iota,Builder,DataType,openArray[int],int	proc iota(b: Builder; dtype: DataType; dims: openArray[int]; axis: int): Node		363
+nim	errorNode	graph.html#errorNode,Builder,string	proc errorNode(b: Builder; message: string): Node		370
+nim	broadcast	graph.html#broadcast,Node,openArray[int]	proc broadcast(a: Node; dims: openArray[int]): Node		375
+nim	convert	graph.html#convert,Node,DataType	proc convert(a: Node; dtype: DataType): Node		376
+nim	constant	graph.html#constant,Builder,Literal	proc constant(b: Builder; lit: Literal): Node		378
+nim	constant	graph.html#constant,Builder,Tensor[T: ElemType]	proc constant[T: ElemType](b: Builder; t: Tensor[T]): Node		382
+nim	constant	graph.html#constant,Builder,int32	proc constant(b: Builder; value: int32): Node		393
+nim	constant	graph.html#constant,Builder,	proc constant(b: Builder; value: openArray[int32]): Node		402
+nim	constant	graph.html#constant,Builder,int64	proc constant(b: Builder; value: int64): Node		393
+nim	constant	graph.html#constant,Builder,_2	proc constant(b: Builder; value: openArray[int64]): Node		403
+nim	constant	graph.html#constant,Builder,float32	proc constant(b: Builder; value: float32): Node		393
+nim	constant	graph.html#constant,Builder,_3	proc constant(b: Builder; value: openArray[float32]): Node		404
+nim	constant	graph.html#constant,Builder,float64	proc constant(b: Builder; value: float64): Node		393
+nim	constant	graph.html#constant,Builder,_4	proc constant(b: Builder; value: openArray[float64]): Node		405
+nim	constant	graph.html#constant,Builder,int	proc constant(b: Builder; value: int): Node		407
+nim	constant	graph.html#constant,Builder,openArray[int]	proc constant(b: Builder; value: openArray[int]): Node		411
+nim	constant	graph.html#constant,Builder,T,DataType	proc constant[T: float | int](b: Builder; value: T; dtype: DataType): Node		415
+nim	`^`	graph.html#^.t,Builder,untyped	template `^`(b: Builder; value: untyped): Node		432
+nim	zero	graph.html#zero,Builder,enum	proc zero(b: Builder; dtype = F32; dims: openArray[int] = []): Node		447
+nim	one	graph.html#one,Builder,enum	proc one(b: Builder; dtype = F32; dims: openArray[int] = []): Node		449
+nim	minValue	graph.html#minValue,Builder,enum	proc minValue(b: Builder; dtype = F32; dims: openArray[int] = []): Node		451
+nim	maxValue	graph.html#maxValue,Builder,enum	proc maxValue(b: Builder; dtype = F32; dims: openArray[int] = []): Node		454
+nim	`+`	graph.html#+,Node,Node	proc `+`(a, b: Node): Node		468
+nim	`-`	graph.html#-,Node,Node	proc `-`(a, b: Node): Node		469
+nim	`*`	graph.html#*,Node,Node	proc `*`(a, b: Node): Node		470
+nim	`/`	graph.html#/,Node,Node	proc `/`(a, b: Node): Node		471
+nim	rem	graph.html#rem,Node,Node	proc rem(a, b: Node): Node		472
+nim	max	graph.html#max,Node,Node	proc max(a, b: Node): Node		473
+nim	min	graph.html#min,Node,Node	proc min(a, b: Node): Node		474
+nim	pow	graph.html#pow,Node,Node	proc pow(a, b: Node): Node		475
+nim	dot	graph.html#dot,Node,Node	proc dot(a, b: Node): Node		476
+nim	logicalAnd	graph.html#logicalAnd,Node,Node	proc logicalAnd(a, b: Node): Node		477
+nim	logicalOr	graph.html#logicalOr,Node,Node	proc logicalOr(a, b: Node): Node		478
+nim	`==`	graph.html#==,Node,Node	proc `==`(a, b: Node): Node		479
+nim	`!=`	graph.html#!=,Node,Node	proc `!=`(a, b: Node): Node		480
+nim	`>=`	graph.html#>=,Node,Node	proc `>=`(a, b: Node): Node		481
+nim	`>`	graph.html#>,Node,Node	proc `>`(a, b: Node): Node		482
+nim	`<=`	graph.html#<=,Node,Node	proc `<=`(a, b: Node): Node		483
+nim	`<`	graph.html#<,Node,Node	proc `<`(a, b: Node): Node		484
+nim	`!`	graph.html#!,Node	proc `!`(a: Node): Node		495
+nim	`-`	graph.html#-,Node	proc `-`(a: Node): Node		496
+nim	abs	graph.html#abs,Node	proc abs(a: Node): Node		497
+nim	exp	graph.html#exp,Node	proc exp(a: Node): Node		498
+nim	floor	graph.html#floor,Node	proc floor(a: Node): Node		499
+nim	ceil	graph.html#ceil,Node	proc ceil(a: Node): Node		500
+nim	round	graph.html#round,Node	proc round(a: Node): Node		501
+nim	log	graph.html#log,Node	proc log(a: Node): Node		502
+nim	log1p	graph.html#log1p,Node	proc log1p(a: Node): Node		503
+nim	sigmoid	graph.html#sigmoid,Node	proc sigmoid(a: Node): Node		504
+nim	sign	graph.html#sign,Node	proc sign(a: Node): Node		505
+nim	cos	graph.html#cos,Node	proc cos(a: Node): Node		506
+nim	sin	graph.html#sin,Node	proc sin(a: Node): Node		507
+nim	tanh	graph.html#tanh,Node	proc tanh(a: Node): Node		508
+nim	sqrt	graph.html#sqrt,Node	proc sqrt(a: Node): Node		509
+nim	rsqrt	graph.html#rsqrt,Node	proc rsqrt(a: Node): Node		510
+nim	isFinite	graph.html#isFinite,Node	proc isFinite(a: Node): Node		511
+nim	copy	graph.html#copy,Node	proc copy(a: Node): Node		512
+nim	zerosLike	graph.html#zerosLike,Node	proc zerosLike(a: Node): Node		513
+nim	`[]`	graph.html#[],Node,int	proc `[]`(a: Node; index: int): Node		518
+nim	reshape	graph.html#reshape,Node,varargs[int]	proc reshape(a: Node; dims: varargs[int]): Node		530
+nim	flatten	graph.html#flatten,Node,int,int	proc flatten(a: Node; startDim = 0; endDim = -1): Node		538
+nim	reverse	graph.html#reverse,Node,varargs[int]	proc reverse(a: Node; axes: varargs[int]): Node		553
+nim	broadcastInDim	graph.html#broadcastInDim,Node,openArray[int],openArray[int]	proc broadcastInDim(a: Node; outSize, bcastDims: openArray[int]): Node		568
+nim	collapse	graph.html#collapse,Node,openArray[int]	proc collapse(a: Node; dims: openArray[int]): Node		579
+nim	transpose	graph.html#transpose,Node,varargs[int]	proc transpose(a: Node; axes: varargs[int]): Node		587
+nim	narrow	graph.html#narrow,Node,int,int,int,int	proc narrow(a: Node; dim, start, stop: int; stride = 1): Node		599
+nim	relu	graph.html#relu,Node	proc relu(a: Node): Node		606
+nim	select	graph.html#select,Node,Node,Node	proc select(a, onTrue, onFalse: Node): Node		611
+nim	clamp	graph.html#clamp,Node,Node,Node	proc clamp(a, min, max: Node): Node		615
+nim	rngUniform	graph.html#rngUniform,Node,Node,openArray[int]	proc rngUniform(min, max: Node; dims: openArray[int]): Node		619
+nim	rngNormal	graph.html#rngNormal,Node,Node,openArray[int]	proc rngNormal(mean, stddev: Node; dims: openArray[int]): Node		627
+nim	concat	graph.html#concat,Node,openArray[Node],int	proc concat(a: Node; nodes: openArray[Node]; axis: int): Node		635
+nim	pad	graph.html#pad,Node,Node,openArray[]	proc pad(a, padValue: Node; padConfig: openArray[(int, int, int)]): Node		643
+nim	convolution	graph.html#convolution,Node,Node,openArray[int],openArray[int],openArray[int],openArray[int],openArray[Padding],openArray[int],openArray[int],int,int	proc convolution(a, kernel: Node; inputDims, outputDims, kernelDims: openArray[int];\n            strides: openArray[int] = []; padding: openArray[Padding] = [];\n            dilation: openArray[int] = []; inputDilation: openArray[int] = [];\n            groups = 1; batchGroups = 1): Node		669
+nim	conv1d	graph.html#conv1d,Node,Node,int,int,int	proc conv1d(a, kernel: Node; strides = 1; padding = pad(0); dilation = 1; groups = 1;\n       channelsFirst = false): Node		733
+nim	conv2d	graph.html#conv2d,Node,Node,Opt2d,Pad2d,Opt2d,int	proc conv2d(a, kernel: Node; strides: Opt2d = 1; padding: Pad2d = pad(0);\n       dilation: Opt2d = 1; groups = 1; channelsFirst = false): Node		752
+nim	conv3d	graph.html#conv3d,Node,Node,Opt3d,Pad3d,Opt3d,int	proc conv3d(a, kernel: Node; strides: Opt3d = 1; padding: Pad3d = pad(0);\n       dilation: Opt3d = 1; groups = 1; channelsFirst = false): Node		772
+nim	gather	graph.html#gather,Node,Node	proc gather(a, indices: Node): Node		792
+nim	scatter	graph.html#scatter,Node,Node,Node,Computation	proc scatter(a, indices, b: Node; comp: Computation): Node		820
+nim	addAt	graph.html#addAt,Node,Node,Node	proc addAt(a, indices, b: Node): Node		846
+nim	reduce	graph.html#reduce,Node,Node,Computation,openArray[int]	proc reduce(a, initValue: Node; comp: Computation; dims: openArray[int] = [];\n       nodeType = tReduce; keepDims = false): Node		870
+nim	sum	graph.html#sum,Node,openArray[int]	proc sum(a: Node; dims: openArray[int] = []; keepDims = false): Node		890
+nim	sum	graph.html#sum,Node,int	proc sum(a: Node; axis: int; keepDims = false): Node		897
+nim	mean	graph.html#mean,Node,openArray[int]	proc mean(a: Node; dims: openArray[int] = []; keepDims = false): Node		902
+nim	mean	graph.html#mean,Node,int	proc mean(a: Node; axis: int; keepDims = false): Node		910
+nim	min	graph.html#min,Node,openArray[int]	proc min(a: Node; dims: openArray[int] = []; keepDims = false): Node		915
+nim	min	graph.html#min,Node,int	proc min(a: Node; axis: int; keepDims = false): Node		922
+nim	max	graph.html#max,Node,openArray[int]	proc max(a: Node; dims: openArray[int] = []; keepDims = false): Node		927
+nim	max	graph.html#max,Node,int	proc max(a: Node; axis: int; keepDims = false): Node		934
+nim	argMax	graph.html#argMax,Node,int,bool,enum	proc argMax(a: Node; axis: int; keepDims = false; ixType = I64): Node		977
+nim	argMin	graph.html#argMin,Node,int,bool,enum	proc argMin(a: Node; axis: int; keepDims = false; ixType = I64): Node		978
+nim	oneHot	graph.html#oneHot,Node,int,DataType	proc oneHot(x: Node; classes: int; dtype: DataType): Node		981
+nim	mseLoss	graph.html#mseLoss,Node,Node	proc mseLoss(pred, target: Node): Node		990
+nim	softmax	graph.html#softmax,Node,int	proc softmax(a: Node; axis = -1): Node		995
+nim	crossEntropyLoss	graph.html#crossEntropyLoss,Node,Node	proc crossEntropyLoss(pred, target: Node): Node		1003
+nim	reduceWindow	graph.html#reduceWindow,Node,Node,Computation,openArray[int],openArray[int],openArray[Padding]	proc reduceWindow(a, initValue: Node; comp: Computation;\n             windowDims, strides: openArray[int];\n             padding: openArray[Padding] = []; nodeType = tReduceWindow): Node		1038
+nim	maxPool1d	graph.html#maxPool1d,Node,int,int	proc maxPool1d(a: Node; kernelSize: int; strides = 0; padding = pad(0);\n          channelsFirst = false): Node		1077
+nim	maxPool2d	graph.html#maxPool2d,Node,Opt2d,Opt2d,Pad2d	proc maxPool2d(a: Node; kernelSize: Opt2d; strides: Opt2d = 0;\n          padding: Pad2d = pad(0); channelsFirst = false): Node		1083
+nim	maxPool3d	graph.html#maxPool3d,Node,Opt3d,Opt3d,Pad3d	proc maxPool3d(a: Node; kernelSize: Opt3d; strides: Opt3d = 0;\n          padding: Pad3d = pad(0); channelsFirst = false): Node		1089
+nim	avgPool1d	graph.html#avgPool1d,Node,int,int	proc avgPool1d(a: Node; kernelSize: int; strides = 0; padding = pad(0);\n          channelsFirst = false): Node		1108
+nim	avgPool2d	graph.html#avgPool2d,Node,Opt2d,Opt2d,Pad2d	proc avgPool2d(a: Node; kernelSize: Opt2d; strides: Opt2d = 0;\n          padding: Pad2d = pad(0); channelsFirst = false): Node		1114
+nim	avgPool3d	graph.html#avgPool3d,Node,Opt3d,Opt3d,Pad3d	proc avgPool3d(a: Node; kernelSize: Opt3d; strides: Opt3d = 0;\n          padding: Pad3d = pad(0); channelsFirst = false): Node		1121
+nim	selectAndScatter	graph.html#selectAndScatter,Node,Node,openArray[int],openArray[int],openArray[Padding]	proc selectAndScatter(a, source: Node; windowDims, strides: openArray[int];\n                 padding: openArray[Padding] = []): Node		1129
+nim	batchNormInference	graph.html#batchNormInference,Node,Node,Node,Node,Node,float,int	proc batchNormInference(a, scale, offset, mean, variance: Node; epsilon: float;\n                   axis: int): Node		1154
+nim	batchNormTraining	graph.html#batchNormTraining,Node,Node,Node,float,int	proc batchNormTraining(a, scale, offset: Node; epsilon: float; axis: int): Node		1164
+nim	batchNormGrad	graph.html#batchNormGrad,Node,Node,Node,Node,Node,float,int	proc batchNormGrad(a, scale, mean, variance, gradOutput: Node; epsilon: float;\n              axis: int): Node		1173
+nim	gradient	graph.html#gradient,Builder,Node,openArray[string]	proc gradient(b: Builder; output: Node; inputs: openArray[string]): seq[Node]		1408
+nimgrp	mean	graph.html#mean-procs-all	proc		902
+nimgrp	-	graph.html#--procs-all	proc		463
+nimgrp	constant	graph.html#constant-procs-all	proc		378
+nimgrp	$	graph.html#$-procs-all	proc		198
+nimgrp	iota	graph.html#iota-procs-all	proc		358
+nimgrp	max	graph.html#max-procs-all	proc		463
+nimgrp	sum	graph.html#sum-procs-all	proc		890
+nimgrp	min	graph.html#min-procs-all	proc		463

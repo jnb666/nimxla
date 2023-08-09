@@ -1,12 +1,13 @@
-Trainer	train.html#Trainer	train: Trainer	
-trainFunc	train.html#trainFunc,Client,Module,DataType,seq[int],proc(Node,Node)	train: trainFunc(c: Client; model: Module; dtype: DataType; shape: seq[int];\n          lossFn: proc (yp, y: Node): Node): Executable	
-testFunc	train.html#testFunc,Client,Module,DataType,seq[int]	train: testFunc(c: Client; model: Module; dtype: DataType; shape: seq[int]): Executable	
-accuracyFunc	train.html#accuracyFunc,Client,int,int	train: accuracyFunc(c: Client; batch, nout: int; outType = F32; labelType = I32): Executable	
-trainEpoch	train.html#trainEpoch,Trainer,DataLoader	train: trainEpoch[T: ElemType](t: var Trainer; loader: var DataLoader): (float, float,\n    bool)	
-getAccuracy	train.html#getAccuracy,Trainer,DataLoader	train: getAccuracy[T: ElemType](t: var Trainer; loader: var DataLoader): (float, bool)	
-saveCheckpoint	train.html#saveCheckpoint,Trainer,string	train: saveCheckpoint(t: Trainer; basename: string)	
-loadCheckpoint	train.html#loadCheckpoint,Trainer,string	train: loadCheckpoint(t: var Trainer; filename: string)	
-readCheckpointFile	train.html#readCheckpointFile,string,string	train: readCheckpointFile(archiveFile, name: string): Stream	
-statsPlots	train.html#statsPlots,Trainer,seq[string]	train: statsPlots(t: Trainer; classes: seq[string]): JsonNode	
-getLayout	train.html#getLayout,int	train: getLayout(epochs: int): JsonNode	
-trainNetwork	train.html#trainNetwork,Trainer,DataLoader,DataLoader,int,string,int	train: trainNetwork[T: ElemType](t: var Trainer; train, test: var DataLoader;\n                          epochs: int; plot = false; checkpoint = &quot;&quot;;\n                          saveEvery = 20)	
+nimTitle	train	train.html	module nimxla/train		0
+nim	Trainer	train.html#Trainer	object Trainer		11
+nim	trainFunc	train.html#trainFunc,Client,Module,DataType,seq[int],proc(Node,Node)	proc trainFunc(c: Client; model: Module; dtype: DataType; shape: seq[int];\n          lossFn: proc (yp, y: Node): Node): Executable		42
+nim	testFunc	train.html#testFunc,Client,Module,DataType,seq[int]	proc testFunc(c: Client; model: Module; dtype: DataType; shape: seq[int]): Executable		50
+nim	accuracyFunc	train.html#accuracyFunc,Client,int,int	proc accuracyFunc(c: Client; batch, nout: int; outType = F32; labelType = I32): Executable		57
+nim	trainEpoch	train.html#trainEpoch,Trainer,DataLoader	proc trainEpoch[T: ElemType](t: var Trainer; loader: var DataLoader): (float, float,\n    bool)		79
+nim	getAccuracy	train.html#getAccuracy,Trainer,DataLoader	proc getAccuracy[T: ElemType](t: var Trainer; loader: var DataLoader): (float, bool)		110
+nim	saveCheckpoint	train.html#saveCheckpoint,Trainer,string	proc saveCheckpoint(t: Trainer; basename: string)		146
+nim	loadCheckpoint	train.html#loadCheckpoint,Trainer,string	proc loadCheckpoint(t: var Trainer; filename: string)		175
+nim	readCheckpointFile	train.html#readCheckpointFile,string,string	proc readCheckpointFile(archiveFile, name: string): Stream		196
+nim	statsPlots	train.html#statsPlots,Trainer,seq[string]	proc statsPlots(t: Trainer; classes: seq[string]): JsonNode		212
+nim	getLayout	train.html#getLayout,int	proc getLayout(epochs: int): JsonNode		230
+nim	trainNetwork	train.html#trainNetwork,Trainer,DataLoader,DataLoader,int,string,int	proc trainNetwork[T: ElemType](t: var Trainer; train, test: var DataLoader;\n                          epochs: int; plot = false; checkpoint = "";\n                          saveEvery = 20)		255

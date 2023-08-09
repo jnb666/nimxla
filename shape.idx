@@ -1,43 +1,48 @@
-ElemType	shape.html#ElemType	shape: ElemType	
-InvalidType	shape.html#InvalidType	DataType.InvalidType	
-Bool	shape.html#Bool	DataType.Bool	
-I8	shape.html#I8	DataType.I8	
-I16	shape.html#I16	DataType.I16	
-I32	shape.html#I32	DataType.I32	
-I64	shape.html#I64	DataType.I64	
-U8	shape.html#U8	DataType.U8	
-U16	shape.html#U16	DataType.U16	
-U32	shape.html#U32	DataType.U32	
-U64	shape.html#U64	DataType.U64	
-F16	shape.html#F16	DataType.F16	
-F32	shape.html#F32	DataType.F32	
-F64	shape.html#F64	DataType.F64	
-Tuple	shape.html#Tuple	DataType.Tuple	
-OpaqueType	shape.html#OpaqueType	DataType.OpaqueType	
-C64	shape.html#C64	DataType.C64	
-BF16	shape.html#BF16	DataType.BF16	
-Token	shape.html#Token	DataType.Token	
-C128	shape.html#C128	DataType.C128	
-DataType	shape.html#DataType	shape: DataType	
-ArrayKind	shape.html#ArrayKind	ShapeKind.ArrayKind	
-TupleKind	shape.html#TupleKind	ShapeKind.TupleKind	
-ShapeKind	shape.html#ShapeKind	shape: ShapeKind	
-Shape	shape.html#Shape	shape: Shape	
-Padding	shape.html#Padding	shape: Padding	
-Opt2d	shape.html#Opt2d	shape: Opt2d	
-Pad2d	shape.html#Pad2d	shape: Pad2d	
-Opt3d	shape.html#Opt3d	shape: Opt3d	
-Pad3d	shape.html#Pad3d	shape: Pad3d	
-padSame	shape.html#padSame	shape: padSame	
-pad	shape.html#pad,int	shape: pad(val: int): Padding	
-pad	shape.html#pad,int,int	shape: pad(lo, hi: int): Padding	
-`$`	shape.html#$,Padding	shape: `$`(p: Padding): string	
-seq2	shape.html#seq2,Opt2d	shape: seq2(opt: Opt2d): seq[int]	
-seq2	shape.html#seq2,Pad2d	shape: seq2(opt: Pad2d): seq[Padding]	
-seq3	shape.html#seq3,Opt3d	shape: seq3(opt: Opt3d): seq[int]	
-seq3	shape.html#seq3,Pad3d	shape: seq3(opt: Pad3d): seq[Padding]	
-arrayShape	shape.html#arrayShape,DataType,varargs[int]	shape: arrayShape(dtype: DataType; dims: varargs[int]): Shape	
-dtypeOf	shape.html#dtypeOf,typedesc[ElemType]	shape: dtypeOf(T: typedesc[ElemType]): DataType	
-`==`	shape.html#==,Shape,Shape	shape: `==`(s1, s2: Shape): bool	
-`$`	shape.html#$,Shape	shape: `$`(s: Shape): string	
-toShape	shape.html#toShape,shape_t	shape: toShape(s: shape_t; topLevel = true): Shape	
+nimTitle	shape	shape.html	module nimxla/shape		0
+nim	ElemType	shape.html#ElemType	type ElemType		8
+nim	InvalidType	shape.html#InvalidType	DataType.InvalidType		11
+nim	Bool	shape.html#Bool	DataType.Bool		11
+nim	I8	shape.html#I8	DataType.I8		11
+nim	I16	shape.html#I16	DataType.I16		11
+nim	I32	shape.html#I32	DataType.I32		11
+nim	I64	shape.html#I64	DataType.I64		11
+nim	U8	shape.html#U8	DataType.U8		11
+nim	U16	shape.html#U16	DataType.U16		11
+nim	U32	shape.html#U32	DataType.U32		11
+nim	U64	shape.html#U64	DataType.U64		11
+nim	F16	shape.html#F16	DataType.F16		11
+nim	F32	shape.html#F32	DataType.F32		11
+nim	F64	shape.html#F64	DataType.F64		11
+nim	Tuple	shape.html#Tuple	DataType.Tuple		11
+nim	OpaqueType	shape.html#OpaqueType	DataType.OpaqueType		11
+nim	C64	shape.html#C64	DataType.C64		11
+nim	BF16	shape.html#BF16	DataType.BF16		11
+nim	Token	shape.html#Token	DataType.Token		11
+nim	C128	shape.html#C128	DataType.C128		11
+nim	DataType	shape.html#DataType	enum DataType		11
+nim	ArrayKind	shape.html#ArrayKind	ShapeKind.ArrayKind		16
+nim	TupleKind	shape.html#TupleKind	ShapeKind.TupleKind		16
+nim	ShapeKind	shape.html#ShapeKind	enum ShapeKind		16
+nim	Shape	shape.html#Shape	object Shape		18
+nim	Padding	shape.html#Padding	object Padding		28
+nim	Opt2d	shape.html#Opt2d	type Opt2d		33
+nim	Pad2d	shape.html#Pad2d	type Pad2d		35
+nim	Opt3d	shape.html#Opt3d	type Opt3d		37
+nim	Pad3d	shape.html#Pad3d	type Pad3d		39
+nim	padSame	shape.html#padSame	const padSame		42
+nim	pad	shape.html#pad,int	proc pad(val: int): Padding		45
+nim	pad	shape.html#pad,int,int	proc pad(lo, hi: int): Padding		49
+nim	`$`	shape.html#$,Padding	proc `$`(p: Padding): string		53
+nim	seq2	shape.html#seq2,Opt2d	proc seq2(opt: Opt2d): seq[int]		60
+nim	seq2	shape.html#seq2,Pad2d	proc seq2(opt: Pad2d): seq[Padding]		66
+nim	seq3	shape.html#seq3,Opt3d	proc seq3(opt: Opt3d): seq[int]		72
+nim	seq3	shape.html#seq3,Pad3d	proc seq3(opt: Pad3d): seq[Padding]		78
+nim	arrayShape	shape.html#arrayShape,DataType,varargs[int]	proc arrayShape(dtype: DataType; dims: varargs[int]): Shape		84
+nim	dtypeOf	shape.html#dtypeOf,typedesc[ElemType]	proc dtypeOf(T: typedesc[ElemType]): DataType		88
+nim	`==`	shape.html#==,Shape,Shape	proc `==`(s1, s2: Shape): bool		105
+nim	`$`	shape.html#$,Shape	proc `$`(s: Shape): string		114
+nim	toShape	shape.html#toShape,shape_t	proc toShape(s: shape_t; topLevel = true): Shape		126
+nimgrp	$	shape.html#$-procs-all	proc		53
+nimgrp	pad	shape.html#pad-procs-all	proc		45
+nimgrp	seq3	shape.html#seq3-procs-all	proc		72
+nimgrp	seq2	shape.html#seq2-procs-all	proc		60

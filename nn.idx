@@ -1,53 +1,57 @@
-Variable	nn.html#Variable	nn: Variable	
-InitFunc	nn.html#InitFunc	nn: InitFunc	
-Optimizer	nn.html#Optimizer	nn: Optimizer	
-SGDOptimizer	nn.html#SGDOptimizer	nn: SGDOptimizer	
-AdamOptimizer	nn.html#AdamOptimizer	nn: AdamOptimizer	
-Scheduler	nn.html#Scheduler	nn: Scheduler	
-ChainedScheduler	nn.html#ChainedScheduler	nn: ChainedScheduler	
-StepLR	nn.html#StepLR	nn: StepLR	
-LinearLR	nn.html#LinearLR	nn: LinearLR	
-CosineAnnealingLR	nn.html#CosineAnnealingLR	nn: CosineAnnealingLR	
-Outputs	nn.html#Outputs	nn: Outputs	
-Module	nn.html#Module	nn: Module	
-initRandom	nn.html#initRandom,int64	nn: initRandom(seed: int64 = 0): Rand	
-constantInit	nn.html#constantInit,SomeFloat	nn: constantInit(value: SomeFloat): InitFunc	
-uniformInit	nn.html#uniformInit,float,float	nn: uniformInit(min = 0.0; max = 1.0): InitFunc	
-normalInit	nn.html#normalInit,float,float	nn: normalInit(mean = 0.0; stddev = 1.0): InitFunc	
-glorotInit	nn.html#glorotInit,float	nn: glorotInit(gain = 1.0): InitFunc	
-heInit	nn.html#heInit,float,float	nn: heInit(mean = 0.0; gain = 2.0; fanOut = false): InitFunc	
-newVariable	nn.html#newVariable,Client,string,openArray[int],InitFunc,Rand	nn: newVariable(c: Client; name: string; dims: openArray[int]; init: InitFunc;\n            rng: var Rand; calcGrad = true): Variable	
-param	nn.html#param,Builder,Variable,string	nn: param(b: Builder; p: Variable; suffix = &quot;&quot;): Node	
-add	nn.html#add,Module,varargs[Module]	nn: add(m: var Module; modules: varargs[Module])	
-`$`	nn.html#$,Module	nn: `$`(m: Module): string	
-setVars	nn.html#setVars,Module,varargs[Variable]	nn: setVars(m: var Module; vars: varargs[Variable])	
-learnableVars	nn.html#learnableVars,Module	nn: learnableVars(m: Module): seq[Variable]	
-varNames	nn.html#varNames,Module	nn: varNames(m: Module): seq[string]	
-gradNames	nn.html#gradNames,Module	nn: gradNames(m: Module): seq[string]	
-getParams	nn.html#getParams,Module,Params	nn: getParams(m: Module; params: var Params)	
-setParams	nn.html#setParams,Module,Params	nn: setParams(m: var Module; params: Params)	
-update	nn.html#update,Module,Params	nn: update(m: var Module; params: Params)	
-dropout	nn.html#dropout,Node,float,bool	nn: dropout(a: Node; ratio: float; training: bool; normalize = true): Node	
-initLinear	nn.html#initLinear,Client,Rand,string,int,int	nn: initLinear(c: Client; rng: var Rand; id: string; nin, nout: int;\n           weights = heInit(); biases = constantInit(0.0); dtype = F32): Module	
-initConv2d	nn.html#initConv2d,Client,Rand,string,int,int,Opt2d,Opt2d,Pad2d,Opt2d,int	nn: initConv2d(c: Client; rng: var Rand; id: string; inChannels, outChannels: int;\n           kernelSize: Opt2d; strides: Opt2d = 1; padding: Pad2d = pad(0);\n           dilation: Opt2d = 1; groups = 1; weights = heInit();\n           biases = constantInit(0.0); dtype = F32): Module	
-initBatchNorm	nn.html#initBatchNorm,Client,Rand,string,int,float,float	nn: initBatchNorm(c: Client; rng: var Rand; id: string; numFeatures: int;\n              momentum: float = 0.1; epsilon: float = 0.00001;\n              weights = constantInit(1.0); biases = constantInit(0.0);\n              dtype = F32): Module	
-initConv2dBatchNorm	nn.html#initConv2dBatchNorm,Client,Rand,string,int,int,Opt2d,Opt2d,Pad2d,Opt2d,int,float,float	nn: initConv2dBatchNorm(c: Client; rng: var Rand; id: string;\n                    inChannels, outChannels: int; kernelSize: Opt2d;\n                    strides: Opt2d = 1; padding: Pad2d = pad(0);\n                    dilation: Opt2d = 1; groups = 1; momentum: float = 0.1;\n                    epsilon: float = 0.00001; weights = heInit(); dtype = F32): Module	
-compileTest	nn.html#compileTest,Client,Module,Node	nn: compileTest(c: Client; m: Module; input: Node; softmax = false): Executable	
-compileTrain	nn.html#compileTrain,Client,Module,Node,proc(Node)	nn: compileTrain(c: Client; m: Module; input: Node; lossFn: proc (y: Node): Node): Executable	
-format	nn.html#format,float	nn: format(val: float): string	
-learningRate	nn.html#learningRate,Optimizer	nn: learningRate(optim: Optimizer): float	
-setLearningRate	nn.html#setLearningRate,Optimizer,Client,float	nn: setLearningRate(optim: var Optimizer; c: Client; lr: float)	
-step	nn.html#step,Optimizer,Params	nn: step(optim: var Optimizer; params: Params): Params	
-`$`	nn.html#$.e,Optimizer	nn: `$`(optim: Optimizer): string	
-optimSGD	nn.html#optimSGD,Client,Module,float,float,float	nn: optimSGD(c: Client; m: Module; learnRate: float; weightDecay = 0.0;\n         momentum = 0.0; nesterov = false): Optimizer	
-`$`	nn.html#$.e,SGDOptimizer	nn: `$`(optim: SGDOptimizer): string	
-optimAdam	nn.html#optimAdam,Client,Module,float,float,float,float,float	nn: optimAdam(c: Client; m: Module; learnRate: float; weightDecay = 0.0;\n          beta1 = 0.9; beta2 = 0.999; eps = 1e-8): Optimizer	
-optimAdamW	nn.html#optimAdamW,Client,Module,float,float,float,float,float	nn: optimAdamW(c: Client; m: Module; learnRate: float; weightDecay = 0.0;\n           beta1 = 0.9; beta2 = 0.999; eps = 1e-8): Optimizer	
-`$`	nn.html#$.e,AdamOptimizer	nn: `$`(optim: AdamOptimizer): string	
-init	nn.html#init,Scheduler,Client,int	nn: init(s: Scheduler; c: Client; epoch: int)	
-step	nn.html#step,Scheduler,Client	nn: step(s: Scheduler; c: Client)	
-`$`	nn.html#$,Scheduler	nn: `$`(s: Scheduler): string	
-newStepLR	nn.html#newStepLR,Optimizer,int,float	nn: newStepLR(optim: var Optimizer; stepSize: int; gamma = 0.1): StepLR	
-newLinearLR	nn.html#newLinearLR,Optimizer,int,float,float	nn: newLinearLR(optim: var Optimizer; epochs: int; startFactor, endFactor: float): LinearLR	
-newCosineAnnealingLR	nn.html#newCosineAnnealingLR,Optimizer,int,float	nn: newCosineAnnealingLR(optim: var Optimizer; tMax: int; lrMin = 0.0): CosineAnnealingLR	
-newChainedScheduler	nn.html#newChainedScheduler,varargs[Scheduler]	nn: newChainedScheduler(schedulers: varargs[Scheduler]): ChainedScheduler	
+nimTitle	nn	nn.html	module nimxla/nn		0
+nim	Variable	nn.html#Variable	object Variable		8
+nim	InitFunc	nn.html#InitFunc	type InitFunc		14
+nim	Optimizer	nn.html#Optimizer	type Optimizer		17
+nim	SGDOptimizer	nn.html#SGDOptimizer	type SGDOptimizer		25
+nim	AdamOptimizer	nn.html#AdamOptimizer	type AdamOptimizer		29
+nim	Scheduler	nn.html#Scheduler	type Scheduler		34
+nim	ChainedScheduler	nn.html#ChainedScheduler	type ChainedScheduler		42
+nim	StepLR	nn.html#StepLR	type StepLR		46
+nim	LinearLR	nn.html#LinearLR	type LinearLR		50
+nim	CosineAnnealingLR	nn.html#CosineAnnealingLR	type CosineAnnealingLR		54
+nim	Outputs	nn.html#Outputs	object Outputs		57
+nim	Module	nn.html#Module	object Module		61
+nim	initRandom	nn.html#initRandom,int64	proc initRandom(seed: int64 = 0): Rand		72
+nim	constantInit	nn.html#constantInit,SomeFloat	proc constantInit(value: SomeFloat): InitFunc		81
+nim	uniformInit	nn.html#uniformInit,float,float	proc uniformInit(min = 0.0; max = 1.0): InitFunc		87
+nim	normalInit	nn.html#normalInit,float,float	proc normalInit(mean = 0.0; stddev = 1.0): InitFunc		93
+nim	glorotInit	nn.html#glorotInit,float	proc glorotInit(gain = 1.0): InitFunc		110
+nim	heInit	nn.html#heInit,float,float	proc heInit(mean = 0.0; gain = 2.0; fanOut = false): InitFunc		122
+nim	newVariable	nn.html#newVariable,Client,string,openArray[int],InitFunc,Rand	proc newVariable(c: Client; name: string; dims: openArray[int]; init: InitFunc;\n            rng: var Rand; calcGrad = true): Variable		137
+nim	param	nn.html#param,Builder,Variable,string	proc param(b: Builder; p: Variable; suffix = ""): Node		142
+nim	add	nn.html#add,Module,varargs[Module]	proc add(m: var Module; modules: varargs[Module])		147
+nim	`$`	nn.html#$,Module	proc `$`(m: Module): string		160
+nim	setVars	nn.html#setVars,Module,varargs[Variable]	proc setVars(m: var Module; vars: varargs[Variable])		163
+nim	learnableVars	nn.html#learnableVars,Module	proc learnableVars(m: Module): seq[Variable]		168
+nim	varNames	nn.html#varNames,Module	proc varNames(m: Module): seq[string]		173
+nim	gradNames	nn.html#gradNames,Module	proc gradNames(m: Module): seq[string]		178
+nim	getParams	nn.html#getParams,Module,Params	proc getParams(m: Module; params: var Params)		183
+nim	setParams	nn.html#setParams,Module,Params	proc setParams(m: var Module; params: Params)		188
+nim	update	nn.html#update,Module,Params	proc update(m: var Module; params: Params)		193
+nim	dropout	nn.html#dropout,Node,float,bool	proc dropout(a: Node; ratio: float; training: bool; normalize = true): Node		198
+nim	initLinear	nn.html#initLinear,Client,Rand,string,int,int	proc initLinear(c: Client; rng: var Rand; id: string; nin, nout: int;\n           weights = heInit(); biases = constantInit(0.0); dtype = F32): Module		211
+nim	initConv2d	nn.html#initConv2d,Client,Rand,string,int,int,Opt2d,Opt2d,Pad2d,Opt2d,int	proc initConv2d(c: Client; rng: var Rand; id: string; inChannels, outChannels: int;\n           kernelSize: Opt2d; strides: Opt2d = 1; padding: Pad2d = pad(0);\n           dilation: Opt2d = 1; groups = 1; weights = heInit();\n           biases = constantInit(0.0); dtype = F32): Module		232
+nim	initBatchNorm	nn.html#initBatchNorm,Client,Rand,string,int,float,float	proc initBatchNorm(c: Client; rng: var Rand; id: string; numFeatures: int;\n              momentum: float = 0.1; epsilon: float = 0.00001;\n              weights = constantInit(1.0); biases = constantInit(0.0);\n              dtype = F32): Module		262
+nim	initConv2dBatchNorm	nn.html#initConv2dBatchNorm,Client,Rand,string,int,int,Opt2d,Opt2d,Pad2d,Opt2d,int,float,float	proc initConv2dBatchNorm(c: Client; rng: var Rand; id: string;\n                    inChannels, outChannels: int; kernelSize: Opt2d;\n                    strides: Opt2d = 1; padding: Pad2d = pad(0);\n                    dilation: Opt2d = 1; groups = 1; momentum: float = 0.1;\n                    epsilon: float = 0.00001; weights = heInit(); dtype = F32): Module		293
+nim	compileTest	nn.html#compileTest,Client,Module,Node	proc compileTest(c: Client; m: Module; input: Node; softmax = false): Executable		306
+nim	compileTrain	nn.html#compileTrain,Client,Module,Node,proc(Node)	proc compileTrain(c: Client; m: Module; input: Node; lossFn: proc (y: Node): Node): Executable		319
+nim	format	nn.html#format,float	proc format(val: float): string		337
+nim	learningRate	nn.html#learningRate,Optimizer	proc learningRate(optim: Optimizer): float		343
+nim	setLearningRate	nn.html#setLearningRate,Optimizer,Client,float	proc setLearningRate(optim: var Optimizer; c: Client; lr: float)		347
+nim	step	nn.html#step,Optimizer,Params	proc step(optim: var Optimizer; params: Params): Params		351
+nim	`$`	nn.html#$.e,Optimizer	method `$`(optim: Optimizer): string		363
+nim	optimSGD	nn.html#optimSGD,Client,Module,float,float,float	proc optimSGD(c: Client; m: Module; learnRate: float; weightDecay = 0.0;\n         momentum = 0.0; nesterov = false): Optimizer		398
+nim	`$`	nn.html#$.e,SGDOptimizer	method `$`(optim: SGDOptimizer): string		411
+nim	optimAdam	nn.html#optimAdam,Client,Module,float,float,float,float,float	proc optimAdam(c: Client; m: Module; learnRate: float; weightDecay = 0.0;\n          beta1 = 0.9; beta2 = 0.999; eps = 1e-8): Optimizer		458
+nim	optimAdamW	nn.html#optimAdamW,Client,Module,float,float,float,float,float	proc optimAdamW(c: Client; m: Module; learnRate: float; weightDecay = 0.0;\n           beta1 = 0.9; beta2 = 0.999; eps = 1e-8): Optimizer		475
+nim	`$`	nn.html#$.e,AdamOptimizer	method `$`(optim: AdamOptimizer): string		492
+nim	init	nn.html#init,Scheduler,Client,int	proc init(s: Scheduler; c: Client; epoch: int)		505
+nim	step	nn.html#step,Scheduler,Client	proc step(s: Scheduler; c: Client)		511
+nim	`$`	nn.html#$,Scheduler	proc `$`(s: Scheduler): string		516
+nim	newStepLR	nn.html#newStepLR,Optimizer,int,float	proc newStepLR(optim: var Optimizer; stepSize: int; gamma = 0.1): StepLR		519
+nim	newLinearLR	nn.html#newLinearLR,Optimizer,int,float,float	proc newLinearLR(optim: var Optimizer; epochs: int; startFactor, endFactor: float): LinearLR		532
+nim	newCosineAnnealingLR	nn.html#newCosineAnnealingLR,Optimizer,int,float	proc newCosineAnnealingLR(optim: var Optimizer; tMax: int; lrMin = 0.0): CosineAnnealingLR		549
+nim	newChainedScheduler	nn.html#newChainedScheduler,varargs[Scheduler]	proc newChainedScheduler(schedulers: varargs[Scheduler]): ChainedScheduler		566
+nimgrp	$	nn.html#$-procs-all	proc		160
+nimgrp	step	nn.html#step-procs-all	proc		351
+nimgrp	$	nn.html#$-methods-all	method		363

@@ -1,44 +1,49 @@
-Info	nimxla.html#Info	LogLevel.Info	
-Warning	nimxla.html#Warning	LogLevel.Warning	
-Error	nimxla.html#Error	LogLevel.Error	
-Fatal	nimxla.html#Fatal	LogLevel.Fatal	
-LogLevel	nimxla.html#LogLevel	nimxla: LogLevel	
-Buffer	nimxla.html#Buffer	nimxla: Buffer	
-Params	nimxla.html#Params	nimxla: Params	
-Executable	nimxla.html#Executable	nimxla: Executable	
-Client	nimxla.html#Client	nimxla: Client	
-setLogLevel	nimxla.html#setLogLevel,LogLevel	nimxla: setLogLevel(level: LogLevel)	
-deviceCount	nimxla.html#deviceCount,Client	nimxla: deviceCount(client: Client): int	
-platformName	nimxla.html#platformName,Client	nimxla: platformName(client: Client): string	
-platformVersion	nimxla.html#platformVersion,Client	nimxla: platformVersion(client: Client): string	
-`$`	nimxla.html#$,Client	nimxla: `$`(client: Client): string	
-newCPUClient	nimxla.html#newCPUClient	nimxla: newCPUClient(logLevel = Warning): Client	
-newGPUClient	nimxla.html#newGPUClient,float	nimxla: newGPUClient(memoryFraction = 1.0; preallocate = false; logLevel = Warning): Client	
-newTPUClient	nimxla.html#newTPUClient,int	nimxla: newTPUClient(maxInflightComputations: int; logLevel = Warning): Client	
-newClient	nimxla.html#newClient	nimxla: newClient(useGPU = true): Client	
-newBuffer	nimxla.html#newBuffer,Client,Literal,int	nimxla: newBuffer(client: Client; lit: Literal; device = 0): Buffer	
-newBuffer	nimxla.html#newBuffer,Client,DataType,openArray[int]	nimxla: newBuffer(client: Client; dtype: DataType; dims: openArray[int]): Buffer	
-newBuffer	nimxla.html#newBuffer,Client,Tensor[T: ElemType],int	nimxla: newBuffer[T: ElemType](client: Client; t: Tensor[T]; device = 0): Buffer	
-shape	nimxla.html#shape,Buffer	nimxla: shape(buf: Buffer): Shape	
-toLiteral	nimxla.html#toLiteral,Buffer	nimxla: toLiteral(buf: Buffer): Literal	
-toTensor	nimxla.html#toTensor,Buffer	nimxla: toTensor[T: ElemType](buf: Buffer): Tensor[T]	
-i32	nimxla.html#i32,Buffer	nimxla: i32(buf: Buffer): Tensor[int32]	
-i64	nimxla.html#i64,Buffer	nimxla: i64(buf: Buffer): Tensor[int64]	
-f32	nimxla.html#f32,Buffer	nimxla: f32(buf: Buffer): Tensor[float32]	
-f64	nimxla.html#f64,Buffer	nimxla: f64(buf: Buffer): Tensor[float64]	
-boolean	nimxla.html#boolean,Buffer	nimxla: boolean(buf: Buffer): Tensor[bool]	
-`$`	nimxla.html#$,Buffer	nimxla: `$`(buf: Buffer): string	
-noutputs	nimxla.html#noutputs,Executable	nimxla: noutputs(exec: Executable): int	
-compile	nimxla.html#compile,Client,Computation,openArray[string]	nimxla: compile(client: Client; comp: Computation; outputs: openArray[string] = []): Executable	
-`$`	nimxla.html#$,Executable	nimxla: `$`(exec: Executable): string	
-runAndUnpack	nimxla.html#runAndUnpack,Executable,openArray[T]	nimxla: runAndUnpack[T: Buffer | Literal](exec: Executable; args: openArray[T];\n                                  checkShape = true): seq[Buffer]	
-runAndUnpack	nimxla.html#runAndUnpack,Executable	nimxla: runAndUnpack(exec: Executable; checkShape = true): seq[Buffer]	
-run	nimxla.html#run,Executable,openArray[T]	nimxla: run[T: Buffer | Literal](exec: Executable; args: openArray[T]; checkShape = true): Buffer	
-run	nimxla.html#run,Executable	nimxla: run(exec: Executable; checkShape = true): Buffer	
-initParams	nimxla.html#initParams,openArray[]	nimxla: initParams(pairs: openArray[(string, Buffer)]): Params	
-runWith	nimxla.html#runWith,Executable,Params	nimxla: runWith(exec: Executable; params: var Params; checkShape = true)	
-toLiterals	nimxla.html#toLiterals,openArray[Buffer]	nimxla: toLiterals(buffers: openArray[Buffer]): seq[Literal]	
-tuple2	nimxla.html#tuple2,openArray[Buffer]	nimxla: tuple2(res: openArray[Buffer]): (Buffer, Buffer)	
-tuple3	nimxla.html#tuple3,openArray[Buffer]	nimxla: tuple3(res: openArray[Buffer]): (Buffer, Buffer, Buffer)	
-tuple4	nimxla.html#tuple4,openArray[Buffer]	nimxla: tuple4(res: openArray[Buffer]): (Buffer, Buffer, Buffer, Buffer)	
-tuple5	nimxla.html#tuple5,openArray[Buffer]	nimxla: tuple5(res: openArray[Buffer]): (Buffer, Buffer, Buffer, Buffer, Buffer)	
+nimTitle	nimxla	nimxla.html	module nimxla		0
+nim	Info	nimxla.html#Info	LogLevel.Info		35
+nim	Warning	nimxla.html#Warning	LogLevel.Warning		35
+nim	Error	nimxla.html#Error	LogLevel.Error		35
+nim	Fatal	nimxla.html#Fatal	LogLevel.Fatal		35
+nim	LogLevel	nimxla.html#LogLevel	enum LogLevel		35
+nim	Buffer	nimxla.html#Buffer	type Buffer		41
+nim	Params	nimxla.html#Params	type Params		44
+nim	Executable	nimxla.html#Executable	object Executable		50
+nim	Client	nimxla.html#Client	type Client		63
+nim	setLogLevel	nimxla.html#setLogLevel,LogLevel	proc setLogLevel(level: LogLevel)		90
+nim	deviceCount	nimxla.html#deviceCount,Client	proc deviceCount(client: Client): int		94
+nim	platformName	nimxla.html#platformName,Client	proc platformName(client: Client): string		98
+nim	platformVersion	nimxla.html#platformVersion,Client	proc platformVersion(client: Client): string		102
+nim	`$`	nimxla.html#$,Client	proc `$`(client: Client): string		106
+nim	newCPUClient	nimxla.html#newCPUClient	proc newCPUClient(logLevel = Warning): Client		115
+nim	newGPUClient	nimxla.html#newGPUClient,float	proc newGPUClient(memoryFraction = 1.0; preallocate = false; logLevel = Warning): Client		125
+nim	newTPUClient	nimxla.html#newTPUClient,int	proc newTPUClient(maxInflightComputations: int; logLevel = Warning): Client		137
+nim	newClient	nimxla.html#newClient	proc newClient(useGPU = true): Client		147
+nim	newBuffer	nimxla.html#newBuffer,Client,Literal,int	proc newBuffer(client: Client; lit: Literal; device = 0): Buffer		163
+nim	newBuffer	nimxla.html#newBuffer,Client,DataType,openArray[int]	proc newBuffer(client: Client; dtype: DataType; dims: openArray[int]): Buffer		170
+nim	newBuffer	nimxla.html#newBuffer,Client,Tensor[T: ElemType],int	proc newBuffer[T: ElemType](client: Client; t: Tensor[T]; device = 0): Buffer		174
+nim	shape	nimxla.html#shape,Buffer	proc shape(buf: Buffer): Shape		185
+nim	toLiteral	nimxla.html#toLiteral,Buffer	proc toLiteral(buf: Buffer): Literal		190
+nim	toTensor	nimxla.html#toTensor,Buffer	proc toTensor[T: ElemType](buf: Buffer): Tensor[T]		197
+nim	i32	nimxla.html#i32,Buffer	proc i32(buf: Buffer): Tensor[int32]		203
+nim	i64	nimxla.html#i64,Buffer	proc i64(buf: Buffer): Tensor[int64]		207
+nim	f32	nimxla.html#f32,Buffer	proc f32(buf: Buffer): Tensor[float32]		211
+nim	f64	nimxla.html#f64,Buffer	proc f64(buf: Buffer): Tensor[float64]		215
+nim	boolean	nimxla.html#boolean,Buffer	proc boolean(buf: Buffer): Tensor[bool]		219
+nim	`$`	nimxla.html#$,Buffer	proc `$`(buf: Buffer): string		223
+nim	noutputs	nimxla.html#noutputs,Executable	proc noutputs(exec: Executable): int		227
+nim	compile	nimxla.html#compile,Client,Computation,openArray[string]	proc compile(client: Client; comp: Computation; outputs: openArray[string] = []): Executable		231
+nim	`$`	nimxla.html#$,Executable	proc `$`(exec: Executable): string		255
+nim	runAndUnpack	nimxla.html#runAndUnpack,Executable,openArray[T]	proc runAndUnpack[T: Buffer | Literal](exec: Executable; args: openArray[T];\n                                  checkShape = true): seq[Buffer]		311
+nim	runAndUnpack	nimxla.html#runAndUnpack,Executable	proc runAndUnpack(exec: Executable; checkShape = true): seq[Buffer]		324
+nim	run	nimxla.html#run,Executable,openArray[T]	proc run[T: Buffer | Literal](exec: Executable; args: openArray[T]; checkShape = true): Buffer		332
+nim	run	nimxla.html#run,Executable	proc run(exec: Executable; checkShape = true): Buffer		344
+nim	initParams	nimxla.html#initParams,openArray[]	proc initParams(pairs: openArray[(string, Buffer)]): Params		351
+nim	runWith	nimxla.html#runWith,Executable,Params	proc runWith(exec: Executable; params: var Params; checkShape = true)		355
+nim	toLiterals	nimxla.html#toLiterals,openArray[Buffer]	proc toLiterals(buffers: openArray[Buffer]): seq[Literal]		366
+nim	tuple2	nimxla.html#tuple2,openArray[Buffer]	proc tuple2(res: openArray[Buffer]): (Buffer, Buffer)		370
+nim	tuple3	nimxla.html#tuple3,openArray[Buffer]	proc tuple3(res: openArray[Buffer]): (Buffer, Buffer, Buffer)		375
+nim	tuple4	nimxla.html#tuple4,openArray[Buffer]	proc tuple4(res: openArray[Buffer]): (Buffer, Buffer, Buffer, Buffer)		380
+nim	tuple5	nimxla.html#tuple5,openArray[Buffer]	proc tuple5(res: openArray[Buffer]): (Buffer, Buffer, Buffer, Buffer, Buffer)		385
+nimgrp	newbuffer	nimxla.html#newBuffer-procs-all	proc		163
+nimgrp	$	nimxla.html#$-procs-all	proc		106
+nimgrp	run	nimxla.html#run-procs-all	proc		332
+nimgrp	runandunpack	nimxla.html#runAndUnpack-procs-all	proc		311
